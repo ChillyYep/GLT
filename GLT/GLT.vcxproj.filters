@@ -1,0 +1,347 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\Common">
+      <UniqueIdentifier>{583e3e47-4f62-45f8-b15a-94e25268265c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Scene">
+      <UniqueIdentifier>{d0e4b7e8-ba96-4ee0-b745-5acaefa54f48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Component">
+      <UniqueIdentifier>{146b9188-f77a-4f48-9640-f1b45e21d25c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Component\Camera">
+      <UniqueIdentifier>{c3e66d67-e918-43cb-8812-c3ad6ae438d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Common">
+      <UniqueIdentifier>{8148d6e7-79a0-4f67-8cc1-9c337cf3414c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Component">
+      <UniqueIdentifier>{0a7e38f6-8929-42e0-83be-a6feb4ab0e9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Scene">
+      <UniqueIdentifier>{ab09180e-3a02-4c93-bee6-fb6faadc5d6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Window">
+      <UniqueIdentifier>{2dc0d357-4ccf-4bef-af21-11068c1ea537}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Window">
+      <UniqueIdentifier>{fa8f25b4-c691-43ec-9fce-ae4a25f45962}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\RenderPipeline">
+      <UniqueIdentifier>{ac8f4303-b020-4f67-9334-ad61cad9eb1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\RenderPipeline">
+      <UniqueIdentifier>{173167b9-fe0d-4b43-bab2-8771840decc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Shader">
+      <UniqueIdentifier>{13abfbfd-0a32-400c-b798-0486394510d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\ShaderSourceCode">
+      <UniqueIdentifier>{2ab20afd-bff2-4cc7-a1cb-eadf70ceb609}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Shader">
+      <UniqueIdentifier>{1d1e726e-0987-4f03-8455-4319ecae4c38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\ResourceManager">
+      <UniqueIdentifier>{d600431f-d44e-4f4c-aff6-fbdbc2945879}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\ResourceManager">
+      <UniqueIdentifier>{f3e47e1d-a6e2-4a33-924d-79367ae37223}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\EventSystem">
+      <UniqueIdentifier>{4eb9f64b-e2f8-4cb7-af88-e773a305ff3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\EventSystem">
+      <UniqueIdentifier>{6926f7e4-dc80-4cb1-9880-d09897bd3b8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\plugins">
+      <UniqueIdentifier>{fc806ec8-d168-4304-bd1c-b0db623f8657}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\plugins">
+      <UniqueIdentifier>{9cb72f01-225e-4713-ac7e-d25923c9b2c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\plugins\stb_image">
+      <UniqueIdentifier>{a88dbbe1-594f-4da4-9fb4-1291d0ea2cef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\plugins\stb_image">
+      <UniqueIdentifier>{e6e95c4f-e792-4673-866e-bbf74e5fc6b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\ResourceManager\ManagementCentre">
+      <UniqueIdentifier>{9f575b9d-2380-49e4-bf27-60fcf69fe280}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\ResourceManager\ManagementCentre">
+      <UniqueIdentifier>{39b971e9-9e27-4cb6-8595-7cfd414aad59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\ResourceManager\Resources">
+      <UniqueIdentifier>{7fdc8ff9-57ac-4595-ab8b-970f24c826ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\CommandBuffer">
+      <UniqueIdentifier>{ded3f8c3-d43e-4a27-a07a-7d0351d65f99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\ResourceManager\Buffers">
+      <UniqueIdentifier>{fe699f4b-cb55-4df3-a75a-6a5b0e9f2b64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\ResourceManager\Buffers">
+      <UniqueIdentifier>{78f9c41e-1b91-4808-81d9-02b5ed1f4aec}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\gl3w.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\triangles.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CommonDefine.cpp">
+      <Filter>源文件\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>源文件\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PrimitiveUtils.cpp">
+      <Filter>源文件\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RenderPipeline.cpp">
+      <Filter>源文件\RenderPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene.cpp">
+      <Filter>源文件\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh.cpp">
+      <Filter>源文件\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window.cpp">
+      <Filter>源文件\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glfwWindow.cpp">
+      <Filter>源文件\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Shader.cpp">
+      <Filter>源文件\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ResourceManager.cpp">
+      <Filter>源文件\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShaderPropertyNames.cpp">
+      <Filter>源文件\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EventSystem.cpp">
+      <Filter>源文件\EventSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics.cpp">
+      <Filter>源文件\RenderPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stb_image.cpp">
+      <Filter>源文件\plugins\stb_image</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MeshManagementCentre.cpp">
+      <Filter>源文件\ResourceManager\ManagementCentre</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextureManagementCentre.cpp">
+      <Filter>源文件\ResourceManager\ManagementCentre</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RenderTexture.cpp">
+      <Filter>源文件\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Allocator.cpp">
+      <Filter>源文件\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MemoryManager.cpp">
+      <Filter>源文件\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ShaderUtils.cpp">
+      <Filter>源文件\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ConstantBufferIdentifier.cpp">
+      <Filter>源文件\ResourceManager\Buffers</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shader\cube.frag">
+      <Filter>源文件\ShaderSourceCode</Filter>
+    </None>
+    <None Include="Shader\cube.vert">
+      <Filter>源文件\ShaderSourceCode</Filter>
+    </None>
+    <None Include="Shader\cube_tex.frag">
+      <Filter>源文件\ShaderSourceCode</Filter>
+    </None>
+    <None Include="Shader\cube_tex.vert">
+      <Filter>源文件\ShaderSourceCode</Filter>
+    </None>
+    <None Include="Shader\lightdata.attr">
+      <Filter>源文件\ShaderSourceCode</Filter>
+    </None>
+    <None Include="Shader\common.attr">
+      <Filter>源文件\ShaderSourceCode</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Common.h">
+      <Filter>头文件\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CommonDefine.h">
+      <Filter>头文件\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Mesh.h">
+      <Filter>头文件\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\InstanceIDProducer.h">
+      <Filter>头文件\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scene.h">
+      <Filter>头文件\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Material.h">
+      <Filter>头文件\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Camera.h">
+      <Filter>头文件\Component\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Renderer.h">
+      <Filter>头文件\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Transform.h">
+      <Filter>头文件\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PrimitiveUtils.h">
+      <Filter>头文件\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CameraOperation.h">
+      <Filter>头文件\Component\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderPipeline.h">
+      <Filter>头文件\RenderPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Window.h">
+      <Filter>头文件\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\glfwWindow.h">
+      <Filter>头文件\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\WindowImplementBase.h">
+      <Filter>头文件\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Shader.h">
+      <Filter>头文件\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ResourceManager.h">
+      <Filter>头文件\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ShaderPropertyNames.h">
+      <Filter>头文件\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SceneManager.h">
+      <Filter>头文件\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EventSystem.h">
+      <Filter>头文件\EventSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Object.h">
+      <Filter>头文件\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Light.h">
+      <Filter>头文件\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics.h">
+      <Filter>头文件\RenderPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stb_image.h">
+      <Filter>头文件\plugins\stb_image</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MeshManagementCentre.h">
+      <Filter>头文件\ResourceManager\ManagementCentre</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SamplerManagementCentre.h">
+      <Filter>头文件\ResourceManager\ManagementCentre</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TextureManagementCentre.h">
+      <Filter>头文件\ResourceManager\ManagementCentre</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ManagementCentreBase.h">
+      <Filter>头文件\ResourceManager\ManagementCentre</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Sampler.h">
+      <Filter>头文件\ResourceManager\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Texture.h">
+      <Filter>头文件\ResourceManager\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderTexture.h">
+      <Filter>头文件\ResourceManager\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\FrameBufferObject.h">
+      <Filter>头文件\ResourceManager\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CommandBuffer.h">
+      <Filter>头文件\CommandBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderBuffer.h">
+      <Filter>头文件\ResourceManager\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PassBase.h">
+      <Filter>头文件\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameObject.h">
+      <Filter>头文件\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component.h">
+      <Filter>头文件\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\gamemain.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SceneUtility.h">
+      <Filter>头文件\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MemoryManager.h">
+      <Filter>头文件\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ShaderUtils.h">
+      <Filter>头文件\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Allocator.h">
+      <Filter>头文件\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ResourceIdentifier.h">
+      <Filter>头文件\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Enums.h">
+      <Filter>头文件\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.cpp">
+      <Filter>源文件\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\StringUtility.h">
+      <Filter>头文件\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ConstantBufferIdentifier.h">
+      <Filter>头文件\ResourceManager\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ConstantBuffers.h">
+      <Filter>头文件\ResourceManager\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ComponentType.h">
+      <Filter>头文件\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ScriptableRenderContext.h">
+      <Filter>头文件\RenderPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BytesBuffer.h">
+      <Filter>头文件\ResourceManager\Buffers</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

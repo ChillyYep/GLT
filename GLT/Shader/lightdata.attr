@@ -1,0 +1,68 @@
+struct LightData{
+	vec4 ambient;
+ 	vec4 color;
+ 	vec4 position;
+ 	vec4 halfVector;
+ 	vec4 coneDirection;
+ 	float spotCosCutoff;
+	float endDistance;
+ 	vec4 attenuations;
+};
+
+const int MaxLights = 8;
+
+uniform LightData_PerFrame{
+    LightData m_mainLightData;
+    LightData m_additionalLightData[MaxLights];
+};
+
+float ApplyLightAttenuation(float distance,float endDistance, float attenuation)
+{
+	// 终结距离不大于0，意味着光线可以发射无限远
+	if(endDistance<=0)
+	{
+		return 1;
+	}
+	// 假设衰减是线性的
+	return pow((endDistance- distance)/endDistance,attenuation);
+}
+
+vec4 PhongShading_Directional(LightData lightData,vec3 eyePosition,vec3 worldPosition,vec3 worldNormal,vec4 fragementColor,float smoothness)
+{
+	vec3 viewDir=normalize(eyePosition-worldPosition);
+	vec3 lightDelta=lightData.position.xyz-worldPosition;
+	vec3 lightDir=normalize(-lightData.coneDirection.rgb);
+	float diffuseStrength=dot(worldNormal,lightDir);
+	vec3 reflectedLightDir=reflect(-lightDir,worldNormal)*step(0.0f,diffuseStrength);
+	float distance=dot(-lightDelta,lightDir);
+	float lightStrength=ApplyLightAttenuation(distance,lightData.endDistance,lightData.attenuations.x);
+	vec3 diffuse=clamp(diffuseStrength,0,1)*fragementColor.rgb*lightData.color.rgb*lightStrength;
+	vec3 specular=0.5f*pow(clamp(dot(viewDir,reflectedLightDir),0,1),smoothness)*lightData.color.rgb*lightStrength;
+	vec3 ambient=lightData.ambient.rgb*fragementColor.rgb;
+	return vec4(clamp(diffuse+ambient+specular,vec3(0.0f,0.0f,0.0f),vec3(1.0f,1.0f,1.0f)),fragementColor.a);
+}
+
+vec4 PhongShading_NonDirectional(LightData lightData,vec3 eyePosition,vec3 worldPosition,vec3 worldNormal,vec4 fragementColor,float smoothness)
+{
+	vec3 viewDir=normalize(eyePosition-worldPosition);
+	vec3 lightDelta=lightData.position.xyz-worldPosition;
+	vec3 lightDir=normalize(lightDelta);
+	float diffuseStrength=dot(worldNormal,lightDir);
+	vec3 reflectedLightDir=reflect(-lightDir,worldNormal)*step(0.0f,diffuseStrength);
+	float distance=length(lightDelta);
+	float lightStrength=ApplyLightAttenuation(distance,lightData.endDistance,lightData.attenuations.x);
+	vec3 diffuse=clamp(diffuseStrength,0,1)*fragementColor.rgb*lightData.color.rgb*lightStrength;
+	vec3 specular=0.5f*pow(clamp(dot(viewDir,reflectedLightDir),0,1),smoothness)*lightData.color.rgb*lightStrength;
+	vec3 ambient=lightData.ambient.rgb*fragementColor.rgb;
+	return vec4(clamp(diffuse+ambient+specular,vec3(0.0f,0.0f,0.0f),vec3(1.0f,1.0f,1.0f)),fragementColor.a);
+}
+
+vec4 PhongShading_All(vec3 eyePosition,vec3 worldPosition,vec3 worldNormal,vec4 fragementColor,float smoothness)
+{
+	vec4 fColor = PhongShading_Directional(m_mainLightData,eyePosition,worldPosition,worldNormal,fragementColor,smoothness);
+	for(int i=0;i<MaxLights;++i)
+	{
+		fColor += PhongShading_NonDirectional(m_additionalLightData[i],eyePosition,worldPosition,worldNormal,fragementColor,smoothness);
+	}
+	return fColor;
+}

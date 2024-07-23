@@ -1,0 +1,8 @@
+uniform FrameData_PerPass{
+	mat4 Model;
+};
+uniform FrameData_PerCamera{
+	mat4 Project;
+	mat4 View;
+	vec4 EyePosition;
+};
