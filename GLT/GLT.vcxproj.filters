@@ -156,9 +156,6 @@
     <ClCompile Include="src\RenderTexture.cpp">
       <Filter>源文件\ResourceManager</Filter>
     </ClCompile>
-    <ClCompile Include="src\Allocator.cpp">
-      <Filter>源文件\Common</Filter>
-    </ClCompile>
     <ClCompile Include="src\MemoryManager.cpp">
       <Filter>源文件\ResourceManager</Filter>
     </ClCompile>
@@ -167,6 +164,9 @@
     </ClCompile>
     <ClCompile Include="src\ConstantBufferIdentifier.cpp">
       <Filter>源文件\ResourceManager\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Allocator.cpp">
+      <Filter>源文件\Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -313,9 +313,6 @@
     <ClInclude Include="include\ShaderUtils.h">
       <Filter>头文件\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="include\Allocator.h">
-      <Filter>头文件\Common</Filter>
-    </ClInclude>
     <ClInclude Include="include\ResourceIdentifier.h">
       <Filter>头文件\ResourceManager</Filter>
     </ClInclude>
@@ -342,6 +339,9 @@
     </ClInclude>
     <ClInclude Include="include\BytesBuffer.h">
       <Filter>头文件\ResourceManager\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Allocator.h">
+      <Filter>头文件\Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
