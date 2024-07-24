@@ -6,7 +6,8 @@
 struct RenderCommand
 {
 	RenderCommandType m_commandType;
-	void* offset;
+	int m_offset;
+	int m_size;
 };
 class CommandBuffer
 {
@@ -16,6 +17,11 @@ public:
 		m_allocator = allocator;
 	}
 	~CommandBuffer() {}
+
+	void Release()
+	{
+
+	}
 private:
 	std::vector<RenderCommand> m_cmdList;
 	Allocator* m_allocator;

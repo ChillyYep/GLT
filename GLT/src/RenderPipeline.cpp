@@ -98,28 +98,15 @@ void RenderPipeline::UpdateLightProperties(std::shared_ptr<Camera>& camera)
 		Shader::SetGlobalFloat(ShaderPropertyNames::MainLightData_EndDistance, -1);
 		Shader::SetGlobalVector(ShaderPropertyNames::MainLightData_Attenuations, glm::vec4(0.5f, 1.0f, 1.0f, 1.0f));
 	}
-	std::stringstream ss;
 	for (int i = 0;i < m_lightProperties.size() - 1;++i)
 	{
 		auto lightProperties = m_lightProperties[i + 1];
-		ss.str("");
-		ss << ShaderPropertyNames::AddtionalLightData_Format << "[" << i << "]." << ShaderPropertyNames::AddtionalLightData_Ambient_Format;
-		Shader::SetGlobalVector(ss.str().c_str(), glm::vec4(0.1f, 0.1f, 0.1f, 0.0f));
-		ss.str("");
-		ss << ShaderPropertyNames::AddtionalLightData_Format << "[" << i << "]." << ShaderPropertyNames::AddtionalLightData_Color_Format;
-		Shader::SetGlobalVector(ss.str().c_str(), lightProperties.color);
-		ss.str("");
-		ss << ShaderPropertyNames::AddtionalLightData_Format << "[" << i << "]." << ShaderPropertyNames::AddtionalLightData_Position_Format;
-		Shader::SetGlobalVector(ss.str().c_str(), glm::vec4(lightProperties.position.x, lightProperties.position.y, lightProperties.position.z, 1.0f));
-		ss.str("");
-		ss << ShaderPropertyNames::AddtionalLightData_Format << "[" << i << "]." << ShaderPropertyNames::AddtionalLightData_ConeDirection_Format;
-		Shader::SetGlobalVector(ss.str().c_str(), glm::vec4(lightProperties.coneDirection.x, lightProperties.coneDirection.y, lightProperties.coneDirection.z, 1.0f));
-		ss.str("");
-		ss << ShaderPropertyNames::AddtionalLightData_Format << "[" << i << "]." << ShaderPropertyNames::AddtionalLightData_EndDistance_Format;
-		Shader::SetGlobalFloat(ss.str().c_str(), 100.0f);
-		ss.str("");
-		ss << ShaderPropertyNames::AddtionalLightData_Format << "[" << i << "]." << ShaderPropertyNames::AddtionalLightData_Attenuations_Format;
-		Shader::SetGlobalVector(ss.str().c_str(), glm::vec4(0.5f, 1.0f, 1.0f, 1.0f));
+		Shader::SetGlobalVector(ShaderPropertyNames::GetShaderArrayPropertyName(ShaderPropertyNames::AddtionalLightData, ShaderPropertyNames::AddtionalLightData_Ambient, i).c_str(), glm::vec4(0.1f, 0.1f, 0.1f, 0.0f));
+		Shader::SetGlobalVector(ShaderPropertyNames::GetShaderArrayPropertyName(ShaderPropertyNames::AddtionalLightData, ShaderPropertyNames::AddtionalLightData_Color, i).c_str(), lightProperties.color);
+		Shader::SetGlobalVector(ShaderPropertyNames::GetShaderArrayPropertyName(ShaderPropertyNames::AddtionalLightData, ShaderPropertyNames::AddtionalLightData_Position, i).c_str(), glm::vec4(lightProperties.position.x, lightProperties.position.y, lightProperties.position.z, 1.0f));
+		Shader::SetGlobalVector(ShaderPropertyNames::GetShaderArrayPropertyName(ShaderPropertyNames::AddtionalLightData, ShaderPropertyNames::AddtionalLightData_ConeDirection, i).c_str(), glm::vec4(lightProperties.coneDirection.x, lightProperties.coneDirection.y, lightProperties.coneDirection.z, 1.0f));
+		Shader::SetGlobalFloat(ShaderPropertyNames::GetShaderArrayPropertyName(ShaderPropertyNames::AddtionalLightData, ShaderPropertyNames::AddtionalLightData_EndDistance, i).c_str(), 100.0f);
+		Shader::SetGlobalVector(ShaderPropertyNames::GetShaderArrayPropertyName(ShaderPropertyNames::AddtionalLightData, ShaderPropertyNames::AddtionalLightData_Attenuations, i).c_str(), glm::vec4(0.5f, 1.0f, 1.0f, 1.0f));
 		/*ss.str("");
 		ss << ShaderPropertyNames::AddtionalLightData_Format << "[" << i << "]." << ShaderPropertyNames::AddtionalLightData_SpotCosCutOff_Format;
 		Shader::SetGlobalFloat(ss.str().c_str(), lightProperties.spotCosCutoff);*/

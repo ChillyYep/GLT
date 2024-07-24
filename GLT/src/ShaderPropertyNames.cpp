@@ -1,5 +1,7 @@
 #include "ShaderPropertyNames.h"
 
+std::stringstream ShaderPropertyNames::s_sstream;
+
 const char* ShaderPropertyNames::ModelMatrix = "Model";
 const char* ShaderPropertyNames::ViewMatrix = "View";
 const char* ShaderPropertyNames::ProjectMatrix = "Project";
@@ -12,14 +14,14 @@ const char* ShaderPropertyNames::MainLightData_ConeDirection = "m_mainLightData.
 const char* ShaderPropertyNames::MainLightData_EndDistance = "m_mainLightData.endDistance";
 const char* ShaderPropertyNames::MainLightData_Attenuations = "m_mainLightData.attenuations";
 
-const char* ShaderPropertyNames::AddtionalLightData_Format = "m_additionalLightData";
-const char* ShaderPropertyNames::AddtionalLightData_Ambient_Format = "ambient";
-const char* ShaderPropertyNames::AddtionalLightData_Color_Format = "color";
-const char* ShaderPropertyNames::AddtionalLightData_Position_Format = "position";
-const char* ShaderPropertyNames::AddtionalLightData_ConeDirection_Format = "coneDirection";
-const char* ShaderPropertyNames::AddtionalLightData_EndDistance_Format = "endDistance";
-const char* ShaderPropertyNames::AddtionalLightData_SpotCosCutOff_Format = "spotCosCutoff";
-const char* ShaderPropertyNames::AddtionalLightData_Attenuations_Format = "attenuations";
+const char* ShaderPropertyNames::AddtionalLightData = "m_additionalLightData";
+const char* ShaderPropertyNames::AddtionalLightData_Ambient = "ambient";
+const char* ShaderPropertyNames::AddtionalLightData_Color = "color";
+const char* ShaderPropertyNames::AddtionalLightData_Position = "position";
+const char* ShaderPropertyNames::AddtionalLightData_ConeDirection = "coneDirection";
+const char* ShaderPropertyNames::AddtionalLightData_EndDistance = "endDistance";
+const char* ShaderPropertyNames::AddtionalLightData_SpotCosCutOff = "spotCosCutoff";
+const char* ShaderPropertyNames::AddtionalLightData_Attenuations = "attenuations";
 
 const char* ShaderPropertyNames::MVP = "MVP";
 const char* ShaderPropertyNames::VP = "VP";
