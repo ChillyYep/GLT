@@ -209,6 +209,7 @@
     <ClInclude Include="include\SceneManager.h" />
     <ClInclude Include="include\ShaderUtils.h" />
     <ClInclude Include="include\SceneUtility.h" />
+    <ClInclude Include="include\Singleton.h" />
     <ClInclude Include="include\StringUtility.h" />
     <ClInclude Include="include\Window.h" />
     <ClInclude Include="include\Shader.h" />

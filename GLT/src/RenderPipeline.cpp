@@ -11,14 +11,14 @@ void RenderPipeline::ClearExpiredMeshBuffers(std::vector<std::shared_ptr<Scene>>
 	// É¾³ý
 	for (int i = 0;i < allScenes.size();++i)
 	{
-		ClearExpiredObjects(&ResourceManager::GetInstance().GetMeshManagementCentre(), ResourceType::ResourceType_Mesh);
+		ClearExpiredObjects(&ResourceManager::getInstance()->GetMeshManagementCentre(), ResourceType::Mesh);
 	}
 }
 void RenderPipeline::AppendNewMeshBuffers(std::vector<std::shared_ptr<Scene>>& allScenes)
 {
 	for (int i = 0;i < allScenes.size();++i)
 	{
-		AppendNewObjects(&ResourceManager::GetInstance().GetMeshManagementCentre(), ResourceType::ResourceType_Mesh);
+		AppendNewObjects(&ResourceManager::getInstance()->GetMeshManagementCentre(), ResourceType::Mesh);
 	}
 }
 
@@ -26,14 +26,14 @@ void RenderPipeline::ClearExpiredTextures(std::vector<std::shared_ptr<Scene>>& a
 {
 	for (int i = 0;i < allScenes.size();++i)
 	{
-		ClearExpiredObjects(&ResourceManager::GetInstance().GetTextureManagementCentre(), ResourceType::ResourceType_Texture);
+		ClearExpiredObjects(&ResourceManager::getInstance()->GetTextureManagementCentre(), ResourceType::Texture);
 	}
 }
 void RenderPipeline::AppendNewTextures(std::vector<std::shared_ptr<Scene>>& allScenes)
 {
 	for (int i = 0;i < allScenes.size();++i)
 	{
-		AppendNewObjects(&ResourceManager::GetInstance().GetTextureManagementCentre(), ResourceType::ResourceType_Texture);
+		AppendNewObjects(&ResourceManager::getInstance()->GetTextureManagementCentre(), ResourceType::Texture);
 	}
 }
 
@@ -52,7 +52,7 @@ void RenderPipeline::Render() {
 		UpdatePerCameraConstantBuffer(mainCamera);
 
 		auto viewPort = mainCamera->GetViewPort();
-		auto windowSize = Window::GetInstance().GetSize();
+		auto windowSize = Window::getInstance()->GetSize();
 		auto viewPortRect = glm::ivec4(viewPort.x * windowSize.x, viewPort.y * windowSize.y, viewPort.z * windowSize.x, viewPort.w * windowSize.y);
 		glViewport(viewPortRect.x, viewPortRect.y, viewPortRect.z, viewPortRect.w);
 		for (auto& renderObject : scene->GetObjectList())
@@ -68,13 +68,13 @@ void RenderPipeline::Render() {
 }
 void RenderPipeline::PostUpdate()
 {
-	ResourceManager::GetInstance().GetMeshManagementCentre().OnSubmit();
-	ResourceManager::GetInstance().GetTextureManagementCentre().OnSubmit();
+	ResourceManager::getInstance()->GetMeshManagementCentre().OnSubmit();
+	ResourceManager::getInstance()->GetTextureManagementCentre().OnSubmit();
 }
 
 void RenderPipeline::UpdateSceneProperties4Render()
 {
-	m_allScenes = SceneManager::GetInstance().GetAllScenes(false);
+	m_allScenes = SceneManager::getInstance()->GetAllScenes(false);
 
 	// É¾³ý
 	ClearExpiredMeshBuffers(m_allScenes);
@@ -87,7 +87,7 @@ void RenderPipeline::UpdateSceneProperties4Render()
 
 void RenderPipeline::UpdateLightProperties(std::shared_ptr<Camera>& camera)
 {
-	m_lightProperties = SceneManager::GetInstance().GetAffectedLights(camera);
+	m_lightProperties = SceneManager::getInstance()->GetAffectedLights(camera);
 	if (m_lightProperties.size() > 0)
 	{
 		auto lightProperties = m_lightProperties[0];
@@ -116,7 +116,7 @@ void RenderPipeline::UpdateLightProperties(std::shared_ptr<Camera>& camera)
 void RenderPipeline::UpdatePerFrameConstantBuffer()
 {
 	// do something
-	Shader::Upload(ConstantBufferType::ConstantBufferType_PerFrame);
+	Shader::Upload(ConstantBufferType::PerFrame);
 }
 
 void RenderPipeline::UpdatePerCameraConstantBuffer(std::shared_ptr<Camera>& camera)
@@ -126,7 +126,7 @@ void RenderPipeline::UpdatePerCameraConstantBuffer(std::shared_ptr<Camera>& came
 	Shader::SetGlobalMatrix(ShaderPropertyNames::ProjectMatrix, camera->GetProjectMatrix());
 	auto eyePosition = camera->GetTransform()->GetPosition();
 	Shader::SetGlobalVector(ShaderPropertyNames::EyePosition, glm::vec4(eyePosition.x, eyePosition.y, eyePosition.z, 1.0f));
-	Shader::Upload(ConstantBufferType::ConstantBufferType_PerCamera);
+	Shader::Upload(ConstantBufferType::PerCamera);
 }
 
 void RenderPipeline::RenderPerObject(Renderer& renderObject, std::shared_ptr<Camera>& camera)

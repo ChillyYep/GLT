@@ -1,56 +1,67 @@
 #pragma once
-enum TextureType {
-	TextureType_Texture1D,
-	TextureType_Texture1DArray,
-	TextureType_Texture2D,
-	TextureType_Texture2DArray,
-	TextureType_Texture2DMultiSample,
-	TextureType_Texture2DMultiSampleArray,
-	TextureType_Texture3D,
-	TextureType_CubeMap,
-	TextureType_CubeMapArray,
-	TextureType_Buffer,
+enum class TextureType {
+	Texture1D,
+	Texture1DArray,
+	Texture2D,
+	Texture2DArray,
+	Texture2DMultiSample,
+	Texture2DMultiSampleArray,
+	Texture3D,
+	CubeMap,
+	CubeMapArray,
+	Buffer,
 };
 
-enum TextureWrapMode {
-	TextureWrapMode_ClampEdge,
-	TextureWrapMode_Border,
-	TextureWrapMode_Repeat,
-	TextureWrapMode_MirroredRepeat
+enum class TextureWrapMode {
+	ClampEdge,
+	Border,
+	Repeat,
+	MirroredRepeat
 };
 
-enum TextureFilter {
-	TextureFilter_Point_Mipmap_Point,
-	TextureFilter_Linear_Mipmap_Point,
-	TextureFilter_Point_Mipmap_Linear,
-	TextureFilter_Linear_Mipmap_Linear,
+enum class TextureFilter {
+	Point_Mipmap_Point,
+	Linear_Mipmap_Point,
+	Point_Mipmap_Linear,
+	Linear_Mipmap_Linear,
 };
 
-enum RenderTextureDepthStencilType {
-	RenderTextureDepthStencilType_None,
-	RenderTextureDepthStencilType_Depth8,
-	RenderTextureDepthStencilType_Depth16,
-	RenderTextureDepthStencilType_Depth24,
-	RenderTextureDepthStencilType_Depth32,
-	RenderTextureDepthStencilType_Depth32F,
-	RenderTextureDepthStencilType_Stencil0,
-	RenderTextureDepthStencilType_Stencil1,
-	RenderTextureDepthStencilType_Stencil4,
-	RenderTextureDepthStencilType_Stencil8,
-	RenderTextureDepthStencilType_Stencil16,
-	RenderTextureDepthStencilType_Depth_Stencil,
+enum class RenderTextureDepthStencilType {
+	None,
+	Depth8,
+	Depth16,
+	Depth24,
+	Depth32,
+	Depth32F,
+	Stencil0,
+	Stencil1,
+	Stencil4,
+	Stencil8,
+	Stencil16,
+	Depth_Stencil,
 };
 
-enum ConstantBufferType
+enum class ConstantBufferType
 {
-	ConstantBufferType_None,
-	ConstantBufferType_PerFrame,
-	ConstantBufferType_PerCamera,
-	ConstantBufferType_PerPass,
+	None,
+	PerFrame,
+	PerCamera,
+	PerPass,
 	//ShaderGlobalType_PerObject
 };
 
-enum RenderCommandType
+enum class RenderCommandType
 {
-	RenderCommandType_Draw
+	Invalid,
+	Default,
+	RequestRenderTexture,
+	Draw
+};
+
+enum class TextureFormat {
+
+};
+
+enum class TextureFilterMode {
+
 };

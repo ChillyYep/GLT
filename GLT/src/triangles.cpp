@@ -24,13 +24,13 @@ GameMain gameMain;
 
 void CreateScene()
 {
-	glm::ivec2 screenSize = Window::GetInstance().GetSize();
+	glm::ivec2 screenSize = Window::getInstance()->GetSize();
 
 	pipeline.Init();
 	auto scene = shared_ptr<Scene>(new Scene());
 	scene->SetActived(true);
 	scene->SetMainScene(true);
-	SceneManager::GetInstance().AddScene(scene);
+	SceneManager::getInstance()->AddScene(scene);
 	// 材质
 	auto shader = shared_ptr<Shader>(new Shader("cube_tex"));
 
@@ -41,9 +41,9 @@ void CreateScene()
 	tex->SetInternalFormat(GL_RGB8);
 	tex->SetLevels(4);
 	tex->SetPerChannelSize(GL_UNSIGNED_BYTE);
-	tex->SetWrapModeS(TextureWrapMode::TextureWrapMode_Repeat);
-	tex->SetWrapModeT(TextureWrapMode::TextureWrapMode_Repeat);
-	tex->SetTextureFilter(TextureFilter::TextureFilter_Linear_Mipmap_Linear);
+	tex->SetWrapModeS(TextureWrapMode::Repeat);
+	tex->SetWrapModeT(TextureWrapMode::Repeat);
+	tex->SetTextureFilter(TextureFilter::Linear_Mipmap_Linear);
 
 	mat->SetProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(tex)));
 	// 网格
@@ -103,17 +103,17 @@ void CreateScene()
 
 void DestroyScene()
 {
-	auto& sceneManager = SceneManager::GetInstance();
-	for (auto scene : sceneManager.GetAllScenes())
+	auto sceneManager = SceneManager::getInstance();
+	for (auto scene : sceneManager->GetAllScenes())
 	{
-		sceneManager.RemoveScene(scene);
+		sceneManager->RemoveScene(scene);
 	}
 	pipeline.UnInit();
 }
 
 void logicLoop()
 {
-	auto scenes = SceneManager::GetInstance().GetAllScenes();
+	auto scenes = SceneManager::getInstance()->GetAllScenes();
 	gameMain.Run(scenes);
 }
 
@@ -134,32 +134,33 @@ void gameLoop()
 	logicLoop();
 	renderLoop();
 }
+
 int main(int argc, char** argv)
 {
 	cout << fs::current_path().string() << endl;
 
 	cout << SHADER_ROOT << "  " << fs::is_directory(SHADER_ROOT) << endl;
-	auto& window = Window::GetInstance();
-	window.Init();
-	window.Create(1280, 960, "TestWindow");
+	auto window = Window::getInstance();
+	window->Init();
+	window->Create(1280, 960, "TestWindow");
 	// 初始化gl3w库
 	gl3wInit();
 	// 初始化阶段，初始化VAO，VBO等
 	CreateScene();
-	window.AttachToEventSystem();
+	window->AttachToEventSystem();
 
-	auto windowSize = window.GetSize();
-	RenderTexture renderTexture = RenderTexture(windowSize.x, windowSize.y, GL_RGBA, RenderTextureDepthStencilType::RenderTextureDepthStencilType_Depth16,
-		RenderTextureDepthStencilType::RenderTextureDepthStencilType_None);
+	auto windowSize = window->GetSize();
+	RenderTexture renderTexture = RenderTexture(windowSize.x, windowSize.y, GL_RGBA, RenderTextureDepthStencilType::Depth16,
+		RenderTextureDepthStencilType::None);
 	renderTexture.Create();
 	renderTexture.Active();
 
-	window.GameLoop(gameLoop);
+	window->GameLoop(gameLoop);
 
-	window.DetachToEventSystem();
+	window->DetachToEventSystem();
 	DestroyScene();
 
-	window.Destroy();
-	window.UnInit();
+	window->Destroy();
+	window->UnInit();
 
 }

@@ -1,17 +1,11 @@
 #pragma once
+#include <Singleton.h>
 #include <CommonDefine.h>
 #include <GLFW/glfw3.h>
 #include <glfwWindow.h>
-class Window
+class Window :public Singleton<Window>
 {
 public:
-	inline static Window& GetInstance() {
-		static Window window;
-		return window;
-	}
-	Window(const Window&) = delete;
-	Window& operator=(const Window&) = delete;
-	
 	~Window()
 	{
 		if (m_windowImplent != nullptr)
@@ -63,8 +57,5 @@ public:
 		m_windowImplent->GameLoop(renderLoopMainFunc);
 	}
 private:
-	Window()
-	{
-	}
 	WindowImplementBase* m_windowImplent;
 };

@@ -1,19 +1,20 @@
 #pragma once
 #include <CommonDefine.h>
 
+
 class BytesBuffer
 {
 public:
-	BytesBuffer() :m_dataPtr(nullptr) {}
+	BytesBuffer() :m_dataPtr(nullptr), m_dataSize(0) {}
 	~BytesBuffer() {}
 
-	void Create(GLuint bufferSize)
+	void Create(GLTUInt32 bufferSize)
 	{
 		m_dataSize = bufferSize;
-		m_dataPtr = new GLubyte[bufferSize];
+		m_dataPtr = new GLTByte[bufferSize];
 		for (GLuint i = 0;i < bufferSize;++i)
 		{
-			((GLubyte*)m_dataPtr)[i] = 0xff;
+			((GLTByte*)m_dataPtr)[i] = 0xff;
 		}
 	}
 
@@ -26,19 +27,19 @@ public:
 		}
 	}
 
-	void SetData(GLuint offset, GLuint length, void* data)
+	void SetData(GLTUInt32 offset, GLTUInt32 length, void* data)
 	{
 		if ((offset + length) <= m_dataSize)
 		{
-			GLubyte* offsetDataPtr = reinterpret_cast<GLubyte*>(m_dataPtr) + offset;
+			GLTByte* offsetDataPtr = reinterpret_cast<GLTByte*>(m_dataPtr) + offset;
 			memcpy(offsetDataPtr, data, length);
 		}
 	}
 
 	inline const void* data() { return m_dataPtr; }
-	inline GLsizeiptr dataSize() { return m_dataSize; }
+	inline GLTSize dataSize() { return m_dataSize; }
 private:
 	void* m_dataPtr;
 
-	GLsizeiptr m_dataSize;
+	GLTSize m_dataSize;
 };

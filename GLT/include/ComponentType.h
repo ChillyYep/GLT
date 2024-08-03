@@ -1,17 +1,22 @@
 #pragma once
-enum ComponentType {
-	ComponentType_None,
-	ComponentType_Renderer,
-	ComponentType_Light,
-	ComponentType_Transform,
-	ComponentType_Camera,
+enum class ComponentType {
+	Invalid,
+	Renderer,
+	Light,
+	Transform,
+	Camera,
 };
 
 template<typename T>
 struct component_traits
 {
-	static const ComponentType value = ComponentType::ComponentType_None;
+	static const ComponentType value = ComponentType::Invalid;
 };
+
+#define COMPONENT_CLASS(CLASSTYPE,CLASSTYPEENUM) ENUM_BINDING_CLASS(CLASSTYPE,Component,ComponentType,CLASSTYPEENUM,component_traits)
+
+#define DERIVED_COMPONENT_CLASS(CLASSTYPE,BASECLASSTYPE,CLASSTYPEENUM) ENUM_BINDING_CLASS(CLASSTYPE,BASECLASSTYPE,ComponentType,CLASSTYPEENUM,component_traits)
+
 
 class TypeCheck
 {
@@ -21,13 +26,13 @@ public:
 	template<typename T>
 	static constexpr bool IsComponentType()
 	{
-		return component_traits<T>::value != ComponentType::ComponentType_None;
+		return component_traits<T>::value != ComponentType::Invalid;
 	}
 
 	template<typename T>
 	static constexpr bool IsComponentType(T src)
 	{
-		return component_traits<T>::value != ComponentType::ComponentType_None;
+		return component_traits<T>::value != ComponentType::Invalid;
 	}
 private:
 

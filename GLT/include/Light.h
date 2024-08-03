@@ -22,10 +22,10 @@ struct LightProperties {
 	glm::vec4 attenuations;
 };
 
-COMPONENT_CLASS(Light, ComponentType::ComponentType_Light)
+COMPONENT_CLASS(Light, ComponentType::Light)
 {
 public:
-	ComponentType GetComponentType() override { return ComponentType::ComponentType_Light; }
+	ComponentType GetComponentType() override { return ComponentType::Light; }
 
 	virtual LightProperties GetLightProperties() = 0;
 	inline static int GetMaxLightCount()
@@ -43,7 +43,7 @@ protected:
 };
 
 
-DERIVED_COMPONENT_CLASS(DirectionalLight,Light, ComponentType::ComponentType_Light)
+DERIVED_COMPONENT_CLASS(DirectionalLight,Light, ComponentType::Light)
 {
 public:
 	LightProperties GetLightProperties() override
@@ -65,7 +65,7 @@ private:
 	glm::vec3 m_diretion;
 };
 
-DERIVED_COMPONENT_CLASS(SpotLight, Light, ComponentType::ComponentType_Light)
+DERIVED_COMPONENT_CLASS(SpotLight, Light, ComponentType::Light)
 {
 public:
 	LightProperties GetLightProperties() override
@@ -96,7 +96,7 @@ private:
 	float m_quadraticAttenuationFactor;
 };
 
-DERIVED_COMPONENT_CLASS(PointLight, Light, ComponentType::ComponentType_Light)
+DERIVED_COMPONENT_CLASS(PointLight, Light, ComponentType::Light)
 {
 public:
 	LightProperties GetLightProperties() override

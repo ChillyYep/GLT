@@ -6,10 +6,10 @@
 #include <Material.h>
 #include <ResourceManager.h>
 
-COMPONENT_CLASS(Renderer, ComponentType::ComponentType_Renderer)
+COMPONENT_CLASS(Renderer, ComponentType::Renderer)
 {
 public:
-	ComponentType GetComponentType() override { return ComponentType::ComponentType_Renderer; }
+	ComponentType GetComponentType() override { return ComponentType::Renderer; }
 	Renderer() {}
 	Renderer(std::shared_ptr<Mesh> mesh) { m_mesh = mesh; }
 	~Renderer() {}
@@ -18,14 +18,14 @@ public:
 	{
 		if (m_mesh != nullptr)
 		{
-			ResourceManager::GetInstance().GetMeshManagementCentre().Add(m_mesh);
+			ResourceManager::getInstance()->GetMeshManagementCentre().Add(m_mesh);
 		}
 		if (m_material != nullptr)
 		{
 			auto textures = m_material->GetAllTextures();
 			for (const auto& texture : textures)
 			{
-				ResourceManager::GetInstance().GetTextureManagementCentre().Add(texture);
+				ResourceManager::getInstance()->GetTextureManagementCentre().Add(texture);
 			}
 		}
 	}
@@ -34,14 +34,14 @@ public:
 	{
 		if (m_mesh != nullptr)
 		{
-			ResourceManager::GetInstance().GetMeshManagementCentre().Remove(m_mesh);
+			ResourceManager::getInstance()->GetMeshManagementCentre().Remove(m_mesh);
 		}
 		if (m_material != nullptr)
 		{
 			auto textures = m_material->GetAllTextures();
 			for (const auto& texture : textures)
 			{
-				ResourceManager::GetInstance().GetTextureManagementCentre().Remove(texture);
+				ResourceManager::getInstance()->GetTextureManagementCentre().Remove(texture);
 			}
 		}
 	}

@@ -6,12 +6,15 @@
 #include <Light.h>
 #include <CameraOperation.h>
 
-COMPONENT_CLASS(Camera, ComponentType::ComponentType_Camera)
+COMPONENT_CLASS(Camera, ComponentType::Camera)
 {
 public:
-	Camera() {}
+	Camera() :m_isMainCamera(false), m_ortho(false), m_aspect(0.0f), m_fov(0.0f),
+		m_height(0.0f), m_nearFar(glm::zero<glm::vec2>()), m_cameraController(nullptr), m_viewPort(glm::zero<glm::vec4>()),
+		m_viewMatrix(glm::zero<glm::mat4>()), m_projectMatrix(glm::zero<glm::mat4>())
+	{}
 	~Camera() {}
-	ComponentType GetComponentType() override { return ComponentType::ComponentType_Camera; }
+	ComponentType GetComponentType() override { return ComponentType::Camera; }
 
 	inline void LookAt(std::shared_ptr<Transform> target)
 	{

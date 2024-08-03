@@ -33,7 +33,7 @@ private:
 		{
 			return;
 		}
-		ResourceManager::GetInstance().RequestResource(management, newObjectList, resourceType);
+		ResourceManager::getInstance()->RequestResource(management, newObjectList, resourceType);
 		management->ClearNewList();
 	}
 
@@ -47,7 +47,7 @@ private:
 		{
 			return;
 		}
-		ResourceManager::GetInstance().DestroyResource(management, expiredMeshInstanceIdList, resourceType);
+		ResourceManager::getInstance()->DestroyResource(management, expiredMeshInstanceIdList, resourceType);
 		management->ClearExpiredList();
 	}
 

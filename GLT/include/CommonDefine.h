@@ -10,22 +10,22 @@
 #include <glm/ext.hpp>
 #include "Enums.h"
 
-#define COMPONENT_CLASS(CLASSTYPE,CLASSTYPEENUM)\
+using GLTByte = unsigned char;
+using GLTSByte = signed char;
+using GLTInt16 = signed short;
+using GLTUInt16 = unsigned short;
+using GLTInt32 = signed int;
+using GLTUInt32 = unsigned int;
+using GLTInt64 = signed long long int;
+using GLTUInt64 = unsigned long long int;
+using GLTSize = size_t;
+
+#define ENUM_BINDING_CLASS(CLASSTYPE,BASECLASSTYPE,ENUMTYPE,CLASSTYPEENUM,TRAITSCLASS) \
 class CLASSTYPE; \
 template<>	\
-struct component_traits<CLASSTYPE> \
+struct TRAITSCLASS<CLASSTYPE> \
 {	\
-	static const ComponentType value = CLASSTYPEENUM;	\
-};	\
-class CLASSTYPE :public Component	\
-
-
-#define DERIVED_COMPONENT_CLASS(CLASSTYPE,BASECLASSTYPE,CLASSTYPEENUM)\
-class CLASSTYPE; \
-template<>	\
-struct component_traits<CLASSTYPE> \
-{	\
-	static const ComponentType value = CLASSTYPEENUM;	\
+	static const ENUMTYPE value = CLASSTYPEENUM;	\
 };	\
 class CLASSTYPE :public BASECLASSTYPE	\
 

@@ -38,7 +38,7 @@ public:
 		auto component = std::shared_ptr<Component>(new T());
 		component->m_gameObjectPtr = this;
 		m_components.push_back(component);
-		if (component_traits<T>::value == ComponentType::ComponentType_Transform)
+		if (component_traits<T>::value == ComponentType::Transform)
 		{
 			m_transform = std::static_pointer_cast<Transform>(component);
 		}

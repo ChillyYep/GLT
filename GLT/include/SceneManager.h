@@ -1,15 +1,9 @@
 #pragma once
+#include <Singleton.h>
 #include <Scene.h>
-class SceneManager
+class SceneManager :public Singleton<SceneManager>
 {
 public:
-	SceneManager(const SceneManager&) = delete;
-	SceneManager& operator=(const SceneManager&) = delete;
-	inline static SceneManager& GetInstance() {
-
-		static SceneManager instance;
-		return instance;
-	}
 	~SceneManager() {}
 	inline const std::shared_ptr<Scene> GetMainScene() const {
 		for (int i = 0;i < m_allScenes.size();++i)
@@ -72,7 +66,7 @@ public:
 
 	inline std::vector<LightProperties> GetAffectedLights(std::shared_ptr<Camera>& camera)
 	{
-		auto allScenes = SceneManager::GetInstance().GetAllScenes(false);
+		auto allScenes = SceneManager::getInstance()->GetAllScenes(false);
 		std::vector<LightProperties> lights;
 		for (const auto& scene : allScenes)
 		{
@@ -90,6 +84,5 @@ public:
 		return lights;
 	}
 private:
-	SceneManager() {}
 	std::vector<std::shared_ptr<Scene>> m_allScenes;
 };

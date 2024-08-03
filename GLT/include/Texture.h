@@ -15,25 +15,25 @@ public:
 	{
 		switch (textureType)
 		{
-		case TextureType_Texture1D:
+		case TextureType::Texture1D:
 			return GL_TEXTURE_1D;
-		case TextureType_Texture1DArray:
+		case TextureType::Texture1DArray:
 			return GL_TEXTURE_1D_ARRAY;
-		case TextureType_Texture2D:
+		case TextureType::Texture2D:
 			return GL_TEXTURE_2D;
-		case TextureType_Texture2DArray:
+		case TextureType::Texture2DArray:
 			return GL_TEXTURE_2D_ARRAY;
-		case TextureType_Texture2DMultiSample:
+		case TextureType::Texture2DMultiSample:
 			return GL_TEXTURE_2D_MULTISAMPLE;
-		case TextureType_Texture2DMultiSampleArray:
+		case TextureType::Texture2DMultiSampleArray:
 			return GL_TEXTURE_2D_MULTISAMPLE_ARRAY;
-		case TextureType_Texture3D:
+		case TextureType::Texture3D:
 			return GL_TEXTURE_3D;
-		case TextureType_CubeMap:
+		case TextureType::CubeMap:
 			return GL_TEXTURE_CUBE_MAP;
-		case TextureType_CubeMapArray:
+		case TextureType::CubeMapArray:
 			return GL_TEXTURE_CUBE_MAP_ARRAY;
-		case TextureType_Buffer:
+		case TextureType::Buffer:
 			return GL_TEXTURE_BUFFER;
 		default:
 			break;
@@ -71,13 +71,13 @@ protected:
 class Texture1D :public Texture
 {
 public:
-	Texture1D() :Texture(TextureType::TextureType_Texture1D) {}
+	Texture1D() :Texture(TextureType::Texture1D) {}
 
 };
 class Texture2D :public Texture
 {
 public:
-	Texture2D() :Texture(TextureType::TextureType_Texture2D) {}
+	Texture2D() :Texture(TextureType::Texture2D) {}
 	void Load(const char* filename) override {
 		if (m_data != nullptr)
 		{
@@ -119,7 +119,7 @@ protected:
 class Texture3D :public Texture
 {
 public:
-	Texture3D() :Texture(TextureType::TextureType_Texture3D) {}
+	Texture3D() :Texture(TextureType::Texture3D) {}
 	__GET_SET_PROPERTY__(Height, GLsizei, m_height)
 		__GET_SET_PROPERTY__(Depth, GLsizei, m_depth)
 		__GET_SET_PROPERTY__(WrapModeP, TextureWrapMode, m_wrapModeP)

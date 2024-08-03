@@ -11,7 +11,7 @@ void ShaderUtils::LoadAllShader(ScriptableRenderContext& renderContext)
 	std::vector<ConstantBufferIdentifier> constantBuffers;
 
 	CompileShaderProgram(renderContext, rawShaderInfos, outputShaderPrograms, constantBuffers);
-	ResourceManager::GetInstance().RequestConstantBufferResource(constantBuffers);
+	ResourceManager::getInstance()->RequestConstantBufferResource(constantBuffers);
 	Shader::Init(outputShaderPrograms, constantBuffers);
 }
 
@@ -241,17 +241,17 @@ ConstantBufferType ShaderUtils::GetConstantType(std::string blockName)
 {
 	if (StringUtility::EndsWith(blockName, "PerFrame"))
 	{
-		return ConstantBufferType::ConstantBufferType_PerFrame;
+		return ConstantBufferType::PerFrame;
 	}
 	if (StringUtility::EndsWith(blockName, "PerCamera"))
 	{
-		return ConstantBufferType::ConstantBufferType_PerCamera;
+		return ConstantBufferType::PerCamera;
 	}
 	if (StringUtility::EndsWith(blockName, "PerPass"))
 	{
-		return ConstantBufferType::ConstantBufferType_PerPass;
+		return ConstantBufferType::PerPass;
 	}
-	return ConstantBufferType::ConstantBufferType_None;
+	return ConstantBufferType::None;
 }
 
 ConstantBufferIdentifier* ShaderUtils::GetConstantBuffer(std::vector<ConstantBufferIdentifier>& constantBuffers, ConstantBufferType constantBufferType)

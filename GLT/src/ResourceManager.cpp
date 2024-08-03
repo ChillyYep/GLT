@@ -139,12 +139,12 @@ void ResourceManager::RequestTextureResource(const TextureManagementCentre& text
 		textureResourceIdentifier.m_internalFormat = texturePtr->GetInternalFormat();
 		textureResourceIdentifier.m_textureType = textureType;
 		textureResourceIdentifier.m_width = texturePtr->GetWidth();
-		if (textureType == TextureType::TextureType_Texture2D)
+		if (textureType == TextureType::Texture2D)
 		{
 			auto texture2DPtr = static_cast<Texture2D*>(texturePtr.get());
 			textureResourceIdentifier.m_height = texture2DPtr->GetHeight();
 		}
-		else if (textureType == TextureType::TextureType_Texture3D)
+		else if (textureType == TextureType::Texture3D)
 		{
 			auto texture3DPtr = static_cast<Texture3D*>(texturePtr.get());
 			textureResourceIdentifier.m_height = texture3DPtr->GetHeight();
@@ -189,11 +189,11 @@ void ResourceManager::RequestTextureResource(const TextureManagementCentre& text
 		{
 			const auto textureRef = textureManagementCentre.GetRefObject(resourceIdentifier->GetInstanceId());
 			auto texturePtr = textureRef.m_target;
-			if (textureType == TextureType::TextureType_Texture1D)
+			if (textureType == TextureType::Texture1D)
 			{
 				glTextureStorage1D(resourceIdentifier->m_texture, resourceIdentifier->m_levels, resourceIdentifier->m_internalFormat, resourceIdentifier->m_width);
 			}
-			else if (textureType == TextureType::TextureType_Texture2D)
+			else if (textureType == TextureType::Texture2D)
 			{
 				auto texture2DPtr = static_cast<Texture2D*>(texturePtr.get());
 				glBindTextureUnit(0, resourceIdentifier->m_texture);
@@ -210,7 +210,7 @@ void ResourceManager::RequestTextureResource(const TextureManagementCentre& text
 
 				glGenerateTextureMipmap(resourceIdentifier->m_texture);
 			}
-			else if (textureType == TextureType::TextureType_Texture3D)
+			else if (textureType == TextureType::Texture3D)
 			{
 				glTextureStorage3D(resourceIdentifier->m_texture, resourceIdentifier->m_levels, resourceIdentifier->m_internalFormat, resourceIdentifier->m_width, resourceIdentifier->m_height,
 					resourceIdentifier->m_depth);

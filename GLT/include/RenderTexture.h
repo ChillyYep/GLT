@@ -6,7 +6,7 @@
 class RenderTexture :public Object
 {
 public:
-	RenderTexture(int width, int height, GLenum colorInternalFormat, RenderTextureDepthStencilType depthInternalFormat, RenderTextureDepthStencilType stencilInternalFormat = RenderTextureDepthStencilType_None)
+	RenderTexture(int width, int height, GLenum colorInternalFormat, RenderTextureDepthStencilType depthInternalFormat, RenderTextureDepthStencilType stencilInternalFormat = RenderTextureDepthStencilType::None)
 		:m_width(width), m_height(height), m_colorInternalFormat(colorInternalFormat), m_depthInternalFormat(depthInternalFormat), m_stencilInternalFormat(stencilInternalFormat) {}
 
 	~RenderTexture() {}
@@ -22,7 +22,7 @@ public:
 			// 将RenderBuffer关联到FrameBuffer的附件
 			glNamedFramebufferRenderbuffer(m_frameBuffer, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, m_colorRenderBuffer.GetRenderBufferPtr());
 		}
-		if (m_depthInternalFormat == RenderTextureDepthStencilType::RenderTextureDepthStencilType_Depth_Stencil)
+		if (m_depthInternalFormat == RenderTextureDepthStencilType::Depth_Stencil)
 		{
 			m_depthRenderBuffer.Create(m_width, m_height, GL_DEPTH_STENCIL);
 			// 将RenderBuffer关联到FrameBuffer的附件
@@ -30,13 +30,13 @@ public:
 		}
 		else
 		{
-			if (m_depthInternalFormat != RenderTextureDepthStencilType::RenderTextureDepthStencilType_None)
+			if (m_depthInternalFormat != RenderTextureDepthStencilType::None)
 			{
 				m_depthRenderBuffer.Create(m_width, m_height, GetDepthStencilGLType(m_depthInternalFormat));
 				// 将RenderBuffer关联到FrameBuffer的附件
 				glNamedFramebufferRenderbuffer(m_frameBuffer, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthRenderBuffer.GetRenderBufferPtr());
 			}
-			if (m_stencilInternalFormat != RenderTextureDepthStencilType::RenderTextureDepthStencilType_None)
+			if (m_stencilInternalFormat != RenderTextureDepthStencilType::None)
 			{
 				m_stencilRenderBuffer.Create(m_width, m_height, GetDepthStencilGLType(m_stencilInternalFormat));
 				// 将RenderBuffer关联到FrameBuffer的附件
@@ -57,7 +57,7 @@ public:
 
 	void ClearColor()
 	{
-		auto size = Window::GetInstance().GetSize();
+		auto size = Window::getInstance()->GetSize();
 		glViewport(0, 0, size.x, size.y);
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -65,7 +65,7 @@ public:
 
 	void BlitToWindow()
 	{
-		auto windowSize = Window::GetInstance().GetSize();
+		auto windowSize = Window::getInstance()->GetSize();
 		assert(glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
 		// 将FBO绑定到读取FB目标上
 		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_frameBuffer);
@@ -89,29 +89,29 @@ public:
 	{
 		switch (depthStencilType)
 		{
-		case RenderTextureDepthStencilType_None:
+		case RenderTextureDepthStencilType::None:
 			return GL_NONE;
-		case RenderTextureDepthStencilType_Depth8:
+		case RenderTextureDepthStencilType::Depth8:
 			return GL_DEPTH_COMPONENT;
-		case RenderTextureDepthStencilType_Depth16:
+		case RenderTextureDepthStencilType::Depth16:
 			return GL_DEPTH_COMPONENT16;
-		case RenderTextureDepthStencilType_Depth24:
+		case RenderTextureDepthStencilType::Depth24:
 			return GL_DEPTH_COMPONENT24;
-		case RenderTextureDepthStencilType_Depth32:
+		case RenderTextureDepthStencilType::Depth32:
 			return GL_DEPTH_COMPONENT32;
-		case RenderTextureDepthStencilType_Depth32F:
+		case RenderTextureDepthStencilType::Depth32F:
 			return GL_DEPTH_COMPONENT32F;
-		case RenderTextureDepthStencilType_Stencil0:
+		case RenderTextureDepthStencilType::Stencil0:
 			return GL_STENCIL_INDEX;
-		case RenderTextureDepthStencilType_Stencil1:
+		case RenderTextureDepthStencilType::Stencil1:
 			return GL_STENCIL_INDEX1;
-		case RenderTextureDepthStencilType_Stencil4:
+		case RenderTextureDepthStencilType::Stencil4:
 			return GL_STENCIL_INDEX4;
-		case RenderTextureDepthStencilType_Stencil8:
+		case RenderTextureDepthStencilType::Stencil8:
 			return GL_STENCIL_INDEX8;
-		case RenderTextureDepthStencilType_Stencil16:
+		case RenderTextureDepthStencilType::Stencil16:
 			return GL_STENCIL_INDEX16;
-		case RenderTextureDepthStencilType_Depth_Stencil:
+		case RenderTextureDepthStencilType::Depth_Stencil:
 			return GL_DEPTH_STENCIL;
 		default:
 			break;
@@ -137,7 +137,7 @@ private:
 class RenderTexture_TextureVersion :public Object
 {
 public:
-	RenderTexture_TextureVersion(int width, int height, GLenum colorInternalFormat, RenderTextureDepthStencilType depthInternalFormat, RenderTextureDepthStencilType stencilInternalFormat = RenderTextureDepthStencilType_None)
+	RenderTexture_TextureVersion(int width, int height, GLenum colorInternalFormat, RenderTextureDepthStencilType depthInternalFormat, RenderTextureDepthStencilType stencilInternalFormat = RenderTextureDepthStencilType::None)
 		:m_width(width), m_height(height), m_colorInternalFormat(colorInternalFormat), m_depthInternalFormat(depthInternalFormat), m_stencilInternalFormat(stencilInternalFormat) {}
 
 	~RenderTexture_TextureVersion() {}
@@ -162,7 +162,7 @@ public:
 			// 将Texture关联到FrameBuffer的附件
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_colorTexturePtr, 0);
 		}
-		if (m_depthInternalFormat == RenderTextureDepthStencilType::RenderTextureDepthStencilType_Depth_Stencil)
+		if (m_depthInternalFormat == RenderTextureDepthStencilType::Depth_Stencil)
 		{
 			auto depthInternalFormat = GetDepthStencilGLType(m_depthInternalFormat);
 			glCreateTextures(GL_TEXTURE_2D, 1, &m_depthTexturePtr);
@@ -173,7 +173,7 @@ public:
 		}
 		else
 		{
-			if (m_depthInternalFormat != RenderTextureDepthStencilType::RenderTextureDepthStencilType_None)
+			if (m_depthInternalFormat != RenderTextureDepthStencilType::None)
 			{
 				auto depthInternalFormat = GetDepthStencilGLType(m_depthInternalFormat);
 				glCreateTextures(GL_TEXTURE_2D, 1, &m_depthTexturePtr);
@@ -182,7 +182,7 @@ public:
 				glBindTexture(GL_TEXTURE_2D, 0);
 				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_depthTexturePtr, 0);
 			}
-			if (m_stencilInternalFormat != RenderTextureDepthStencilType::RenderTextureDepthStencilType_None)
+			if (m_stencilInternalFormat != RenderTextureDepthStencilType::None)
 			{
 				auto stencilInternalFormat = GetDepthStencilGLType(m_stencilInternalFormat);
 				glCreateTextures(GL_TEXTURE_2D, 1, &m_stencilTexturePtr);
@@ -240,7 +240,7 @@ public:
 
 	void ClearColor()
 	{
-		auto size = Window::GetInstance().GetSize();
+		auto size = Window::getInstance()->GetSize();
 		glViewport(0, 0, size.x, size.y);
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -248,7 +248,7 @@ public:
 
 	void BlitToWindow()
 	{
-		auto windowSize = Window::GetInstance().GetSize();
+		auto windowSize = Window::getInstance()->GetSize();
 		// 将FBO绑定到读取FB目标上
 		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_frameBuffer);
 		// 绘制窗口设置为0，意思是重新绑定到窗口的帧缓存上
@@ -280,29 +280,29 @@ public:
 	{
 		switch (depthStencilType)
 		{
-		case RenderTextureDepthStencilType_None:
+		case RenderTextureDepthStencilType::None:
 			return GL_NONE;
-		case RenderTextureDepthStencilType_Depth8:
+		case RenderTextureDepthStencilType::Depth8:
 			return GL_DEPTH_COMPONENT;
-		case RenderTextureDepthStencilType_Depth16:
+		case RenderTextureDepthStencilType::Depth16:
 			return GL_DEPTH_COMPONENT16;
-		case RenderTextureDepthStencilType_Depth24:
+		case RenderTextureDepthStencilType::Depth24:
 			return GL_DEPTH_COMPONENT24;
-		case RenderTextureDepthStencilType_Depth32:
+		case RenderTextureDepthStencilType::Depth32:
 			return GL_DEPTH_COMPONENT32;
-		case RenderTextureDepthStencilType_Depth32F:
+		case RenderTextureDepthStencilType::Depth32F:
 			return GL_DEPTH_COMPONENT32F;
-		case RenderTextureDepthStencilType_Stencil0:
+		case RenderTextureDepthStencilType::Stencil0:
 			return GL_STENCIL_INDEX;
-		case RenderTextureDepthStencilType_Stencil1:
+		case RenderTextureDepthStencilType::Stencil1:
 			return GL_STENCIL_INDEX1;
-		case RenderTextureDepthStencilType_Stencil4:
+		case RenderTextureDepthStencilType::Stencil4:
 			return GL_STENCIL_INDEX4;
-		case RenderTextureDepthStencilType_Stencil8:
+		case RenderTextureDepthStencilType::Stencil8:
 			return GL_STENCIL_INDEX8;
-		case RenderTextureDepthStencilType_Stencil16:
+		case RenderTextureDepthStencilType::Stencil16:
 			return GL_STENCIL_INDEX16;
-		case RenderTextureDepthStencilType_Depth_Stencil:
+		case RenderTextureDepthStencilType::Depth_Stencil:
 			return GL_DEPTH_STENCIL;
 		default:
 			break;

@@ -6,36 +6,31 @@
 #include <MeshManagementCentre.h>
 #include <TextureManagementCentre.h>
 #include <SamplerManagementCentre.h>
+#include <Singleton.h>
 
-enum ResourceType {
-	ResourceType_Mesh,
-	ResourceType_Texture,
-	ResourceType_Sampler
+enum class ResourceType {
+	Mesh,
+	Texture,
+	Sampler
 };
 
-class ResourceManager
+class ResourceManager :public Singleton<ResourceManager>
 {
 public:
 	~ResourceManager() {}
-	ResourceManager(const ResourceManager&) = delete;
-	ResourceManager& operator=(const ResourceManager&) = delete;
-	inline static ResourceManager& GetInstance() {
 
-		static ResourceManager instance;
-		return instance;
-	}
 	template<typename T>
 	inline void RequestResource(ManagementCentreBase<T>* managementCentre, std::vector<GLuint> instanceIds, ResourceType resourceType)
 	{
 		switch (resourceType)
 		{
-		case ResourceType_Mesh:
+		case ResourceType::Mesh:
 			RequestMeshResource(*dynamic_cast<MeshManagementCentre*>(managementCentre), instanceIds);
 			break;
-		case ResourceType_Texture:
+		case ResourceType::Texture:
 			RequestTextureResource(*dynamic_cast<TextureManagementCentre*>(managementCentre), instanceIds);
 			break;
-		case ResourceType_Sampler:
+		case ResourceType::Sampler:
 			RequestSamplerResource(*dynamic_cast<SamplerManagementCentre*>(managementCentre), instanceIds);
 			break;
 		default:
@@ -48,13 +43,13 @@ public:
 	{
 		switch (resourceType)
 		{
-		case ResourceType_Mesh:
+		case ResourceType::Mesh:
 			DestroyMeshResource(*dynamic_cast<MeshManagementCentre*>(managementCentre), instanceIds);
 			break;
-		case ResourceType_Texture:
+		case ResourceType::Texture:
 			DestroyTextureResource(*dynamic_cast<TextureManagementCentre*>(managementCentre), instanceIds);
 			break;
-		case ResourceType_Sampler:
+		case ResourceType::Sampler:
 			DestroySamplerResource(*dynamic_cast<SamplerManagementCentre*>(managementCentre), instanceIds);
 			break;
 		default:
@@ -105,8 +100,6 @@ public:
 
 	inline TextureManagementCentre& GetTextureManagementCentre() { return m_textureManagementCentre; }
 private:
-	ResourceManager() {}
-
 	template<typename Identifier>
 	std::vector<GLuint> RequestNewIdentifier(std::vector<GLuint>& instanceIds, std::unordered_map<GLuint, Identifier>& identifiers)
 	{
@@ -142,16 +135,16 @@ private:
 	{
 		switch (wrapMode)
 		{
-		case TextureWrapMode::TextureWrapMode_ClampEdge:
+		case TextureWrapMode::ClampEdge:
 			glTextureParameteri(texture, pname, GL_CLAMP_TO_EDGE);
 			break;
-		case TextureWrapMode::TextureWrapMode_Border:
+		case TextureWrapMode::Border:
 			glTextureParameteri(texture, pname, GL_CLAMP_TO_BORDER);
 			break;
-		case TextureWrapMode::TextureWrapMode_Repeat:
+		case TextureWrapMode::Repeat:
 			glTextureParameteri(texture, pname, GL_REPEAT);
 			break;
-		case TextureWrapMode::TextureWrapMode_MirroredRepeat:
+		case TextureWrapMode::MirroredRepeat:
 			glTextureParameteri(texture, pname, GL_MIRRORED_REPEAT);
 			break;
 		default:
@@ -163,16 +156,16 @@ private:
 	{
 		switch (textureFilter)
 		{
-		case TextureFilter::TextureFilter_Point_Mipmap_Point:
+		case TextureFilter::Point_Mipmap_Point:
 			glTextureParameteri(texture, pname, GL_NEAREST_MIPMAP_NEAREST);
 			break;
-		case TextureFilter::TextureFilter_Point_Mipmap_Linear:
+		case TextureFilter::Point_Mipmap_Linear:
 			glTextureParameteri(texture, pname, GL_NEAREST_MIPMAP_LINEAR);
 			break;
-		case TextureFilter::TextureFilter_Linear_Mipmap_Point:
+		case TextureFilter::Linear_Mipmap_Point:
 			glTextureParameteri(texture, pname, GL_LINEAR_MIPMAP_NEAREST);
 			break;
-		case TextureFilter::TextureFilter_Linear_Mipmap_Linear:
+		case TextureFilter::Linear_Mipmap_Linear:
 			glTextureParameteri(texture, pname, GL_LINEAR_MIPMAP_LINEAR);
 			break;
 		default:

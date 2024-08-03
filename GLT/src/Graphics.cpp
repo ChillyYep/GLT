@@ -2,7 +2,7 @@
 
 void Graphics::DrawMesh(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material, std::shared_ptr<Camera>& camera, const glm::mat4x4& modelMatrix)
 {
-	auto scenePtr = SceneManager::GetInstance().GetMainScene();
+	auto scenePtr = SceneManager::getInstance()->GetMainScene();
 	if (scenePtr == nullptr)
 	{
 		return;
@@ -16,7 +16,7 @@ void Graphics::DrawMesh(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr
 void Graphics::DrawMeshNow(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material, std::shared_ptr<Camera>& camera, const glm::mat4x4& modelMatrix)
 {
 	ComponentStateMachine componentStateMachine;
-	auto scenePtr = SceneManager::GetInstance().GetMainScene();
+	auto scenePtr = SceneManager::getInstance()->GetMainScene();
 	if (scenePtr == nullptr)
 	{
 		return;
@@ -36,7 +36,7 @@ void Graphics::DrawMeshNow(const std::shared_ptr<Mesh>& mesh, const std::shared_
 }
 void Graphics::DrawRequestedMesh(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material, std::shared_ptr<Camera>& camera, const glm::mat4x4& modelMatrix)
 {
-	auto resourceIdentifier = ResourceManager::GetInstance().GetMeshResource(mesh->GetInstanceId());
+	auto resourceIdentifier = ResourceManager::getInstance()->GetMeshResource(mesh->GetInstanceId());
 	if (!resourceIdentifier.IsValid())
 	{
 		return;
@@ -55,10 +55,10 @@ void Graphics::DrawRequestedMesh(const std::shared_ptr<Mesh>& mesh, const std::s
 
 		if (program > 0 && glIsProgram(program))
 		{
-			auto lightProperties = SceneManager::GetInstance().GetAffectedLights(camera);
+			auto lightProperties = SceneManager::getInstance()->GetAffectedLights(camera);
 			glUseProgram(program);
 			Shader::SetGlobalMatrix(ShaderPropertyNames::ModelMatrix, modelMatrix);
-			Shader::Upload(ConstantBufferType::ConstantBufferType_PerPass);
+			Shader::Upload(ConstantBufferType::PerPass);
 			ShaderUtils::BindBlockForProgram(*shader.get());
 			//shader->SetUniformBlock(ShaderPropertyNames::Lights)
 			//shader->SetVector(ShaderPropertyNames::Lights, &lightProperties);
@@ -66,7 +66,7 @@ void Graphics::DrawRequestedMesh(const std::shared_ptr<Mesh>& mesh, const std::s
 			Texture* mainTex = mainTexProperty == nullptr ? nullptr : ((MaterialTextureProperty*)mainTexProperty.get())->GetTexture().get();
 			if (mainTex != nullptr)
 			{
-				auto textureIdentifier = ResourceManager::GetInstance().GetTextureResource(mainTex->GetInstanceId());
+				auto textureIdentifier = ResourceManager::getInstance()->GetTextureResource(mainTex->GetInstanceId());
 				auto target = Texture::TextureType2TextureTarget(textureIdentifier.GetTextureType());
 				if (target != GL_NONE)
 				{
