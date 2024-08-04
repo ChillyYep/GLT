@@ -373,9 +373,6 @@
     <ClInclude Include="include\ConstantBuffers.h">
       <Filter>头文件\RHI\ResourceManager\Buffers</Filter>
     </ClInclude>
-    <ClInclude Include="include\ScriptableRenderContext.h">
-      <Filter>头文件\RenderPipeline</Filter>
-    </ClInclude>
     <ClInclude Include="include\BytesBuffer.h">
       <Filter>头文件\RHI\ResourceManager\Buffers</Filter>
     </ClInclude>
@@ -438,6 +435,9 @@
     </ClInclude>
     <ClInclude Include="Object.cpp">
       <Filter>源文件\Common\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ScriptableRenderContext.h">
+      <Filter>头文件\RHI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
