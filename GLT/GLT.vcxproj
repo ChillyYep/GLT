@@ -141,6 +141,7 @@
     <ClCompile Include="src\CommandBuffer.cpp" />
     <ClCompile Include="src\EventSystem.cpp" />
     <ClCompile Include="src\FileUtils.cpp" />
+    <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\gl3w.c" />
     <ClCompile Include="src\glfwWindow.cpp" />
     <ClCompile Include="src\GLSLCompiler.cpp" />
@@ -155,7 +156,9 @@
     <ClCompile Include="src\RHICommon.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\ConstantBufferIdentifier.cpp" />
+    <ClCompile Include="src\SceneUtility.cpp" />
     <ClCompile Include="src\ShaderUtils.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\ShaderPropertyNames.cpp" />

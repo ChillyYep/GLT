@@ -23,9 +23,9 @@ public:
 	ManagementCentreBase() {}
 	~ManagementCentreBase() {}
 
-	virtual void Add(T target)
+	virtual void add(T target)
 	{
-		auto instanceId = target->GetInstanceId();
+		auto instanceId = target->getInstanceId();
 		assert(instanceId > 0);
 		if (m_allObjects.find(instanceId) == m_allObjects.end())
 		{
@@ -36,9 +36,9 @@ public:
 		m_allObjects[instanceId].m_refCount++;
 	}
 
-	virtual void Remove(T target)
+	virtual void remove(T target)
 	{
-		auto instanceId = target->GetInstanceId();
+		auto instanceId = target->getInstanceId();
 		assert(instanceId > 0);
 		if (m_allObjects.find(instanceId) != m_allObjects.end())
 		{
@@ -51,11 +51,11 @@ public:
 		}
 	}
 
-	virtual void OnSubmit() {}
+	virtual void onSubmit() {}
 
-	inline std::vector<GLTUInt32>& GetAllObjectInstanceIds() const { return m_sortedObjects; }
+	inline std::vector<GLTUInt32>& getAllObjectInstanceIds() const { return m_sortedObjects; }
 
-	inline ReferencedObject GetRefObject(GLTUInt32 instanceId) const
+	inline ReferencedObject getRefObject(GLTUInt32 instanceId) const
 	{
 		auto iter = m_allObjects.find(instanceId);
 		if (m_allObjects.end() != iter)
@@ -65,23 +65,23 @@ public:
 		return ReferencedObject();
 	}
 
-	inline std::vector<ReferencedObject> GetRemovedObjects() const { return m_removeList; }
+	inline std::vector<ReferencedObject> getRemovedObjects() const { return m_removeList; }
 
-	inline std::vector<GLTUInt32> GetExpiredObjectInstanceIds() const
+	inline std::vector<GLTUInt32> getExpiredObjectInstanceIds() const
 	{
 		std::vector<GLTUInt32> removedInstanceIds;
 		for (int i = 0;i < m_removeList.size();++i)
 		{
-			removedInstanceIds.push_back(m_removeList[i].m_target->GetInstanceId());
+			removedInstanceIds.push_back(m_removeList[i].m_target->getInstanceId());
 		}
 		return removedInstanceIds;
 	}
 
-	inline void ClearExpiredList() { m_removeList.clear(); }
+	inline void clearExpiredList() { m_removeList.clear(); }
 
-	inline std::vector<GLTUInt32> GetNewObjects() const { return m_addList; }
+	inline std::vector<GLTUInt32> getNewObjects() const { return m_addList; }
 
-	inline void ClearNewList() { m_addList.clear(); }
+	inline void clearNewList() { m_addList.clear(); }
 protected:
 	std::map<GLTUInt32, ReferencedObject> m_allObjects;
 

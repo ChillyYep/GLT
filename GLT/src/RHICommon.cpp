@@ -4,7 +4,7 @@ ShaderUniformBlockProperty ShaderUniformBlockProperty::s_null;
 
 BlockUniform BlockUniform::s_null;
 
-BlockUniform ShaderUniformBlockProperty::FindBlockUniformByPropertyName(std::string name)
+BlockUniform ShaderUniformBlockProperty::findBlockUniformByPropertyName(std::string name)
 {
 	for (int i = 0;i < m_blockUniforms.size();++i)
 	{
@@ -13,7 +13,7 @@ BlockUniform ShaderUniformBlockProperty::FindBlockUniformByPropertyName(std::str
 			return m_blockUniforms[i];
 		}
 	}
-	return BlockUniform::Null();
+	return BlockUniform::null();
 }
 
 bool ShaderUniformBlockProperty::operator==(const ShaderUniformBlockProperty& other) const

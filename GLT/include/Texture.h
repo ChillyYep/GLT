@@ -10,41 +10,14 @@ class Texture :public Object
 public:
 	Texture(TextureType textureType) :m_textureType(textureType) {}
 	~Texture() {}
-	virtual void Load(const char* filename) = 0;
-	virtual void Unload() = 0;
+	virtual void load(const char* filename) = 0;
+	virtual void unload() = 0;
 
-	inline static GLenum TextureType2TextureTarget(TextureType textureType)
-	{
-		switch (textureType)
-		{
-		case TextureType::Texture1D:
-			return GL_TEXTURE_1D;
-		case TextureType::Texture1DArray:
-			return GL_TEXTURE_1D_ARRAY;
-		case TextureType::Texture2D:
-			return GL_TEXTURE_2D;
-		case TextureType::Texture2DArray:
-			return GL_TEXTURE_2D_ARRAY;
-		case TextureType::Texture2DMultiSample:
-			return GL_TEXTURE_2D_MULTISAMPLE;
-		case TextureType::Texture2DMultiSampleArray:
-			return GL_TEXTURE_2D_MULTISAMPLE_ARRAY;
-		case TextureType::Texture3D:
-			return GL_TEXTURE_3D;
-		case TextureType::CubeMap:
-			return GL_TEXTURE_CUBE_MAP;
-		case TextureType::CubeMapArray:
-			return GL_TEXTURE_CUBE_MAP_ARRAY;
-		case TextureType::Buffer:
-			return GL_TEXTURE_BUFFER;
-		default:
-			break;
-		}
-		return GL_NONE;
-	}
+	static GLenum textureType2TextureTarget(TextureType textureType);
 
-	inline GLubyte* GetData() { return m_data; }
-	inline TextureType GetTextureType() { return m_textureType; }
+	inline GLubyte* getData() { return m_data; }
+
+	inline TextureType getTextureType() { return m_textureType; }
 	__GET_SET_PROPERTY__(Levels, GLsizei, m_levels)
 		__GET_SET_PROPERTY__(Width, GLsizei, m_width)
 		__GET_SET_PROPERTY__(IsProxy, GLboolean, m_isProxy)
@@ -80,10 +53,10 @@ class Texture2D :public Texture
 {
 public:
 	Texture2D() :Texture(TextureType::Texture2D) {}
-	void Load(const char* filename) override {
+	void load(const char* filename) override {
 		if (m_data != nullptr)
 		{
-			Unload();
+			unload();
 		}
 		int channels;
 		m_data = stbi_load(filename, &m_width, &m_height, &channels, 0);
@@ -104,7 +77,7 @@ public:
 			m_externalFormat = GL_RGBA;
 		}
 	}
-	void Unload() override {
+	void unload() override {
 		if (m_data != nullptr)
 		{
 			stbi_image_free(m_data);

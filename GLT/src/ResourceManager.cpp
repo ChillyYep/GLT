@@ -1,5 +1,5 @@
 #include "ResourceManager.h"
-void ResourceManager::RequestMeshResource(const MeshManagementCentre& meshManagementCentre, std::vector<GLuint>& meshInstanceIds)
+void ResourceManager::requestMeshResource(const MeshManagementCentre& meshManagementCentre, std::vector<GLuint>& meshInstanceIds)
 {
 	size_t length = meshInstanceIds.size();
 	GLuint* newMeshInstanceIds = new GLuint[length];
@@ -33,12 +33,12 @@ void ResourceManager::RequestMeshResource(const MeshManagementCentre& meshManage
 		GLuint vbo = newMeshVbos[i];
 		GLuint ebo = newMeshEbos[i];
 		GLuint instanceId = newMeshInstanceIds[i];
-		auto meshItem = meshManagementCentre.GetRefObject(instanceId);
+		auto meshItem = meshManagementCentre.getRefObject(instanceId);
 		auto mesh = meshItem.m_target;
-		size_t verticesMemorySize = mesh->GetVerticesCount() * Mesh::VertexSize;
-		size_t colorsMemorySize = mesh->GetVerticesCount() * Mesh::ColorSize;
-		size_t uvsMemorySize = mesh->GetVerticesCount() * Mesh::UVSize;
-		size_t normalsMemorySize = mesh->GetVerticesCount() * Mesh::NormalSize;
+		size_t verticesMemorySize = mesh->getVerticesCount() * Mesh::VertexSize;
+		size_t colorsMemorySize = mesh->getVerticesCount() * Mesh::ColorSize;
+		size_t uvsMemorySize = mesh->getVerticesCount() * Mesh::UVSize;
+		size_t normalsMemorySize = mesh->getVerticesCount() * Mesh::NormalSize;
 
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -52,13 +52,13 @@ void ResourceManager::RequestMeshResource(const MeshManagementCentre& meshManage
 			/*glBufferData(GL_ARRAY_BUFFER, verticesMemorySize + colorsMemorySize, NULL, GL_STATIC_DRAW);
 			glBufferSubData(GL_ARRAY_BUFFER, 0, verticesMemorySize, mesh->GetVertices());*/
 			glNamedBufferStorage(vbo, verticesMemorySize + colorsMemorySize + uvsMemorySize + normalsMemorySize, NULL, GL_DYNAMIC_STORAGE_BIT);
-			glNamedBufferSubData(vbo, 0, verticesMemorySize, mesh->GetVertices());
+			glNamedBufferSubData(vbo, 0, verticesMemorySize, mesh->getVertices());
 			if (colorsMemorySize > 0)
 			{
 				auto offset = verticesMemorySize;
 				glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0,(void*)offset);
 				glEnableVertexAttribArray(1);
-				glNamedBufferSubData(vbo, offset, colorsMemorySize, mesh->GetColors());
+				glNamedBufferSubData(vbo, offset, colorsMemorySize, mesh->getColors());
 				//glBufferSubData(GL_ARRAY_BUFFER, verticesMemorySize, colorsMemorySize, mesh->GetColors());
 			}
 			if (uvsMemorySize > 0)
@@ -66,17 +66,17 @@ void ResourceManager::RequestMeshResource(const MeshManagementCentre& meshManage
 				auto offset = colorsMemorySize + verticesMemorySize;
 				glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)offset);
 				glEnableVertexAttribArray(2);
-				glNamedBufferSubData(vbo, offset, uvsMemorySize, mesh->GetUvs());
+				glNamedBufferSubData(vbo, offset, uvsMemorySize, mesh->getUvs());
 			}
 			if (normalsMemorySize > 0)
 			{
 				auto offset = colorsMemorySize + verticesMemorySize + uvsMemorySize;
 				glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, (void*)offset);
 				glEnableVertexAttribArray(3);
-				glNamedBufferSubData(vbo, offset, normalsMemorySize, mesh->GetNormals());
+				glNamedBufferSubData(vbo, offset, normalsMemorySize, mesh->getNormals());
 			}
 		}
-		glNamedBufferStorage(ebo, mesh->GetIndicesCount() * Mesh::IndexSize, mesh->GetIndices(), GL_DYNAMIC_STORAGE_BIT);
+		glNamedBufferStorage(ebo, mesh->getIndicesCount() * Mesh::IndexSize, mesh->getIndices(), GL_DYNAMIC_STORAGE_BIT);
 
 		m_meshResources[instanceId] = MeshResourceIdentifier(vao, vbo, ebo, instanceId);
 	}
@@ -91,7 +91,7 @@ void ResourceManager::RequestMeshResource(const MeshManagementCentre& meshManage
 	newMeshInstanceIds = nullptr;
 }
 
-void ResourceManager::DestroyMeshResource(const MeshManagementCentre& meshManagementCentre, std::vector<GLuint>& meshInstanceIds)
+void ResourceManager::destroyMeshResource(const MeshManagementCentre& meshManagementCentre, std::vector<GLuint>& meshInstanceIds)
 {
 	GLsizei removedCount = (GLsizei)meshInstanceIds.size();
 	GLuint* removedVaos = new GLuint[removedCount];
@@ -107,9 +107,9 @@ void ResourceManager::DestroyMeshResource(const MeshManagementCentre& meshManage
 		}
 		auto meshResourceIdentifier = (*targetIter).second;
 
-		removedVaos[i] = meshResourceIdentifier.GetVAO();
-		removedVbos[i] = meshResourceIdentifier.GetVBO();
-		removedEbos[i] = meshResourceIdentifier.GetEBO();
+		removedVaos[i] = meshResourceIdentifier.getVAO();
+		removedVbos[i] = meshResourceIdentifier.getVBO();
+		removedEbos[i] = meshResourceIdentifier.getEBO();
 	}
 	glDeleteVertexArrays(removedCount, removedVaos);
 	glDeleteBuffers(removedCount, removedVbos);
@@ -122,9 +122,9 @@ void ResourceManager::DestroyMeshResource(const MeshManagementCentre& meshManage
 	removedEbos = nullptr;
 }
 
-void ResourceManager::RequestTextureResource(const TextureManagementCentre& textureManagementCentre, std::vector<GLuint>& textureInstanceIds)
+void ResourceManager::requestTextureResource(const TextureManagementCentre& textureManagementCentre, std::vector<GLuint>& textureInstanceIds)
 {
-	std::vector<GLuint> newTextureInstanceIds = RequestNewIdentifier(textureInstanceIds, m_textureResources);
+	std::vector<GLuint> newTextureInstanceIds = requestNewIdentifier(textureInstanceIds, m_textureResources);
 	size_t newTextureCount = newTextureInstanceIds.size();
 
 	// 收集新的实例
@@ -132,9 +132,9 @@ void ResourceManager::RequestTextureResource(const TextureManagementCentre& text
 	{
 		auto instanceId = newTextureInstanceIds[i];
 		TextureResourceIdentifier textureResourceIdentifier = TextureResourceIdentifier(instanceId);
-		const auto textureRef = textureManagementCentre.GetRefObject(instanceId);
+		const auto textureRef = textureManagementCentre.getRefObject(instanceId);
 		auto texturePtr = textureRef.m_target;
-		const auto textureType = texturePtr->GetTextureType();
+		const auto textureType = texturePtr->getTextureType();
 		textureResourceIdentifier.m_levels = texturePtr->GetLevels();
 		textureResourceIdentifier.m_internalFormat = texturePtr->GetInternalFormat();
 		textureResourceIdentifier.m_textureType = textureType;
@@ -166,7 +166,7 @@ void ResourceManager::RequestTextureResource(const TextureManagementCentre& text
 		auto textureResourceIdentifiers = pair.second;
 		auto size = (GLsizei)textureResourceIdentifiers.size();
 		textures = new GLuint[size];
-		GLenum target = Texture::TextureType2TextureTarget(textureType);
+		GLenum target = Texture::textureType2TextureTarget(textureType);
 		if (target == GL_NONE)
 		{
 			continue;
@@ -187,7 +187,7 @@ void ResourceManager::RequestTextureResource(const TextureManagementCentre& text
 		auto textureResourceIdentifiers = pair.second;
 		for (const auto& resourceIdentifier : textureResourceIdentifiers)
 		{
-			const auto textureRef = textureManagementCentre.GetRefObject(resourceIdentifier->GetInstanceId());
+			const auto textureRef = textureManagementCentre.getRefObject(resourceIdentifier->getInstanceId());
 			auto texturePtr = textureRef.m_target;
 			if (textureType == TextureType::Texture1D)
 			{
@@ -198,15 +198,15 @@ void ResourceManager::RequestTextureResource(const TextureManagementCentre& text
 				auto texture2DPtr = static_cast<Texture2D*>(texturePtr.get());
 				glBindTextureUnit(0, resourceIdentifier->m_texture);
 
-				SetTextureWrapMode(resourceIdentifier->m_texture, GL_TEXTURE_WRAP_S, texture2DPtr->GetWrapModeS());
-				SetTextureWrapMode(resourceIdentifier->m_texture, GL_TEXTURE_WRAP_T, texture2DPtr->GetWrapModeT());
+				setTextureWrapMode(resourceIdentifier->m_texture, GL_TEXTURE_WRAP_S, texture2DPtr->GetWrapModeS());
+				setTextureWrapMode(resourceIdentifier->m_texture, GL_TEXTURE_WRAP_T, texture2DPtr->GetWrapModeT());
 
-				SetTextureFilter(resourceIdentifier->m_texture, GL_TEXTURE_MIN_FILTER, texture2DPtr->GetTextureFilter());
-				SetTextureFilter(resourceIdentifier->m_texture, GL_TEXTURE_MAG_FILTER, texture2DPtr->GetTextureFilter());
+				setTextureFilter(resourceIdentifier->m_texture, GL_TEXTURE_MIN_FILTER, texture2DPtr->GetTextureFilter());
+				setTextureFilter(resourceIdentifier->m_texture, GL_TEXTURE_MAG_FILTER, texture2DPtr->GetTextureFilter());
 
 				glTextureStorage2D(resourceIdentifier->m_texture, resourceIdentifier->m_levels, resourceIdentifier->m_internalFormat, resourceIdentifier->m_width, resourceIdentifier->m_height);
 				glTextureSubImage2D(resourceIdentifier->m_texture, 0, 0, 0, resourceIdentifier->m_width,
-					resourceIdentifier->m_height, resourceIdentifier->m_externalFormat, resourceIdentifier->m_perChannelSize, texturePtr->GetData());
+					resourceIdentifier->m_height, resourceIdentifier->m_externalFormat, resourceIdentifier->m_perChannelSize, texturePtr->getData());
 
 				glGenerateTextureMipmap(resourceIdentifier->m_texture);
 			}
@@ -225,13 +225,13 @@ void ResourceManager::RequestTextureResource(const TextureManagementCentre& text
 		auto textureResourceIdentifiers = pair.second;
 		for (const auto& resourceIdentifier : textureResourceIdentifiers)
 		{
-			m_textureResources[resourceIdentifier->GetInstanceId()] = *resourceIdentifier;
+			m_textureResources[resourceIdentifier->getInstanceId()] = *resourceIdentifier;
 		}
 	}
 	m_tempTextureResources.clear();
 }
 
-void ResourceManager::DestroyTextureResource(const TextureManagementCentre& textureManagementCentre, std::vector<GLuint>& textureInstanceIds)
+void ResourceManager::destroyTextureResource(const TextureManagementCentre& textureManagementCentre, std::vector<GLuint>& textureInstanceIds)
 {
 	size_t length = textureInstanceIds.size();
 	std::vector<GLuint> removedTextures;
@@ -250,14 +250,14 @@ void ResourceManager::DestroyTextureResource(const TextureManagementCentre& text
 	glDeleteTextures((GLsizei)removedTextures.size(), removedTextures.data());
 }
 
-void ResourceManager::RequestSamplerResource(const SamplerManagementCentre& samplerManagementCentre, std::vector<GLuint>& samplerInstanceIds)
+void ResourceManager::requestSamplerResource(const SamplerManagementCentre& samplerManagementCentre, std::vector<GLuint>& samplerInstanceIds)
 {
-	std::vector<GLuint> newSamplerInstanceIds = RequestNewIdentifier(samplerInstanceIds, m_samplerResources);
+	std::vector<GLuint> newSamplerInstanceIds = requestNewIdentifier(samplerInstanceIds, m_samplerResources);
 	GLsizei newSamplerCount = (GLsizei)newSamplerInstanceIds.size();
 	for (int i = 0;i < newSamplerCount;++i)
 	{
 		SamplerResouceIdentifier samplerResourceIdentifier;
-		const auto samplerRef = samplerManagementCentre.GetRefObject(newSamplerInstanceIds[i]);
+		const auto samplerRef = samplerManagementCentre.getRefObject(newSamplerInstanceIds[i]);
 		auto samplerPtr = samplerRef.m_target;
 		// Sampler -> SamplerResourceIdentifier 参数设置
 
@@ -275,7 +275,7 @@ void ResourceManager::RequestSamplerResource(const SamplerManagementCentre& samp
 	}
 }
 
-void ResourceManager::DestroySamplerResource(const SamplerManagementCentre& samplerManagementCentre, std::vector<GLuint>& samplerInstanceIds)
+void ResourceManager::destroySamplerResource(const SamplerManagementCentre& samplerManagementCentre, std::vector<GLuint>& samplerInstanceIds)
 {
 	size_t length = samplerInstanceIds.size();
 	std::vector<GLuint> removedSamplers;

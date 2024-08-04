@@ -25,7 +25,7 @@ struct BlockUniform
 
 	bool operator==(const BlockUniform& other) const;
 	bool operator!=(const BlockUniform& other) const;
-	inline static BlockUniform Null() { return s_null; }
+	inline static BlockUniform null() { return s_null; }
 private:
 	static BlockUniform s_null;
 };
@@ -49,12 +49,12 @@ struct ShaderUniformBlockProperty {
 
 	std::vector<BlockUniform> m_blockUniforms;
 
-	BlockUniform FindBlockUniformByPropertyName(std::string name);
+	BlockUniform findBlockUniformByPropertyName(std::string name);
 	bool operator==(const ShaderUniformBlockProperty& other) const;
 
 	bool operator!=(const ShaderUniformBlockProperty& other) const;
 
-	inline static ShaderUniformBlockProperty Null() { return s_null; }
+	inline static ShaderUniformBlockProperty null() { return s_null; }
 private:
 	static ShaderUniformBlockProperty s_null;
 };

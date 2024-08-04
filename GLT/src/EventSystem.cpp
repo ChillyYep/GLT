@@ -9,7 +9,7 @@ GLFWwindow* EventSystem::m_currentWindow;
 
 std::list<EventListener*> EventSystem::m_listeners;
 
-void EventSystem::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+void EventSystem::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
 	double x, y;
 	glfwGetCursorPos(window, &x, &y);
@@ -23,7 +23,7 @@ void EventSystem::MouseButtonCallback(GLFWwindow* window, int button, int action
 		{
 			if (listener != nullptr)
 			{
-				listener->OnPointerPressed(m_uniqueMouseEvent);
+				listener->onPointerPressed(m_uniqueMouseEvent);
 			}
 		}
 	}
@@ -36,14 +36,14 @@ void EventSystem::MouseButtonCallback(GLFWwindow* window, int button, int action
 		{
 			if (listener != nullptr)
 			{
-				listener->OnPointerReleased(m_uniqueMouseEvent);
+				listener->onPointerReleased(m_uniqueMouseEvent);
 			}
 		}
 		m_uniqueMouseEvent.m_mouseType = MouseButtonType::None;
 	}
 }
 
-void EventSystem::CursorCallback(GLFWwindow* window, double xpos, double ypos)
+void EventSystem::cursorCallback(GLFWwindow* window, double xpos, double ypos)
 {
 	m_uniqueMouseEvent.m_pos = glm::vec2(xpos, ypos);
 	// Moving
@@ -53,13 +53,13 @@ void EventSystem::CursorCallback(GLFWwindow* window, double xpos, double ypos)
 		{
 			if (listener != nullptr)
 			{
-				listener->OnPointerMoved(m_uniqueMouseEvent);
+				listener->onPointerMoved(m_uniqueMouseEvent);
 			}
 		}
 	}
 }
 
-void EventSystem::WheelCallback(GLFWwindow* window, double xoffset, double yoffset)
+void EventSystem::wheelCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	m_uniqueWheelEvent.m_xOffset = static_cast<float>(xoffset);
 	m_uniqueWheelEvent.m_yOffset = static_cast<float>(yoffset);
@@ -67,7 +67,7 @@ void EventSystem::WheelCallback(GLFWwindow* window, double xoffset, double yoffs
 	{
 		if (listener != nullptr)
 		{
-			listener->OnWheelScroll(m_uniqueWheelEvent);
+			listener->onWheelScroll(m_uniqueWheelEvent);
 		}
 	}
 }

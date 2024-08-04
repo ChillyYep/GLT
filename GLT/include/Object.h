@@ -8,9 +8,9 @@ class Object {
 public:
 	Object()
 	{
-		m_instanceId = s_instanceIdProducer.ProduceInstanceId();
+		m_instanceId = s_instanceIdProducer.produceInstanceId();
 	}
-	inline GLTUInt32 GetInstanceId() const { return m_instanceId; }
+	inline GLTUInt32 getInstanceId() const { return m_instanceId; }
 
 protected:
 	GLTUInt32 m_instanceId;

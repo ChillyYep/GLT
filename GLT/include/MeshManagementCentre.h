@@ -11,7 +11,7 @@ public:
 	MeshManagementCentre() {}
 	~MeshManagementCentre() {}
 
-	void OnSubmit() override;
+	void onSubmit() override;
 private:
-	inline void DeallocateMesh(Mesh* mesh) { mesh->_Deallocate(); }
+	inline void deallocateMesh(Mesh* mesh) { mesh->_deallocate(); }
 };

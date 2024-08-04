@@ -13,49 +13,49 @@ class RenderPipeline
 public:
 	RenderPipeline() {}
 	~RenderPipeline() { }
-	void Init();
-	void UnInit();
-	void Render();
+	void init();
+	void uninit();
+	void render();
 private:
-	void UpdateSceneProperties4Render();
-	void PostUpdate();
-	void UpdatePerFrameConstantBuffer();
-	void UpdatePerCameraConstantBuffer(std::shared_ptr<Camera>& camera);
-	void UpdateLightProperties(std::shared_ptr<Camera>& camera);
-	void RenderPerObject(Renderer& renderObject, std::shared_ptr<Camera>& camera);
+	void updateSceneProperties4Render();
+	void postUpdate();
+	void updatePerFrameConstantBuffer();
+	void updatePerCameraConstantBuffer(std::shared_ptr<Camera>& camera);
+	void updateLightProperties(std::shared_ptr<Camera>& camera);
+	void renderPerObject(Renderer& renderObject, std::shared_ptr<Camera>& camera);
 
 	template<typename T>
-	void AppendNewObjects(ManagementCentreBase<T>* management, ResourceType resourceType)
+	void appendNewObjects(ManagementCentreBase<T>* management, ResourceType resourceType)
 	{
-		auto&& newObjectList = management->GetNewObjects();
+		auto&& newObjectList = management->getNewObjects();
 		const size_t newObjectCount = newObjectList.size();
 		if (newObjectCount == 0)
 		{
 			return;
 		}
-		ResourceManager::getInstance()->RequestResource(management, newObjectList, resourceType);
-		management->ClearNewList();
+		ResourceManager::getInstance()->requestResource(management, newObjectList, resourceType);
+		management->clearNewList();
 	}
 
 	template<typename T>
-	void ClearExpiredObjects(ManagementCentreBase<T>* management, ResourceType resourceType)
+	void clearExpiredObjects(ManagementCentreBase<T>* management, ResourceType resourceType)
 	{
 		// É¾³ý
-		auto&& expiredMeshInstanceIdList = management->GetExpiredObjectInstanceIds();
+		auto&& expiredMeshInstanceIdList = management->getExpiredObjectInstanceIds();
 		size_t expiredMeshCount = expiredMeshInstanceIdList.size();
 		if (expiredMeshCount == 0)
 		{
 			return;
 		}
-		ResourceManager::getInstance()->DestroyResource(management, expiredMeshInstanceIdList, resourceType);
-		management->ClearExpiredList();
+		ResourceManager::getInstance()->destroyResource(management, expiredMeshInstanceIdList, resourceType);
+		management->clearExpiredList();
 	}
 
-	void ClearExpiredMeshBuffers(std::vector<std::shared_ptr<Scene>>& allScenes);
-	void AppendNewMeshBuffers(std::vector<std::shared_ptr<Scene>>& allScenes);
+	void clearExpiredMeshBuffers(std::vector<std::shared_ptr<Scene>>& allScenes);
+	void appendNewMeshBuffers(std::vector<std::shared_ptr<Scene>>& allScenes);
 
-	void ClearExpiredTextures(std::vector<std::shared_ptr<Scene>>& allScenes);
-	void AppendNewTextures(std::vector<std::shared_ptr<Scene>>& allScenes);
+	void clearExpiredTextures(std::vector<std::shared_ptr<Scene>>& allScenes);
+	void appendNewTextures(std::vector<std::shared_ptr<Scene>>& allScenes);
 	
 	ScriptableRenderContext m_renderContext;
 

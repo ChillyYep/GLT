@@ -5,17 +5,17 @@ class SceneManager :public Singleton<SceneManager>
 {
 public:
 	~SceneManager() {}
-	inline const std::shared_ptr<Scene> GetMainScene() const {
+	inline const std::shared_ptr<Scene> getMainScene() const {
 		for (int i = 0;i < m_allScenes.size();++i)
 		{
-			if (m_allScenes[i]->GetMainScene() && m_allScenes[i]->GetActived())
+			if (m_allScenes[i]->IsMainScene() && m_allScenes[i]->GetActived())
 			{
 				return m_allScenes[i];
 			}
 		}
 		return nullptr;
 	}
-	inline const std::vector<std::shared_ptr<Scene>> GetAllScenes(bool includeInactived = true) {
+	inline const std::vector<std::shared_ptr<Scene>> getAllScenes(bool includeInactived = true) {
 		std::vector<std::shared_ptr<Scene>> allScenes;
 		for (int i = 0;i < m_allScenes.size();++i)
 		{
@@ -28,15 +28,15 @@ public:
 		return allScenes;
 	}
 
-	inline void AddScene(std::shared_ptr<Scene>& scene)
+	inline void addScene(std::shared_ptr<Scene>& scene)
 	{
-		if (!HasScene(scene))
+		if (!hasScene(scene))
 		{
 			m_allScenes.push_back(scene);
 		}
 	}
 
-	inline void RemoveScene(std::shared_ptr<Scene>& scene)
+	inline void removeScene(std::shared_ptr<Scene>& scene)
 	{
 		for (int i = 0;i < m_allScenes.size();++i)
 		{
@@ -52,7 +52,7 @@ public:
 		}
 	}
 
-	inline bool HasScene(std::shared_ptr<Scene>& scene)
+	inline bool hasScene(std::shared_ptr<Scene>& scene)
 	{
 		for (int i = 0;i < m_allScenes.size();++i)
 		{
@@ -64,19 +64,19 @@ public:
 		return false;
 	}
 
-	inline std::vector<LightProperties> GetAffectedLights(std::shared_ptr<Camera>& camera)
+	inline std::vector<LightProperties> getAffectedLights(std::shared_ptr<Camera>& camera)
 	{
-		auto allScenes = SceneManager::getInstance()->GetAllScenes(false);
+		auto allScenes = SceneManager::getInstance()->getAllScenes(false);
 		std::vector<LightProperties> lights;
 		for (const auto& scene : allScenes)
 		{
-			auto objs = scene->GetObjectList();
+			auto objs = scene->getObjectList();
 			for (const auto& obj : objs)
 			{
-				auto light = obj->GetComponent<Light>();
+				auto light = obj->getComponent<Light>();
 				if (light != nullptr && light->IsRealtime())
 				{
-					auto lightProperties = light->GetLightProperties();
+					auto lightProperties = light->getLightProperties();
 					lights.push_back(lightProperties);
 				}
 			}

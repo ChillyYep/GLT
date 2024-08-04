@@ -1,6 +1,6 @@
 #include "PrimitiveUtils.h"
 
-std::shared_ptr<Mesh> PrimitiveUtils::CreateCube()
+std::shared_ptr<Mesh> PrimitiveUtils::createCube()
 {
 	static const glm::vec4 cube_vertices[] = {
 		// ǰ
@@ -142,10 +142,10 @@ std::shared_ptr<Mesh> PrimitiveUtils::CreateCube()
 	};
 
 	auto object = std::shared_ptr<Mesh>(new Mesh(sizeof(cube_vertices) / sizeof(glm::vec4), sizeof(cube_indices) / sizeof(GLTUInt16)));
-	object->SetVertices(cube_vertices);
-	object->SetIndices(cube_indices);
-	object->SetColors(cube_colors);
-	object->SetNormals(cube_normals);
-	object->SetUVs(cube_uvs);
+	object->setVertices(cube_vertices);
+	object->setIndices(cube_indices);
+	object->setColors(cube_colors);
+	object->setNormals(cube_normals);
+	object->setUVs(cube_uvs);
 	return object;
 }

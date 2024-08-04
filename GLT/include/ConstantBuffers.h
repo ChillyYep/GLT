@@ -10,33 +10,33 @@ public:
 	ConstantBufferSet() {}
 	~ConstantBufferSet() {}
 
-	void Create(ConstantBufferIdentifier globalBufferIdentifier)
+	void create(ConstantBufferIdentifier globalBufferIdentifier)
 	{
 		auto shaderGlobalType = globalBufferIdentifier.GetConstantBufferType();
 		if (m_globalBufferIdentifiers.find(shaderGlobalType) != m_globalBufferIdentifiers.end())
 		{
 			return;
 		}
-		GLuint bufferSize = globalBufferIdentifier.GetTotalBufferSize();
+		GLuint bufferSize = globalBufferIdentifier.getTotalBufferSize();
 		if (bufferSize > 0)
 		{
 			m_globalBufferIdentifiers[shaderGlobalType] = globalBufferIdentifier;
 
 			m_bytesBuffers[shaderGlobalType] = BytesBuffer();
-			m_bytesBuffers[shaderGlobalType].Create(bufferSize);
+			m_bytesBuffers[shaderGlobalType].create(bufferSize);
 		}
 	}
 
-	void SetData(ConstantBufferType bufferType, GLuint offset, GLuint length, void* data)
+	void setData(ConstantBufferType bufferType, GLuint offset, GLuint length, void* data)
 	{
 		if (m_bytesBuffers.find(bufferType) == m_bytesBuffers.end())
 		{
 			return;
 		}
-		m_bytesBuffers[bufferType].SetData(offset, length, data);
+		m_bytesBuffers[bufferType].setData(offset, length, data);
 	}
 
-	void Upload(ConstantBufferType constantBufferType)
+	void upload(ConstantBufferType constantBufferType)
 	{
 		if (m_globalBufferIdentifiers.find(constantBufferType) != m_globalBufferIdentifiers.end())
 		{
@@ -47,36 +47,36 @@ public:
 		}
 	}
 
-	void FindProperty(std::string propertyName, ShaderUniformBlockProperty& block, BlockUniform& blockUniform, ConstantBufferType& constantBufferType)
+	void findProperty(std::string propertyName, ShaderUniformBlockProperty& block, BlockUniform& blockUniform, ConstantBufferType& constantBufferType)
 	{
 		for (auto& bufferIdentifier : m_globalBufferIdentifiers)
 		{
-			if (bufferIdentifier.second.FindBlockByPropertyName(propertyName, block))
+			if (bufferIdentifier.second.findBlockByPropertyName(propertyName, block))
 			{
 				constantBufferType = bufferIdentifier.first;
-				blockUniform = block.FindBlockUniformByPropertyName(propertyName);
+				blockUniform = block.findBlockUniformByPropertyName(propertyName);
 				return;
 			}
 			else {
-				blockUniform = BlockUniform::Null();
+				blockUniform = BlockUniform::null();
 			}
 		}
 	}
 
-	void GetPropertyRange(ShaderUniformBlockProperty& block, BlockUniform& blockUniform, GLuint* offset, GLuint* length)
+	void getPropertyRange(ShaderUniformBlockProperty& block, BlockUniform& blockUniform, GLuint* offset, GLuint* length)
 	{
 		*offset = block.m_blockOffset + blockUniform.m_offset;
 		*length = (GLuint)blockUniform.m_size;
 	}
 
-	inline ShaderUniformBlockProperty* FindBlock(std::string blockName)
+	inline ShaderUniformBlockProperty* findBlock(std::string blockName)
 	{
 		for (auto& identifierPair : m_globalBufferIdentifiers)
 		{
 			auto constantBufferType = identifierPair.first;
 			auto identifier = identifierPair.second;
 			ShaderUniformBlockProperty* block;
-			if (identifier.FindBlock(blockName, block))
+			if (identifier.findBlock(blockName, block))
 			{
 				return block;
 			}
@@ -84,29 +84,29 @@ public:
 		return nullptr;
 	}
 
-	bool HasConstantBuffer(ConstantBufferType constantBufferType)
+	bool hasConstantBuffer(ConstantBufferType constantBufferType)
 	{
 		return m_globalBufferIdentifiers.find(constantBufferType) != m_globalBufferIdentifiers.end();
 	}
 
-	inline ConstantBufferIdentifier& GetGlobalBufferIdentifier(ConstantBufferType bufferType)
+	inline ConstantBufferIdentifier& getGlobalBufferIdentifier(ConstantBufferType bufferType)
 	{
-		return m_globalBufferIdentifiers.find(bufferType) == m_globalBufferIdentifiers.end() ? ConstantBufferIdentifier::Null() : m_globalBufferIdentifiers[bufferType];
+		return m_globalBufferIdentifiers.find(bufferType) == m_globalBufferIdentifiers.end() ? ConstantBufferIdentifier::null() : m_globalBufferIdentifiers[bufferType];
 	}
 
-	inline ConstantBufferIdentifier& GetGlobalBufferIdentifierByBlockName(std::string blockName)
+	inline ConstantBufferIdentifier& getGlobalBufferIdentifierByBlockName(std::string blockName)
 	{
 		for (auto& identifierPair : m_globalBufferIdentifiers)
 		{
 			auto constantBufferType = identifierPair.first;
 			auto identifier = identifierPair.second;
 			ShaderUniformBlockProperty* block;
-			if (identifier.FindBlock(blockName, block))
+			if (identifier.findBlock(blockName, block))
 			{
 				return m_globalBufferIdentifiers[constantBufferType];
 			}
 		}
-		return ConstantBufferIdentifier::Null();
+		return ConstantBufferIdentifier::null();
 	}
 private:
 	std::unordered_map<ConstantBufferType, ConstantBufferIdentifier> m_globalBufferIdentifiers;

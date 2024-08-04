@@ -27,11 +27,11 @@ public:
 	EventListener() {}
 	~EventListener() {}
 
-	virtual void OnPointerPressed(MouseEvent mouseEvent) {}
-	virtual void OnPointerMoved(MouseEvent mouseEvent) {}
-	virtual void OnPointerReleased(MouseEvent mouseEvent) {}
+	virtual void onPointerPressed(MouseEvent mouseEvent) {}
+	virtual void onPointerMoved(MouseEvent mouseEvent) {}
+	virtual void onPointerReleased(MouseEvent mouseEvent) {}
 
-	virtual void OnWheelScroll(WheelEvent mouseEvent) {}
+	virtual void onWheelScroll(WheelEvent mouseEvent) {}
 
 private:
 
@@ -43,28 +43,28 @@ class EventSystem
 public:
 	EventSystem() {}
 	~EventSystem() {}
-	inline static void Attach(GLFWwindow* window) {
+	inline static void attach(GLFWwindow* window) {
 		m_currentWindow = window;
-		glfwSetMouseButtonCallback(m_currentWindow, MouseButtonCallback);
-		glfwSetScrollCallback(m_currentWindow, WheelCallback);
-		glfwSetCursorPosCallback(m_currentWindow, CursorCallback);
+		glfwSetMouseButtonCallback(m_currentWindow, mouseButtonCallback);
+		glfwSetScrollCallback(m_currentWindow, wheelCallback);
+		glfwSetCursorPosCallback(m_currentWindow, cursorCallback);
 	}
-	inline static void Dettach()
+	inline static void dettach()
 	{
 		glfwSetMouseButtonCallback(m_currentWindow, nullptr);
 		glfwSetScrollCallback(m_currentWindow, nullptr);
 		glfwSetCursorPosCallback(m_currentWindow, nullptr);
 		m_currentWindow = nullptr;
 	}
-	inline static void AddListener(EventListener* listener) { m_listeners.push_back(listener); }
-	inline static void RemoveListener(EventListener* listener) { m_listeners.remove(listener); }
+	inline static void addListener(EventListener* listener) { m_listeners.push_back(listener); }
+	inline static void removeListener(EventListener* listener) { m_listeners.remove(listener); }
 private:
 
-	static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+	static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 
-	static void CursorCallback(GLFWwindow* window, double xpos, double ypos);
+	static void cursorCallback(GLFWwindow* window, double xpos, double ypos);
 
-	static void WheelCallback(GLFWwindow* window, double xoffset, double yoffset);
+	static void wheelCallback(GLFWwindow* window, double xoffset, double yoffset);
 
 	static bool m_pressed;
 

@@ -1,6 +1,6 @@
 #include "MeshManagementCentre.h"
 
-void MeshManagementCentre::OnSubmit()
+void MeshManagementCentre::onSubmit()
 {
 	for (const auto& meshPair : m_allObjects)
 	{
@@ -8,7 +8,7 @@ void MeshManagementCentre::OnSubmit()
 		auto& mesh = meshItem.m_target;
 		if (!mesh->GetCanReadWrite())
 		{
-			DeallocateMesh(mesh.get());
+			deallocateMesh(mesh.get());
 		}
 	}
 }

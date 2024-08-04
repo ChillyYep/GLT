@@ -9,7 +9,7 @@ class GlFWWindowImplement :public WindowImplementBase
 public:
 	GlFWWindowImplement() :WindowImplementBase() {}
 	~GlFWWindowImplement() {}
-	void Init() override
+	void init() override
 	{
 		// 初始化GLFW库
 		if (!s_inited)
@@ -18,7 +18,7 @@ public:
 			s_inited = true;
 		}
 	}
-	void UnInit() override
+	void uninit() override
 	{
 		if (s_inited)
 		{
@@ -28,7 +28,7 @@ public:
 		}
 	}
 
-	void Create(int width, int height, const char* title) override
+	void create(int width, int height, const char* title) override
 	{
 		// 使用核心模式，且设定好版本
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -39,7 +39,7 @@ public:
 		assert(m_windowPtr != nullptr);
 		glfwMakeContextCurrent(m_windowPtr);
 	}
-	void Destroy()
+	void destroy()
 	{
 		if (m_windowPtr != nullptr)
 		{
@@ -48,27 +48,27 @@ public:
 			m_windowPtr = nullptr;
 		}
 	}
-	void SetSize(int width, int height) override
+	void setSize(int width, int height) override
 	{
 		glfwSetWindowSize(m_windowPtr, width, height);
 	}
 
-	glm::ivec2 GetSize() override
+	glm::ivec2 getSize() override
 	{
 		glm::ivec2 size;
 		glfwGetWindowSize(m_windowPtr, &size.x, &size.y);
 		return size;
 	}
 
-	void AttachToEventSystem() override
+	void attachToEventSystem() override
 	{
-		EventSystem::Attach(m_windowPtr);
+		EventSystem::attach(m_windowPtr);
 	}
-	void DetachToEventSystem() override
+	void detachToEventSystem() override
 	{
-		EventSystem::Dettach();
+		EventSystem::dettach();
 	}
-	void GameLoop(RenderLoopMainFunc renderLoopMainFunc) override
+	void gameLoop(RenderLoopMainFunc renderLoopMainFunc) override
 	{
 		// GLFW窗口渲染循环
 		while (!glfwWindowShouldClose(m_windowPtr))

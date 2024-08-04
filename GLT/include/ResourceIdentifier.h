@@ -8,7 +8,7 @@ public:
 	ResourceIdentifier() :m_instanceId(0) {}
 	ResourceIdentifier(GLTUInt32 instanceId) :m_instanceId(instanceId) {}
 	~ResourceIdentifier() {}
-	inline GLTUInt32 GetInstanceId() { return m_instanceId; }
+	inline GLTUInt32 getInstanceId() { return m_instanceId; }
 private:
 	GLTUInt32 m_instanceId;
 };
@@ -19,10 +19,10 @@ public:
 	MeshResourceIdentifier() :m_vao(0), m_vbo(0), m_ebo(0) {}
 	MeshResourceIdentifier(GLTUInt32 vao, GLTUInt32 vbo, GLTUInt32 ebo, GLTUInt32 instanceId) :m_vao(vao), m_vbo(vbo), m_ebo(ebo), ResourceIdentifier(instanceId) {}
 	~MeshResourceIdentifier() {}
-	inline GLTUInt32 GetVAO() { return m_vao; }
-	inline GLTUInt32 GetVBO() { return m_vbo; }
-	inline GLTUInt32 GetEBO() { return m_ebo; }
-	inline GLTUInt32 IsValid() { return m_vao > 0; }
+	inline GLTUInt32 getVAO() { return m_vao; }
+	inline GLTUInt32 getVBO() { return m_vbo; }
+	inline GLTUInt32 getEBO() { return m_ebo; }
+	inline GLTUInt32 isValid() { return m_vao > 0; }
 
 private:
 	GLTUInt32 m_vao;
@@ -37,8 +37,8 @@ public:
 	TextureResourceIdentifier(GLTUInt32 instanceId) :ResourceIdentifier(instanceId) {}
 	~TextureResourceIdentifier() {}
 
-	inline GLTUInt32 GetTextureHandle() { return m_texture; }
-	inline TextureType GetTextureType() { return m_textureType; }
+	inline GLTUInt32 getTextureHandle() { return m_texture; }
+	inline TextureType getTextureType() { return m_textureType; }
 	friend class ResourceManager;
 private:
 	GLTUInt32 m_texture;

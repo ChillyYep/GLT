@@ -1,16 +1,16 @@
 #include "FileUtils.h"
-char FileUtils::FilePathBuffer[FilePathBufferLength];
+char FileUtils::s_filePathBuffer[FilePathBufferLength];
 
 std::string FileUtils::s_globalTextBuffer;
 
-size_t FileUtils::OpenFile(const char* directory, const char* filename, std::string& content)
+size_t FileUtils::openFile(const char* directory, const char* filename, std::string& content)
 {
 	// Æ´½ÓÂ·¾¶
-	memset(FilePathBuffer, 0, FilePathBufferLength);
-	strcat_s(FilePathBuffer, directory);
-	strcat_s(FilePathBuffer, filename);
+	memset(s_filePathBuffer, 0, FilePathBufferLength);
+	strcat_s(s_filePathBuffer, directory);
+	strcat_s(s_filePathBuffer, filename);
 	FILE* f;
-	errno_t err = fopen_s(&f, FilePathBuffer, "rb");
+	errno_t err = fopen_s(&f, s_filePathBuffer, "rb");
 	size_t realFileSize = 0;
 	if (err == 0)
 	{

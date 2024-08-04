@@ -7,7 +7,7 @@ public:
 	BytesBuffer() :m_dataPtr(nullptr), m_dataSize(0) {}
 	~BytesBuffer() {}
 
-	void Create(GLTUInt32 bufferSize)
+	void create(GLTUInt32 bufferSize)
 	{
 		m_dataSize = bufferSize;
 		m_dataPtr = new GLTByte[bufferSize];
@@ -17,7 +17,7 @@ public:
 		}
 	}
 
-	void Release()
+	void release()
 	{
 		if (m_dataPtr != nullptr)
 		{
@@ -26,7 +26,7 @@ public:
 		}
 	}
 
-	void SetData(GLTUInt32 offset, GLTUInt32 length, void* data)
+	void setData(GLTUInt32 offset, GLTUInt32 length, void* data)
 	{
 		if ((offset + length) <= m_dataSize)
 		{

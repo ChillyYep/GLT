@@ -21,7 +21,7 @@ public:
 	/// <param name="material"></param>
 	/// <param name="camera"></param>
 	/// <param name="modelMatrix"></param>
-	static void DrawMeshNow(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material, std::shared_ptr<Camera>& camera, const glm::mat4x4& modelMatrix);
+	static void drawMeshNow(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material, std::shared_ptr<Camera>& camera, const glm::mat4x4& modelMatrix);
 	/// <summary>
 	/// 将Mesh加入到绘制队列
 	/// </summary>
@@ -29,7 +29,7 @@ public:
 	/// <param name="material"></param>
 	/// <param name="camera"></param>
 	/// <param name="modelMatrix"></param>
-	static void DrawMesh(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material, std::shared_ptr<Camera>& camera, const glm::mat4x4& modelMatrix);
+	static void drawMesh(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material, std::shared_ptr<Camera>& camera, const glm::mat4x4& modelMatrix);
 private:
 	/// <summary>
 	/// 绘制已经申请了内存的Mesh
@@ -38,5 +38,5 @@ private:
 	/// <param name="material"></param>
 	/// <param name="camera"></param>
 	/// <param name="modelMatrix"></param>
-	static void DrawRequestedMesh(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material, std::shared_ptr<Camera>& camera, const glm::mat4x4& modelMatrix);
+	static void drawRequestedMesh(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material, std::shared_ptr<Camera>& camera, const glm::mat4x4& modelMatrix);
 };

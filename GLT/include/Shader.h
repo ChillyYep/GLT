@@ -11,57 +11,57 @@ public:
 	Shader(std::string shaderName);
 	~Shader();
 
-	inline std::string GetShaderName() { return m_shaderInfo.m_programName; }
+	inline std::string getShaderName() { return m_shaderInfo.m_programName; }
 
-	inline GLuint GetShaderProgram() { return m_shaderInfo.m_program; }
+	inline GLuint getShaderProgram() { return m_shaderInfo.m_program; }
 
-	inline std::vector<ShaderUniformBlockReference>& GetAllBlocks() { return m_shaderInfo.m_referenceBlocks; }
+	inline std::vector<ShaderUniformBlockReference>& getAllBlocks() { return m_shaderInfo.m_referenceBlocks; }
 
-	static inline void Init(std::unordered_map<std::string, ShaderProgramInfo>& allPrograms, std::vector<ConstantBufferIdentifier>& constantBuffers)
+	static inline void init(std::unordered_map<std::string, ShaderProgramInfo>& allPrograms, std::vector<ConstantBufferIdentifier>& constantBuffers)
 	{
 		m_allPrograms = allPrograms;
 		for (int i = 0;i < constantBuffers.size();++i)
 		{
-			m_globalBuffer.Create(constantBuffers[i]);
+			m_globalBuffer.create(constantBuffers[i]);
 		}
 	}
 
-	static inline void SetGlobalMatrix(const char* propertyName, glm::mat4x4 matrix)
+	static inline void setGlobalMatrix(const char* propertyName, glm::mat4x4 matrix)
 	{
-		_SetGlobalValueInternal(propertyName, matrix);
+		_setGlobalValueInternal(propertyName, matrix);
 	}
 
-	static inline void SetGlobalFloat(const char* propertyName, float value)
+	static inline void setGlobalFloat(const char* propertyName, float value)
 	{
-		_SetGlobalValueInternal(propertyName, value);
+		_setGlobalValueInternal(propertyName, value);
 	}
 
-	static inline void SetGlobalVector(const char* propertyName, glm::vec4 vec4)
+	static inline void setGlobalVector(const char* propertyName, glm::vec4 vec4)
 	{
-		_SetGlobalValueInternal(propertyName, vec4);
+		_setGlobalValueInternal(propertyName, vec4);
 	}
 
-	static inline void Upload(ConstantBufferType constantBufferType)
+	static inline void upload(ConstantBufferType constantBufferType)
 	{
-		m_globalBuffer.Upload(constantBufferType);
+		m_globalBuffer.upload(constantBufferType);
 	}
-	static inline ConstantBufferSet& GetShaderGlobalBuffer() { return m_globalBuffer; }
+	static inline ConstantBufferSet& getShaderGlobalBuffer() { return m_globalBuffer; }
 	// Todo:需要有卸载的接口，用于shader切换，或者将所有shader一次性载入且不再卸载
 private:
 	template<typename T>
-	static inline void _SetGlobalValueInternal(const char* propertyName, T value)
+	static inline void _setGlobalValueInternal(const char* propertyName, T value)
 	{
 		ShaderUniformBlockProperty block;
 		BlockUniform blockUniform;
 		ConstantBufferType constantBufferType;
-		m_globalBuffer.FindProperty(propertyName, block, blockUniform, constantBufferType);
-		if (block != ShaderUniformBlockProperty::Null() && blockUniform != BlockUniform::Null())
+		m_globalBuffer.findProperty(propertyName, block, blockUniform, constantBufferType);
+		if (block != ShaderUniformBlockProperty::null() && blockUniform != BlockUniform::null())
 		{
 			GLuint offset, length;
-			m_globalBuffer.GetPropertyRange(block, blockUniform, &offset, &length);
+			m_globalBuffer.getPropertyRange(block, blockUniform, &offset, &length);
 			if (sizeof(T) <= length)
 			{
-				m_globalBuffer.SetData(constantBufferType, offset, length, reinterpret_cast<void*>(&value));
+				m_globalBuffer.setData(constantBufferType, offset, length, reinterpret_cast<void*>(&value));
 			}
 		}
 	}

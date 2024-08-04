@@ -191,8 +191,8 @@ namespace detail
 	{
 		GLM_FUNC_QUALIFIER static vec<4, float, Q> call(vec<4, float, Q> const& x, vec<4, float, Q> const& y, vec<4, bool, Q> const& a)
 		{
-			__m128i const Load = _mm_set_epi32(-static_cast<int>(a.w), -static_cast<int>(a.z), -static_cast<int>(a.y), -static_cast<int>(a.x));
-			__m128 const Mask = _mm_castsi128_ps(Load);
+			__m128i const load = _mm_set_epi32(-static_cast<int>(a.w), -static_cast<int>(a.z), -static_cast<int>(a.y), -static_cast<int>(a.x));
+			__m128 const Mask = _mm_castsi128_ps(load);
 
 			vec<4, float, Q> Result;
 #			if 0 && GLM_ARCH & GLM_ARCH_AVX

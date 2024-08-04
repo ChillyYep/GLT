@@ -9,7 +9,7 @@
 COMPONENT_CLASS(Renderer, ComponentType::Renderer)
 {
 public:
-	ComponentType GetComponentType() override { return ComponentType::Renderer; }
+	ComponentType getComponentType() override { return ComponentType::Renderer; }
 	Renderer() {}
 	Renderer(std::shared_ptr<Mesh> mesh) { m_mesh = mesh; }
 	~Renderer() {}
@@ -18,14 +18,14 @@ public:
 	{
 		if (m_mesh != nullptr)
 		{
-			ResourceManager::getInstance()->GetMeshManagementCentre().Add(m_mesh);
+			ResourceManager::getInstance()->getMeshManagementCentre().add(m_mesh);
 		}
 		if (m_material != nullptr)
 		{
-			auto textures = m_material->GetAllTextures();
+			auto textures = m_material->getAllTextures();
 			for (const auto& texture : textures)
 			{
-				ResourceManager::getInstance()->GetTextureManagementCentre().Add(texture);
+				ResourceManager::getInstance()->getTextureManagementCentre().add(texture);
 			}
 		}
 	}
@@ -34,14 +34,14 @@ public:
 	{
 		if (m_mesh != nullptr)
 		{
-			ResourceManager::getInstance()->GetMeshManagementCentre().Remove(m_mesh);
+			ResourceManager::getInstance()->getMeshManagementCentre().remove(m_mesh);
 		}
 		if (m_material != nullptr)
 		{
-			auto textures = m_material->GetAllTextures();
+			auto textures = m_material->getAllTextures();
 			for (const auto& texture : textures)
 			{
-				ResourceManager::getInstance()->GetTextureManagementCentre().Remove(texture);
+				ResourceManager::getInstance()->getTextureManagementCentre().remove(texture);
 			}
 		}
 	}

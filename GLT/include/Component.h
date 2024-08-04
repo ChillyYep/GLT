@@ -26,11 +26,11 @@ public:
 	Component() {}
 	~Component() {}
 
-	void Destroy()
+	void destroy()
 	{
 		m_isReadyDead = true;
 	}
-	virtual ComponentType GetComponentType() = 0;
+	virtual ComponentType getComponentType() = 0;
 
 	inline bool IsDead() { return m_isDead; }
 	inline GameObject* GetGameObject() { return m_gameObjectPtr; }
@@ -75,7 +75,7 @@ public:
 		}
 		case ComponentLifeCycle::Destroyed:
 		{
-			Destroy();
+			destroy();
 			break;
 		}
 		default:
@@ -171,7 +171,7 @@ private:
 		}
 	}
 
-	void Destroy()
+	void destroy()
 	{
 		m_target->OnDestroy();
 		m_target->m_isDead = true;

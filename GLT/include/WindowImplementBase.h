@@ -8,16 +8,16 @@ public:
 	WindowImplementBase() {}
 	~WindowImplementBase() {}
 
-	virtual void Init() = 0;
-	virtual void UnInit() = 0;
-	virtual void Create(int width, int height, const char* title) = 0;
-	virtual void Destroy() = 0;
+	virtual void init() = 0;
+	virtual void uninit() = 0;
+	virtual void create(int width, int height, const char* title) = 0;
+	virtual void destroy() = 0;
 
-	virtual void SetSize(int width, int height) = 0;
+	virtual void setSize(int width, int height) = 0;
 
-	virtual glm::ivec2 GetSize() = 0;
+	virtual glm::ivec2 getSize() = 0;
 
-	virtual void AttachToEventSystem() = 0;
-	virtual void DetachToEventSystem() = 0;
-	virtual void GameLoop(RenderLoopMainFunc renderLoopMainFunc) = 0;
+	virtual void attachToEventSystem() = 0;
+	virtual void detachToEventSystem() = 0;
+	virtual void gameLoop(RenderLoopMainFunc renderLoopMainFunc) = 0;
 };

@@ -1,6 +1,6 @@
 #include "TextureManagementCentre.h"
 
-void TextureManagementCentre::OnSubmit()
+void TextureManagementCentre::onSubmit()
 {
 	for (const auto& texturePair : m_allObjects)
 	{
@@ -8,7 +8,7 @@ void TextureManagementCentre::OnSubmit()
 		auto& texture = textureItem.m_target;
 		if (!texture->GetCanReadWrite())
 		{
-			UnloadTexture(texture.get());
+			unloadTexture(texture.get());
 		}
 	}
 }

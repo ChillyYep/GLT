@@ -7,7 +7,7 @@ class PrimitiveUtils
 public:
 	PrimitiveUtils() {};
 	~PrimitiveUtils() {};
-	static std::shared_ptr<Mesh> CreateCube();
+	static std::shared_ptr<Mesh> createCube();
 
 private:
 

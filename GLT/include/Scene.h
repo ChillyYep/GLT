@@ -14,18 +14,18 @@ public:
 	Scene() {};
 	~Scene() {};
 
-	void AddObject(std::shared_ptr<GameObject> go);
+	void addObject(std::shared_ptr<GameObject> go);
 
-	void RemoveObject(std::shared_ptr<GameObject> go);
+	void removeObject(std::shared_ptr<GameObject> go);
 
-	inline std::vector<std::shared_ptr<GameObject>> GetObjectList() { return m_gos; }
+	inline std::vector<std::shared_ptr<GameObject>> getObjectList() { return m_gos; }
 
-	inline std::vector<std::shared_ptr<Light>> GetLights()
+	inline std::vector<std::shared_ptr<Light>> getLights()
 	{
 		std::vector<std::shared_ptr<Light>> lights;
 		for (const auto& go : m_gos)
 		{
-			auto light = go->GetComponent<Light>();
+			auto light = go->getComponent<Light>();
 			if (light == nullptr)
 			{
 				continue;
@@ -35,11 +35,11 @@ public:
 		return lights;
 	}
 
-	inline std::shared_ptr<Camera> GetMainCamera()
+	inline std::shared_ptr<Camera> getMainCamera()
 	{
 		for (const auto& go : m_gos)
 		{
-			auto camera = go->GetComponent<Camera>();
+			auto camera = go->getComponent<Camera>();
 			if (camera == nullptr || !camera->GetMainCameraFlag())
 			{
 				continue;
@@ -50,7 +50,7 @@ public:
 	}
 
 	__GET_SET_PROPERTY__(Actived, bool, m_actived)
-		__GET_SET_PROPERTY__(MainScene, bool, m_mainScene)
+		__GET_SET_BOOLEANPROPERTY__(MainScene, m_mainScene)
 
 private:
 	bool m_mainScene;

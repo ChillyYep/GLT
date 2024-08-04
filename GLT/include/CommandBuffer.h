@@ -12,9 +12,9 @@ public:
 	}
 	~CommandBuffer() {}
 
-	void SetRenderTarget(RenderTargetIdentifier* renderTargetIdentifier);
-	void RequestRenderTexture(int width, int height, TextureFormat textureFormat, TextureFilterMode filterMode);
-	void Release();
+	void setRenderTarget(RenderTargetIdentifier* renderTargetIdentifier);
+	void requestRenderTexture(int width, int height, TextureFormat textureFormat, TextureFilterMode filterMode);
+	void release();
 private:
 	std::string m_name;
 	std::vector<RenderCommand> m_cmdList;

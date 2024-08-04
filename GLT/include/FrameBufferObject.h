@@ -1,6 +1,7 @@
 #pragma once
 #include <CommonDefine.h>
 #include <Object.h>
+#include <GLCommon.h>
 
 class FrameBufferObject :public Object
 {
@@ -10,7 +11,7 @@ public:
 
 	}
 	~FrameBufferObject() {}
-	void Create()
+	void create()
 	{
 		if (!glIsFramebuffer(m_framebuffer))
 		{
@@ -18,7 +19,7 @@ public:
 		}
 	}
 
-	void SetColorAttachment(int index, GLuint texture, GLuint level = 0)
+	void setColorAttachment(int index, GLuint texture, GLuint level = 0)
 	{
 		if (glIsFramebuffer(m_framebuffer))
 		{
@@ -26,7 +27,7 @@ public:
 		}
 	}
 
-	void Destroy()
+	void destroy()
 	{
 		if (glIsFramebuffer(m_framebuffer))
 		{
@@ -34,7 +35,7 @@ public:
 		}
 	}
 
-	void Recycle()
+	void recycle()
 	{
 		//glInvalidateNamedFramebufferData(m_framebuffer)
 	}

@@ -11,23 +11,23 @@ public:
 	ConstantBufferIdentifier() {}
 	~ConstantBufferIdentifier() {}
 
-	void AddBlock(ShaderUniformBlockProperty& block);
+	void addBlock(ShaderUniformBlockProperty& block);
 
-	bool HasBlock(std::string name);
+	bool hasBlock(std::string name);
 
-	bool FindBlock(std::string blockName, ShaderUniformBlockProperty*& block);
+	bool findBlock(std::string blockName, ShaderUniformBlockProperty*& block);
 
-	bool FindBlockByPropertyName(std::string propertyName, ShaderUniformBlockProperty& block) const;
+	bool findBlockByPropertyName(std::string propertyName, ShaderUniformBlockProperty& block) const;
 
-	ShaderUniformBlockProperty* GetBlock(std::string blockName);
+	ShaderUniformBlockProperty* getBlock(std::string blockName);
 
-	void ReCalculateBufferSizeAndBlockOffset();
+	void recalculateBufferSizeAndBlockOffset();
 
-	inline std::vector<ShaderUniformBlockProperty>& GetBlocks() { return m_globalBuffer; }
+	inline std::vector<ShaderUniformBlockProperty>& getBlocks() { return m_globalBuffer; }
 
-	inline GLTUInt32 GetTotalBufferSize() { return m_bufferSize; }
+	inline GLTUInt32 getTotalBufferSize() { return m_bufferSize; }
 
-	static ConstantBufferIdentifier& Null() { return s_null; }
+	static ConstantBufferIdentifier& null() { return s_null; }
 
 	__GET_SET_PROPERTY__(Ubo, GLTUInt32, m_ubo)
 		__GET_SET_PROPERTY__(ConstantBufferType, ConstantBufferType, m_constantBufferType)

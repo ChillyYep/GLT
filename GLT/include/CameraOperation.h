@@ -14,14 +14,14 @@ public:
 	inline void Attach(std::shared_ptr<Transform>& transform)
 	{
 		m_transform = transform;
-		EventSystem::AddListener(this);
+		EventSystem::addListener(this);
 	}
 	inline void Dettach()
 	{
-		EventSystem::RemoveListener(this);
+		EventSystem::removeListener(this);
 		m_transform = nullptr;
 	}
-	inline void OnPointerPressed(MouseEvent mouseEvent) override
+	inline void onPointerPressed(MouseEvent mouseEvent) override
 	{
 		if (mouseEvent.m_mouseType == MouseButtonType::LeftButton)
 		{
@@ -44,7 +44,7 @@ public:
 			}
 		}
 	}
-	inline void OnPointerMoved(MouseEvent mouseEvent) override
+	inline void onPointerMoved(MouseEvent mouseEvent) override
 	{
 		if (mouseEvent.m_mouseType == MouseButtonType::LeftButton)
 		{
@@ -71,7 +71,7 @@ public:
 		}
 	}
 
-	inline void OnPointerReleased(MouseEvent mouseEvent) override
+	inline void onPointerReleased(MouseEvent mouseEvent) override
 	{
 		if (mouseEvent.m_mouseType == MouseButtonType::LeftButton)
 		{
@@ -102,7 +102,7 @@ public:
 		}
 	}
 
-	inline void OnWheelScroll(WheelEvent wheelEvent) override {
+	inline void onWheelScroll(WheelEvent wheelEvent) override {
 		auto forward = m_transform->Forward();
 		m_transform->Translate(forward * -wheelEvent.m_yOffset * m_zoomSensitivity);
 	}

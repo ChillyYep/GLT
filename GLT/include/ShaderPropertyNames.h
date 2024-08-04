@@ -34,7 +34,7 @@ public:
 	static const char* Ambient;
 	static const char* Lights;
 
-	inline static std::string GetShaderArrayPropertyName(const char* arrayPropertyName, const char* memberPropertyName, int index)
+	inline static std::string getShaderArrayPropertyName(const char* arrayPropertyName, const char* memberPropertyName, int index)
 	{
 		s_sstream.str("");
 		s_sstream << arrayPropertyName << "[" << index << "]." << memberPropertyName;

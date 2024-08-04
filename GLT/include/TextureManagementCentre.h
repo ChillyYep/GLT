@@ -11,7 +11,7 @@ public:
 	TextureManagementCentre() {}
 	~TextureManagementCentre() {}
 
-	void OnSubmit() override;
+	void onSubmit() override;
 private:
-	inline void UnloadTexture(Texture* texture) { texture->Unload(); }
+	inline void unloadTexture(Texture* texture) { texture->unload(); }
 };

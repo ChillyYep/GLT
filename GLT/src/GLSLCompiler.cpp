@@ -91,8 +91,8 @@ void GLSLCompiler::afterAllProgramCompiled(const std::unordered_map<std::string,
 	int count = 0;
 	for (int i = 0;i < constantBuffers.size();++i)
 	{
-		constantBuffers[i].ReCalculateBufferSizeAndBlockOffset();
-		auto& blocks = constantBuffers[i].GetBlocks();
+		constantBuffers[i].recalculateBufferSizeAndBlockOffset();
+		auto& blocks = constantBuffers[i].getBlocks();
 		for (int j = 0;j < blocks.size();++j)
 		{
 			blocks[j].m_blockBindingNum = count++;
@@ -173,7 +173,7 @@ void GLSLCompiler::extractBlocks(GLuint program, GLint numBlocks, GLint maxBlock
 					targetConstantBuffer = &constantBuffers[constantBuffers.size() - 1];
 					targetConstantBuffer->SetConstantBufferType(blockProperty.m_constantBufferType);
 				}
-				targetConstantBuffer->AddBlock(blockProperty);
+				targetConstantBuffer->addBlock(blockProperty);
 			}
 			else
 			{
@@ -314,7 +314,7 @@ ShaderUniformBlockProperty* GLSLCompiler::findBlock(std::vector<ConstantBufferId
 	ShaderUniformBlockProperty* blockPtr;
 	for (int i = 0;i < constantBuffers.size();++i)
 	{
-		if (constantBuffers[i].FindBlock(blockName, blockPtr))
+		if (constantBuffers[i].findBlock(blockName, blockPtr))
 		{
 			if (constantBufferIndex != nullptr)
 			{

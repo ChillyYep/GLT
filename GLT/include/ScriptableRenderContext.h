@@ -8,7 +8,7 @@ public:
 	ScriptableRenderContext() {}
 	~ScriptableRenderContext() {}
 
-	void Init()
+	void init()
 	{
 
 	}

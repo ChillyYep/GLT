@@ -7,7 +7,7 @@ class RenderBuffer
 public:
 	RenderBuffer() {}
 	~RenderBuffer() {}
-	void Create(int width, int height, GLenum internalFormat)
+	void create(int width, int height, GLenum internalFormat)
 	{
 		assert(!glIsRenderbuffer(m_renderBufferPtr));
 		m_width = width;
@@ -22,14 +22,14 @@ public:
 		}
 	}
 
-	void Release()
+	void release()
 	{
 		if (glIsRenderbuffer(m_renderBufferPtr))
 		{
 			glDeleteRenderbuffers(1, &m_renderBufferPtr);
 		}
 	}
-	inline GLuint GetRenderBufferPtr()
+	inline GLuint getRenderBufferPtr()
 	{
 		return m_renderBufferPtr;
 	}

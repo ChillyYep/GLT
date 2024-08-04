@@ -17,66 +17,66 @@ public:
 		_Allocate(verticesCount, indicesCount);
 	}
 	~Mesh() {
-		_Deallocate();
+		_deallocate();
 	}
-	inline void SetVertices(const glm::vec4 vertices[])
+	inline void setVertices(const glm::vec4 vertices[])
 	{
 		assert(m_readWrite);
 		memcpy((void*)m_vertices, vertices, m_verticesCount * sizeof(glm::vec4));
 	}
-	inline void SetIndices(const GLTUInt16 indices[])
+	inline void setIndices(const GLTUInt16 indices[])
 	{
 		assert(m_readWrite);
 		memcpy((void*)m_indices, indices, m_indicesCount * sizeof(GLTUInt16));
 	}
-	inline void SetColors(const glm::vec4 colors[])
+	inline void setColors(const glm::vec4 colors[])
 	{
 		assert(m_readWrite);
 		memcpy((void*)m_colors, colors, m_verticesCount * sizeof(glm::vec4));
 	}
 
-	inline void SetUVs(const glm::vec2 uvs[])
+	inline void setUVs(const glm::vec2 uvs[])
 	{
 		assert(m_readWrite);
 		memcpy((void*)m_uvs, uvs, m_verticesCount * sizeof(glm::vec2));
 	}
 
-	inline void SetNormals(const glm::vec4 normals[])
+	inline void setNormals(const glm::vec4 normals[])
 	{
 		assert(m_readWrite);
 		memcpy((void*)m_normals, normals, m_verticesCount * sizeof(glm::vec4));
 	}
-	inline GLTSizei GetVerticesCount() { return m_verticesCount; }
-	inline GLTSizei GetIndicesCount() const { return m_indicesCount; }
+	inline GLTSizei getVerticesCount() { return m_verticesCount; }
+	inline GLTSizei getIndicesCount() const { return m_indicesCount; }
 
-	inline const glm::vec4* GetVertices()
+	inline const glm::vec4* getVertices()
 	{
 		assert(m_readWrite);
 		return m_vertices;
 	}
-	inline const glm::vec4* GetColors()
+	inline const glm::vec4* getColors()
 	{
 		assert(m_readWrite);
 		return m_colors;
 	}
-	inline const GLTUInt16* GetIndices()
+	inline const GLTUInt16* getIndices()
 	{
 		assert(m_readWrite);
 		return m_indices;
 	}
-	inline const glm::vec2* GetUvs()
+	inline const glm::vec2* getUvs()
 	{
 		assert(m_readWrite);
 		return m_uvs;
 	}
-	inline const glm::vec4* GetNormals()
+	inline const glm::vec4* getNormals()
 	{
 		assert(m_readWrite);
 		return m_normals;
 	}
-	inline void MarkDirty() { m_dirty = true; }
-	inline GLTBool IsDirty() { return m_dirty; }
-	inline void ClearDirty() { m_dirty = false; }
+	inline void markDirty() { m_dirty = true; }
+	inline GLTBool isDirty() { return m_dirty; }
+	inline void clearDirty() { m_dirty = false; }
 
 	const static GLTSizei VertexSize = sizeof(glm::vec4);
 	const static GLTSizei ColorSize = sizeof(glm::vec4);
@@ -89,7 +89,7 @@ private:
 	inline void _Allocate(const GLTSizei verticesCount, const GLTSizei indicesCount) {
 		if (m_allocated)
 		{
-			_Deallocate();
+			_deallocate();
 		}
 		m_verticesCount = verticesCount;
 		m_indicesCount = indicesCount;
@@ -102,7 +102,7 @@ private:
 		m_dirty = false;
 		m_readWrite = true;
 	}
-	inline void _Deallocate()
+	inline void _deallocate()
 	{
 		if (m_allocated)
 		{

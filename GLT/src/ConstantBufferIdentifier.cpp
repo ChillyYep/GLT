@@ -2,7 +2,7 @@
 
 ConstantBufferIdentifier ConstantBufferIdentifier::s_null;
 
-void ConstantBufferIdentifier::AddBlock(ShaderUniformBlockProperty& block)
+void ConstantBufferIdentifier::addBlock(ShaderUniformBlockProperty& block)
 {
 	m_globalBuffer.push_back(block);
 
@@ -14,7 +14,7 @@ void ConstantBufferIdentifier::AddBlock(ShaderUniformBlockProperty& block)
 	}
 }
 
-bool ConstantBufferIdentifier::HasBlock(std::string name)
+bool ConstantBufferIdentifier::hasBlock(std::string name)
 {
 	for (int i = 0;i < m_globalBuffer.size();++i)
 	{
@@ -26,7 +26,7 @@ bool ConstantBufferIdentifier::HasBlock(std::string name)
 	return false;
 }
 
-bool ConstantBufferIdentifier::FindBlock(std::string blockName, ShaderUniformBlockProperty*& block)
+bool ConstantBufferIdentifier::findBlock(std::string blockName, ShaderUniformBlockProperty*& block)
 {
 	for (int i = 0;i < m_globalBuffer.size();++i)
 	{
@@ -39,12 +39,12 @@ bool ConstantBufferIdentifier::FindBlock(std::string blockName, ShaderUniformBlo
 	return false;
 }
 
-bool ConstantBufferIdentifier::FindBlockByPropertyName(std::string propertyName, ShaderUniformBlockProperty& block) const
+bool ConstantBufferIdentifier::findBlockByPropertyName(std::string propertyName, ShaderUniformBlockProperty& block) const
 {
 	auto blockIter = m_property2Block.find(propertyName);
 	if (blockIter == m_property2Block.end())
 	{
-		block = ShaderUniformBlockProperty::Null();
+		block = ShaderUniformBlockProperty::null();
 		return false;
 	}
 	auto bufferIndex = blockIter->second;
@@ -52,7 +52,7 @@ bool ConstantBufferIdentifier::FindBlockByPropertyName(std::string propertyName,
 	return true;
 }
 
-ShaderUniformBlockProperty* ConstantBufferIdentifier::GetBlock(std::string blockName)
+ShaderUniformBlockProperty* ConstantBufferIdentifier::getBlock(std::string blockName)
 {
 	for (int i = 0;i < m_globalBuffer.size();++i)
 	{
@@ -64,7 +64,7 @@ ShaderUniformBlockProperty* ConstantBufferIdentifier::GetBlock(std::string block
 	return nullptr;
 }
 
-void ConstantBufferIdentifier::ReCalculateBufferSizeAndBlockOffset()
+void ConstantBufferIdentifier::recalculateBufferSizeAndBlockOffset()
 {
 	m_bufferSize = 0;
 	GLTSizei globalBufferCount = (GLTSizei)m_globalBuffer.size();

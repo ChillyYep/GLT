@@ -2,6 +2,7 @@
 #include <Object.h>
 #include <Component.h>
 #include <type_traits>
+#include <Transform.h>
 
 class GameObject :public Object
 {
@@ -9,26 +10,18 @@ public:
 	GameObject() {}
 	~GameObject() {}
 
-	inline std::shared_ptr<Transform>& GetTransform()
-	{
-		return m_transform;
-	}
+	inline std::shared_ptr<Transform>& getTransform() { return m_transform; }
 
-	void AddComponent(std::shared_ptr<Component> component)
-	{
-		assert(GetComponentIndex(component) < 0);
-		component->m_gameObjectPtr = this;
-		m_components.push_back(component);
-	}
+	void addComponent(std::shared_ptr<Component> component);
 
 	template<typename T>
-	std::shared_ptr<T> AddComponent()
+	std::shared_ptr<T> addComponent()
 	{
 		static_assert(TypeCheck::IsComponentType<T>(), "组件必须添加component_traits类型萃取");
 		bool existSameType = false;
 		for (int i = 0;i < m_components.size();++i)
 		{
-			if (m_components[i]->GetComponentType() == component_traits<T>::value)
+			if (m_components[i]->getComponentType() == component_traits<T>::value)
 			{
 				existSameType = true;
 				break;
@@ -45,25 +38,8 @@ public:
 		return std::static_pointer_cast<T>(component);
 	}
 
-	void RemoveComponent(std::shared_ptr<Component> component)
-	{
-		auto targetComponentIndex = GetComponentIndex(component);
-		if (targetComponentIndex >= 0)
-		{
-			m_components[targetComponentIndex]->m_gameObjectPtr = nullptr;
-			m_components[targetComponentIndex] = nullptr;
-			for (int i = targetComponentIndex;i < m_components.size() - 1;++i)
-			{
-				m_components[i] = m_components[i + 1];
-			}
-			m_components.pop_back();
-		}
-	}
-
-	inline std::vector<std::shared_ptr<Component>> GetComponents() { return m_components; }
-
 	template<typename T>
-	std::shared_ptr<T> GetComponent()
+	std::shared_ptr<T> getComponent()
 	{
 		if (!TypeCheck::IsComponentType<T>())
 		{
@@ -71,7 +47,7 @@ public:
 		}
 		for (int i = 0;i < m_components.size();++i)
 		{
-			if (m_components[i]->GetComponentType() == component_traits<T>::value)
+			if (m_components[i]->getComponentType() == component_traits<T>::value)
 			{
 				return std::static_pointer_cast<T>(m_components[i]);
 			}
@@ -79,16 +55,20 @@ public:
 		return nullptr;
 	}
 
-	void Destroy()
+	void removeComponent(std::shared_ptr<Component> component);
+
+	inline std::vector<std::shared_ptr<Component>> getComponents() { return m_components; }
+
+	void destroy()
 	{
 		for (int i = 0;i < m_components.size();++i)
 		{
-			m_components[i]->Destroy();
+			m_components[i]->destroy();
 		}
 	}
 
 private:
-	int GetComponentIndex(std::shared_ptr<Component> component)
+	int getComponentIndex(std::shared_ptr<Component> component)
 	{
 		if (component == nullptr)
 		{
@@ -96,13 +76,14 @@ private:
 		}
 		for (int i = 0;i < m_components.size();++i)
 		{
-			if (m_components[i]->GetInstanceId() == component->GetInstanceId())
+			if (m_components[i]->getInstanceId() == component->getInstanceId())
 			{
 				return i;
 			}
 		}
 		return -1;
 	}
+
 	std::shared_ptr<Transform> m_transform;
 
 	std::vector<std::shared_ptr<Component>> m_components;

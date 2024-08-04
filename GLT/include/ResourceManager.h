@@ -22,18 +22,18 @@ public:
 	~ResourceManager() {}
 
 	template<typename T>
-	inline void RequestResource(ManagementCentreBase<T>* managementCentre, std::vector<GLuint> instanceIds, ResourceType resourceType)
+	inline void requestResource(ManagementCentreBase<T>* managementCentre, std::vector<GLuint> instanceIds, ResourceType resourceType)
 	{
 		switch (resourceType)
 		{
 		case ResourceType::Mesh:
-			RequestMeshResource(*dynamic_cast<MeshManagementCentre*>(managementCentre), instanceIds);
+			requestMeshResource(*dynamic_cast<MeshManagementCentre*>(managementCentre), instanceIds);
 			break;
 		case ResourceType::Texture:
-			RequestTextureResource(*dynamic_cast<TextureManagementCentre*>(managementCentre), instanceIds);
+			requestTextureResource(*dynamic_cast<TextureManagementCentre*>(managementCentre), instanceIds);
 			break;
 		case ResourceType::Sampler:
-			RequestSamplerResource(*dynamic_cast<SamplerManagementCentre*>(managementCentre), instanceIds);
+			requestSamplerResource(*dynamic_cast<SamplerManagementCentre*>(managementCentre), instanceIds);
 			break;
 		default:
 			break;
@@ -41,37 +41,37 @@ public:
 	}
 
 	template<typename T>
-	inline void DestroyResource(ManagementCentreBase<T>* managementCentre, std::vector<GLuint> instanceIds, ResourceType resourceType)
+	inline void destroyResource(ManagementCentreBase<T>* managementCentre, std::vector<GLuint> instanceIds, ResourceType resourceType)
 	{
 		switch (resourceType)
 		{
 		case ResourceType::Mesh:
-			DestroyMeshResource(*dynamic_cast<MeshManagementCentre*>(managementCentre), instanceIds);
+			destroyMeshResource(*dynamic_cast<MeshManagementCentre*>(managementCentre), instanceIds);
 			break;
 		case ResourceType::Texture:
-			DestroyTextureResource(*dynamic_cast<TextureManagementCentre*>(managementCentre), instanceIds);
+			destroyTextureResource(*dynamic_cast<TextureManagementCentre*>(managementCentre), instanceIds);
 			break;
 		case ResourceType::Sampler:
-			DestroySamplerResource(*dynamic_cast<SamplerManagementCentre*>(managementCentre), instanceIds);
+			destroySamplerResource(*dynamic_cast<SamplerManagementCentre*>(managementCentre), instanceIds);
 			break;
 		default:
 			break;
 		}
 	}
 
-	void RequestMeshResource(const MeshManagementCentre& meshManagementCentre, std::vector<GLuint>& meshInstanceIds);
+	void requestMeshResource(const MeshManagementCentre& meshManagementCentre, std::vector<GLuint>& meshInstanceIds);
 
-	void DestroyMeshResource(const MeshManagementCentre& meshManagementCentre, std::vector<GLuint>& meshInstanceIds);
+	void destroyMeshResource(const MeshManagementCentre& meshManagementCentre, std::vector<GLuint>& meshInstanceIds);
 
-	void RequestTextureResource(const TextureManagementCentre& textureManagementCentre, std::vector<GLuint>& textureInstanceIds);
+	void requestTextureResource(const TextureManagementCentre& textureManagementCentre, std::vector<GLuint>& textureInstanceIds);
 
-	void DestroyTextureResource(const TextureManagementCentre& textureManagementCentre, std::vector<GLuint>& textureInstanceIds);
+	void destroyTextureResource(const TextureManagementCentre& textureManagementCentre, std::vector<GLuint>& textureInstanceIds);
 
-	void RequestSamplerResource(const SamplerManagementCentre& samplerManagementCentre, std::vector<GLuint>& samplerInstanceIds);
+	void requestSamplerResource(const SamplerManagementCentre& samplerManagementCentre, std::vector<GLuint>& samplerInstanceIds);
 
-	void DestroySamplerResource(const SamplerManagementCentre& samplerManagementCentre, std::vector<GLuint>& samplerInstanceIds);
+	void destroySamplerResource(const SamplerManagementCentre& samplerManagementCentre, std::vector<GLuint>& samplerInstanceIds);
 
-	void RequestConstantBufferResource(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers)
+	void requestConstantBufferResource(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers)
 	{
 		int size = (int)constantBufferIdentifiers.size();
 		std::vector<GLuint> ubos = std::vector<GLuint>(size);
@@ -79,7 +79,7 @@ public:
 		for (int i = 0;i < size;++i)
 		{
 			constantBufferIdentifiers[i].SetUbo(ubos[i]);
-			size_t bufferSize = constantBufferIdentifiers[i].GetTotalBufferSize();
+			size_t bufferSize = constantBufferIdentifiers[i].getTotalBufferSize();
 			// ·ÖÅä´æ´¢¿Õ¼ä
 			glBindBuffer(GL_UNIFORM_BUFFER, ubos[i]);
 			glBufferData(GL_UNIFORM_BUFFER, bufferSize, NULL, GL_STATIC_DRAW);
@@ -88,22 +88,22 @@ public:
 		}
 	}
 
-	inline MeshResourceIdentifier GetMeshResource(GLuint meshInstanceId)
+	inline MeshResourceIdentifier getMeshResource(GLuint meshInstanceId)
 	{
-		return GetResource(meshInstanceId, m_meshResources);
+		return getResource(meshInstanceId, m_meshResources);
 	}
 
-	inline TextureResourceIdentifier GetTextureResource(GLuint textureInstanceId)
+	inline TextureResourceIdentifier getTextureResource(GLuint textureInstanceId)
 	{
-		return GetResource(textureInstanceId, m_textureResources);
+		return getResource(textureInstanceId, m_textureResources);
 	}
 
-	inline MeshManagementCentre& GetMeshManagementCentre() { return m_meshManagementCentre; }
+	inline MeshManagementCentre& getMeshManagementCentre() { return m_meshManagementCentre; }
 
-	inline TextureManagementCentre& GetTextureManagementCentre() { return m_textureManagementCentre; }
+	inline TextureManagementCentre& getTextureManagementCentre() { return m_textureManagementCentre; }
 private:
 	template<typename Identifier>
-	std::vector<GLuint> RequestNewIdentifier(std::vector<GLuint>& instanceIds, std::unordered_map<GLuint, Identifier>& identifiers)
+	std::vector<GLuint> requestNewIdentifier(std::vector<GLuint>& instanceIds, std::unordered_map<GLuint, Identifier>& identifiers)
 	{
 		size_t length = instanceIds.size();
 		std::vector<GLuint> newInstanceIds;
@@ -123,7 +123,7 @@ private:
 	}
 
 	template<typename Identifier>
-	Identifier GetResource(GLuint instanceId, std::unordered_map<GLuint, Identifier>& resourceIdentifier)
+	Identifier getResource(GLuint instanceId, std::unordered_map<GLuint, Identifier>& resourceIdentifier)
 	{
 		auto resource = resourceIdentifier.find(instanceId);
 		if (resource != resourceIdentifier.end())
@@ -133,7 +133,7 @@ private:
 		return Identifier();
 	}
 
-	inline void SetTextureWrapMode(GLuint texture, GLenum pname, TextureWrapMode wrapMode)
+	inline void setTextureWrapMode(GLuint texture, GLenum pname, TextureWrapMode wrapMode)
 	{
 		switch (wrapMode)
 		{
@@ -154,7 +154,7 @@ private:
 		}
 	}
 
-	inline void SetTextureFilter(GLuint texture, GLenum pname, TextureFilterMode textureFilter)
+	inline void setTextureFilter(GLuint texture, GLenum pname, TextureFilterMode textureFilter)
 	{
 		switch (textureFilter)
 		{

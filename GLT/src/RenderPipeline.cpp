@@ -1,135 +1,135 @@
 #include "RenderPipeline.h"
-void RenderPipeline::Init() {
-	m_renderContext.Init();
+void RenderPipeline::init() {
+	m_renderContext.init();
 	ShaderUtils::loadAllShader(m_renderContext);
 }
-void RenderPipeline::UnInit() {
+void RenderPipeline::uninit() {
 
 }
-void RenderPipeline::ClearExpiredMeshBuffers(std::vector<std::shared_ptr<Scene>>& allScenes)
+void RenderPipeline::clearExpiredMeshBuffers(std::vector<std::shared_ptr<Scene>>& allScenes)
 {
 	// É¾³ý
 	for (int i = 0;i < allScenes.size();++i)
 	{
-		ClearExpiredObjects(&ResourceManager::getInstance()->GetMeshManagementCentre(), ResourceType::Mesh);
+		clearExpiredObjects(&ResourceManager::getInstance()->getMeshManagementCentre(), ResourceType::Mesh);
 	}
 }
-void RenderPipeline::AppendNewMeshBuffers(std::vector<std::shared_ptr<Scene>>& allScenes)
+void RenderPipeline::appendNewMeshBuffers(std::vector<std::shared_ptr<Scene>>& allScenes)
 {
 	for (int i = 0;i < allScenes.size();++i)
 	{
-		AppendNewObjects(&ResourceManager::getInstance()->GetMeshManagementCentre(), ResourceType::Mesh);
+		appendNewObjects(&ResourceManager::getInstance()->getMeshManagementCentre(), ResourceType::Mesh);
 	}
 }
 
-void RenderPipeline::ClearExpiredTextures(std::vector<std::shared_ptr<Scene>>& allScenes)
+void RenderPipeline::clearExpiredTextures(std::vector<std::shared_ptr<Scene>>& allScenes)
 {
 	for (int i = 0;i < allScenes.size();++i)
 	{
-		ClearExpiredObjects(&ResourceManager::getInstance()->GetTextureManagementCentre(), ResourceType::Texture);
+		clearExpiredObjects(&ResourceManager::getInstance()->getTextureManagementCentre(), ResourceType::Texture);
 	}
 }
-void RenderPipeline::AppendNewTextures(std::vector<std::shared_ptr<Scene>>& allScenes)
+void RenderPipeline::appendNewTextures(std::vector<std::shared_ptr<Scene>>& allScenes)
 {
 	for (int i = 0;i < allScenes.size();++i)
 	{
-		AppendNewObjects(&ResourceManager::getInstance()->GetTextureManagementCentre(), ResourceType::Texture);
+		appendNewObjects(&ResourceManager::getInstance()->getTextureManagementCentre(), ResourceType::Texture);
 	}
 }
 
-void RenderPipeline::Render() {
-	UpdateSceneProperties4Render();
+void RenderPipeline::render() {
+	updateSceneProperties4Render();
 
 	// do someting
-	UpdatePerFrameConstantBuffer();
+	updatePerFrameConstantBuffer();
 	for (const auto& scene : m_allScenes)
 	{
-		auto mainCamera = scene->GetMainCamera();
+		auto mainCamera = scene->getMainCamera();
 		if (mainCamera == nullptr)
 		{
 			continue;
 		}
-		UpdatePerCameraConstantBuffer(mainCamera);
+		updatePerCameraConstantBuffer(mainCamera);
 
 		auto viewPort = mainCamera->GetViewPort();
-		auto windowSize = Window::getInstance()->GetSize();
+		auto windowSize = Window::getInstance()->getSize();
 		auto viewPortRect = glm::ivec4(viewPort.x * windowSize.x, viewPort.y * windowSize.y, viewPort.z * windowSize.x, viewPort.w * windowSize.y);
 		glViewport(viewPortRect.x, viewPortRect.y, viewPortRect.z, viewPortRect.w);
-		for (auto& renderObject : scene->GetObjectList())
+		for (auto& renderObject : scene->getObjectList())
 		{
-			auto renderer = renderObject->GetComponent<Renderer>();
+			auto renderer = renderObject->getComponent<Renderer>();
 			if (renderer != nullptr)
 			{
-				RenderPerObject(*renderer, mainCamera);
+				renderPerObject(*renderer, mainCamera);
 			}
 		}
 	}
-	PostUpdate();
+	postUpdate();
 }
-void RenderPipeline::PostUpdate()
+void RenderPipeline::postUpdate()
 {
-	ResourceManager::getInstance()->GetMeshManagementCentre().OnSubmit();
-	ResourceManager::getInstance()->GetTextureManagementCentre().OnSubmit();
+	ResourceManager::getInstance()->getMeshManagementCentre().onSubmit();
+	ResourceManager::getInstance()->getTextureManagementCentre().onSubmit();
 }
 
-void RenderPipeline::UpdateSceneProperties4Render()
+void RenderPipeline::updateSceneProperties4Render()
 {
-	m_allScenes = SceneManager::getInstance()->GetAllScenes(false);
+	m_allScenes = SceneManager::getInstance()->getAllScenes(false);
 
 	// É¾³ý
-	ClearExpiredMeshBuffers(m_allScenes);
-	ClearExpiredTextures(m_allScenes);
+	clearExpiredMeshBuffers(m_allScenes);
+	clearExpiredTextures(m_allScenes);
 
 	// Ìí¼Ó
-	AppendNewMeshBuffers(m_allScenes);
-	AppendNewTextures(m_allScenes);
+	appendNewMeshBuffers(m_allScenes);
+	appendNewTextures(m_allScenes);
 }
 
-void RenderPipeline::UpdateLightProperties(std::shared_ptr<Camera>& camera)
+void RenderPipeline::updateLightProperties(std::shared_ptr<Camera>& camera)
 {
-	m_lightProperties = SceneManager::getInstance()->GetAffectedLights(camera);
+	m_lightProperties = SceneManager::getInstance()->getAffectedLights(camera);
 	if (m_lightProperties.size() > 0)
 	{
 		auto lightProperties = m_lightProperties[0];
-		Shader::SetGlobalVector(ShaderPropertyNames::MainLightData_Ambient, glm::vec4(0.2f, 0.2f, 0.2f, 0.0f));
-		Shader::SetGlobalVector(ShaderPropertyNames::MainLightData_Color, lightProperties.color);
-		Shader::SetGlobalVector(ShaderPropertyNames::MainLightData_Position, glm::vec4(lightProperties.position.x, lightProperties.position.y, lightProperties.position.z, 1.0f));
-		Shader::SetGlobalVector(ShaderPropertyNames::MainLightData_ConeDirection, glm::vec4(lightProperties.coneDirection.x, lightProperties.coneDirection.y, lightProperties.coneDirection.z, 1.0f));
-		Shader::SetGlobalFloat(ShaderPropertyNames::MainLightData_EndDistance, -1);
-		Shader::SetGlobalVector(ShaderPropertyNames::MainLightData_Attenuations, glm::vec4(0.5f, 1.0f, 1.0f, 1.0f));
+		Shader::setGlobalVector(ShaderPropertyNames::MainLightData_Ambient, glm::vec4(0.2f, 0.2f, 0.2f, 0.0f));
+		Shader::setGlobalVector(ShaderPropertyNames::MainLightData_Color, lightProperties.color);
+		Shader::setGlobalVector(ShaderPropertyNames::MainLightData_Position, glm::vec4(lightProperties.position.x, lightProperties.position.y, lightProperties.position.z, 1.0f));
+		Shader::setGlobalVector(ShaderPropertyNames::MainLightData_ConeDirection, glm::vec4(lightProperties.direction.x, lightProperties.direction.y, lightProperties.direction.z, 1.0f));
+		Shader::setGlobalFloat(ShaderPropertyNames::MainLightData_EndDistance, -1);
+		Shader::setGlobalVector(ShaderPropertyNames::MainLightData_Attenuations, glm::vec4(0.5f, 1.0f, 1.0f, 1.0f));
 	}
 	for (int i = 0;i < m_lightProperties.size() - 1;++i)
 	{
 		auto lightProperties = m_lightProperties[i + 1];
-		Shader::SetGlobalVector(ShaderPropertyNames::GetShaderArrayPropertyName(ShaderPropertyNames::AddtionalLightData, ShaderPropertyNames::AddtionalLightData_Ambient, i).c_str(), glm::vec4(0.1f, 0.1f, 0.1f, 0.0f));
-		Shader::SetGlobalVector(ShaderPropertyNames::GetShaderArrayPropertyName(ShaderPropertyNames::AddtionalLightData, ShaderPropertyNames::AddtionalLightData_Color, i).c_str(), lightProperties.color);
-		Shader::SetGlobalVector(ShaderPropertyNames::GetShaderArrayPropertyName(ShaderPropertyNames::AddtionalLightData, ShaderPropertyNames::AddtionalLightData_Position, i).c_str(), glm::vec4(lightProperties.position.x, lightProperties.position.y, lightProperties.position.z, 1.0f));
-		Shader::SetGlobalVector(ShaderPropertyNames::GetShaderArrayPropertyName(ShaderPropertyNames::AddtionalLightData, ShaderPropertyNames::AddtionalLightData_ConeDirection, i).c_str(), glm::vec4(lightProperties.coneDirection.x, lightProperties.coneDirection.y, lightProperties.coneDirection.z, 1.0f));
-		Shader::SetGlobalFloat(ShaderPropertyNames::GetShaderArrayPropertyName(ShaderPropertyNames::AddtionalLightData, ShaderPropertyNames::AddtionalLightData_EndDistance, i).c_str(), 100.0f);
-		Shader::SetGlobalVector(ShaderPropertyNames::GetShaderArrayPropertyName(ShaderPropertyNames::AddtionalLightData, ShaderPropertyNames::AddtionalLightData_Attenuations, i).c_str(), glm::vec4(0.5f, 1.0f, 1.0f, 1.0f));
+		Shader::setGlobalVector(ShaderPropertyNames::getShaderArrayPropertyName(ShaderPropertyNames::AddtionalLightData, ShaderPropertyNames::AddtionalLightData_Ambient, i).c_str(), glm::vec4(0.1f, 0.1f, 0.1f, 0.0f));
+		Shader::setGlobalVector(ShaderPropertyNames::getShaderArrayPropertyName(ShaderPropertyNames::AddtionalLightData, ShaderPropertyNames::AddtionalLightData_Color, i).c_str(), lightProperties.color);
+		Shader::setGlobalVector(ShaderPropertyNames::getShaderArrayPropertyName(ShaderPropertyNames::AddtionalLightData, ShaderPropertyNames::AddtionalLightData_Position, i).c_str(), glm::vec4(lightProperties.position.x, lightProperties.position.y, lightProperties.position.z, 1.0f));
+		Shader::setGlobalVector(ShaderPropertyNames::getShaderArrayPropertyName(ShaderPropertyNames::AddtionalLightData, ShaderPropertyNames::AddtionalLightData_ConeDirection, i).c_str(), glm::vec4(lightProperties.direction.x, lightProperties.direction.y, lightProperties.direction.z, 1.0f));
+		Shader::setGlobalFloat(ShaderPropertyNames::getShaderArrayPropertyName(ShaderPropertyNames::AddtionalLightData, ShaderPropertyNames::AddtionalLightData_EndDistance, i).c_str(), 100.0f);
+		Shader::setGlobalVector(ShaderPropertyNames::getShaderArrayPropertyName(ShaderPropertyNames::AddtionalLightData, ShaderPropertyNames::AddtionalLightData_Attenuations, i).c_str(), glm::vec4(0.5f, 1.0f, 1.0f, 1.0f));
 		/*ss.str("");
 		ss << ShaderPropertyNames::AddtionalLightData_Format << "[" << i << "]." << ShaderPropertyNames::AddtionalLightData_SpotCosCutOff_Format;
 		Shader::SetGlobalFloat(ss.str().c_str(), lightProperties.spotCosCutoff);*/
 	}
 }
 
-void RenderPipeline::UpdatePerFrameConstantBuffer()
+void RenderPipeline::updatePerFrameConstantBuffer()
 {
 	// do something
-	Shader::Upload(ConstantBufferType::PerFrame);
+	Shader::upload(ConstantBufferType::PerFrame);
 }
 
-void RenderPipeline::UpdatePerCameraConstantBuffer(std::shared_ptr<Camera>& camera)
+void RenderPipeline::updatePerCameraConstantBuffer(std::shared_ptr<Camera>& camera)
 {
-	UpdateLightProperties(camera);
-	Shader::SetGlobalMatrix(ShaderPropertyNames::ViewMatrix, camera->GetViewMatrix());
-	Shader::SetGlobalMatrix(ShaderPropertyNames::ProjectMatrix, camera->GetProjectMatrix());
-	auto eyePosition = camera->GetTransform()->GetPosition();
-	Shader::SetGlobalVector(ShaderPropertyNames::EyePosition, glm::vec4(eyePosition.x, eyePosition.y, eyePosition.z, 1.0f));
-	Shader::Upload(ConstantBufferType::PerCamera);
+	updateLightProperties(camera);
+	Shader::setGlobalMatrix(ShaderPropertyNames::ViewMatrix, camera->getViewMatrix());
+	Shader::setGlobalMatrix(ShaderPropertyNames::ProjectMatrix, camera->getProjectMatrix());
+	auto eyePosition = camera->getTransform()->GetPosition();
+	Shader::setGlobalVector(ShaderPropertyNames::EyePosition, glm::vec4(eyePosition.x, eyePosition.y, eyePosition.z, 1.0f));
+	Shader::upload(ConstantBufferType::PerCamera);
 }
 
-void RenderPipeline::RenderPerObject(Renderer& renderObject, std::shared_ptr<Camera>& camera)
+void RenderPipeline::renderPerObject(Renderer& renderObject, std::shared_ptr<Camera>& camera)
 {
 	auto mesh = renderObject.GetMesh();
 	if (mesh == nullptr)
@@ -147,5 +147,5 @@ void RenderPipeline::RenderPerObject(Renderer& renderObject, std::shared_ptr<Cam
 	glDepthRange(0, 1);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
-	Graphics::DrawRequestedMesh(mesh, renderObject.GetMaterial(), camera, go->GetTransform()->GetMatrix());
+	Graphics::drawRequestedMesh(mesh, renderObject.GetMaterial(), camera, go->getTransform()->GetMatrix());
 }

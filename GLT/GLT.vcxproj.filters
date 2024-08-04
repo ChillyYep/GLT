@@ -124,6 +124,21 @@
     <Filter Include="源文件\RHI\GLSL\Compiler">
       <UniqueIdentifier>{9a9c5917-95cf-43bb-8778-ef29b36ef1a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Common\Utilities">
+      <UniqueIdentifier>{7c9784a7-1f8f-4e75-b3b8-907a3d65c0de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Common\Object">
+      <UniqueIdentifier>{3c96af4e-f364-4610-9d2a-9b6503c6f3c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Common\Utilities">
+      <UniqueIdentifier>{14025956-c2c2-4203-8a74-b32c05857c6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Common\Object">
+      <UniqueIdentifier>{8b4c5ed3-de5f-469e-a742-5c464a074572}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Component\Camera">
+      <UniqueIdentifier>{082f7a14-9eca-4994-8ca3-4de96d39c976}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl3w.c">
@@ -131,12 +146,6 @@
     </ClCompile>
     <ClCompile Include="src\triangles.cpp">
       <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Camera.cpp">
-      <Filter>源文件\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="src\PrimitiveUtils.cpp">
-      <Filter>源文件\Common</Filter>
     </ClCompile>
     <ClCompile Include="src\RenderPipeline.cpp">
       <Filter>源文件\RenderPipeline</Filter>
@@ -195,14 +204,29 @@
     <ClCompile Include="src\CommandBuffer.cpp">
       <Filter>源文件\RHI\Command</Filter>
     </ClCompile>
-    <ClCompile Include="src\FileUtils.cpp">
-      <Filter>源文件\Common</Filter>
-    </ClCompile>
     <ClCompile Include="src\RHICommon.cpp">
       <Filter>源文件\RHI</Filter>
     </ClCompile>
     <ClCompile Include="src\GLSLCompiler.cpp">
       <Filter>源文件\RHI\GLSL\Compiler</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FileUtils.cpp">
+      <Filter>源文件\Common\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PrimitiveUtils.cpp">
+      <Filter>源文件\Common\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObject.cpp">
+      <Filter>源文件\Common\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SceneUtility.cpp">
+      <Filter>源文件\Common\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>源文件\Component\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Texture.cpp">
+      <Filter>源文件\RHI\ResourceManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -253,9 +277,6 @@
     <ClInclude Include="include\Transform.h">
       <Filter>头文件\Component</Filter>
     </ClInclude>
-    <ClInclude Include="include\PrimitiveUtils.h">
-      <Filter>头文件\Common</Filter>
-    </ClInclude>
     <ClInclude Include="include\CameraOperation.h">
       <Filter>头文件\Component\Camera</Filter>
     </ClInclude>
@@ -285,9 +306,6 @@
     </ClInclude>
     <ClInclude Include="include\EventSystem.h">
       <Filter>头文件\EventSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Object.h">
-      <Filter>头文件\Common</Filter>
     </ClInclude>
     <ClInclude Include="include\Light.h">
       <Filter>头文件\Component</Filter>
@@ -331,17 +349,11 @@
     <ClInclude Include="include\PassBase.h">
       <Filter>头文件\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="include\GameObject.h">
-      <Filter>头文件\Common</Filter>
-    </ClInclude>
     <ClInclude Include="include\Component.h">
       <Filter>头文件\Component</Filter>
     </ClInclude>
     <ClInclude Include="include\gamemain.h">
       <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\SceneUtility.h">
-      <Filter>头文件\Common</Filter>
     </ClInclude>
     <ClInclude Include="include\MemoryManager.h">
       <Filter>头文件\RHI\ResourceManager</Filter>
@@ -351,12 +363,6 @@
     </ClInclude>
     <ClInclude Include="include\ResourceIdentifier.h">
       <Filter>头文件\RHI\ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.cpp">
-      <Filter>源文件\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="include\StringUtility.h">
-      <Filter>头文件\Common</Filter>
     </ClInclude>
     <ClInclude Include="include\ConstantBufferIdentifier.h">
       <Filter>头文件\RHI\ResourceManager\Buffers</Filter>
@@ -378,9 +384,6 @@
     </ClInclude>
     <ClInclude Include="include\RenderCommand.h">
       <Filter>头文件\RHI\Command</Filter>
-    </ClInclude>
-    <ClInclude Include="include\FileUtils.h">
-      <Filter>头文件\Common</Filter>
     </ClInclude>
     <ClInclude Include="include\ShaderCompilerBase.h">
       <Filter>头文件\RHI\Common</Filter>
@@ -411,6 +414,27 @@
     </ClInclude>
     <ClInclude Include="include\GLMath.h">
       <Filter>头文件\RHI\GLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="include\StringUtility.h">
+      <Filter>头文件\Common\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SceneUtility.h">
+      <Filter>头文件\Common\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PrimitiveUtils.h">
+      <Filter>头文件\Common\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\FileUtils.h">
+      <Filter>头文件\Common\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameObject.h">
+      <Filter>头文件\Common\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Object.h">
+      <Filter>头文件\Common\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.cpp">
+      <Filter>源文件\Common\Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

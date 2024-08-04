@@ -16,46 +16,46 @@ public:
 		}
 	}
 
-	void Init()
+	void init()
 	{
 		m_windowImplent = new GlFWWindowImplement();
-		m_windowImplent->Init();
+		m_windowImplent->init();
 	}
-	void UnInit()
+	void uninit()
 	{
-		m_windowImplent->UnInit();
+		m_windowImplent->uninit();
 	}
-	void Create(int width, int height, const char* title)
+	void create(int width, int height, const char* title)
 	{
-		m_windowImplent->Create(width, height, title);
+		m_windowImplent->create(width, height, title);
 	}
-	void Destroy()
+	void destroy()
 	{
-		m_windowImplent->Destroy();
-	}
-
-	void SetSize(int width, int height)
-	{
-		m_windowImplent->SetSize(width, height);
+		m_windowImplent->destroy();
 	}
 
-	glm::ivec2 GetSize()
+	void setSize(int width, int height)
 	{
-		return m_windowImplent->GetSize();
+		m_windowImplent->setSize(width, height);
 	}
 
-	void AttachToEventSystem()
+	glm::ivec2 getSize()
 	{
-		m_windowImplent->AttachToEventSystem();
-	}
-	void DetachToEventSystem()
-	{
-		m_windowImplent->DetachToEventSystem();
+		return m_windowImplent->getSize();
 	}
 
-	void GameLoop(WindowImplementBase::RenderLoopMainFunc renderLoopMainFunc)
+	void attachToEventSystem()
 	{
-		m_windowImplent->GameLoop(renderLoopMainFunc);
+		m_windowImplent->attachToEventSystem();
+	}
+	void detachToEventSystem()
+	{
+		m_windowImplent->detachToEventSystem();
+	}
+
+	void gameLoop(WindowImplementBase::RenderLoopMainFunc renderLoopMainFunc)
+	{
+		m_windowImplent->gameLoop(renderLoopMainFunc);
 	}
 private:
 	WindowImplementBase* m_windowImplent;

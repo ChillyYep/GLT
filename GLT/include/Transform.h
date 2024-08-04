@@ -9,7 +9,7 @@ public:
 	Transform() :m_position(glm::zero<glm::vec4>()), m_rotation(glm::identity<glm::quat>()), m_scale(glm::one<glm::vec3>()) {};
 	~Transform() {};
 
-	ComponentType GetComponentType() override { return ComponentType::Transform; }
+	ComponentType getComponentType() override { return ComponentType::Transform; }
 
 	inline glm::mat4x4 GetMatrix() {
 		auto mat = glm::scale(glm::identity<glm::mat4x4>(), m_scale);

@@ -1,6 +1,6 @@
 #include "CommandBuffer.h"
 
-void CommandBuffer::RequestRenderTexture(int width, int height, TextureFormat textureFormat, TextureFilterMode filterMode)
+void CommandBuffer::requestRenderTexture(int width, int height, TextureFormat textureFormat, TextureFilterMode filterMode)
 {
 	RenderCommand command = RenderCommand();
 	RequestRenderTextureParam* renderTextureParam = RenderCommandParamFactory::getInstance()->createParam<RequestRenderTextureParam>();
@@ -13,7 +13,7 @@ void CommandBuffer::RequestRenderTexture(int width, int height, TextureFormat te
 	m_cmdList.push_back(command);
 }
 
-void CommandBuffer::SetRenderTarget(RenderTargetIdentifier* renderTargetIdentifier)
+void CommandBuffer::setRenderTarget(RenderTargetIdentifier* renderTargetIdentifier)
 {
 	assert(renderTargetIdentifier != nullptr);
 	RenderCommand command = RenderCommand();
@@ -25,7 +25,7 @@ void CommandBuffer::SetRenderTarget(RenderTargetIdentifier* renderTargetIdentifi
 	m_cmdList.push_back(command);
 }
 
-void CommandBuffer::Release()
+void CommandBuffer::release()
 {
 	for (int i = 0;i < m_cmdList.size();++i)
 	{

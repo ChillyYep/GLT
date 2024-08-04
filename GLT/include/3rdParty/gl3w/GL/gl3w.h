@@ -134,7 +134,7 @@ union GL3WProcs {
 		PFNGLCLEARBUFFERFVPROC                                  ClearBufferfv;
 		PFNGLCLEARBUFFERIVPROC                                  ClearBufferiv;
 		PFNGLCLEARBUFFERUIVPROC                                 ClearBufferuiv;
-		PFNGLCLEARCOLORPROC                                     ClearColor;
+		PFNGLCLEARCOLORPROC                                     clearColor;
 		PFNGLCLEARDEPTHPROC                                     ClearDepth;
 		PFNGLCLEARDEPTHDNVPROC                                  ClearDepthdNV;
 		PFNGLCLEARDEPTHFPROC                                    ClearDepthf;
@@ -1418,7 +1418,7 @@ GL3W_API extern union GL3WProcs gl3wProcs;
 #define glClearBufferfv                                  gl3wProcs.gl.ClearBufferfv
 #define glClearBufferiv                                  gl3wProcs.gl.ClearBufferiv
 #define glClearBufferuiv                                 gl3wProcs.gl.ClearBufferuiv
-#define glClearColor                                     gl3wProcs.gl.ClearColor
+#define glClearColor                                     gl3wProcs.gl.clearColor
 #define glClearDepth                                     gl3wProcs.gl.ClearDepth
 #define glClearDepthdNV                                  gl3wProcs.gl.ClearDepthdNV
 #define glClearDepthf                                    gl3wProcs.gl.ClearDepthf

@@ -7,11 +7,11 @@ public:
 	/// <summary>
 	/// 编译
 	/// </summary>
-	virtual void Compile() = 0;
+	virtual void compile() = 0;
 	/// <summary>
 	/// 设置变量，执行绘制
 	/// </summary>
-	virtual void Execute() = 0;
+	virtual void execute() = 0;
 private:
 
 };
