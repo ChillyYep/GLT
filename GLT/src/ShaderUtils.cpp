@@ -6,7 +6,8 @@ ShaderUtils::~ShaderUtils() {}
 void ShaderUtils::loadAllShader(ScriptableRenderContext& renderContext)
 {
 	auto files = ShaderUtils::collectAllFiles();
-	auto rawShaderInfos = ShaderUtils::parse(files);
+	GLSLPreProcessCompiler preProcessCompiler;
+	auto rawShaderInfos = preProcessCompiler.parse(files);
 	// ±‡“ÎShader
 	GLSLCompiler compiler;
 	CompiledResult compileResult;
@@ -38,72 +39,6 @@ std::vector<std::string> ShaderUtils::collectAllFiles()
 	return fileList;
 }
 
-std::unordered_map<std::string, RawShaderInfo> ShaderUtils::parse(std::vector<std::string>& fileList) {
-	std::unordered_map<std::string, RawShaderInfo> map;
-	std::stringstream ss;
-	std::ifstream fileStream;
-
-	for (int i = 0;i < fileList.size();++i)
-	{
-		const auto shaderFileName = fileList[i];
-		auto index = shaderFileName.find_last_of('.');
-		auto suffix = shaderFileName.substr(index + 1);
-		auto filename = shaderFileName.substr(0, index);
-		std::string line;
-		ss.clear();
-		ss.str("");
-		if (suffix == "vert" || suffix == "frag")
-		{
-			auto shaderFilePath = SHADER_ROOT + shaderFileName;
-			fileStream.open(shaderFilePath, std::ios::out);
-			if (fileStream.is_open())
-			{
-				while (std::getline(fileStream, line))
-				{
-					auto trimLine = StringUtility::Trim(line);
-					if (StringUtility::StartWith(trimLine, "#include"))
-					{
-						auto includeFile = extractIncludeFile(trimLine, "#include");
-						auto includeFilePath = SHADER_ROOT + includeFile;
-						assert(fs::exists(includeFilePath) && !fs::is_directory(includeFilePath));
-
-						auto text = readAllText(includeFilePath);
-						ss << text;
-					}
-					else {
-						ss << line << std::endl;
-					}
-				}
-			}
-			fileStream.close();
-
-			RawShaderInfo rawShaderInfo;
-			if (map.find(filename) == map.end())
-			{
-				rawShaderInfo.m_programName = filename;
-				map[filename] = rawShaderInfo;
-			}
-			if (suffix == "vert")
-			{
-				map[filename].m_vertexShader = ss.str();
-			}
-			else {
-				map[filename].m_fragmentShader = ss.str();
-			}
-		}
-	}
-
-	for (const auto& pair : map)
-	{
-		std::cout << pair.first << ".vert" << std::endl;
-		std::cout << pair.second.m_vertexShader << std::endl;
-		std::cout << pair.first << ".frag" << std::endl;
-		std::cout << pair.second.m_fragmentShader << std::endl;
-	}
-
-	return map;
-}
-
 void ShaderUtils::bindBlockForProgram(Shader& shader)
 {
 	ConstantBufferSet& globalBuffer = Shader::getShaderGlobalBuffer();
@@ -122,44 +57,4 @@ void ShaderUtils::bindBlockForProgram(Shader& shader)
 			glUniformBlockBinding(program, blockIndex, block->m_blockBindingNum);
 		}
 	}
-
-}
-
-std::string ShaderUtils::readAllText(std::string& filePath)
-{
-	std::ifstream fileStream;
-	std::stringstream ss;
-	fileStream.open(filePath, std::ios::out);
-	if (fileStream.is_open())
-	{
-		std::string line;
-		while (std::getline(fileStream, line))
-		{
-			ss << line << std::endl;
-		}
-	}
-	fileStream.close();
-	return ss.str();
-}
-
-std::string ShaderUtils::extractIncludeFile(const std::string& line, const std::string& pattern)
-{
-	if (line.size() < pattern.size())
-	{
-		return "";
-	}
-	std::stringstream ss;
-	bool start = false;
-	for (size_t i = pattern.size();i < line.size();++i)
-	{
-		if (line[i] == '\"')
-		{
-			start = true;
-		}
-		else if (start && line[i] != '\"')
-		{
-			ss << line[i];
-		}
-	}
-	return ss.str();
 }

@@ -39,3 +39,21 @@ size_t FileUtils::openFile(const char* directory, const char* filename, std::str
 	}
 	return realFileSize;
 }
+
+
+std::string FileUtils::readAllText(std::string& filePath)
+{
+	std::ifstream fileStream;
+	std::stringstream ss;
+	fileStream.open(filePath, std::ios::out);
+	if (fileStream.is_open())
+	{
+		std::string line;
+		while (std::getline(fileStream, line))
+		{
+			ss << line << std::endl;
+		}
+	}
+	fileStream.close();
+	return ss.str();
+}

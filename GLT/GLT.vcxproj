@@ -145,6 +145,7 @@
     <ClCompile Include="src\gl3w.c" />
     <ClCompile Include="src\glfwWindow.cpp" />
     <ClCompile Include="src\GLSLCompiler.cpp" />
+    <ClCompile Include="src\GLSLPreProcessCompiler.cpp" />
     <ClCompile Include="src\Graphics.cpp" />
     <ClCompile Include="src\MemoryManager.cpp" />
     <ClCompile Include="src\Mesh.cpp" />

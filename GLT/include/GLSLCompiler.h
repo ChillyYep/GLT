@@ -2,26 +2,20 @@
 #include <CommonDefine.h>
 #include <GLCommon.h>
 #include <string>
-#include <unordered_map>
-#include <vector>
 #include <iostream>
 #include <ConstantBufferIdentifier.h>
 #include <RHICommon.h>
 #include <assert.h>
 #include <StringUtility.h>
+#include <ShaderCompilerBase.h>
 
-struct CompiledResult {
-	std::unordered_map<std::string, ShaderProgramInfo> outputShaderPrograms;
-	std::vector<ConstantBufferIdentifier> constantBuffers;
-};
-
-class GLSLCompiler
+class GLSLCompiler :public ShaderCompilerBase
 {
 public:
 	GLSLCompiler() {}
 	~GLSLCompiler() {}
 
-	void compileShaderProgram(std::unordered_map<std::string, RawShaderInfo>& rawShaderInfo, CompiledResult& compiledResult);
+	void compileShaderProgram(std::unordered_map<std::string, RawShaderInfo>& rawShaderInfo, CompiledResult& compiledResult) override;
 private:
 	GLuint compileShader(std::string shaderName, GLuint shaderStage, const char* shaderCode, GLint shaderCodeLength);
 
@@ -30,7 +24,7 @@ private:
 	void afterEveryProgramCompiled(GLuint program, ShaderProgramInfo& shaderProgramInfo, std::vector<ConstantBufferIdentifier>& constantBuffers);
 
 	void afterAllProgramCompiled(const std::unordered_map<std::string, ShaderProgramInfo>& outputShaderPrograms, std::vector<ConstantBufferIdentifier>& constantBuffers);
-	
+
 	void extractBlocks(GLuint program, GLint numBlocks, GLint maxBlockNameLength, const std::vector<std::string>& uniformNames, const std::vector<GLuint>& uniformIndcies,
 		const std::vector<GLint>& uniformSizes, const std::vector<GLint>& uniformOffsets, const std::vector<GLint>& uniformTypes,
 		std::vector<ConstantBufferIdentifier>& constantBuffers, std::vector<ShaderUniformBlockReference>& blockReferences);

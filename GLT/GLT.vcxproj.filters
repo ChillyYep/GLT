@@ -228,6 +228,9 @@
     <ClCompile Include="src\Texture.cpp">
       <Filter>源文件\RHI\ResourceManager</Filter>
     </ClCompile>
+    <ClCompile Include="src\GLSLPreProcessCompiler.cpp">
+      <Filter>源文件\RHI\GLSL\Compiler</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\cube.frag">
