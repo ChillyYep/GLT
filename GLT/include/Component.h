@@ -1,19 +1,20 @@
 #pragma once
 #include <Object.h>
 #include <ComponentType.h>
-enum ComponentLifeCycle
+#include <memory>
+enum class ComponentLifeCycle
 {
-	ComponentLifeCycle_None,
-	ComponentLifeCycle_Awaked,
-	ComponentLifeCycle_Running,
-	ComponentLifeCycle_Destroyed
+	None,
+	Awaked,
+	Running,
+	Destroyed
 };
-enum ComponentSubLifeCycle {
-	ComponentSubLifeCycle_None,
-	ComponentSubLifeCycle_Enabled,
-	ComponentSubLifeCycle_Start,
-	ComponentSubLifeCycle_Disabled,
-	ComponentSubLifeCycle_Updating
+enum class ComponentSubLifeCycle {
+	None,
+	Enabled,
+	Start,
+	Disabled,
+	Updating
 };
 class ComponentStateMachine;
 
@@ -57,22 +58,22 @@ public:
 	{
 		switch (m_target->m_state)
 		{
-		case ComponentLifeCycle_None:
+		case ComponentLifeCycle::None:
 		{
 			PreAwake();
 			break;
 		}
-		case ComponentLifeCycle_Awaked:
+		case ComponentLifeCycle::Awaked:
 		{
 			Awake();
 			break;
 		}
-		case ComponentLifeCycle_Running:
+		case ComponentLifeCycle::Running:
 		{
 			Running();
 			break;
 		}
-		case ComponentLifeCycle_Destroyed:
+		case ComponentLifeCycle::Destroyed:
 		{
 			Destroy();
 			break;
@@ -91,19 +92,19 @@ public:
 private:
 	void PreAwake()
 	{
-		m_target->m_state = ComponentLifeCycle::ComponentLifeCycle_Awaked;
+		m_target->m_state = ComponentLifeCycle::Awaked;
 	}
 	void Awake()
 	{
 		m_target->OnAwake();
 		if (m_target->m_isReadyDead)
 		{
-			m_target->m_state = ComponentLifeCycle::ComponentLifeCycle_Destroyed;
+			m_target->m_state = ComponentLifeCycle::Destroyed;
 		}
 		if (m_target->m_enabled)
 		{
-			m_target->m_state = ComponentLifeCycle::ComponentLifeCycle_Running;
-			m_target->m_subState = ComponentSubLifeCycle::ComponentSubLifeCycle_Enabled;
+			m_target->m_state = ComponentLifeCycle::Running;
+			m_target->m_subState = ComponentSubLifeCycle::Enabled;
 		}
 	}
 
@@ -111,22 +112,22 @@ private:
 	{
 		switch (m_target->m_subState)
 		{
-		case ComponentSubLifeCycle_Enabled:
+		case ComponentSubLifeCycle::Enabled:
 		{
 			Enable();
 			break;
 		}
-		case ComponentSubLifeCycle_Start:
+		case ComponentSubLifeCycle::Start:
 		{
 			Start();
 			break;
 		}
-		case ComponentSubLifeCycle_Updating:
+		case ComponentSubLifeCycle::Updating:
 		{
 			Update();
 			break;
 		}
-		case ComponentSubLifeCycle_Disabled:
+		case ComponentSubLifeCycle::Disabled:
 			Disable();
 			break;
 		default:
@@ -136,14 +137,14 @@ private:
 
 	void Start() {
 		m_target->OnStart();
-		m_target->m_subState = ComponentSubLifeCycle::ComponentSubLifeCycle_Updating;
+		m_target->m_subState = ComponentSubLifeCycle::Updating;
 	}
 
 	void Update()
 	{
 		if (!m_target->m_enabled || m_target->m_isReadyDead)
 		{
-			m_target->m_subState = ComponentSubLifeCycle::ComponentSubLifeCycle_Disabled;
+			m_target->m_subState = ComponentSubLifeCycle::Disabled;
 		}
 		else {
 			m_target->OnUpdate();
@@ -154,10 +155,10 @@ private:
 		if (!m_target->m_inited)
 		{
 			m_target->m_inited = true;
-			m_target->m_subState = ComponentSubLifeCycle::ComponentSubLifeCycle_Start;
+			m_target->m_subState = ComponentSubLifeCycle::Start;
 		}
 		else {
-			m_target->m_subState = ComponentSubLifeCycle::ComponentSubLifeCycle_Updating;
+			m_target->m_subState = ComponentSubLifeCycle::Updating;
 		}
 	}
 
@@ -166,7 +167,7 @@ private:
 		m_target->OnDisable();
 		if (m_target->m_isReadyDead)
 		{
-			m_target->m_state = ComponentLifeCycle::ComponentLifeCycle_Destroyed;
+			m_target->m_state = ComponentLifeCycle::Destroyed;
 		}
 	}
 

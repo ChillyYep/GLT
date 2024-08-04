@@ -1,11 +1,7 @@
 #include<iostream>
 #include "Common.h"
-#include <GLFW/glfw3.h>
 #include <CameraOperation.h>
-#include <Window.h>
 #include <stb_image.h>
-#include <RenderTexture.h>
-#include <SceneUtility.h>
 #include <gamemain.h>
 using namespace std;
 
@@ -43,7 +39,7 @@ void CreateScene()
 	tex->SetPerChannelSize(GL_UNSIGNED_BYTE);
 	tex->SetWrapModeS(TextureWrapMode::Repeat);
 	tex->SetWrapModeT(TextureWrapMode::Repeat);
-	tex->SetTextureFilter(TextureFilter::Linear_Mipmap_Linear);
+	tex->SetTextureFilter(TextureFilterMode::Linear_Mipmap_Linear);
 
 	mat->SetProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(tex)));
 	// Íø¸ñ

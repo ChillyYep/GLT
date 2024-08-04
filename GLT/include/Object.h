@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include <InstanceIDProducer.h>
 
 static InstanceIDProducer s_instanceIdProducer;
@@ -9,10 +10,10 @@ public:
 	{
 		m_instanceId = s_instanceIdProducer.ProduceInstanceId();
 	}
-	inline GLuint GetInstanceId() const { return m_instanceId; }
+	inline GLTUInt32 GetInstanceId() const { return m_instanceId; }
 
 protected:
-	GLuint m_instanceId;
+	GLTUInt32 m_instanceId;
 
 	std::string m_name;
 

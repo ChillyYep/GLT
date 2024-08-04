@@ -1,6 +1,7 @@
 #pragma once
 #include <CommonDefine.h>
-#include <GLFW/glfw3.h>
+#include <GLCommon.h>
+#include <GLMath.h>
 #include <list>
 enum MouseButtonType {
 	None = -1,

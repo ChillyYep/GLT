@@ -1,84 +1,76 @@
 #include "ConstantBufferIdentifier.h"
 
-ShaderUniformBlockProperty ShaderUniformBlockProperty::s_null;
-BlockUniform BlockUniform::s_null;
 ConstantBufferIdentifier ConstantBufferIdentifier::s_null;
 
-BlockUniform ShaderUniformBlockProperty::FindBlockUniformByPropertyName(std::string name)
+void ConstantBufferIdentifier::AddBlock(ShaderUniformBlockProperty& block)
 {
-	for (int i = 0;i < m_blockUniforms.size();++i)
+	m_globalBuffer.push_back(block);
+
+	auto lastIndex = m_globalBuffer.size() - 1;
+
+	for (int i = 0;i < block.m_blockUniforms.size();++i)
 	{
-		if (m_blockUniforms[i].m_uniformName == name)
+		m_property2Block[block.m_blockUniforms[i].m_uniformName] = (int)lastIndex;
+	}
+}
+
+bool ConstantBufferIdentifier::HasBlock(std::string name)
+{
+	for (int i = 0;i < m_globalBuffer.size();++i)
+	{
+		if (m_globalBuffer[i].m_name == name)
 		{
-			return m_blockUniforms[i];
+			return true;
 		}
 	}
-	return BlockUniform::Null();
+	return false;
 }
 
-bool ShaderUniformBlockProperty::operator==(const ShaderUniformBlockProperty& other) const
+bool ConstantBufferIdentifier::FindBlock(std::string blockName, ShaderUniformBlockProperty*& block)
 {
-	if (other.m_name != m_name)
+	for (int i = 0;i < m_globalBuffer.size();++i)
 	{
-		return false;
-	}
-
-	if (other.m_blockBindingNum != m_blockBindingNum)
-	{
-		return false;
-	}
-	for (int i = 0;i < m_blockUniforms.size();++i)
-	{
-		if (m_blockUniforms[i] != other.m_blockUniforms[i])
+		if (m_globalBuffer[i].m_name == blockName)
 		{
-			return false;
+			block = &m_globalBuffer[i];
+			return true;
 		}
 	}
+	return false;
+}
+
+bool ConstantBufferIdentifier::FindBlockByPropertyName(std::string propertyName, ShaderUniformBlockProperty& block) const
+{
+	auto blockIter = m_property2Block.find(propertyName);
+	if (blockIter == m_property2Block.end())
+	{
+		block = ShaderUniformBlockProperty::Null();
+		return false;
+	}
+	auto bufferIndex = blockIter->second;
+	block = m_globalBuffer[bufferIndex];
 	return true;
 }
 
-bool ShaderUniformBlockProperty::operator!=(const ShaderUniformBlockProperty& other) const
+ShaderUniformBlockProperty* ConstantBufferIdentifier::GetBlock(std::string blockName)
 {
-	return !(*this == other);
+	for (int i = 0;i < m_globalBuffer.size();++i)
+	{
+		if (m_globalBuffer[i].m_name == blockName)
+		{
+			return &m_globalBuffer[i];
+		}
+	}
+	return nullptr;
 }
 
-
-
-bool BlockUniform::operator==(const BlockUniform& other) const
+void ConstantBufferIdentifier::ReCalculateBufferSizeAndBlockOffset()
 {
-	if (other.m_uniformName != m_uniformName || other.m_offset != m_offset || other.m_size != m_size ||
-		other.m_type != m_type)
+	m_bufferSize = 0;
+	GLTSizei globalBufferCount = (GLTSizei)m_globalBuffer.size();
+	for (size_t i = 0;i < globalBufferCount;++i)
 	{
-		return false;
+		m_globalBuffer[i].m_blockOffset = m_bufferSize;
+		m_bufferSize += m_globalBuffer[i].m_preDefineSize;
 	}
-	return true;
-}
-
-bool BlockUniform::operator!=(const BlockUniform& other) const
-{
-	return !(*this == other);
-}
-
-bool ShaderUniformProperty::operator==(const ShaderUniformProperty& other) const
-{
-	if (other.m_name != m_name)
-	{
-		return false;
-	}
-
-	if (other.m_location != m_location)
-	{
-		return false;
-	}
-
-	if (other.m_size != m_size)
-	{
-		return false;
-	}
-	return true;
-}
-
-bool ShaderUniformProperty::operator!=(const ShaderUniformProperty& other) const
-{
-	return !(*this == other);
 }

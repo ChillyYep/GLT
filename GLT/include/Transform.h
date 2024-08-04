@@ -1,8 +1,7 @@
 #pragma once
 #include <CommonDefine.h>
 #include <Component.h>
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtx/euler_angles.hpp>
+#include <GLMath.h>
 
 COMPONENT_CLASS(Transform, ComponentType::Transform)
 {

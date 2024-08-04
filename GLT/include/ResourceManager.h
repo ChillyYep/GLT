@@ -7,6 +7,8 @@
 #include <TextureManagementCentre.h>
 #include <SamplerManagementCentre.h>
 #include <Singleton.h>
+#include <iostream>
+#include <GLCommon.h>
 
 enum class ResourceType {
 	Mesh,
@@ -152,20 +154,20 @@ private:
 		}
 	}
 
-	inline void SetTextureFilter(GLuint texture, GLenum pname, TextureFilter textureFilter)
+	inline void SetTextureFilter(GLuint texture, GLenum pname, TextureFilterMode textureFilter)
 	{
 		switch (textureFilter)
 		{
-		case TextureFilter::Point_Mipmap_Point:
+		case TextureFilterMode::Point_Mipmap_Point:
 			glTextureParameteri(texture, pname, GL_NEAREST_MIPMAP_NEAREST);
 			break;
-		case TextureFilter::Point_Mipmap_Linear:
+		case TextureFilterMode::Point_Mipmap_Linear:
 			glTextureParameteri(texture, pname, GL_NEAREST_MIPMAP_LINEAR);
 			break;
-		case TextureFilter::Linear_Mipmap_Point:
+		case TextureFilterMode::Linear_Mipmap_Point:
 			glTextureParameteri(texture, pname, GL_LINEAR_MIPMAP_NEAREST);
 			break;
-		case TextureFilter::Linear_Mipmap_Linear:
+		case TextureFilterMode::Linear_Mipmap_Linear:
 			glTextureParameteri(texture, pname, GL_LINEAR_MIPMAP_LINEAR);
 			break;
 		default:

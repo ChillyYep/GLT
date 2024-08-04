@@ -1,7 +1,8 @@
 #pragma once
 #include <Singleton.h>
 #include <CommonDefine.h>
-#include <GLFW/glfw3.h>
+#include <GLMath.h>
+#include <GLCommon.h>
 #include <glfwWindow.h>
 class Window :public Singleton<Window>
 {

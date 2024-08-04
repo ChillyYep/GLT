@@ -1,15 +1,7 @@
 #pragma once
-#include <GL/glcorearb.h>
-#include <GL/gl3w.h>
-#include <string>
-#include <stdexcept>
-#include <iostream>
-#include <map>
-#include <vector>
-#include <glm/glm.hpp>
-#include <glm/ext.hpp>
-#include "Enums.h"
+#include <assert.h>
 
+using GLTBool = bool;
 using GLTByte = unsigned char;
 using GLTSByte = signed char;
 using GLTInt16 = signed short;
@@ -19,6 +11,7 @@ using GLTUInt32 = unsigned int;
 using GLTInt64 = signed long long int;
 using GLTUInt64 = unsigned long long int;
 using GLTSize = size_t;
+using GLTSizei = GLTInt32;
 
 #define ENUM_BINDING_CLASS(CLASSTYPE,BASECLASSTYPE,ENUMTYPE,CLASSTYPEENUM,TRAITSCLASS) \
 class CLASSTYPE; \
@@ -74,10 +67,3 @@ inline PROPERTYTYPE* Get##PROPERTYNAME() { return VARIABLE; } \
 #endif // USE_SPIRV
 
 #endif //SPRIV_USING
-
-
-size_t OpenFile(const char* directory, const char* filename, char*& content);
-
-std::string OpenFile(const char* directory, const char* filename);
-
-inline size_t OpenShaderFile(const char* shaderName, char*& content) { return OpenFile(SHADER_ROOT, shaderName, content); }

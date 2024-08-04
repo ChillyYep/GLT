@@ -1,7 +1,6 @@
 #pragma once
 #include <CommonDefine.h>
 
-
 class BytesBuffer
 {
 public:
@@ -12,7 +11,7 @@ public:
 	{
 		m_dataSize = bufferSize;
 		m_dataPtr = new GLTByte[bufferSize];
-		for (GLuint i = 0;i < bufferSize;++i)
+		for (GLTUInt32 i = 0;i < bufferSize;++i)
 		{
 			((GLTByte*)m_dataPtr)[i] = 0xff;
 		}

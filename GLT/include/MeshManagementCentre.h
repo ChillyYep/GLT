@@ -1,6 +1,7 @@
 #pragma once
 #include "Mesh.h"
 #include "ManagementCentreBase.h"
+#include <memory>
 /// <summary>
 /// 那些会进入渲染的Mesh的分配器
 /// </summary>

@@ -138,10 +138,12 @@
   <ItemGroup>
     <ClCompile Include="src\Allocator.cpp" />
     <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\CommonDefine.cpp" />
+    <ClCompile Include="src\CommandBuffer.cpp" />
     <ClCompile Include="src\EventSystem.cpp" />
+    <ClCompile Include="src\FileUtils.cpp" />
     <ClCompile Include="src\gl3w.c" />
     <ClCompile Include="src\glfwWindow.cpp" />
+    <ClCompile Include="src\GLSLCompiler.cpp" />
     <ClCompile Include="src\Graphics.cpp" />
     <ClCompile Include="src\MemoryManager.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
@@ -150,6 +152,7 @@
     <ClCompile Include="src\RenderPipeline.cpp" />
     <ClCompile Include="src\RenderTexture.cpp" />
     <ClCompile Include="src\ResourceManager.cpp" />
+    <ClCompile Include="src\RHICommon.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\ConstantBufferIdentifier.cpp" />
     <ClCompile Include="src\ShaderUtils.cpp" />
@@ -179,8 +182,14 @@
     <ClInclude Include="include\Component.h" />
     <ClInclude Include="include\ComponentType.h" />
     <ClInclude Include="include\ConstantBuffers.h" />
-    <ClInclude Include="include\Enums.h" />
+    <ClInclude Include="include\ConstantBufferType.h" />
+    <ClInclude Include="include\FileUtils.h" />
+    <ClInclude Include="include\GLCommon.h" />
+    <ClInclude Include="include\GLMath.h" />
+    <ClInclude Include="include\GLSLCompiler.h" />
+    <ClInclude Include="include\GLSLPreProcessCompiler.h" />
     <ClInclude Include="include\MemoryManager.h" />
+    <ClInclude Include="include\RenderCommand.h" />
     <ClInclude Include="include\ResourceIdentifier.h" />
     <ClInclude Include="include\ConstantBufferIdentifier.h" />
     <ClInclude Include="include\EventSystem.h" />
@@ -203,14 +212,18 @@
     <ClInclude Include="include\RenderPipeline.h" />
     <ClInclude Include="include\RenderTexture.h" />
     <ClInclude Include="include\ResourceManager.h" />
+    <ClInclude Include="include\RHICommon.h" />
     <ClInclude Include="include\Sampler.h" />
     <ClInclude Include="include\SamplerManagementCentre.h" />
     <ClInclude Include="include\Scene.h" />
     <ClInclude Include="include\SceneManager.h" />
+    <ClInclude Include="include\ShaderCompilerBase.h" />
+    <ClInclude Include="include\ShaderPreProcessCompilerBase.h" />
     <ClInclude Include="include\ShaderUtils.h" />
     <ClInclude Include="include\SceneUtility.h" />
     <ClInclude Include="include\Singleton.h" />
     <ClInclude Include="include\StringUtility.h" />
+    <ClInclude Include="include\TextureEnums.h" />
     <ClInclude Include="include\Window.h" />
     <ClInclude Include="include\Shader.h" />
     <ClInclude Include="include\ShaderPropertyNames.h" />

@@ -1,6 +1,7 @@
 #pragma once
 #include <ManagementCentreBase.h>
 #include <Texture.h>
+#include <memory>
 /// <summary>
 /// 那些会进入渲染的Texture的分配器
 /// </summary>

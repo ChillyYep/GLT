@@ -1,5 +1,6 @@
 #pragma once
 #include <CommonDefine.h>
+#include <map>
 #include <Texture.h>
 #include <Shader.h>
 #include <ShaderPropertyNames.h>

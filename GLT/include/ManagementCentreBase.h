@@ -1,12 +1,14 @@
 #pragma once
 #include <CommonDefine.h>
+#include <map>
+#include <vector>
 template<typename T>
 class ReferenceItem {
 public:
 	ReferenceItem() :m_refCount(0) {}
 	ReferenceItem(T target) :m_target(target), m_refCount(0) {}
 	T m_target;
-	GLuint m_refCount;
+	GLTUInt32 m_refCount;
 };
 
 /// <summary>
@@ -51,9 +53,9 @@ public:
 
 	virtual void OnSubmit() {}
 
-	inline std::vector<GLuint>& GetAllObjectInstanceIds() const { return m_sortedObjects; }
+	inline std::vector<GLTUInt32>& GetAllObjectInstanceIds() const { return m_sortedObjects; }
 
-	inline ReferencedObject GetRefObject(GLuint instanceId) const
+	inline ReferencedObject GetRefObject(GLTUInt32 instanceId) const
 	{
 		auto iter = m_allObjects.find(instanceId);
 		if (m_allObjects.end() != iter)
@@ -65,9 +67,9 @@ public:
 
 	inline std::vector<ReferencedObject> GetRemovedObjects() const { return m_removeList; }
 
-	inline std::vector<GLuint> GetExpiredObjectInstanceIds() const
+	inline std::vector<GLTUInt32> GetExpiredObjectInstanceIds() const
 	{
-		std::vector<GLuint> removedInstanceIds;
+		std::vector<GLTUInt32> removedInstanceIds;
 		for (int i = 0;i < m_removeList.size();++i)
 		{
 			removedInstanceIds.push_back(m_removeList[i].m_target->GetInstanceId());
@@ -77,15 +79,15 @@ public:
 
 	inline void ClearExpiredList() { m_removeList.clear(); }
 
-	inline std::vector<GLuint> GetNewObjects() const { return m_addList; }
+	inline std::vector<GLTUInt32> GetNewObjects() const { return m_addList; }
 
 	inline void ClearNewList() { m_addList.clear(); }
 protected:
-	std::map<GLuint, ReferencedObject> m_allObjects;
+	std::map<GLTUInt32, ReferencedObject> m_allObjects;
 
 	std::vector<ReferencedObject> m_removeList;
 
-	std::vector<GLuint> m_addList;
+	std::vector<GLTUInt32> m_addList;
 
-	std::vector<GLuint> m_sortedObjects;
+	std::vector<GLTUInt32> m_sortedObjects;
 };

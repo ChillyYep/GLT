@@ -1,7 +1,7 @@
 #pragma once
 #include <CommonDefine.h>
 #include <WindowImplementBase.h>
-#include <GLFW/glfw3.h>
+#include <GLCommon.h>
 #include <EventSystem.h>
 
 class GlFWWindowImplement :public WindowImplementBase

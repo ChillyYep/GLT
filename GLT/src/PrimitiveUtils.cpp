@@ -99,7 +99,7 @@ std::shared_ptr<Mesh> PrimitiveUtils::CreateCube()
 		{1.0f,1.0f},
 		{0.0f,1.0f},
 	};
-	static const GLushort cube_indices[] = {
+	static const GLTUInt16 cube_indices[] = {
 		0,1,2,2,3,0,
 		4,5,6,6,7,4,
 		8,9,10,10,11,8,
@@ -141,7 +141,7 @@ std::shared_ptr<Mesh> PrimitiveUtils::CreateCube()
 		{-1.0f,  0.0f, 0.0f,1.0f},
 	};
 
-	auto object = std::shared_ptr<Mesh>(new Mesh(sizeof(cube_vertices) / sizeof(glm::vec4), sizeof(cube_indices) / sizeof(GLushort)));
+	auto object = std::shared_ptr<Mesh>(new Mesh(sizeof(cube_vertices) / sizeof(glm::vec4), sizeof(cube_indices) / sizeof(GLTUInt16)));
 	object->SetVertices(cube_vertices);
 	object->SetIndices(cube_indices);
 	object->SetColors(cube_colors);

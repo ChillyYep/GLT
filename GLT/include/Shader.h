@@ -2,15 +2,8 @@
 #include <CommonDefine.h>
 #include <ConstantBuffers.h>
 #include <filesystem>
+#include <GLMath.h>
 namespace fs = std::filesystem;
-
-struct ShaderProgramInfo
-{
-	std::string m_programName;
-	GLuint m_program;
-	std::vector<ShaderUniformProperty> m_uniformProperties;
-	std::vector<ShaderUniformBlockReference> m_referenceBlocks;
-};
 
 class Shader
 {
@@ -23,29 +16,6 @@ public:
 	inline GLuint GetShaderProgram() { return m_shaderInfo.m_program; }
 
 	inline std::vector<ShaderUniformBlockReference>& GetAllBlocks() { return m_shaderInfo.m_referenceBlocks; }
-
-	inline void SetMatrix(const char* propertyName, glm::mat4x4 matrix)
-	{
-		GLuint shaderProgram = m_shaderInfo.m_program;
-		if (shaderProgram > 0)
-		{
-			GLuint matrixLoc = glGetUniformLocation(shaderProgram, propertyName);
-			if (matrixLoc >= 0)
-			{
-				glUniformMatrix4fv(matrixLoc, 1, GL_FALSE, glm::value_ptr(matrix));
-			}
-		}
-	}
-
-	inline void SetVector(const char* propertyName, glm::vec4 vec4)
-	{
-		GLuint shaderProgram = m_shaderInfo.m_program;
-		if (shaderProgram > 0)
-		{
-			GLuint vecLoc = glGetUniformLocation(shaderProgram, propertyName);
-			glProgramUniform4f(shaderProgram, vecLoc, vec4.x, vec4.y, vec4.z, vec4.w);
-		}
-	}
 
 	static inline void Init(std::unordered_map<std::string, ShaderProgramInfo>& allPrograms, std::vector<ConstantBufferIdentifier>& constantBuffers)
 	{

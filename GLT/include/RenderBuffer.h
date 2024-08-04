@@ -1,5 +1,7 @@
 #pragma once
 #include <CommonDefine.h>
+#include <GLCommon.h>
+
 class RenderBuffer
 {
 public:

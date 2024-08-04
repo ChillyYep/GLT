@@ -28,7 +28,7 @@ void Graphics::DrawMeshNow(const std::shared_ptr<Mesh>& mesh, const std::shared_
 	scenePtr->AddObject(gameObject);
 
 	componentStateMachine.Setup(renderer);
-	while (componentStateMachine.GetComponentLifeStyle() != ComponentLifeCycle::ComponentLifeCycle_Running)
+	while (componentStateMachine.GetComponentLifeStyle() != ComponentLifeCycle::Running)
 	{
 		componentStateMachine.Tick();
 	}
@@ -59,7 +59,7 @@ void Graphics::DrawRequestedMesh(const std::shared_ptr<Mesh>& mesh, const std::s
 			glUseProgram(program);
 			Shader::SetGlobalMatrix(ShaderPropertyNames::ModelMatrix, modelMatrix);
 			Shader::Upload(ConstantBufferType::PerPass);
-			ShaderUtils::BindBlockForProgram(*shader.get());
+			ShaderUtils::bindBlockForProgram(*shader.get());
 			//shader->SetUniformBlock(ShaderPropertyNames::Lights)
 			//shader->SetVector(ShaderPropertyNames::Lights, &lightProperties);
 

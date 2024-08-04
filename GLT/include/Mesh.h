@@ -1,6 +1,7 @@
 #pragma once
 #include <CommonDefine.h>
 #include <Object.h>
+#include <GLMath.h>
 
 class Mesh :public Object
 {
@@ -11,7 +12,7 @@ public:
 	/// </summary>
 	/// <param name="verticesCount"></param>
 	/// <param name="indicesCount"></param>
-	Mesh(const GLsizei verticesCount, const GLsizei indicesCount) :Object()
+	Mesh(const GLTSizei verticesCount, const GLTSizei indicesCount) :Object()
 	{
 		_Allocate(verticesCount, indicesCount);
 	}
@@ -23,10 +24,10 @@ public:
 		assert(m_readWrite);
 		memcpy((void*)m_vertices, vertices, m_verticesCount * sizeof(glm::vec4));
 	}
-	inline void SetIndices(const GLushort indices[])
+	inline void SetIndices(const GLTUInt16 indices[])
 	{
 		assert(m_readWrite);
-		memcpy((void*)m_indices, indices, m_indicesCount * sizeof(GLushort));
+		memcpy((void*)m_indices, indices, m_indicesCount * sizeof(GLTUInt16));
 	}
 	inline void SetColors(const glm::vec4 colors[])
 	{
@@ -45,8 +46,8 @@ public:
 		assert(m_readWrite);
 		memcpy((void*)m_normals, normals, m_verticesCount * sizeof(glm::vec4));
 	}
-	inline GLsizei GetVerticesCount() { return m_verticesCount; }
-	inline GLsizei GetIndicesCount() const { return m_indicesCount; }
+	inline GLTSizei GetVerticesCount() { return m_verticesCount; }
+	inline GLTSizei GetIndicesCount() const { return m_indicesCount; }
 
 	inline const glm::vec4* GetVertices()
 	{
@@ -58,7 +59,7 @@ public:
 		assert(m_readWrite);
 		return m_colors;
 	}
-	inline const GLushort* GetIndices()
+	inline const GLTUInt16* GetIndices()
 	{
 		assert(m_readWrite);
 		return m_indices;
@@ -74,18 +75,18 @@ public:
 		return m_normals;
 	}
 	inline void MarkDirty() { m_dirty = true; }
-	inline GLboolean IsDirty() { return m_dirty; }
+	inline GLTBool IsDirty() { return m_dirty; }
 	inline void ClearDirty() { m_dirty = false; }
 
-	const static GLsizei VertexSize = sizeof(glm::vec4);
-	const static GLsizei ColorSize = sizeof(glm::vec4);
-	const static GLsizei IndexSize = sizeof(GLushort);
-	const static GLsizei UVSize = sizeof(glm::vec2);
-	const static GLsizei NormalSize = sizeof(glm::vec4);
+	const static GLTSizei VertexSize = sizeof(glm::vec4);
+	const static GLTSizei ColorSize = sizeof(glm::vec4);
+	const static GLTSizei IndexSize = sizeof(GLTUInt16);
+	const static GLTSizei UVSize = sizeof(glm::vec2);
+	const static GLTSizei NormalSize = sizeof(glm::vec4);
 
-	__GET_SET_PROPERTY__(CanReadWrite, GLboolean, m_readWrite)
+	__GET_SET_PROPERTY__(CanReadWrite, GLTBool, m_readWrite)
 private:
-	inline void _Allocate(const GLsizei verticesCount, const GLsizei indicesCount) {
+	inline void _Allocate(const GLTSizei verticesCount, const GLTSizei indicesCount) {
 		if (m_allocated)
 		{
 			_Deallocate();
@@ -94,7 +95,7 @@ private:
 		m_indicesCount = indicesCount;
 		m_vertices = new glm::vec4[m_verticesCount];
 		m_colors = new glm::vec4[m_verticesCount];
-		m_indices = new GLushort[m_indicesCount];
+		m_indices = new GLTUInt16[m_indicesCount];
 		m_uvs = new glm::vec2[m_verticesCount];
 		m_normals = new glm::vec4[m_verticesCount];
 
@@ -133,21 +134,21 @@ private:
 			m_allocated = false;
 		}
 	}
-	GLboolean m_allocated;
+	GLTBool m_allocated;
 
-	GLboolean m_dirty;
+	GLTBool m_dirty;
 
-	GLboolean m_readWrite;
+	GLTBool m_readWrite;
 
-	GLsizei m_verticesCount;
+	GLTSizei m_verticesCount;
 
-	GLsizei m_indicesCount;
+	GLTSizei m_indicesCount;
 
 	const glm::vec4* m_vertices;
 	const glm::vec2* m_uvs;
 	const glm::vec4* m_normals;
 	const glm::vec4* m_colors;
-	const GLushort* m_indices;
+	const GLTUInt16* m_indices;
 
 
 };

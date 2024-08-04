@@ -58,6 +58,7 @@ void EventSystem::CursorCallback(GLFWwindow* window, double xpos, double ypos)
 		}
 	}
 }
+
 void EventSystem::WheelCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	m_uniqueWheelEvent.m_xOffset = static_cast<float>(xoffset);

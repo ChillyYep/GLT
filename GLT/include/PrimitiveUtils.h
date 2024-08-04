@@ -1,6 +1,7 @@
 #pragma once
 #include <CommonDefine.h>
 #include <Mesh.h>
+#include <memory>
 class PrimitiveUtils
 {
 public:

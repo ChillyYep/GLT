@@ -55,12 +55,6 @@
     <Filter Include="源文件\Shader">
       <UniqueIdentifier>{1d1e726e-0987-4f03-8455-4319ecae4c38}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\ResourceManager">
-      <UniqueIdentifier>{d600431f-d44e-4f4c-aff6-fbdbc2945879}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\ResourceManager">
-      <UniqueIdentifier>{f3e47e1d-a6e2-4a33-924d-79367ae37223}</UniqueIdentifier>
-    </Filter>
     <Filter Include="头文件\EventSystem">
       <UniqueIdentifier>{4eb9f64b-e2f8-4cb7-af88-e773a305ff3d}</UniqueIdentifier>
     </Filter>
@@ -79,23 +73,56 @@
     <Filter Include="源文件\plugins\stb_image">
       <UniqueIdentifier>{e6e95c4f-e792-4673-866e-bbf74e5fc6b5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\ResourceManager\ManagementCentre">
-      <UniqueIdentifier>{9f575b9d-2380-49e4-bf27-60fcf69fe280}</UniqueIdentifier>
+    <Filter Include="头文件\RHI">
+      <UniqueIdentifier>{4f66e215-967a-4728-976f-d29542b136a9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\ResourceManager\ManagementCentre">
-      <UniqueIdentifier>{39b971e9-9e27-4cb6-8595-7cfd414aad59}</UniqueIdentifier>
+    <Filter Include="源文件\RHI">
+      <UniqueIdentifier>{d2fabe5d-5c4b-463f-9974-6f1280c6ddc6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\ResourceManager\Resources">
-      <UniqueIdentifier>{7fdc8ff9-57ac-4595-ab8b-970f24c826ab}</UniqueIdentifier>
+    <Filter Include="源文件\RHI\Command">
+      <UniqueIdentifier>{63d4f19d-3fad-4e45-84f1-1fce600984a5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\CommandBuffer">
+    <Filter Include="头文件\RHI\Command">
       <UniqueIdentifier>{ded3f8c3-d43e-4a27-a07a-7d0351d65f99}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\ResourceManager\Buffers">
+    <Filter Include="头文件\Common\Enums">
+      <UniqueIdentifier>{eaae45d2-5cd9-486f-9f12-9655cac56571}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\RHI\ResourceManager">
+      <UniqueIdentifier>{d600431f-d44e-4f4c-aff6-fbdbc2945879}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\RHI\ResourceManager\ManagementCentre">
+      <UniqueIdentifier>{39b971e9-9e27-4cb6-8595-7cfd414aad59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\RHI\ResourceManager\Resources">
+      <UniqueIdentifier>{7fdc8ff9-57ac-4595-ab8b-970f24c826ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\RHI\ResourceManager\Buffers">
       <UniqueIdentifier>{fe699f4b-cb55-4df3-a75a-6a5b0e9f2b64}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\ResourceManager\Buffers">
+    <Filter Include="源文件\RHI\ResourceManager">
+      <UniqueIdentifier>{f3e47e1d-a6e2-4a33-924d-79367ae37223}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\RHI\ResourceManager\ManagementCentre">
+      <UniqueIdentifier>{9f575b9d-2380-49e4-bf27-60fcf69fe280}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\RHI\ResourceManager\Buffers">
       <UniqueIdentifier>{78f9c41e-1b91-4808-81d9-02b5ed1f4aec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\RHI\GLSL">
+      <UniqueIdentifier>{5f529c4b-e1ea-4caf-9e82-8fc5b47cec5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\RHI\Common">
+      <UniqueIdentifier>{4fd5b814-d2a8-478e-b97e-6348301d07fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\RHI\GLSL\Compiler">
+      <UniqueIdentifier>{2a8b73fa-2e3e-401a-8f73-ecac866cfac3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\RHI\GLSL">
+      <UniqueIdentifier>{3d7518da-a1e4-45e4-8be4-25f3b1f03a0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\RHI\GLSL\Compiler">
+      <UniqueIdentifier>{9a9c5917-95cf-43bb-8778-ef29b36ef1a6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -104,9 +131,6 @@
     </ClCompile>
     <ClCompile Include="src\triangles.cpp">
       <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CommonDefine.cpp">
-      <Filter>源文件\Common</Filter>
     </ClCompile>
     <ClCompile Include="src\Camera.cpp">
       <Filter>源文件\Component</Filter>
@@ -133,7 +157,7 @@
       <Filter>源文件\Shader</Filter>
     </ClCompile>
     <ClCompile Include="src\ResourceManager.cpp">
-      <Filter>源文件\ResourceManager</Filter>
+      <Filter>源文件\RHI\ResourceManager</Filter>
     </ClCompile>
     <ClCompile Include="src\ShaderPropertyNames.cpp">
       <Filter>源文件\Shader</Filter>
@@ -148,25 +172,37 @@
       <Filter>源文件\plugins\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\MeshManagementCentre.cpp">
-      <Filter>源文件\ResourceManager\ManagementCentre</Filter>
+      <Filter>源文件\RHI\ResourceManager\ManagementCentre</Filter>
     </ClCompile>
     <ClCompile Include="src\TextureManagementCentre.cpp">
-      <Filter>源文件\ResourceManager\ManagementCentre</Filter>
+      <Filter>源文件\RHI\ResourceManager\ManagementCentre</Filter>
     </ClCompile>
     <ClCompile Include="src\RenderTexture.cpp">
-      <Filter>源文件\ResourceManager</Filter>
+      <Filter>源文件\RHI\ResourceManager</Filter>
     </ClCompile>
     <ClCompile Include="src\MemoryManager.cpp">
-      <Filter>源文件\ResourceManager</Filter>
+      <Filter>源文件\RHI\ResourceManager</Filter>
     </ClCompile>
     <ClCompile Include="src\ShaderUtils.cpp">
       <Filter>源文件\Shader</Filter>
     </ClCompile>
     <ClCompile Include="src\ConstantBufferIdentifier.cpp">
-      <Filter>源文件\ResourceManager\Buffers</Filter>
+      <Filter>源文件\RHI\ResourceManager\Buffers</Filter>
     </ClCompile>
     <ClCompile Include="src\Allocator.cpp">
       <Filter>源文件\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CommandBuffer.cpp">
+      <Filter>源文件\RHI\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FileUtils.cpp">
+      <Filter>源文件\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RHICommon.cpp">
+      <Filter>源文件\RHI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GLSLCompiler.cpp">
+      <Filter>源文件\RHI\GLSL\Compiler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -239,7 +275,7 @@
       <Filter>头文件\Shader</Filter>
     </ClInclude>
     <ClInclude Include="include\ResourceManager.h">
-      <Filter>头文件\ResourceManager</Filter>
+      <Filter>头文件\RHI\ResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="include\ShaderPropertyNames.h">
       <Filter>头文件\Shader</Filter>
@@ -263,34 +299,34 @@
       <Filter>头文件\plugins\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="include\MeshManagementCentre.h">
-      <Filter>头文件\ResourceManager\ManagementCentre</Filter>
+      <Filter>头文件\RHI\ResourceManager\ManagementCentre</Filter>
     </ClInclude>
     <ClInclude Include="include\SamplerManagementCentre.h">
-      <Filter>头文件\ResourceManager\ManagementCentre</Filter>
+      <Filter>头文件\RHI\ResourceManager\ManagementCentre</Filter>
     </ClInclude>
     <ClInclude Include="include\TextureManagementCentre.h">
-      <Filter>头文件\ResourceManager\ManagementCentre</Filter>
+      <Filter>头文件\RHI\ResourceManager\ManagementCentre</Filter>
     </ClInclude>
     <ClInclude Include="include\ManagementCentreBase.h">
-      <Filter>头文件\ResourceManager\ManagementCentre</Filter>
+      <Filter>头文件\RHI\ResourceManager\ManagementCentre</Filter>
     </ClInclude>
     <ClInclude Include="include\Sampler.h">
-      <Filter>头文件\ResourceManager\Resources</Filter>
+      <Filter>头文件\RHI\ResourceManager\Resources</Filter>
     </ClInclude>
     <ClInclude Include="include\Texture.h">
-      <Filter>头文件\ResourceManager\Resources</Filter>
+      <Filter>头文件\RHI\ResourceManager\Resources</Filter>
     </ClInclude>
     <ClInclude Include="include\RenderTexture.h">
-      <Filter>头文件\ResourceManager\Resources</Filter>
+      <Filter>头文件\RHI\ResourceManager\Resources</Filter>
     </ClInclude>
     <ClInclude Include="include\FrameBufferObject.h">
-      <Filter>头文件\ResourceManager\Resources</Filter>
+      <Filter>头文件\RHI\ResourceManager\Resources</Filter>
     </ClInclude>
     <ClInclude Include="include\CommandBuffer.h">
-      <Filter>头文件\CommandBuffer</Filter>
+      <Filter>头文件\RHI\Command</Filter>
     </ClInclude>
     <ClInclude Include="include\RenderBuffer.h">
-      <Filter>头文件\ResourceManager\Resources</Filter>
+      <Filter>头文件\RHI\ResourceManager\Resources</Filter>
     </ClInclude>
     <ClInclude Include="include\PassBase.h">
       <Filter>头文件\Shader</Filter>
@@ -308,16 +344,13 @@
       <Filter>头文件\Common</Filter>
     </ClInclude>
     <ClInclude Include="include\MemoryManager.h">
-      <Filter>头文件\ResourceManager</Filter>
+      <Filter>头文件\RHI\ResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="include\ShaderUtils.h">
       <Filter>头文件\Shader</Filter>
     </ClInclude>
     <ClInclude Include="include\ResourceIdentifier.h">
-      <Filter>头文件\ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Enums.h">
-      <Filter>头文件\Common</Filter>
+      <Filter>头文件\RHI\ResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="Object.cpp">
       <Filter>源文件\Common</Filter>
@@ -326,25 +359,58 @@
       <Filter>头文件\Common</Filter>
     </ClInclude>
     <ClInclude Include="include\ConstantBufferIdentifier.h">
-      <Filter>头文件\ResourceManager\Buffers</Filter>
+      <Filter>头文件\RHI\ResourceManager\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="include\ConstantBuffers.h">
-      <Filter>头文件\ResourceManager\Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ComponentType.h">
-      <Filter>头文件\Component</Filter>
+      <Filter>头文件\RHI\ResourceManager\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="include\ScriptableRenderContext.h">
       <Filter>头文件\RenderPipeline</Filter>
     </ClInclude>
     <ClInclude Include="include\BytesBuffer.h">
-      <Filter>头文件\ResourceManager\Buffers</Filter>
+      <Filter>头文件\RHI\ResourceManager\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="include\Allocator.h">
       <Filter>头文件\Common</Filter>
     </ClInclude>
     <ClInclude Include="include\Singleton.h">
       <Filter>头文件\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderCommand.h">
+      <Filter>头文件\RHI\Command</Filter>
+    </ClInclude>
+    <ClInclude Include="include\FileUtils.h">
+      <Filter>头文件\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ShaderCompilerBase.h">
+      <Filter>头文件\RHI\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ShaderPreProcessCompilerBase.h">
+      <Filter>头文件\RHI\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ConstantBufferType.h">
+      <Filter>头文件\Common\Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ComponentType.h">
+      <Filter>头文件\Common\Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TextureEnums.h">
+      <Filter>头文件\Common\Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RHICommon.h">
+      <Filter>头文件\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GLSLCompiler.h">
+      <Filter>头文件\RHI\GLSL\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GLSLPreProcessCompiler.h">
+      <Filter>头文件\RHI\GLSL\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GLCommon.h">
+      <Filter>头文件\RHI\GLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GLMath.h">
+      <Filter>头文件\RHI\GLSL</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,6 +1,8 @@
 #pragma once
 #include <ConstantBufferIdentifier.h>
 #include <BytesBuffer.h>
+#include <unordered_map>
+#include <GLCommon.h>
 
 class ConstantBufferSet
 {

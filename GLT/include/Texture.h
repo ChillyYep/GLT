@@ -2,6 +2,8 @@
 #include <CommonDefine.h>
 #include <Object.h>
 #include <stb_image.h>
+#include <TextureEnums.h>
+#include <GLCommon.h>
 
 class Texture :public Object
 {
@@ -51,7 +53,7 @@ public:
 		__GET_SET_PROPERTY__(PerChannelSize, GLenum, m_perChannelSize)
 		__GET_SET_PROPERTY__(CanReadWrite, GLboolean, m_readWrite)
 		__GET_SET_PROPERTY__(WrapModeS, TextureWrapMode, m_wrapModeS)
-		__GET_SET_PROPERTY__(TextureFilter, TextureFilter, m_textureFilter)
+		__GET_SET_PROPERTY__(TextureFilter, TextureFilterMode, m_textureFilter)
 
 protected:
 	GLubyte* m_data;
@@ -66,7 +68,7 @@ protected:
 	GLenum m_externalFormat = GL_RED;;
 	GLenum m_perChannelSize;
 	TextureWrapMode m_wrapModeS;
-	TextureFilter m_textureFilter;
+	TextureFilterMode m_textureFilter;
 };
 class Texture1D :public Texture
 {

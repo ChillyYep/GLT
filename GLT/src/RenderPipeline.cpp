@@ -1,7 +1,7 @@
 #include "RenderPipeline.h"
 void RenderPipeline::Init() {
 	m_renderContext.Init();
-	ShaderUtils::LoadAllShader(m_renderContext);
+	ShaderUtils::loadAllShader(m_renderContext);
 }
 void RenderPipeline::UnInit() {
 

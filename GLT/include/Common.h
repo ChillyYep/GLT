@@ -1,5 +1,6 @@
 #pragma once
 #include <CommonDefine.h>
+#include <GLCommon.h>
 #include <Window.h>
 #include <Renderer.h>
 #include <Material.h>
@@ -12,5 +13,7 @@
 #include <Camera.h>
 #include <EventSystem.h>
 #include <SceneManager.h>
+#include <RenderTexture.h>
+#include <SceneUtility.h>
 
 

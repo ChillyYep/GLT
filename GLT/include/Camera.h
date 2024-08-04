@@ -1,5 +1,6 @@
 #pragma once
 #include <CommonDefine.h>
+#include <GLMath.h>
 #include <Transform.h>
 #include <Component.h>
 #include <GameObject.h>

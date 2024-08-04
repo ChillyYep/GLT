@@ -6,8 +6,8 @@ public:
 	InstanceIDProducer() :m_autoInstanceId(0) {};
 	~InstanceIDProducer() {};
 
-	inline GLuint ProduceInstanceId() { return ++m_autoInstanceId; }
+	inline GLTUInt32 ProduceInstanceId() { return ++m_autoInstanceId; }
 
 private:
-	GLuint m_autoInstanceId;
+	GLTUInt32 m_autoInstanceId;
 };
