@@ -2,6 +2,8 @@
 #include <CommonDefine.h>
 #include <Object.h>
 #include <GLMath.h>
+#include <ResourceIdentifier.h>
+
 
 class Mesh :public Object
 {

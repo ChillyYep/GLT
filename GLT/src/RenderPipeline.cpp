@@ -1,10 +1,11 @@
 #include "RenderPipeline.h"
+#include <RenderTexture.h>
 void RenderPipeline::init() {
 	m_renderContext.init();
 	ShaderUtils::loadAllShader(m_renderContext);
 }
 void RenderPipeline::uninit() {
-
+	m_renderContext.uninit();
 }
 void RenderPipeline::clearExpiredMeshBuffers(std::vector<std::shared_ptr<Scene>>& allScenes)
 {
@@ -42,6 +43,19 @@ void RenderPipeline::render() {
 
 	// do someting
 	updatePerFrameConstantBuffer();
+
+	auto& rtManagementCentre = ResourceManager::getInstance()->getRenderTargetManagementCentre();
+	auto instanceIds = rtManagementCentre.getAllObjectInstanceIds();
+	if (instanceIds.size() > 0)
+	{
+		auto rtIdentifier = ResourceManager::getInstance()->getRenderTargetResource(instanceIds[0]);
+		CommandBuffer cmd;
+		cmd.setRenderTarget(&rtIdentifier);
+		cmd.clearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		m_renderContext.scheduleCommandBuffer(cmd);
+		cmd.clear();
+		m_renderContext.submit();
+	}
 	for (const auto& scene : m_allScenes)
 	{
 		auto mainCamera = scene->getMainCamera();
@@ -64,6 +78,8 @@ void RenderPipeline::render() {
 			}
 		}
 	}
+	m_renderContext.blitToWindow();
+
 	postUpdate();
 }
 void RenderPipeline::postUpdate()
@@ -77,12 +93,14 @@ void RenderPipeline::updateSceneProperties4Render()
 	m_allScenes = SceneManager::getInstance()->getAllScenes(false);
 
 	// É¾³ý
-	clearExpiredMeshBuffers(m_allScenes);
-	clearExpiredTextures(m_allScenes);
+	clearExpiredObjects(&ResourceManager::getInstance()->getMeshManagementCentre(), ResourceType::Mesh);
+	clearExpiredObjects(&ResourceManager::getInstance()->getTextureManagementCentre(), ResourceType::Texture);
+	clearExpiredObjects(&ResourceManager::getInstance()->getRenderTargetManagementCentre(), ResourceType::RenderTarget);
 
 	// Ìí¼Ó
-	appendNewMeshBuffers(m_allScenes);
-	appendNewTextures(m_allScenes);
+	appendNewObjects(&ResourceManager::getInstance()->getMeshManagementCentre(), ResourceType::Mesh);
+	appendNewObjects(&ResourceManager::getInstance()->getTextureManagementCentre(), ResourceType::Texture);
+	appendNewObjects(&ResourceManager::getInstance()->getRenderTargetManagementCentre(), ResourceType::RenderTarget);
 }
 
 void RenderPipeline::updateLightProperties(std::shared_ptr<Camera>& camera)

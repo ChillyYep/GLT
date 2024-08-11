@@ -6,15 +6,11 @@
 #include <MeshManagementCentre.h>
 #include <TextureManagementCentre.h>
 #include <SamplerManagementCentre.h>
+#include <RenderTargetManagementCentre.h>
 #include <Singleton.h>
 #include <iostream>
 #include <GLCommon.h>
-
-enum class ResourceType {
-	Mesh,
-	Texture,
-	Sampler
-};
+#include <DeviceBase.h>
 
 class ResourceManager :public Singleton<ResourceManager>
 {
@@ -33,7 +29,10 @@ public:
 			requestTextureResource(*dynamic_cast<TextureManagementCentre*>(managementCentre), instanceIds);
 			break;
 		case ResourceType::Sampler:
-			requestSamplerResource(*dynamic_cast<SamplerManagementCentre*>(managementCentre), instanceIds);
+			requestSamplerResources(*dynamic_cast<SamplerManagementCentre*>(managementCentre), instanceIds);
+			break;
+		case ResourceType::RenderTarget:
+			requestRenderTargetResource(*dynamic_cast<RenderTargetManagementCentre*>(managementCentre), instanceIds);
 			break;
 		default:
 			break;
@@ -52,7 +51,10 @@ public:
 			destroyTextureResource(*dynamic_cast<TextureManagementCentre*>(managementCentre), instanceIds);
 			break;
 		case ResourceType::Sampler:
-			destroySamplerResource(*dynamic_cast<SamplerManagementCentre*>(managementCentre), instanceIds);
+			destroySamplerResources(*dynamic_cast<SamplerManagementCentre*>(managementCentre), instanceIds);
+			break;
+		case ResourceType::RenderTarget:
+			destroyRenderTargetResource(*dynamic_cast<RenderTargetManagementCentre*>(managementCentre), instanceIds);
 			break;
 		default:
 			break;
@@ -67,9 +69,9 @@ public:
 
 	void destroyTextureResource(const TextureManagementCentre& textureManagementCentre, std::vector<GLuint>& textureInstanceIds);
 
-	void requestSamplerResource(const SamplerManagementCentre& samplerManagementCentre, std::vector<GLuint>& samplerInstanceIds);
+	void requestSamplerResources(const SamplerManagementCentre& samplerManagementCentre, std::vector<GLuint>& samplerInstanceIds);
 
-	void destroySamplerResource(const SamplerManagementCentre& samplerManagementCentre, std::vector<GLuint>& samplerInstanceIds);
+	void destroySamplerResources(const SamplerManagementCentre& samplerManagementCentre, std::vector<GLuint>& samplerInstanceIds);
 
 	void requestConstantBufferResource(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers)
 	{
@@ -88,6 +90,10 @@ public:
 		}
 	}
 
+	void requestRenderTargetResource(const RenderTargetManagementCentre& renderTargetManagementCentre, std::vector<GLuint>& renderTargetInstanceIds);
+
+	void destroyRenderTargetResource(const RenderTargetManagementCentre& renderTargetManagementCentre, std::vector<GLuint>& textureInstanceIds);
+
 	inline MeshResourceIdentifier getMeshResource(GLuint meshInstanceId)
 	{
 		return getResource(meshInstanceId, m_meshResources);
@@ -98,12 +104,24 @@ public:
 		return getResource(textureInstanceId, m_textureResources);
 	}
 
+	inline RenderTargetIdentifier getRenderTargetResource(GLuint renderTextureInstanceId)
+	{
+		return getResource(renderTextureInstanceId, m_renderTargetResources);
+	}
+
 	inline MeshManagementCentre& getMeshManagementCentre() { return m_meshManagementCentre; }
 
 	inline TextureManagementCentre& getTextureManagementCentre() { return m_textureManagementCentre; }
+
+	inline RenderTargetManagementCentre& getRenderTargetManagementCentre() { return m_renderTargetManagementCentre; }
+
+	inline void SetDevice(DeviceBase* device)
+	{
+		m_device = device;
+	}
 private:
 	template<typename Identifier>
-	std::vector<GLuint> requestNewIdentifier(std::vector<GLuint>& instanceIds, std::unordered_map<GLuint, Identifier>& identifiers)
+	std::vector<GLuint> filterNewIdentifier(std::vector<GLuint>& instanceIds, std::unordered_map<GLuint, Identifier>& identifiers)
 	{
 		size_t length = instanceIds.size();
 		std::vector<GLuint> newInstanceIds;
@@ -180,9 +198,13 @@ private:
 
 	TextureManagementCentre m_textureManagementCentre;
 
-	std::unordered_map<TextureType, std::vector<TextureResourceIdentifier*>> m_tempTextureResources;
+	RenderTargetManagementCentre m_renderTargetManagementCentre;
+
 	std::unordered_map<GLuint, MeshResourceIdentifier> m_meshResources;
 	std::unordered_map<GLuint, TextureResourceIdentifier> m_textureResources;
 	std::unordered_map<GLuint, SamplerResouceIdentifier> m_samplerResources;
+	std::unordered_map<GLuint, RenderTargetIdentifier> m_renderTargetResources;
 
+
+	DeviceBase* m_device;
 };

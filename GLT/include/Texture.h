@@ -4,6 +4,7 @@
 #include <stb_image.h>
 #include <TextureEnums.h>
 #include <GLCommon.h>
+#include <ResourceIdentifier.h>
 
 class Texture :public Object
 {
@@ -38,7 +39,7 @@ protected:
 	GLsizei m_levels;
 	GLsizei m_width;
 	GLenum m_internalFormat;
-	GLenum m_externalFormat = GL_RED;;
+	GLenum m_externalFormat = GL_RED;
 	GLenum m_perChannelSize;
 	TextureWrapMode m_wrapModeS;
 	TextureFilterMode m_textureFilter;

@@ -5,13 +5,12 @@
 #include <ResourceManager.h>
 #include <ShaderPropertyNames.h>
 #include <SceneManager.h>
-#include <RenderPipeline.h>
 #include <SceneUtility.h>
+#include <ShaderUtils.h>
 
 class Graphics
 {
 public:
-	friend class RenderPipeline;
 	Graphics() {}
 	~Graphics() {}
 	/// <summary>
@@ -30,7 +29,6 @@ public:
 	/// <param name="camera"></param>
 	/// <param name="modelMatrix"></param>
 	static void drawMesh(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material, std::shared_ptr<Camera>& camera, const glm::mat4x4& modelMatrix);
-private:
 	/// <summary>
 	/// 绘制已经申请了内存的Mesh
 	/// </summary>
@@ -39,4 +37,5 @@ private:
 	/// <param name="camera"></param>
 	/// <param name="modelMatrix"></param>
 	static void drawRequestedMesh(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material, std::shared_ptr<Camera>& camera, const glm::mat4x4& modelMatrix);
+private:
 };

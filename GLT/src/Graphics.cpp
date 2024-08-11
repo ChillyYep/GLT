@@ -67,10 +67,10 @@ void Graphics::drawRequestedMesh(const std::shared_ptr<Mesh>& mesh, const std::s
 			if (mainTex != nullptr)
 			{
 				auto textureIdentifier = ResourceManager::getInstance()->getTextureResource(mainTex->getInstanceId());
-				auto target = Texture::textureType2TextureTarget(textureIdentifier.getTextureType());
+				auto target = Texture::textureType2TextureTarget(textureIdentifier.m_textureType);
 				if (target != GL_NONE)
 				{
-					glBindTextureUnit(0, textureIdentifier.getTextureHandle());
+					glBindTextureUnit(0, textureIdentifier.m_texture);
 				}
 			}
 		}

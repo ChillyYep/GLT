@@ -117,14 +117,7 @@ void logicLoop()
 
 void renderLoop()
 {
-	auto activedRT = RenderTexture::getActiveRenderTexture();
-	if (activedRT != nullptr)
-	{
-		activedRT->activate();
-		activedRT->clearColor();
-		pipeline.render();
-		activedRT->blitToWindow();
-	}
+	pipeline.render();
 }
 
 void gameLoop()
@@ -148,10 +141,9 @@ int main(int argc, char** argv)
 	window->attachToEventSystem();
 
 	auto windowSize = window->getSize();
-	RenderTexture renderTexture = RenderTexture(windowSize.x, windowSize.y, GL_RGBA, RenderTextureDepthStencilType::Depth16,
+	RenderTexture* renderTexture = new RenderTexture(windowSize.x, windowSize.y, GL_RGBA, RenderTextureDepthStencilType::Depth16,
 		RenderTextureDepthStencilType::None);
-	renderTexture.create();
-	renderTexture.activate();
+	renderTexture->create(false);
 
 	window->gameLoop(gameLoop);
 
@@ -159,6 +151,9 @@ int main(int argc, char** argv)
 	DestroyScene();
 
 	window->destroy();
+	renderTexture->release(false);
+	delete renderTexture;
+	renderTexture = nullptr;
 	window->uninit();
 
 }

@@ -143,6 +143,7 @@
     <ClCompile Include="src\FileUtils.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\gl3w.c" />
+    <ClCompile Include="src\GLDevice.cpp" />
     <ClCompile Include="src\glfwWindow.cpp" />
     <ClCompile Include="src\GLSLCompiler.cpp" />
     <ClCompile Include="src\GLSLPreProcessCompiler.cpp" />
@@ -187,13 +188,17 @@
     <ClInclude Include="include\ComponentType.h" />
     <ClInclude Include="include\ConstantBuffers.h" />
     <ClInclude Include="include\ConstantBufferType.h" />
+    <ClInclude Include="include\DeviceBase.h" />
     <ClInclude Include="include\FileUtils.h" />
     <ClInclude Include="include\GLCommon.h" />
+    <ClInclude Include="include\GLDevice.h" />
     <ClInclude Include="include\GLMath.h" />
     <ClInclude Include="include\GLSLCompiler.h" />
     <ClInclude Include="include\GLSLPreProcessCompiler.h" />
     <ClInclude Include="include\MemoryManager.h" />
     <ClInclude Include="include\RenderCommand.h" />
+    <ClInclude Include="include\RenderTarget.h" />
+    <ClInclude Include="include\RenderTargetManagementCentre.h" />
     <ClInclude Include="include\ResourceIdentifier.h" />
     <ClInclude Include="include\ConstantBufferIdentifier.h" />
     <ClInclude Include="include\EventSystem.h" />
@@ -215,6 +220,7 @@
     <ClInclude Include="include\Renderer.h" />
     <ClInclude Include="include\RenderPipeline.h" />
     <ClInclude Include="include\RenderTexture.h" />
+    <ClInclude Include="include\ResourceIdentifierType.h" />
     <ClInclude Include="include\ResourceManager.h" />
     <ClInclude Include="include\RHICommon.h" />
     <ClInclude Include="include\Sampler.h" />

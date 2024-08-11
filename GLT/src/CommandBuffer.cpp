@@ -25,10 +25,32 @@ void CommandBuffer::setRenderTarget(RenderTargetIdentifier* renderTargetIdentifi
 	m_cmdList.push_back(command);
 }
 
+void CommandBuffer::clearColor(float r, float g, float b, float a)
+{
+	RenderCommand command = RenderCommand();
+	ClearColorRenderParam* clearColorParam = RenderCommandParamFactory::getInstance()->createParam<ClearColorRenderParam>();
+	clearColorParam->r = r;
+	clearColorParam->g = g;
+	clearColorParam->b = b;
+	clearColorParam->a = a;
+
+	command.commandType = RenderCommandType::ClearColor;
+	command.param = clearColorParam;
+	m_cmdList.push_back(command);
+}
+//void CommandBuffer::blitto(RenderTargetIdentifier* renderTargetIdentifier);
+//{
+//
+//}
 void CommandBuffer::release()
 {
 	for (int i = 0;i < m_cmdList.size();++i)
 	{
 		RenderCommandParamFactory::getInstance()->releaseParam(m_cmdList[i].param);
 	}
+}
+
+void CommandBuffer::clear()
+{
+	m_cmdList.clear();
 }

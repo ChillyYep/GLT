@@ -231,6 +231,9 @@
     <ClCompile Include="src\GLSLPreProcessCompiler.cpp">
       <Filter>源文件\RHI\GLSL\Compiler</Filter>
     </ClCompile>
+    <ClCompile Include="src\GLDevice.cpp">
+      <Filter>源文件\RHI\GLSL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\cube.frag">
@@ -364,9 +367,6 @@
     <ClInclude Include="include\ShaderUtils.h">
       <Filter>头文件\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="include\ResourceIdentifier.h">
-      <Filter>头文件\RHI\ResourceManager</Filter>
-    </ClInclude>
     <ClInclude Include="include\ConstantBufferIdentifier.h">
       <Filter>头文件\RHI\ResourceManager\Buffers</Filter>
     </ClInclude>
@@ -438,6 +438,24 @@
     </ClInclude>
     <ClInclude Include="include\ScriptableRenderContext.h">
       <Filter>头文件\RHI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GLDevice.h">
+      <Filter>头文件\RHI\GLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DeviceBase.h">
+      <Filter>头文件\RHI\GLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ResourceIdentifier.h">
+      <Filter>头文件\RHI\ResourceManager\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ResourceIdentifierType.h">
+      <Filter>头文件\RHI\ResourceManager\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderTargetManagementCentre.h">
+      <Filter>头文件\RHI\ResourceManager\ManagementCentre</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderTarget.h">
+      <Filter>头文件\RHI\ResourceManager\Resources</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -9,6 +9,7 @@ enum class RenderCommandType
 	Default,
 	RequestRenderTexture,
 	SetRenderTarget,
+	ClearColor,
 	Draw
 };
 
@@ -63,6 +64,16 @@ public:
 	~SetRenderTargetParam() {}
 
 	RenderTargetIdentifier* identifier;
+private:
+};
+
+RENDERCOMMANDPARAM_CLASS(ClearColorRenderParam, RenderCommandType::ClearColor)
+{
+public:
+	ClearColorRenderParam() {}
+	~ClearColorRenderParam() {}
+
+	float r, g, b, a;
 private:
 };
 

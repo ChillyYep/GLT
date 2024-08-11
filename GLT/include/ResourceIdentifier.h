@@ -1,6 +1,8 @@
 #pragma once
 #include <CommonDefine.h>
 #include <TextureEnums.h>
+#include <RenderBuffer.h>
+#include <ResourceIdentifierType.h>
 
 class ResourceIdentifier
 {
@@ -13,7 +15,7 @@ private:
 	GLTUInt32 m_instanceId;
 };
 
-class MeshResourceIdentifier :public ResourceIdentifier
+ENUM_BINDING_CLASS(MeshResourceIdentifier, ResourceIdentifier, ResourceIdentifierType, ResourceIdentifierType::Mesh, resourceidentifier_traits)
 {
 public:
 	MeshResourceIdentifier() :m_vao(0), m_vbo(0), m_ebo(0) {}
@@ -30,17 +32,13 @@ private:
 	GLTUInt32 m_ebo;
 };
 
-class TextureResourceIdentifier :public ResourceIdentifier
+ENUM_BINDING_CLASS(TextureResourceIdentifier, ResourceIdentifier, ResourceIdentifierType, ResourceIdentifierType::Texture, resourceidentifier_traits)
 {
 public:
 	TextureResourceIdentifier() :ResourceIdentifier(0) {}
 	TextureResourceIdentifier(GLTUInt32 instanceId) :ResourceIdentifier(instanceId) {}
 	~TextureResourceIdentifier() {}
 
-	inline GLTUInt32 getTextureHandle() { return m_texture; }
-	inline TextureType getTextureType() { return m_textureType; }
-	friend class ResourceManager;
-private:
 	GLTUInt32 m_texture;
 
 	/// <summary>
@@ -67,16 +65,22 @@ private:
 	GLTSizei m_width;
 	GLTSizei m_height;
 	GLTSizei m_depth;
-};
-
-class SamplerResouceIdentifier :ResourceIdentifier {
-public:
-	friend class ResourceManager;
 private:
-	GLTUInt32 m_sampler;
 };
 
-class RenderTargetIdentifier :public ResourceIdentifier
+ENUM_BINDING_CLASS(SamplerResouceIdentifier, ResourceIdentifier, ResourceIdentifierType, ResourceIdentifierType::Sampler, resourceidentifier_traits)
 {
+public:
+	GLTUInt32 m_sampler;
+private:
+};
 
+ENUM_BINDING_CLASS(RenderTargetIdentifier, ResourceIdentifier, ResourceIdentifierType, ResourceIdentifierType::RenderTarget, resourceidentifier_traits)
+{
+public:
+	GLTUInt32 m_fbo;
+
+	RenderBuffer m_colorRenderBuffer;
+	RenderBuffer m_depthRenderBuffer;
+	RenderBuffer m_stencilRenderBuffer;
 };

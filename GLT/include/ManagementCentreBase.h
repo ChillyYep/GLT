@@ -53,7 +53,7 @@ public:
 
 	virtual void onSubmit() {}
 
-	inline std::vector<GLTUInt32>& getAllObjectInstanceIds() const { return m_sortedObjects; }
+	inline std::vector<GLTUInt32> getAllObjectInstanceIds() const { return m_sortedObjects; }
 
 	inline ReferencedObject getRefObject(GLTUInt32 instanceId) const
 	{
