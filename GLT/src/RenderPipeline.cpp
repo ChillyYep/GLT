@@ -7,37 +7,6 @@ void RenderPipeline::init() {
 void RenderPipeline::uninit() {
 	m_renderContext.uninit();
 }
-void RenderPipeline::clearExpiredMeshBuffers(std::vector<std::shared_ptr<Scene>>& allScenes)
-{
-	// É¾³ý
-	for (int i = 0;i < allScenes.size();++i)
-	{
-		clearExpiredObjects(&ResourceManager::getInstance()->getMeshManagementCentre(), ResourceType::Mesh);
-	}
-}
-void RenderPipeline::appendNewMeshBuffers(std::vector<std::shared_ptr<Scene>>& allScenes)
-{
-	for (int i = 0;i < allScenes.size();++i)
-	{
-		appendNewObjects(&ResourceManager::getInstance()->getMeshManagementCentre(), ResourceType::Mesh);
-	}
-}
-
-void RenderPipeline::clearExpiredTextures(std::vector<std::shared_ptr<Scene>>& allScenes)
-{
-	for (int i = 0;i < allScenes.size();++i)
-	{
-		clearExpiredObjects(&ResourceManager::getInstance()->getTextureManagementCentre(), ResourceType::Texture);
-	}
-}
-void RenderPipeline::appendNewTextures(std::vector<std::shared_ptr<Scene>>& allScenes)
-{
-	for (int i = 0;i < allScenes.size();++i)
-	{
-		appendNewObjects(&ResourceManager::getInstance()->getTextureManagementCentre(), ResourceType::Texture);
-	}
-}
-
 void RenderPipeline::render() {
 	updateSceneProperties4Render();
 

@@ -51,12 +51,6 @@ private:
 		management->clearExpiredList();
 	}
 
-	void clearExpiredMeshBuffers(std::vector<std::shared_ptr<Scene>>& allScenes);
-	void appendNewMeshBuffers(std::vector<std::shared_ptr<Scene>>& allScenes);
-
-	void clearExpiredTextures(std::vector<std::shared_ptr<Scene>>& allScenes);
-	void appendNewTextures(std::vector<std::shared_ptr<Scene>>& allScenes);
-	
 	ScriptableRenderContext m_renderContext;
 
 	std::vector<LightProperties> m_lightProperties;
