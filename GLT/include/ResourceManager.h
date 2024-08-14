@@ -150,49 +150,6 @@ private:
 		}
 		return Identifier();
 	}
-
-	inline void setTextureWrapMode(GLuint texture, GLenum pname, TextureWrapMode wrapMode)
-	{
-		switch (wrapMode)
-		{
-		case TextureWrapMode::ClampEdge:
-			glTextureParameteri(texture, pname, GL_CLAMP_TO_EDGE);
-			break;
-		case TextureWrapMode::Border:
-			glTextureParameteri(texture, pname, GL_CLAMP_TO_BORDER);
-			break;
-		case TextureWrapMode::Repeat:
-			glTextureParameteri(texture, pname, GL_REPEAT);
-			break;
-		case TextureWrapMode::MirroredRepeat:
-			glTextureParameteri(texture, pname, GL_MIRRORED_REPEAT);
-			break;
-		default:
-			break;
-		}
-	}
-
-	inline void setTextureFilter(GLuint texture, GLenum pname, TextureFilterMode textureFilter)
-	{
-		switch (textureFilter)
-		{
-		case TextureFilterMode::Point_Mipmap_Point:
-			glTextureParameteri(texture, pname, GL_NEAREST_MIPMAP_NEAREST);
-			break;
-		case TextureFilterMode::Point_Mipmap_Linear:
-			glTextureParameteri(texture, pname, GL_NEAREST_MIPMAP_LINEAR);
-			break;
-		case TextureFilterMode::Linear_Mipmap_Point:
-			glTextureParameteri(texture, pname, GL_LINEAR_MIPMAP_NEAREST);
-			break;
-		case TextureFilterMode::Linear_Mipmap_Linear:
-			glTextureParameteri(texture, pname, GL_LINEAR_MIPMAP_LINEAR);
-			break;
-		default:
-			break;
-		}
-	}
-
 private:
 	MeshManagementCentre m_meshManagementCentre;
 
