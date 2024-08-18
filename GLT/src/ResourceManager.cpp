@@ -167,3 +167,13 @@ void ResourceManager::destroyRenderTargetResource(const RenderTargetManagementCe
 	}
 	m_device->destroyRenderTargetResource(identifiers);
 }
+
+void ResourceManager::requestConstantBufferResources(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers)
+{
+	m_device->requestConstantBufferResources(constantBufferIdentifiers);
+}
+
+void ResourceManager::destroyConstantBufferResources(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers)
+{
+	m_device->destroyConstantBufferResources(constantBufferIdentifiers);
+}

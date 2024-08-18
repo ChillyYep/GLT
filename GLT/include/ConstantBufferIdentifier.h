@@ -27,13 +27,10 @@ public:
 
 	inline GLTUInt32 getTotalBufferSize() { return m_bufferSize; }
 
-	static ConstantBufferIdentifier& null() { return s_null; }
 
 	__GET_SET_PROPERTY__(Ubo, GLTUInt32, m_ubo)
 		__GET_SET_PROPERTY__(ConstantBufferType, ConstantBufferType, m_constantBufferType)
 private:
-	static ConstantBufferIdentifier s_null;
-
 	ConstantBufferType m_constantBufferType;
 
 	std::vector<ShaderUniformBlockProperty> m_globalBuffer;

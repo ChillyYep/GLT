@@ -1,7 +1,5 @@
 #include "ConstantBufferIdentifier.h"
 
-ConstantBufferIdentifier ConstantBufferIdentifier::s_null;
-
 void ConstantBufferIdentifier::addBlock(ShaderUniformBlockProperty& block)
 {
 	m_globalBuffer.push_back(block);

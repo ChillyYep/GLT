@@ -8,7 +8,7 @@
 class RenderTexture :public RenderTarget
 {
 public:
-	RenderTexture(int width, int height, GLTUInt32 colorInternalFormat, RenderTextureDepthStencilType depthInternalFormat, RenderTextureDepthStencilType stencilInternalFormat = RenderTextureDepthStencilType::None)
+	RenderTexture(int width, int height, TextureInternalFormat colorInternalFormat, RenderTextureDepthStencilType depthInternalFormat, RenderTextureDepthStencilType stencilInternalFormat = RenderTextureDepthStencilType::None)
 		:RenderTarget(width, height, colorInternalFormat, depthInternalFormat, stencilInternalFormat) {}
 
 	~RenderTexture() {}

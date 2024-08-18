@@ -73,38 +73,30 @@ public:
 
 	void destroySamplerResources(const SamplerManagementCentre& samplerManagementCentre, std::vector<GLuint>& samplerInstanceIds);
 
-	void requestConstantBufferResource(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers)
+	void requestConstantBufferResources(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers);
+
+	void destroyConstantBufferResources(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers);
+
+	void uploadConstantBufferResource(ConstantBufferType constantBufferType)
 	{
-		int size = (int)constantBufferIdentifiers.size();
-		std::vector<GLuint> ubos = std::vector<GLuint>(size);
-		glCreateBuffers(size, ubos.data());
-		for (int i = 0;i < size;++i)
-		{
-			constantBufferIdentifiers[i].SetUbo(ubos[i]);
-			size_t bufferSize = constantBufferIdentifiers[i].getTotalBufferSize();
-			// ·ÖÅä´æ´¢¿Õ¼ä
-			glBindBuffer(GL_UNIFORM_BUFFER, ubos[i]);
-			glBufferData(GL_UNIFORM_BUFFER, bufferSize, NULL, GL_STATIC_DRAW);
-			//glNamedBufferStorage(ubo, bufferSize, NULL, GL_STATIC_DRAW);
-			glBindBuffer(GL_UNIFORM_BUFFER, 0);
-		}
+		m_device->uploadConstantBufferResource(constantBufferType);
 	}
 
 	void requestRenderTargetResource(const RenderTargetManagementCentre& renderTargetManagementCentre, std::vector<GLuint>& renderTargetInstanceIds);
 
 	void destroyRenderTargetResource(const RenderTargetManagementCentre& renderTargetManagementCentre, std::vector<GLuint>& textureInstanceIds);
 
-	inline MeshResourceIdentifier getMeshResource(GLuint meshInstanceId)
+	inline MeshResourceIdentifier* getMeshResource(GLuint meshInstanceId)
 	{
 		return getResource(meshInstanceId, m_meshResources);
 	}
 
-	inline TextureResourceIdentifier getTextureResource(GLuint textureInstanceId)
+	inline TextureResourceIdentifier* getTextureResource(GLuint textureInstanceId)
 	{
 		return getResource(textureInstanceId, m_textureResources);
 	}
 
-	inline RenderTargetIdentifier getRenderTargetResource(GLuint renderTextureInstanceId)
+	inline RenderTargetIdentifier* getRenderTargetResource(GLuint renderTextureInstanceId)
 	{
 		return getResource(renderTextureInstanceId, m_renderTargetResources);
 	}
@@ -114,6 +106,12 @@ public:
 	inline TextureManagementCentre& getTextureManagementCentre() { return m_textureManagementCentre; }
 
 	inline RenderTargetManagementCentre& getRenderTargetManagementCentre() { return m_renderTargetManagementCentre; }
+
+	inline std::unordered_map<GLuint, MeshResourceIdentifier>& getMeshResources() { return m_meshResources; }
+
+	inline std::unordered_map<GLuint, TextureResourceIdentifier>& getTextureResources() { return m_textureResources; }
+
+	inline std::unordered_map<GLuint, RenderTargetIdentifier>& getRenderTargetResources() { return m_renderTargetResources; }
 
 	inline void SetDevice(DeviceBase* device)
 	{
@@ -141,14 +139,14 @@ private:
 	}
 
 	template<typename Identifier>
-	Identifier getResource(GLuint instanceId, std::unordered_map<GLuint, Identifier>& resourceIdentifier)
+	Identifier* getResource(GLuint instanceId, std::unordered_map<GLuint, Identifier>& resourceIdentifier)
 	{
-		auto resource = resourceIdentifier.find(instanceId);
-		if (resource != resourceIdentifier.end())
+		auto resourceIter = resourceIdentifier.find(instanceId);
+		if (resourceIter != resourceIdentifier.end())
 		{
-			return (*resource).second;
+			return &resourceIdentifier[instanceId];
 		}
-		return Identifier();
+		return nullptr;
 	}
 private:
 	MeshManagementCentre m_meshManagementCentre;

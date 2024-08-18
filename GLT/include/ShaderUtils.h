@@ -17,8 +17,7 @@ public:
 	static std::vector<std::string> collectAllFiles();
 
 	static void loadAllShader(ScriptableRenderContext& renderContext);
-
-	static void bindBlockForProgram(Shader& shader);
+	static void unloadAllShader(ScriptableRenderContext& renderContext);
 private:
 
 	static char infoLog[512];

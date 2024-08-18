@@ -13,8 +13,21 @@ void ShaderUtils::loadAllShader(ScriptableRenderContext& renderContext)
 	CompiledResult compileResult;
 	compiler.compileShaderProgram(rawShaderInfos, compileResult);
 	// 收集编译结果
-	ResourceManager::getInstance()->requestConstantBufferResource(compileResult.constantBuffers);
+	ResourceManager::getInstance()->requestConstantBufferResources(compileResult.constantBuffers);
 	Shader::init(compileResult.outputShaderPrograms, compileResult.constantBuffers);
+}
+
+void ShaderUtils::unloadAllShader(ScriptableRenderContext& renderContext)
+{
+	auto& identifierMap = Shader::getShaderConstantBufferSet().getAllConstantBufferIdentifier();
+	std::vector<ConstantBufferIdentifier> identifiers;
+
+	for (const auto& identifierPair : identifierMap)
+	{
+		identifiers.push_back(identifierPair.second);
+	}
+	ResourceManager::getInstance()->destroyConstantBufferResources(identifiers);
+
 }
 
 std::vector<std::string> ShaderUtils::collectAllFiles()
@@ -37,24 +50,4 @@ std::vector<std::string> ShaderUtils::collectAllFiles()
 		std::cerr << e.what() << std::endl;
 	}
 	return fileList;
-}
-
-void ShaderUtils::bindBlockForProgram(Shader& shader)
-{
-	ConstantBufferSet& globalBuffer = Shader::getShaderGlobalBuffer();
-	std::vector<ShaderUniformBlockReference>& blockRefs = shader.getAllBlocks();
-	auto program = shader.getShaderProgram();
-	//glBindBufferBase(GL_UNIFORM_BUFFER, 0, globalBufferIdentifier.GetUbo());
-	for (int i = 0;i < blockRefs.size();++i)
-	{
-		auto blockIndex = blockRefs[i].m_blockIndex;
-		ShaderUniformBlockProperty* block;
-
-		ConstantBufferIdentifier& globalBufferIdentifier = globalBuffer.getGlobalBufferIdentifierByBlockName(blockRefs[i].m_uniformBlockName);
-		if (globalBufferIdentifier.findBlock(blockRefs[i].m_uniformBlockName, block))
-		{
-			glBindBufferRange(GL_UNIFORM_BUFFER, block->m_blockBindingNum, globalBufferIdentifier.GetUbo(), block->m_blockOffset, block->m_preDefineSize);
-			glUniformBlockBinding(program, blockIndex, block->m_blockBindingNum);
-		}
-	}
 }

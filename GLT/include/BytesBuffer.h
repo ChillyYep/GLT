@@ -1,5 +1,6 @@
 #pragma once
 #include <CommonDefine.h>
+#include <vcruntime_string.h>
 
 class BytesBuffer
 {
@@ -10,10 +11,10 @@ public:
 	void create(GLTUInt32 bufferSize)
 	{
 		m_dataSize = bufferSize;
-		m_dataPtr = new GLTByte[bufferSize];
+		m_dataPtr = new GLTUByte[bufferSize];
 		for (GLTUInt32 i = 0;i < bufferSize;++i)
 		{
-			((GLTByte*)m_dataPtr)[i] = 0xff;
+			((GLTUByte*)m_dataPtr)[i] = 0xff;
 		}
 	}
 
@@ -30,7 +31,7 @@ public:
 	{
 		if ((offset + length) <= m_dataSize)
 		{
-			GLTByte* offsetDataPtr = reinterpret_cast<GLTByte*>(m_dataPtr) + offset;
+			GLTUByte* offsetDataPtr = reinterpret_cast<GLTUByte*>(m_dataPtr) + offset;
 			memcpy(offsetDataPtr, data, length);
 		}
 	}

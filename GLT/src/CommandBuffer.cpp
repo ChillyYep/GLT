@@ -1,18 +1,5 @@
 #include "CommandBuffer.h"
 
-void CommandBuffer::requestRenderTexture(int width, int height, TextureFormat textureFormat, TextureFilterMode filterMode)
-{
-	RenderCommand command = RenderCommand();
-	RequestRenderTextureParam* renderTextureParam = RenderCommandParamFactory::getInstance()->createParam<RequestRenderTextureParam>();
-	renderTextureParam->width = width;
-	renderTextureParam->height = height;
-	renderTextureParam->textureFormat = textureFormat;
-	renderTextureParam->filterMode = filterMode;
-	command.commandType = RenderCommandType::RequestRenderTexture;
-	command.param = renderTextureParam;
-	m_cmdList.push_back(command);
-}
-
 void CommandBuffer::setRenderTarget(RenderTargetIdentifier* renderTargetIdentifier)
 {
 	assert(renderTargetIdentifier != nullptr);
@@ -38,19 +25,35 @@ void CommandBuffer::clearColor(float r, float g, float b, float a)
 	command.param = clearColorParam;
 	m_cmdList.push_back(command);
 }
-//void CommandBuffer::blitto(RenderTargetIdentifier* renderTargetIdentifier);
-//{
-//
-//}
-void CommandBuffer::release()
-{
-	for (int i = 0;i < m_cmdList.size();++i)
-	{
-		RenderCommandParamFactory::getInstance()->releaseParam(m_cmdList[i].param);
-	}
-}
 
 void CommandBuffer::clear()
 {
 	m_cmdList.clear();
+}
+
+void CommandBuffer::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix)
+{
+	RenderCommand command = RenderCommand();
+	DrawMeshParam* drawMeshParam = RenderCommandParamFactory::getInstance()->createParam<DrawMeshParam>();
+	drawMeshParam->m_meshPtr = mesh;
+	drawMeshParam->m_materialPtr = material;
+	drawMeshParam->m_modelMatrix = modelMatrix;
+	drawMeshParam->m_meshResourceIdentifier = ResourceManager::getInstance()->getMeshResource(mesh->getInstanceId());
+	drawMeshParam->m_textureResources = ResourceManager::getInstance()->getTextureResources();
+	command.commandType = RenderCommandType::DrawMesh;
+	command.param = drawMeshParam;
+	m_cmdList.push_back(command);
+}
+
+void CommandBuffer::setViewport(int x, int y, int width, int height)
+{
+	RenderCommand command = RenderCommand();
+	SetViewPortParam* setViewPortParam = RenderCommandParamFactory::getInstance()->createParam<SetViewPortParam>();
+	setViewPortParam->m_x = x;
+	setViewPortParam->m_y = y;
+	setViewPortParam->m_width = width;
+	setViewPortParam->m_height = height;
+	command.commandType = RenderCommandType::SetViewPort;
+	command.param = setViewPortParam;
+	m_cmdList.push_back(command);
 }

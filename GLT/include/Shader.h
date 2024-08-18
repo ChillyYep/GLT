@@ -15,7 +15,9 @@ public:
 
 	inline GLuint getShaderProgram() { return m_shaderInfo.m_program; }
 
-	inline std::vector<ShaderUniformBlockReference>& getAllBlocks() { return m_shaderInfo.m_referenceBlocks; }
+	inline std::vector<ShaderUniformProperty>& getShaderUniforms() { return m_shaderInfo.m_uniformProperties; }
+
+	inline std::vector<ShaderUniformBlockReference>& getReferencedBlocks() { return m_shaderInfo.m_referenceBlocks; }
 
 	static inline void init(std::unordered_map<std::string, ShaderProgramInfo>& allPrograms, std::vector<ConstantBufferIdentifier>& constantBuffers)
 	{
@@ -36,16 +38,22 @@ public:
 		_setGlobalValueInternal(propertyName, value);
 	}
 
+	static inline void setGlobalInt(const char* propertyName, int value)
+	{
+		_setGlobalValueInternal(propertyName, value);
+	}
+
+	static inline void setGlobalBool(const char* propertyName, bool value)
+	{
+		_setGlobalValueInternal(propertyName, value);
+	}
+	
 	static inline void setGlobalVector(const char* propertyName, glm::vec4 vec4)
 	{
 		_setGlobalValueInternal(propertyName, vec4);
 	}
 
-	static inline void upload(ConstantBufferType constantBufferType)
-	{
-		m_globalBuffer.upload(constantBufferType);
-	}
-	static inline ConstantBufferSet& getShaderGlobalBuffer() { return m_globalBuffer; }
+	static inline ConstantBufferSet& getShaderConstantBufferSet() { return m_globalBuffer; }
 	// Todo:需要有卸载的接口，用于shader切换，或者将所有shader一次性载入且不再卸载
 private:
 	template<typename T>

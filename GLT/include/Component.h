@@ -1,7 +1,9 @@
 #pragma once
-#include <Object.h>
 #include <ComponentType.h>
+#include <Object.h>
 #include <memory>
+class GameObject;
+
 enum class ComponentLifeCycle
 {
 	None,

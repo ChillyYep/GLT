@@ -42,6 +42,7 @@ public:
 		{
 			m_device->executeCommand(m_commands[i]);
 		}
+		m_commands.clear();
 	}
 
 	void blitToWindow()

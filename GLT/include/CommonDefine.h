@@ -2,7 +2,7 @@
 #include <assert.h>
 
 using GLTBool = bool;
-using GLTByte = unsigned char;
+using GLTUByte = unsigned char;
 using GLTSByte = signed char;
 using GLTInt16 = signed short;
 using GLTUInt16 = unsigned short;

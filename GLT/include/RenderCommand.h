@@ -2,15 +2,18 @@
 #include <Singleton.h>
 #include <CommonDefine.h>
 #include <ResourceIdentifier.h>
+#include <Light.h>
+#include <Material.h>
+#include <Mesh.h>
 
 enum class RenderCommandType
 {
 	Invalid,
 	Default,
-	RequestRenderTexture,
 	SetRenderTarget,
+	SetViewPort,
 	ClearColor,
-	Draw
+	DrawMesh
 };
 
 class RenderCommandParam
@@ -44,19 +47,6 @@ struct rendercommandparam_traits<RenderCommandParam>
 
 #define RENDERCOMMANDPARAM_CLASS(COMMANDPARAMCLASS,RENDERCOMMANDENUM) ENUM_BINDING_CLASS(COMMANDPARAMCLASS, RenderCommandParam, RenderCommandType, RENDERCOMMANDENUM, rendercommandparam_traits)
 
-RENDERCOMMANDPARAM_CLASS(RequestRenderTextureParam, RenderCommandType::RequestRenderTexture)
-{
-public:
-	RequestRenderTextureParam() {}
-	~RequestRenderTextureParam() {}
-
-	int width;
-	int height;
-	TextureFormat textureFormat;
-	TextureFilterMode filterMode;
-private:
-};
-
 RENDERCOMMANDPARAM_CLASS(SetRenderTargetParam, RenderCommandType::SetRenderTarget)
 {
 public:
@@ -74,7 +64,28 @@ public:
 	~ClearColorRenderParam() {}
 
 	float r, g, b, a;
-private:
+};
+RENDERCOMMANDPARAM_CLASS(DrawMeshParam, RenderCommandType::DrawMesh)
+{
+public:
+	DrawMeshParam() {}
+	~DrawMeshParam() {}
+
+	Mesh* m_meshPtr;
+	Material* m_materialPtr;
+	glm::mat4 m_modelMatrix;
+	MeshResourceIdentifier* m_meshResourceIdentifier;
+	std::unordered_map<GLuint, TextureResourceIdentifier> m_textureResources;
+};
+
+RENDERCOMMANDPARAM_CLASS(SetViewPortParam, RenderCommandType::SetViewPort)
+{
+public:
+	SetViewPortParam() {}
+	~SetViewPortParam() {}
+
+	int m_x, m_y;
+	int m_width, m_height;
 };
 
 class RenderCommandParamFactory :public Singleton<RenderCommandParamFactory>

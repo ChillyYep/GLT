@@ -4,9 +4,9 @@
 #include <Renderer.h>
 #include <Scene.h>
 #include <Texture.h>
-#include <Graphics.h>
 #include <ShaderUtils.h>
 #include <ScriptableRenderContext.h>
+#include <SceneManager.h>
 
 class RenderPipeline
 {
@@ -16,6 +16,8 @@ public:
 	void init();
 	void uninit();
 	void render();
+
+	void drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix);
 private:
 	void updateSceneProperties4Render();
 	void postUpdate();
@@ -56,4 +58,6 @@ private:
 	std::vector<LightProperties> m_lightProperties;
 
 	std::vector<std::shared_ptr<Scene>> m_allScenes;
+
+	CommandBuffer m_cmd;
 };

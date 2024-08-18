@@ -3,6 +3,7 @@
 #include <Component.h>
 #include <type_traits>
 #include <Transform.h>
+#include <memory>
 
 class GameObject :public Object
 {

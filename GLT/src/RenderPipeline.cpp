@@ -5,6 +5,7 @@ void RenderPipeline::init() {
 	ShaderUtils::loadAllShader(m_renderContext);
 }
 void RenderPipeline::uninit() {
+	ShaderUtils::unloadAllShader(m_renderContext);
 	m_renderContext.uninit();
 }
 void RenderPipeline::render() {
@@ -18,11 +19,10 @@ void RenderPipeline::render() {
 	if (instanceIds.size() > 0)
 	{
 		auto rtIdentifier = ResourceManager::getInstance()->getRenderTargetResource(instanceIds[0]);
-		CommandBuffer cmd;
-		cmd.setRenderTarget(&rtIdentifier);
-		cmd.clearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		m_renderContext.scheduleCommandBuffer(cmd);
-		cmd.clear();
+		m_cmd.setRenderTarget(rtIdentifier);
+		m_cmd.clearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		m_renderContext.scheduleCommandBuffer(m_cmd);
+		m_cmd.clear();
 		m_renderContext.submit();
 	}
 	for (const auto& scene : m_allScenes)
@@ -37,7 +37,7 @@ void RenderPipeline::render() {
 		auto viewPort = mainCamera->GetViewPort();
 		auto windowSize = Window::getInstance()->getSize();
 		auto viewPortRect = glm::ivec4(viewPort.x * windowSize.x, viewPort.y * windowSize.y, viewPort.z * windowSize.x, viewPort.w * windowSize.y);
-		glViewport(viewPortRect.x, viewPortRect.y, viewPortRect.z, viewPortRect.w);
+		m_cmd.setViewport(viewPortRect.x, viewPortRect.y, viewPortRect.z, viewPortRect.w);
 		for (auto& renderObject : scene->getObjectList())
 		{
 			auto renderer = renderObject->getComponent<Renderer>();
@@ -103,7 +103,7 @@ void RenderPipeline::updateLightProperties(std::shared_ptr<Camera>& camera)
 void RenderPipeline::updatePerFrameConstantBuffer()
 {
 	// do something
-	Shader::upload(ConstantBufferType::PerFrame);
+	ResourceManager::getInstance()->uploadConstantBufferResource(ConstantBufferType::PerFrame);
 }
 
 void RenderPipeline::updatePerCameraConstantBuffer(std::shared_ptr<Camera>& camera)
@@ -113,7 +113,7 @@ void RenderPipeline::updatePerCameraConstantBuffer(std::shared_ptr<Camera>& came
 	Shader::setGlobalMatrix(ShaderPropertyNames::ProjectMatrix, camera->getProjectMatrix());
 	auto eyePosition = camera->getTransform()->GetPosition();
 	Shader::setGlobalVector(ShaderPropertyNames::EyePosition, glm::vec4(eyePosition.x, eyePosition.y, eyePosition.z, 1.0f));
-	Shader::upload(ConstantBufferType::PerCamera);
+	ResourceManager::getInstance()->uploadConstantBufferResource(ConstantBufferType::PerCamera);
 }
 
 void RenderPipeline::renderPerObject(Renderer& renderObject, std::shared_ptr<Camera>& camera)
@@ -128,11 +128,19 @@ void RenderPipeline::renderPerObject(Renderer& renderObject, std::shared_ptr<Cam
 	{
 		return;
 	}
-	glEnable(GL_DEPTH_TEST);
-	glDepthMask(GL_TRUE);
-	glDepthFunc(GL_LESS);
-	glDepthRange(0, 1);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	Graphics::drawRequestedMesh(mesh, renderObject.GetMaterial(), camera, go->getTransform()->GetMatrix());
+
+	drawMesh(renderObject.GetMesh().get(), renderObject.GetMaterial().get(), renderObject.GetGameObject()->getTransform()->GetMatrix());
+}
+
+void RenderPipeline::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix)
+{
+	auto* resourceIdentifier = ResourceManager::getInstance()->getMeshResource(mesh->getInstanceId());
+	if (resourceIdentifier == nullptr || !resourceIdentifier->isValid())
+	{
+		return;
+	}
+	m_cmd.drawMesh(mesh, material, modelMatrix);
+	m_renderContext.scheduleCommandBuffer(m_cmd);
+	m_renderContext.submit();
+	m_cmd.clear();
 }

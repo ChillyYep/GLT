@@ -33,20 +33,24 @@ public:
 	virtual std::vector<SamplerResouceIdentifier> requestSamplerResources(std::vector<Sampler*>& samplerPtrs) = 0;
 	virtual void destroySamplerResources(std::vector<SamplerResouceIdentifier>& samplerIdentifiers) = 0;
 
-	virtual void requestConstantBufferResource(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers) = 0;
-	virtual void destroyConstantBufferResource(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers) = 0;
-
 	virtual std::vector<RenderTargetIdentifier> requestRenderTargetResource(std::vector<RenderTarget*>& renderTargetPtrs) = 0;
 
 	virtual void destroyRenderTargetResource(std::vector<RenderTargetIdentifier>& renderTargetIdentifiers) = 0;
 
+	virtual void requestConstantBufferResources(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers) = 0;
+
+	virtual void destroyConstantBufferResources(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers) = 0;
+
 	virtual void executeCommand(RenderCommand& renderCommand) = 0;
 
-	virtual void activate(RenderTargetIdentifier& rtIdentifier) = 0;
+	virtual void activate(RenderTargetIdentifier* rtIdentifier) = 0;
 
 	virtual void clearColor(float r, float g, float b, float a) = 0;
 
 	virtual void blitToWindow() = 0;
+
+	virtual void uploadConstantBufferResource(ConstantBufferType constantBufferType) = 0;
+
 private:
 
 };

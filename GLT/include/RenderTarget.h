@@ -1,6 +1,7 @@
 #pragma once
 #include <Object.h>
 #include <CommonDefine.h>
+#include <TextureEnums.h>
 
 enum class RenderTextureDepthStencilType {
 	None,
@@ -19,12 +20,12 @@ enum class RenderTextureDepthStencilType {
 
 struct RenderTargetDescriptor
 {
-	RenderTargetDescriptor(int width, int height, GLTUInt32 colorInternalFormat, RenderTextureDepthStencilType depthInternalFormat, RenderTextureDepthStencilType stencilInternalFormat = RenderTextureDepthStencilType::None)
+	RenderTargetDescriptor(int width, int height, TextureInternalFormat colorInternalFormat, RenderTextureDepthStencilType depthInternalFormat, RenderTextureDepthStencilType stencilInternalFormat = RenderTextureDepthStencilType::None)
 		:m_width(width), m_height(height), m_colorInternalFormat(colorInternalFormat), m_depthInternalFormat(depthInternalFormat), m_stencilInternalFormat(stencilInternalFormat) {}
 
 	int m_width;
 	int m_height;
-	GLTUInt32 m_colorInternalFormat;
+	TextureInternalFormat m_colorInternalFormat;
 	RenderTextureDepthStencilType m_depthInternalFormat;
 	RenderTextureDepthStencilType m_stencilInternalFormat;
 };
@@ -32,7 +33,7 @@ struct RenderTargetDescriptor
 class RenderTarget :public Object
 {
 public:
-	RenderTarget(int width, int height, GLTUInt32 colorInternalFormat, RenderTextureDepthStencilType depthInternalFormat, RenderTextureDepthStencilType stencilInternalFormat = RenderTextureDepthStencilType::None)
+	RenderTarget(int width, int height, TextureInternalFormat colorInternalFormat, RenderTextureDepthStencilType depthInternalFormat, RenderTextureDepthStencilType stencilInternalFormat = RenderTextureDepthStencilType::None)
 		:m_renderTextureDescriptor(RenderTargetDescriptor(width, height, colorInternalFormat, depthInternalFormat, stencilInternalFormat)) {}
 	~RenderTarget() {}
 

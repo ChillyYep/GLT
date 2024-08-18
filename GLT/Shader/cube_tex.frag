@@ -12,7 +12,7 @@ in VS_Out{
 
 layout (location = 0) out vec4 fColor;
 
-layout (binding = 0) uniform sampler2D tex1;
+layout (binding = 0) uniform sampler2D mainTex;
 
 // uniform float Shininess;
 // uniform float Strength;
@@ -42,7 +42,7 @@ void main()
 	// 	}
 	// }
 
-	fColor = texture(tex1, fs_in.fs_Texcoord);
+	fColor = texture(mainTex, fs_in.fs_Texcoord);
 	fColor = vec4(fColor.rgb,1.0);
 
 	fColor = PhongShading_All(EyePosition.xyz,fs_in.fs_worldPosition.xyz,fs_in.fs_worldNormal,fColor,100);

@@ -1,6 +1,6 @@
 #pragma once
-#include <Transform.h>
-#include<Component.h>
+#include <GameObject.h>
+#include <Component.h>
 
 enum class LightType {
 	DirectionalLight,

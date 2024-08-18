@@ -48,16 +48,16 @@ public:
 	/// <summary>
 	/// 内部格式(OpenGL实际使用时的格式)
 	/// </summary>
-	GLTUInt32 m_internalFormat;
+	TextureInternalFormat m_internalFormat;
 
 	/// <summary>
 	/// 外部格式(加载时原始的格式)
 	/// </summary>
-	GLTUInt32 m_externalFormat;
+	TextureExternalFormat m_externalFormat;
 	/// <summary>
 	/// 数据类型，如GL_UNSIGNED_BYTE等
 	/// </summary>
-	GLTUInt32 m_perChannelSize;
+	TexturePerChannelSize m_perChannelSize;
 
 	GLTBool m_isProxy;
 	GLTSizei m_levels;

@@ -139,6 +139,9 @@
     <Filter Include="源文件\Component\Camera">
       <UniqueIdentifier>{082f7a14-9eca-4994-8ca3-4de96d39c976}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\RHI\Common\Compiler">
+      <UniqueIdentifier>{cfb7f778-42c0-4f64-93c4-67b34843aba5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl3w.c">
@@ -233,6 +236,12 @@
     </ClCompile>
     <ClCompile Include="src\GLDevice.cpp">
       <Filter>源文件\RHI\GLSL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ConstantBuffers.cpp">
+      <Filter>源文件\RHI\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BytesBuffer.cpp">
+      <Filter>源文件\RHI\ResourceManager\Buffers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -343,9 +352,6 @@
     <ClInclude Include="include\RenderTexture.h">
       <Filter>头文件\RHI\ResourceManager\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="include\FrameBufferObject.h">
-      <Filter>头文件\RHI\ResourceManager\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="include\CommandBuffer.h">
       <Filter>头文件\RHI\Command</Filter>
     </ClInclude>
@@ -384,12 +390,6 @@
     </ClInclude>
     <ClInclude Include="include\RenderCommand.h">
       <Filter>头文件\RHI\Command</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ShaderCompilerBase.h">
-      <Filter>头文件\RHI\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ShaderPreProcessCompilerBase.h">
-      <Filter>头文件\RHI\Common</Filter>
     </ClInclude>
     <ClInclude Include="include\ConstantBufferType.h">
       <Filter>头文件\Common\Enums</Filter>
@@ -442,9 +442,6 @@
     <ClInclude Include="include\GLDevice.h">
       <Filter>头文件\RHI\GLSL</Filter>
     </ClInclude>
-    <ClInclude Include="include\DeviceBase.h">
-      <Filter>头文件\RHI\GLSL</Filter>
-    </ClInclude>
     <ClInclude Include="include\ResourceIdentifier.h">
       <Filter>头文件\RHI\ResourceManager\Resources</Filter>
     </ClInclude>
@@ -456,6 +453,15 @@
     </ClInclude>
     <ClInclude Include="include\RenderTarget.h">
       <Filter>头文件\RHI\ResourceManager\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DeviceBase.h">
+      <Filter>头文件\RHI\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ShaderCompilerBase.h">
+      <Filter>头文件\RHI\Common\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ShaderPreProcessCompilerBase.h">
+      <Filter>头文件\RHI\Common\Compiler</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

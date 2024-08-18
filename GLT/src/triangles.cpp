@@ -1,5 +1,6 @@
 #include<iostream>
 #include "Common.h"
+#include <Graphics.h>
 #include <CameraOperation.h>
 #include <stb_image.h>
 #include <gamemain.h>
@@ -15,14 +16,15 @@ GLuint VAOs[NumVAOs];
 GLuint Buffers[NumBuffers];
 
 const GLuint NumVertices = 6;
-RenderPipeline pipeline;
+RenderPipeline* pipeline;
 GameMain gameMain;
 
 void CreateScene()
 {
 	glm::ivec2 screenSize = Window::getInstance()->getSize();
-
-	pipeline.init();
+	pipeline = new RenderPipeline();
+	pipeline->init();
+	Graphics::reset(pipeline);
 	auto scene = shared_ptr<Scene>(new Scene());
 	scene->SetActived(true);
 	scene->SetMainScene(true);
@@ -34,9 +36,9 @@ void CreateScene()
 	auto tex = shared_ptr<Texture2D>(new Texture2D());
 	// 需要引入一个从文件加载纹理的库
 	tex->load("Resources/wall.jpg");
-	tex->SetInternalFormat(GL_RGB8);
+	tex->SetInternalFormat(TextureInternalFormat::RGB8);
 	tex->SetLevels(4);
-	tex->SetPerChannelSize(GL_UNSIGNED_BYTE);
+	tex->SetPerChannelSize(TexturePerChannelSize::UNSIGNED_BYTE);
 	tex->SetWrapModeS(TextureWrapMode::Repeat);
 	tex->SetWrapModeT(TextureWrapMode::Repeat);
 	tex->SetTextureFilter(TextureFilterMode::Linear_Mipmap_Linear);
@@ -96,7 +98,7 @@ void CreateScene()
 	scene->addObject(cameraGo);
 	scene->addObject(lightGo);
 	scene->addObject(lightGo2);
-	Graphics::drawMeshNow(cubeMesh, mat, camera, cube1Transform->GetMatrix() * glm::translate(glm::vec3(-3.0f, 0.0f, 0.0f)));
+	Graphics::drawMeshNow(cubeMesh, mat, cube1Transform->GetMatrix() * glm::translate(glm::vec3(-3.0f, 0.0f, 0.0f)));
 }
 
 void DestroyScene()
@@ -106,7 +108,10 @@ void DestroyScene()
 	{
 		sceneManager->removeScene(scene);
 	}
-	pipeline.uninit();
+	pipeline->uninit();
+	delete pipeline;
+	pipeline = nullptr;
+	Graphics::reset(nullptr);
 }
 
 void logicLoop()
@@ -117,7 +122,7 @@ void logicLoop()
 
 void renderLoop()
 {
-	pipeline.render();
+	pipeline->render();
 }
 
 void gameLoop()
@@ -141,7 +146,7 @@ int main(int argc, char** argv)
 	window->attachToEventSystem();
 
 	auto windowSize = window->getSize();
-	RenderTexture* renderTexture = new RenderTexture(windowSize.x, windowSize.y, GL_RGBA, RenderTextureDepthStencilType::Depth16,
+	RenderTexture* renderTexture = new RenderTexture(windowSize.x, windowSize.y, TextureInternalFormat::RGB8, RenderTextureDepthStencilType::Depth16,
 		RenderTextureDepthStencilType::None);
 	renderTexture->create(false);
 
