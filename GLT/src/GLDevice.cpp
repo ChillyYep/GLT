@@ -10,7 +10,7 @@ std::vector<MeshResourceIdentifier> GLDevice::requestMeshResources(std::vector<M
 	glCreateVertexArrays(length, newMeshVaos.data());
 	glCreateBuffers(length, newMeshVbos.data());
 	glCreateBuffers(length, newMeshEbos.data());
-	for (int i = 0;i < length;++i)
+	for (int i = 0; i < length; ++i)
 	{
 		GLuint vao = newMeshVaos[i];
 		GLuint vbo = newMeshVbos[i];
@@ -71,7 +71,7 @@ void GLDevice::destroyMeshResources(std::vector<MeshResourceIdentifier>& meshIde
 	std::vector<GLuint> removedVaos = std::vector<GLuint>(removedCount);
 	std::vector<GLuint> removedVbos = std::vector<GLuint>(removedCount);
 	std::vector<GLuint> removedEbos = std::vector<GLuint>(removedCount);
-	for (size_t i = 0;i < removedCount;++i)
+	for (size_t i = 0; i < removedCount; ++i)
 	{
 		removedVaos[i] = meshIdentifiers[i].getVAO();
 		removedVbos[i] = meshIdentifiers[i].getVBO();
@@ -89,7 +89,7 @@ std::vector<TextureResourceIdentifier> GLDevice::requestTextureResources(std::ve
 	std::map<TextureType, std::vector<int>> textureMap;
 
 	// 纹理分类，方便批量创建纹理对象
-	for (int i = 0;i < newTextureCount;++i)
+	for (int i = 0; i < newTextureCount; ++i)
 	{
 		auto textureType = texturePtrs[i]->getTextureType();;
 		if (textureMap.find(textureType) == textureMap.end())
@@ -115,7 +115,7 @@ std::vector<TextureResourceIdentifier> GLDevice::requestTextureResources(std::ve
 		if (size > 0)
 		{
 			glCreateTextures(target, size, tempTextures.data());
-			for (int i = 0;i < size;++i)
+			for (int i = 0; i < size; ++i)
 			{
 				int index = textureIndices[i];
 				auto texturePtr = texturePtrs[index];
@@ -145,7 +145,7 @@ std::vector<TextureResourceIdentifier> GLDevice::requestTextureResources(std::ve
 	}
 
 	// 分配存储空间
-	for (int i = 0;i < newTextureCount;++i)
+	for (int i = 0; i < newTextureCount; ++i)
 	{
 		const auto& texturePtr = texturePtrs[i];
 		auto& resourceIdentifier = textureResourceIdentifiers[i];
@@ -189,7 +189,7 @@ void GLDevice::destroyTextureResources(std::vector<TextureResourceIdentifier>& t
 {
 	size_t length = textureIdentifiers.size();
 	std::vector<GLuint> removedTextures = std::vector<GLuint>(length);
-	for (size_t i = 0;i < length;++i)
+	for (size_t i = 0; i < length; ++i)
 	{
 		removedTextures[i] = textureIdentifiers[i].m_texture;
 	}
@@ -200,7 +200,7 @@ std::vector<SamplerResouceIdentifier> GLDevice::requestSamplerResources(std::vec
 {
 	GLsizei newSamplerCount = (GLsizei)samplerPtrs.size();
 	std::vector<SamplerResouceIdentifier> samplerResourceIdentifiers = std::vector<SamplerResouceIdentifier>(newSamplerCount);
-	for (int i = 0;i < newSamplerCount;++i)
+	for (int i = 0; i < newSamplerCount; ++i)
 	{
 		SamplerResouceIdentifier samplerResourceIdentifier;
 		// Sampler -> SamplerResourceIdentifier 参数设置
@@ -211,7 +211,7 @@ std::vector<SamplerResouceIdentifier> GLDevice::requestSamplerResources(std::vec
 	// 创建纹理对象
 	std::vector<GLuint> samplers = std::vector<GLuint>(newSamplerCount);
 	glCreateSamplers(newSamplerCount, samplers.data());
-	for (size_t i = 0;i < newSamplerCount;++i)
+	for (size_t i = 0; i < newSamplerCount; ++i)
 	{
 		auto samplerResourceIdentifier = samplerResourceIdentifiers[i];
 		samplerResourceIdentifier.m_sampler = samplers[i];
@@ -224,7 +224,7 @@ void GLDevice::destroySamplerResources(std::vector<SamplerResouceIdentifier>& sa
 {
 	size_t length = samplerIdentifiers.size();
 	std::vector<GLuint> removedSamplers = std::vector<GLuint>(length);
-	for (size_t i = 0;i < length;++i)
+	for (size_t i = 0; i < length; ++i)
 	{
 		removedSamplers[i] = samplerIdentifiers[i].m_sampler;
 	}
@@ -236,7 +236,7 @@ std::vector<RenderTargetIdentifier> GLDevice::requestRenderTargetResource(std::v
 	GLsizei newRenderTextureCount = (GLsizei)renderTargetPtrs.size();
 	std::vector<RenderTargetIdentifier> renderTargetResources = std::vector<RenderTargetIdentifier>(newRenderTextureCount);
 
-	for (int i = 0;i < newRenderTextureCount;++i)
+	for (int i = 0; i < newRenderTextureCount; ++i)
 	{
 		RenderTargetIdentifier rtResourceIdentifier;
 		renderTargetResources[i] = rtResourceIdentifier;
@@ -245,18 +245,33 @@ std::vector<RenderTargetIdentifier> GLDevice::requestRenderTargetResource(std::v
 	// 创建RT对象
 	std::vector<GLuint> rts = std::vector<GLuint>(newRenderTextureCount);
 	glCreateFramebuffers(newRenderTextureCount, rts.data());
-	for (size_t i = 0;i < newRenderTextureCount;++i)
+	for (size_t i = 0; i < newRenderTextureCount; ++i)
 	{
 		auto rtIdentifier = renderTargetResources[i];
 		rtIdentifier.m_fbo = rts[i];
 	}
-	for (size_t i = 0;i < newRenderTextureCount;++i)
+	std::vector<RenderBuffer*> renderBuffers;
+	std::vector<Texture*> textures;
+	for (size_t i = 0; i < newRenderTextureCount; ++i)
 	{
 		auto rtPtr = renderTargetPtrs[i];
 		auto& rtIdentifier = renderTargetResources[i];
 		auto fbo = rtIdentifier.m_fbo;
-
+		auto attachments = rtPtr->GetAttachments();
+		for (const auto& attachment : attachments)
+		{
+			auto resourceType = attachment.GetResourceType();
+			if (resourceType == FBOAttachmentResourceType::RenderBuffer)
+			{
+				renderBuffers.push_back(attachment.GetRenderBuffer());
+			}
+			else if (resourceType == FBOAttachmentResourceType::Texture)
+			{
+				textures.push_back(attachment.GetTexture());
+			}
+		}
 		auto descriptor = rtPtr->GetRenderTargetDescriptor();
+		requestRenderBufferResources(std::vector<RenderBuffer*>() { &rtIdentifier.m_colorRenderBuffer, & rtIdentifier.m_colorRenderBuffer, & rtIdentifier.m_colorRenderBuffer });
 		auto& colorRenderBuffer = rtIdentifier.m_colorRenderBuffer;
 		auto& depthRenderBuffer = rtIdentifier.m_depthRenderBuffer;
 		auto& stencilRenderBuffer = rtIdentifier.m_stencilRenderBuffer;
@@ -296,7 +311,7 @@ void GLDevice::destroyRenderTargetResource(std::vector<RenderTargetIdentifier>& 
 {
 	size_t length = renderTargetIdentifiers.size();
 	std::vector<GLuint> removedRTs;
-	for (size_t i = 0;i < length;++i)
+	for (size_t i = 0; i < length; ++i)
 	{
 		removedRTs.push_back(renderTargetIdentifiers[i].m_fbo);
 
@@ -310,12 +325,44 @@ void GLDevice::destroyRenderTargetResource(std::vector<RenderTargetIdentifier>& 
 	glDeleteFramebuffers((GLsizei)removedRTs.size(), removedRTs.data());
 }
 
+std::vector<RenderBufferIdentifier> GLDevice::requestRenderBufferResources(std::vector<RenderBuffer*>& renderBufferPtrs)
+{
+	std::vector<GLuint> renderBufferIds = std::vector<GLuint>(renderBufferPtrs.size());
+	std::vector<RenderBufferIdentifier> identifiers = std::vector<RenderBufferIdentifier>(renderBufferPtrs.size());
+	// 创建RenderBuffer
+	glCreateRenderbuffers(renderBufferPtrs.size(), renderBufferIds.data());
+	for (int i = 0; i < renderBufferPtrs.size(); ++i)
+	{
+		RenderBufferIdentifier identifier;
+		if (renderBufferPtrs[i]->GetInternalFormat() != GL_NONE)
+		{
+			identifier.m_internalFormat = renderBufferPtrs[i]->GetInternalFormat();
+			identifier.m_width = renderBufferPtrs[i]->GetWidth();
+			identifier.m_height = renderBufferPtrs[i]->GetHeight();
+			// 分配RenderBuffer存储空间
+			glNamedRenderbufferStorage(renderBufferIds[i], identifier.m_internalFormat, identifier.m_width, identifier.m_height);
+		}
+		identifiers[i] = identifier;
+	}
+	return identifiers;
+}
+
+void GLDevice::destroyRenderBufferResources(std::vector<RenderBufferIdentifier>& renderBufferIdentifiers)
+{
+	std::vector<GLuint> renderBufferIds = std::vector<GLuint>(renderBufferIdentifiers.size());
+	for (int i = 0; i < renderBufferIdentifiers.size(); ++i)
+	{
+		renderBufferIds[i] = renderBufferIdentifiers[i].m_renderBuffer;
+	}
+	glDeleteRenderbuffers(renderBufferIds.size(), renderBufferIds.data());
+}
+
 void GLDevice::requestConstantBufferResources(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers)
 {
 	int size = (int)constantBufferIdentifiers.size();
 	std::vector<GLuint> ubos = std::vector<GLuint>(size);
 	glCreateBuffers(size, ubos.data());
-	for (int i = 0;i < size;++i)
+	for (int i = 0; i < size; ++i)
 	{
 		constantBufferIdentifiers[i].SetUbo(ubos[i]);
 		size_t bufferSize = constantBufferIdentifiers[i].getTotalBufferSize();
@@ -326,16 +373,18 @@ void GLDevice::requestConstantBufferResources(std::vector<ConstantBufferIdentifi
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 }
+
 void GLDevice::destroyConstantBufferResources(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers)
 {
 	int size = (int)constantBufferIdentifiers.size();
 	std::vector<GLuint> ubos = std::vector<GLuint>(size);
-	for (int i = 0;i < size;++i)
+	for (int i = 0; i < size; ++i)
 	{
 		ubos[i] = constantBufferIdentifiers[i].GetUbo();
 	}
 	glDeleteBuffers(size, ubos.data());
 }
+
 void GLDevice::activate(RenderTargetIdentifier* rtIdentifier)
 {
 	if (rtIdentifier == nullptr)
@@ -378,7 +427,7 @@ void GLDevice::bindBlockForProgram(Shader& shader)
 	std::vector<ShaderUniformBlockReference>& blockRefs = shader.getReferencedBlocks();
 	auto program = shader.getShaderProgram();
 	//glBindBufferBase(GL_UNIFORM_BUFFER, 0, globalBufferIdentifier.GetUbo());
-	for (int i = 0;i < blockRefs.size();++i)
+	for (int i = 0; i < blockRefs.size(); ++i)
 	{
 		auto blockIndex = blockRefs[i].m_blockIndex;
 		ShaderUniformBlockProperty* block;
@@ -448,7 +497,7 @@ void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, M
 		// uniform变量设置
 		auto& uniforms = shader->getShaderUniforms();
 		int texCount = 0;
-		for (int i = 0;i < uniforms.size();++i)
+		for (int i = 0; i < uniforms.size(); ++i)
 		{
 			auto matProperty = material->getProperty(uniforms[i].m_name);
 			if (matProperty != nullptr)
@@ -529,12 +578,12 @@ void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, M
 		// 全局缓冲，逐材质设置
 		auto& constantBufferSet = Shader::getShaderConstantBufferSet();
 		auto& blockRefs = shader->getReferencedBlocks();
-		for (int i = 0;i < blockRefs.size();++i)
+		for (int i = 0; i < blockRefs.size(); ++i)
 		{
 			auto& blockRef = blockRefs[i];
 			auto blockPtr = constantBufferSet.findBlock(blockRef.m_uniformBlockName);
 			auto uniformsInBlock = blockPtr->m_blockUniforms;
-			for (int j = 0;j < uniformsInBlock.size();++j)
+			for (int j = 0; j < uniformsInBlock.size(); ++j)
 			{
 				auto& uniform = uniformsInBlock[j];
 				auto matProperty = material->getProperty(uniform.m_uniformName);

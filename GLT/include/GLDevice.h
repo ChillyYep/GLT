@@ -203,6 +203,10 @@ public:
 
 	void destroyRenderTargetResource(std::vector<RenderTargetIdentifier>& renderTargetIdentifiers) override;
 
+	std::vector<RenderBufferIdentifier> requestRenderBufferResources(std::vector<RenderBuffer*>& renderBufferPtrs) override;
+
+	void destroyRenderBufferResources(std::vector<RenderBufferIdentifier>& renderBufferIdentifiers) override;
+
 	void requestConstantBufferResources(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers) override;
 
 	void destroyConstantBufferResources(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers) override;

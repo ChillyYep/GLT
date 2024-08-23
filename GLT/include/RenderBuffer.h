@@ -29,14 +29,17 @@ public:
 			glDeleteRenderbuffers(1, &m_renderBufferPtr);
 		}
 	}
-	inline GLuint getRenderBufferPtr()
+	inline GLTUInt32 getRenderBufferPtr()
 	{
 		return m_renderBufferPtr;
 	}
+	__GET_SET_PROPERTY__(InternalFormat,GLTUInt32, m_internalFormat)
+		__GET_SET_PROPERTY__(Width, int, m_width)
+		__GET_SET_PROPERTY__(Height, int, m_height)
 private:
 	int m_width;
 	int m_height;
-	GLenum m_internalFormat;
+	GLTUInt32 m_internalFormat;
 
-	GLuint m_renderBufferPtr;
+	GLTUInt32 m_renderBufferPtr;
 };

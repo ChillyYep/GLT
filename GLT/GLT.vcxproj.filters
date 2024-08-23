@@ -463,5 +463,8 @@
     <ClInclude Include="include\ShaderPreProcessCompilerBase.h">
       <Filter>头文件\RHI\Common\Compiler</Filter>
     </ClInclude>
+    <ClInclude Include="include\AttachmentEntityBase.h">
+      <Filter>头文件\RHI\ResourceManager\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

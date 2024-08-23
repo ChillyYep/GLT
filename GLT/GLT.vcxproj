@@ -180,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Allocator.h" />
+    <ClInclude Include="include\AttachmentEntityBase.h" />
     <ClInclude Include="include\BytesBuffer.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\CameraOperation.h" />

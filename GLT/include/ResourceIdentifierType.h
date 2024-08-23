@@ -4,7 +4,8 @@ enum class ResourceIdentifierType {
 	Mesh,
 	Texture,
 	Sampler,
-	RenderTarget
+	RenderBuffer,
+	RenderTarget,
 };
 template<typename T>
 struct resourceidentifier_traits

@@ -4,6 +4,16 @@
 #include <RenderBuffer.h>
 #include <ResourceIdentifierType.h>
 
+enum class FBOAttachmentType {
+	Color,
+	Depth,
+	Stencil,
+	DepthStencil
+};
+enum class FBOAttachmentResourceType {
+	Texture,
+	RenderBuffer
+};
 class ResourceIdentifier
 {
 public:
@@ -15,7 +25,9 @@ private:
 	GLTUInt32 m_instanceId;
 };
 
-ENUM_BINDING_CLASS(MeshResourceIdentifier, ResourceIdentifier, ResourceIdentifierType, ResourceIdentifierType::Mesh, resourceidentifier_traits)
+#define RESOUCEIDENTIFIER_CLASS(CLASSTYPE,CLASSTYPEENUM) ENUM_BINDING_CLASS(CLASSTYPE,ResourceIdentifier,ResourceIdentifierType,CLASSTYPEENUM,resourceidentifier_traits)
+
+RESOUCEIDENTIFIER_CLASS(MeshResourceIdentifier, ResourceIdentifierType::Mesh)
 {
 public:
 	MeshResourceIdentifier() :m_vao(0), m_vbo(0), m_ebo(0) {}
@@ -32,7 +44,7 @@ private:
 	GLTUInt32 m_ebo;
 };
 
-ENUM_BINDING_CLASS(TextureResourceIdentifier, ResourceIdentifier, ResourceIdentifierType, ResourceIdentifierType::Texture, resourceidentifier_traits)
+RESOUCEIDENTIFIER_CLASS(TextureResourceIdentifier, ResourceIdentifierType::Texture)
 {
 public:
 	TextureResourceIdentifier() :ResourceIdentifier(0) {}
@@ -68,19 +80,77 @@ public:
 private:
 };
 
-ENUM_BINDING_CLASS(SamplerResouceIdentifier, ResourceIdentifier, ResourceIdentifierType, ResourceIdentifierType::Sampler, resourceidentifier_traits)
+RESOUCEIDENTIFIER_CLASS(SamplerResouceIdentifier, ResourceIdentifierType::Sampler)
 {
 public:
 	GLTUInt32 m_sampler;
 private:
 };
 
-ENUM_BINDING_CLASS(RenderTargetIdentifier, ResourceIdentifier, ResourceIdentifierType, ResourceIdentifierType::RenderTarget, resourceidentifier_traits)
+RESOUCEIDENTIFIER_CLASS(RenderBufferIdentifier, ResourceIdentifierType::RenderBuffer)
+{
+public:
+	GLTUInt32 m_renderBuffer;
+	int m_width;
+	int m_height;
+	GLTUInt32 m_internalFormat;
+};
+
+class AttachmentEntityWrapper
+{
+public:
+	AttachmentEntityWrapper(RenderBufferIdentifier* identifier, FBOAttachmentType fboAttachmentType) {
+		SetRenderBufferIdentifier(identifier);
+		m_fboAttachmentType = fboAttachmentType;
+	}
+	AttachmentEntityWrapper(TextureResourceIdentifier* identifier, FBOAttachmentType fboAttachmentType) {
+		SetTextureIdentifier(identifier);
+		m_fboAttachmentType = fboAttachmentType;
+	}
+	void SetRenderBufferIdentifier(RenderBufferIdentifier* identifier)
+	{
+		m_resourceType = FBOAttachmentResourceType::RenderBuffer;
+		m_identifier = identifier;
+	}
+
+	void SetTextureIdentifier(TextureResourceIdentifier* identifier)
+	{
+		m_resourceType = FBOAttachmentResourceType::Texture;
+		m_identifier = identifier;
+	}
+
+	RenderBufferIdentifier* GetRenderBufferIdentifier() const
+	{
+		if (m_resourceType == FBOAttachmentResourceType::RenderBuffer)
+		{
+			return static_cast<RenderBufferIdentifier*>(m_identifier);
+		}
+		return nullptr;
+	}
+
+	TextureResourceIdentifier* GetTextureIdentifier() const
+	{
+		if (m_resourceType == FBOAttachmentResourceType::Texture)
+		{
+			return static_cast<TextureResourceIdentifier*>(m_identifier);
+		}
+		return nullptr;
+	}
+
+	FBOAttachmentResourceType GetResourceType() const
+	{
+		return m_resourceType;
+	}
+private:
+	FBOAttachmentResourceType m_resourceType;
+	FBOAttachmentType m_fboAttachmentType;
+	ResourceIdentifier* m_identifier;
+};
+
+RESOUCEIDENTIFIER_CLASS(RenderTargetIdentifier, ResourceIdentifierType::RenderTarget)
 {
 public:
 	GLTUInt32 m_fbo;
 
-	RenderBuffer m_colorRenderBuffer;
-	RenderBuffer m_depthRenderBuffer;
-	RenderBuffer m_stencilRenderBuffer;
+	std::vector<AttachmentEntityWrapper> m_attachments;
 };
