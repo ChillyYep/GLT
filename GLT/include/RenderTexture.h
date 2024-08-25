@@ -1,6 +1,5 @@
 #pragma once
 #include <Object.h>
-#include <Window.h>
 #include <iostream>
 #include <Texture.h>
 #include <RenderTarget.h>

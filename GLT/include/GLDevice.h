@@ -237,7 +237,7 @@ public:
 
 		if (identifier != nullptr)
 		{
-			GLuint ubo = identifier->GetUbo();
+			GLuint ubo = identifier->getUbo();
 			glNamedBufferSubData(ubo, 0, buffer->dataSize(), buffer->data());
 		}
 	}

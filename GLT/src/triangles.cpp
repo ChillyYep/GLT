@@ -6,16 +6,6 @@
 #include <gamemain.h>
 using namespace std;
 
-const GLuint Triangles = 0;
-const GLuint NumVAOs = 1;
-const GLuint ArrayBuffer = 0;
-const GLuint NumBuffers = 1;
-const GLuint vPosition = 0;
-
-GLuint VAOs[NumVAOs];
-GLuint Buffers[NumBuffers];
-
-const GLuint NumVertices = 6;
 RenderPipeline* pipeline;
 GameMain gameMain;
 
@@ -26,8 +16,8 @@ void CreateScene()
 	pipeline->init();
 	Graphics::reset(pipeline);
 	auto scene = shared_ptr<Scene>(new Scene());
-	scene->SetActived(true);
-	scene->SetMainScene(true);
+	scene->setActived(true);
+	scene->setMainScene(true);
 	SceneManager::getInstance()->addScene(scene);
 	// 材质
 	auto shader = shared_ptr<Shader>(new Shader("cube_tex"));
@@ -36,12 +26,12 @@ void CreateScene()
 	auto tex = shared_ptr<Texture2D>(new Texture2D());
 	// 需要引入一个从文件加载纹理的库
 	tex->load("Resources/wall.jpg");
-	tex->SetInternalFormat(TextureInternalFormat::RGB8);
-	tex->SetLevels(4);
-	tex->SetPerChannelSize(TexturePerChannelSize::UNSIGNED_BYTE);
-	tex->SetWrapModeS(TextureWrapMode::Repeat);
-	tex->SetWrapModeT(TextureWrapMode::Repeat);
-	tex->SetTextureFilter(TextureFilterMode::Linear_Mipmap_Linear);
+	tex->setInternalFormat(TextureInternalFormat::RGB8);
+	tex->setLevels(4);
+	tex->setPerChannelSize(TexturePerChannelSize::UNSIGNED_BYTE);
+	tex->setWrapModeS(TextureWrapMode::Repeat);
+	tex->setWrapModeT(TextureWrapMode::Repeat);
+	tex->setTextureFilter(TextureFilterMode::Linear_Mipmap_Linear);
 
 	mat->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(tex)));
 	// 网格
@@ -49,56 +39,56 @@ void CreateScene()
 
 	auto go1 = SceneUtility::CreateMeshGameObject(cubeMesh, mat);
 	auto cube1Transform = go1->getComponent<Transform>();
-	cube1Transform->SetPosition(glm::vec3(0.0f));
-	cube1Transform->SetScale(glm::vec3(1.0f));
-	cube1Transform->SetEularAngle(glm::vec3(0.0f));
+	cube1Transform->setPosition(glm::vec3(0.0f));
+	cube1Transform->setScale(glm::vec3(1.0f));
+	cube1Transform->setEularAngle(glm::vec3(0.0f));
 
 	auto go2 = SceneUtility::CreateMeshGameObject(cubeMesh, mat);
 	auto cube2Transform = go2->getComponent<Transform>();
-	cube2Transform->SetPosition(glm::vec3(3.0f, 0.0f, 0.0f));
-	cube2Transform->SetScale(glm::vec3(1.0f));
-	cube2Transform->SetEularAngle(glm::vec3(0.0f));
+	cube2Transform->setPosition(glm::vec3(3.0f, 0.0f, 0.0f));
+	cube2Transform->setScale(glm::vec3(1.0f));
+	cube2Transform->setEularAngle(glm::vec3(0.0f));
 
 	auto cameraGo = SceneUtility::CreateEmptyGameObject();
 	auto cameraTransform = cameraGo->getTransform();
-	cameraTransform->SetPosition(glm::vec3(10.0f, 2.0f, 10.0f));
-	cameraTransform->SetScale(glm::vec3(1.0f));
-	cameraTransform->SetEularAngle(glm::vec3(0.0f));
+	cameraTransform->setPosition(glm::vec3(10.0f, 2.0f, 10.0f));
+	cameraTransform->setScale(glm::vec3(1.0f));
+	cameraTransform->setEularAngle(glm::vec3(0.0f));
 
 	auto camera = cameraGo->addComponent<Camera>();
-	camera->SetViewPort(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-	camera->SetOrtho(false);
-	camera->SetAspect((GLfloat)screenSize.x / (GLfloat)screenSize.y);
-	camera->SetFOV(45.0f);
-	camera->SetNearFar(glm::vec2(1.0f, 1000.0f));
-	camera->SetHeight(4.0f);
-	camera->SetMainCameraFlag(true);
-	cameraTransform->LookAt(cube1Transform->GetPosition());
+	camera->setViewPort(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+	camera->setOrtho(false);
+	camera->setAspect((GLfloat)screenSize.x / (GLfloat)screenSize.y);
+	camera->setFOV(45.0f);
+	camera->setNearFar(glm::vec2(1.0f, 1000.0f));
+	camera->setHeight(4.0f);
+	camera->setMainCameraFlag(true);
+	cameraTransform->LookAt(cube1Transform->getPosition());
 	camera->setCameraController(shared_ptr<CameraController>(new CameraController()));
 
 	auto lightGo = SceneUtility::CreateEmptyGameObject();
 	auto lightGo2 = SceneUtility::CreateEmptyGameObject();
 
 	auto lightComp = lightGo->addComponent<Light>();
-	lightComp->SetLightType(LightType::DirectionalLight);
+	lightComp->setLightType(LightType::DirectionalLight);
 	auto lightComp2 = lightGo2->addComponent<Light>();
-	lightComp2->SetLightType(LightType::PointLight);
-	lightComp->SetColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	lightComp2->SetColor(glm::vec4(1.0f, 0.2f, 0.3f, 1.0f));
-	//lightComp2->SetAngle(90.0f);
+	lightComp2->setLightType(LightType::PointLight);
+	lightComp->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	lightComp2->setColor(glm::vec4(1.0f, 0.2f, 0.3f, 1.0f));
+	//lightComp2->setAngle(90.0f);
 
-	lightGo->getTransform()->SetPosition(glm::vec3(10.0f, 10.0f, 10.0f));
-	lightGo->getTransform()->SetEularAngle(glm::vec3(30.0f, 30.0f, 0.f));
+	lightGo->getTransform()->setPosition(glm::vec3(10.0f, 10.0f, 10.0f));
+	lightGo->getTransform()->setEularAngle(glm::vec3(30.0f, 30.0f, 0.f));
 
-	lightGo2->getTransform()->SetPosition(glm::vec3(-10.0f, -10.0f, -10.0f));
-	lightGo2->getTransform()->SetEularAngle(glm::vec3(30.0f, 30.0f, 0.f));
+	lightGo2->getTransform()->setPosition(glm::vec3(-10.0f, -10.0f, -10.0f));
+	lightGo2->getTransform()->setEularAngle(glm::vec3(30.0f, 30.0f, 0.f));
 
 	scene->addObject(go1);
 	scene->addObject(go2);
 	scene->addObject(cameraGo);
 	scene->addObject(lightGo);
 	scene->addObject(lightGo2);
-	Graphics::drawMeshNow(cubeMesh, mat, cube1Transform->GetMatrix() * glm::translate(glm::vec3(-3.0f, 0.0f, 0.0f)));
+	Graphics::drawMeshNow(cubeMesh, mat, cube1Transform->getMatrix() * glm::translate(glm::vec3(-3.0f, 0.0f, 0.0f)));
 }
 
 void DestroyScene()

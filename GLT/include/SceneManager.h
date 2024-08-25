@@ -8,7 +8,7 @@ public:
 	inline const std::shared_ptr<Scene> getMainScene() const {
 		for (int i = 0;i < m_allScenes.size();++i)
 		{
-			if (m_allScenes[i]->IsMainScene() && m_allScenes[i]->GetActived())
+			if (m_allScenes[i]->IsMainScene() && m_allScenes[i]->getActived())
 			{
 				return m_allScenes[i];
 			}
@@ -19,7 +19,7 @@ public:
 		std::vector<std::shared_ptr<Scene>> allScenes;
 		for (int i = 0;i < m_allScenes.size();++i)
 		{
-			if (!includeInactived && !m_allScenes[i]->GetActived())
+			if (!includeInactived && !m_allScenes[i]->getActived())
 			{
 				continue;
 			}

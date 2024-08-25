@@ -171,7 +171,7 @@ void GLSLCompiler::extractBlocks(GLuint program, GLint numBlocks, GLint maxBlock
 				{
 					constantBuffers.push_back(ConstantBufferIdentifier());
 					targetConstantBuffer = &constantBuffers[constantBuffers.size() - 1];
-					targetConstantBuffer->SetConstantBufferType(blockProperty.m_constantBufferType);
+					targetConstantBuffer->setConstantBufferType(blockProperty.m_constantBufferType);
 				}
 				targetConstantBuffer->addBlock(blockProperty);
 			}
@@ -359,7 +359,7 @@ ConstantBufferIdentifier* GLSLCompiler::getConstantBuffer(std::vector<ConstantBu
 {
 	for (int i = 0;i < constantBuffers.size();++i)
 	{
-		if (constantBuffers[i].GetConstantBufferType() == constantBufferType)
+		if (constantBuffers[i].getConstantBufferType() == constantBufferType)
 		{
 			return &constantBuffers[i];
 		}

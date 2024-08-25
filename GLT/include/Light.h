@@ -33,7 +33,7 @@ public:
 		LightProperties lightProperties;
 		lightProperties.isEnabled = m_enabled;
 		lightProperties.lightType = m_lightType;
-		lightProperties.position = getTransform()->GetPosition();
+		lightProperties.position = getTransform()->getPosition();
 		lightProperties.direction = getTransform()->Forward();
 		lightProperties.color = m_color;
 		lightProperties.spotCosCutoff = 0.0f;

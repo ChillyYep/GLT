@@ -10,7 +10,7 @@ void Graphics::drawMesh(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr
 	}
 	auto gameObject = SceneUtility::CreateMeshGameObject(mesh, material);
 	auto transform = gameObject->getComponent<Transform>();
-	transform->SetMatrix(modelMatrix);
+	transform->setMatrix(modelMatrix);
 	scenePtr->addObject(gameObject);
 }
 
@@ -25,11 +25,11 @@ void Graphics::drawMeshNow(const std::shared_ptr<Mesh>& mesh, const std::shared_
 	auto gameObject = SceneUtility::CreateMeshGameObject(mesh, material);
 	auto transform = gameObject->getComponent<Transform>();
 	auto renderer = gameObject->getComponent<Renderer>();
-	transform->SetMatrix(modelMatrix);
+	transform->setMatrix(modelMatrix);
 	scenePtr->addObject(gameObject);
 
-	componentStateMachine.Setup(renderer);
-	while (componentStateMachine.GetComponentLifeStyle() != ComponentLifeCycle::Running)
+	componentStateMachine.setup(renderer);
+	while (componentStateMachine.getComponentLifeStyle() != ComponentLifeCycle::Running)
 	{
 		componentStateMachine.Tick();
 	}

@@ -2,7 +2,7 @@
 
 void ConstantBufferSet::create(ConstantBufferIdentifier globalBufferIdentifier)
 {
-	auto shaderGlobalType = globalBufferIdentifier.GetConstantBufferType();
+	auto shaderGlobalType = globalBufferIdentifier.getConstantBufferType();
 	if (m_globalBufferIdentifiers.find(shaderGlobalType) != m_globalBufferIdentifiers.end())
 	{
 		return;

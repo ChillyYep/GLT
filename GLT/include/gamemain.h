@@ -15,7 +15,7 @@ public:
 			{
 				for (const auto& comp : obj->getComponents())
 				{
-					m_componentStateMachine.Setup(comp);
+					m_componentStateMachine.setup(comp);
 					m_componentStateMachine.Tick();
 				}
 			}

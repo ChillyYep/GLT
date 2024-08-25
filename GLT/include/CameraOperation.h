@@ -32,7 +32,7 @@ public:
 			m_beginRotatePos = mouseEvent.m_pos;
 			if (m_transform != nullptr)
 			{
-				m_beginRotation = m_transform->GetRotation();
+				m_beginRotation = m_transform->getRotation();
 			}
 		}
 		else if (mouseEvent.m_mouseType == MouseButtonType::MiddleButton)
@@ -40,7 +40,7 @@ public:
 			m_beginMovePos = mouseEvent.m_pos;
 			if (m_transform != nullptr)
 			{
-				m_beginCameraPos = m_transform->GetPosition();
+				m_beginCameraPos = m_transform->getPosition();
 			}
 		}
 	}
@@ -56,7 +56,7 @@ public:
 			if (m_transform != nullptr)
 			{
 				auto newRotation = Rotate(m_beginRotation, -offset.y, -offset.x);
-				m_transform->SetRotation(newRotation);
+				m_transform->setRotation(newRotation);
 			}
 		}
 		else if (mouseEvent.m_mouseType == MouseButtonType::MiddleButton)
@@ -66,7 +66,7 @@ public:
 				auto right = m_transform->Right();
 				auto up = m_transform->Up();
 				auto offset = (mouseEvent.m_pos - m_beginMovePos) * m_translateSensitivity;
-				m_transform->SetPosition(m_beginCameraPos + right * -offset.x + up * offset.y);
+				m_transform->setPosition(m_beginCameraPos + right * -offset.x + up * offset.y);
 			}
 		}
 	}
@@ -83,7 +83,7 @@ public:
 			if (m_transform != nullptr)
 			{
 				auto newRotation = Rotate(m_beginRotation, -offset.y, -offset.x);
-				m_transform->SetRotation(newRotation);
+				m_transform->setRotation(newRotation);
 			}
 			m_beginRotatePos = glm::vec2(0.0f);
 			m_beginRotation = glm::identity<glm::quat>();
@@ -95,7 +95,7 @@ public:
 				auto right = m_transform->Right();
 				auto up = m_transform->Up();
 				auto offset = (mouseEvent.m_pos - m_beginMovePos) * m_translateSensitivity;
-				m_transform->SetPosition(m_beginCameraPos + right * -offset.x + up * offset.y);
+				m_transform->setPosition(m_beginCameraPos + right * -offset.x + up * offset.y);
 			}
 			m_beginMovePos = glm::vec2(0.0f);
 			m_beginCameraPos = glm::vec3(0.0f);

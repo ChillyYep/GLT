@@ -18,8 +18,8 @@ public:
 	{
 		auto gameObject = CreateEmptyGameObject();
 		auto renderer = gameObject->addComponent<Renderer>();
-		renderer->SetMesh(mesh);
-		renderer->SetMaterial(material);
+		renderer->setMesh(mesh);
+		renderer->setMaterial(material);
 		return gameObject;
 	}
 private:

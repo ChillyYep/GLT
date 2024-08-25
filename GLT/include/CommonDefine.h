@@ -24,17 +24,17 @@ class CLASSTYPE :public BASECLASSTYPE	\
 
 
 #define __GET_SET_PROPERTY__(PROPERTYNAME,PROPERTYTYPE,VARIABLE) \
-inline void Set##PROPERTYNAME(PROPERTYTYPE params) \
+inline void set##PROPERTYNAME(PROPERTYTYPE params) \
 { \
 	VARIABLE = params; \
 } \
-inline PROPERTYTYPE Get##PROPERTYNAME() const \
+inline PROPERTYTYPE get##PROPERTYNAME() const \
 { \
 	return VARIABLE; \
 } 
 
 #define __GET_SET_BOOLEANPROPERTY__(PROPERTYNAME,VARIABLE) \
-inline void Set##PROPERTYNAME(bool params) \
+inline void set##PROPERTYNAME(bool params) \
 { \
 	VARIABLE = params; \
 } \
@@ -44,8 +44,8 @@ inline bool Is##PROPERTYNAME() const \
 } 
 
 #define __GET_SET_ARRAYPROPERTY__(PROPERTYNAME,PROPERTYTYPE,VARIABLE) \
-inline void Set##PROPERTYNAME(PROPERTYTYPE params[]) { VARIABLE = params; } \
-inline PROPERTYTYPE* Get##PROPERTYNAME() { return VARIABLE; } \
+inline void set##PROPERTYNAME(PROPERTYTYPE params[]) { VARIABLE = params; } \
+inline PROPERTYTYPE* get##PROPERTYNAME() { return VARIABLE; } \
 \
 
 #define BUFFER_OFFSET(offset) ((void*)(offset))

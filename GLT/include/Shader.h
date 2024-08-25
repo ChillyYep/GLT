@@ -21,7 +21,7 @@ public:
 
 	static inline void init(std::unordered_map<std::string, ShaderProgramInfo>& allPrograms, std::vector<ConstantBufferIdentifier>& constantBuffers)
 	{
-		m_allPrograms = allPrograms;
+		m_programs = allPrograms;
 		for (int i = 0;i < constantBuffers.size();++i)
 		{
 			m_globalBuffer.create(constantBuffers[i]);
@@ -75,7 +75,7 @@ private:
 	}
 	ShaderProgramInfo m_shaderInfo;
 
-	static std::unordered_map<std::string, ShaderProgramInfo> m_allPrograms;
+	static std::unordered_map<std::string, ShaderProgramInfo> m_programs;
 
 	static ConstantBufferSet m_globalBuffer;
 };

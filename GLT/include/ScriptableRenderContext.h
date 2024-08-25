@@ -15,7 +15,7 @@ public:
 	void init()
 	{
 		m_device = new GLDevice();
-		RenderResourceManager::getInstance()->SetDevice(m_device);
+		RenderResourceManager::getInstance()->setDevice(m_device);
 	}
 
 	void uninit()

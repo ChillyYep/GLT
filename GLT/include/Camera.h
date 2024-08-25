@@ -19,7 +19,7 @@ public:
 
 	inline void lookAt(std::shared_ptr<Transform> target)
 	{
-		getTransform()->LookAt(target->GetPosition());
+		getTransform()->LookAt(target->getPosition());
 	}
 
 	inline glm::mat4x4 getViewMatrix() { recomputeViewMatrix(); return m_viewMatrix; }

@@ -11,12 +11,12 @@ public:
 
 	ComponentType getComponentType() override { return ComponentType::Transform; }
 
-	inline glm::mat4x4 GetMatrix() {
+	inline glm::mat4x4 getMatrix() {
 		auto mat = glm::scale(glm::identity<glm::mat4x4>(), m_scale);
 		mat = glm::mat4_cast(m_rotation) * mat;
 		return glm::translate(mat, m_position);
 	}
-	inline void SetMatrix(glm::mat4x4 modelMatrix)
+	inline void setMatrix(glm::mat4x4 modelMatrix)
 	{
 		glm::vec4 perspective;
 		glm::vec3 skew;
@@ -63,9 +63,9 @@ public:
 		up = quat * up;
 		return up;
 	}
-	inline glm::vec3 GetEularAngle() { return glm::degrees(glm::eulerAngles(m_rotation)); }
+	inline glm::vec3 getEularAngle() { return glm::degrees(glm::eulerAngles(m_rotation)); }
 
-	inline void SetEularAngle(glm::vec3 eularAngle) {
+	inline void setEularAngle(glm::vec3 eularAngle) {
 		eularAngle = glm::radians(eularAngle);
 		m_rotation = glm::quat_cast(glm::eulerAngleXYZ(eularAngle.x, eularAngle.y, eularAngle.z));
 	}

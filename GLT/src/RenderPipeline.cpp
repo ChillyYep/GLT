@@ -34,7 +34,7 @@ void RenderPipeline::render() {
 		}
 		updatePerCameraConstantBuffer(mainCamera);
 
-		auto viewPort = mainCamera->GetViewPort();
+		auto viewPort = mainCamera->getViewPort();
 		auto windowSize = Window::getInstance()->getSize();
 		auto viewPortRect = glm::ivec4(viewPort.x * windowSize.x, viewPort.y * windowSize.y, viewPort.z * windowSize.x, viewPort.w * windowSize.y);
 		m_cmd.setViewport(viewPortRect.x, viewPortRect.y, viewPortRect.z, viewPortRect.w);
@@ -96,7 +96,7 @@ void RenderPipeline::updateLightProperties(std::shared_ptr<Camera>& camera)
 		Shader::setGlobalVector(ShaderPropertyNames::getShaderArrayPropertyName(ShaderPropertyNames::AddtionalLightData, ShaderPropertyNames::AddtionalLightData_Attenuations, i).c_str(), glm::vec4(0.5f, 1.0f, 1.0f, 1.0f));
 		/*ss.str("");
 		ss << ShaderPropertyNames::AddtionalLightData_Format << "[" << i << "]." << ShaderPropertyNames::AddtionalLightData_SpotCosCutOff_Format;
-		Shader::SetGlobalFloat(ss.str().c_str(), lightProperties.spotCosCutoff);*/
+		Shader::setGlobalFloat(ss.str().c_str(), lightProperties.spotCosCutoff);*/
 	}
 }
 
@@ -111,25 +111,25 @@ void RenderPipeline::updatePerCameraConstantBuffer(std::shared_ptr<Camera>& came
 	updateLightProperties(camera);
 	Shader::setGlobalMatrix(ShaderPropertyNames::ViewMatrix, camera->getViewMatrix());
 	Shader::setGlobalMatrix(ShaderPropertyNames::ProjectMatrix, camera->getProjectMatrix());
-	auto eyePosition = camera->getTransform()->GetPosition();
+	auto eyePosition = camera->getTransform()->getPosition();
 	Shader::setGlobalVector(ShaderPropertyNames::EyePosition, glm::vec4(eyePosition.x, eyePosition.y, eyePosition.z, 1.0f));
 	RenderResourceManager::getInstance()->uploadConstantBufferResource(ConstantBufferType::PerCamera);
 }
 
 void RenderPipeline::renderPerObject(Renderer& renderObject, std::shared_ptr<Camera>& camera)
 {
-	auto mesh = renderObject.GetMesh();
+	auto mesh = renderObject.getMesh();
 	if (mesh == nullptr)
 	{
 		return;
 	}
-	auto go = renderObject.GetGameObject();
+	auto go = renderObject.getGameObject();
 	if (go == nullptr)
 	{
 		return;
 	}
 
-	drawMesh(renderObject.GetMesh().get(), renderObject.GetMaterial().get(), renderObject.GetGameObject()->getTransform()->GetMatrix());
+	drawMesh(renderObject.getMesh().get(), renderObject.getMaterial().get(), renderObject.getGameObject()->getTransform()->getMatrix());
 }
 
 void RenderPipeline::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix)

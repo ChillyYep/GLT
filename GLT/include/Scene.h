@@ -37,7 +37,7 @@ public:
 		for (const auto& go : m_gos)
 		{
 			auto camera = go->getComponent<Camera>();
-			if (camera == nullptr || !camera->GetMainCameraFlag())
+			if (camera == nullptr || !camera->getMainCameraFlag())
 			{
 				continue;
 			}

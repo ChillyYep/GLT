@@ -32,7 +32,7 @@ std::vector<MeshResourceIdentifier> GLDevice::requestMeshResources(std::vector<M
 			glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL);
 			glEnableVertexAttribArray(0);
 			/*glBufferData(GL_ARRAY_BUFFER, verticesMemorySize + colorsMemorySize, NULL, GL_STATIC_DRAW);
-			glBufferSubData(GL_ARRAY_BUFFER, 0, verticesMemorySize, mesh->GetVertices());*/
+			glBufferSubData(GL_ARRAY_BUFFER, 0, verticesMemorySize, mesh->getVertices());*/
 			glNamedBufferStorage(vbo, verticesMemorySize + colorsMemorySize + uvsMemorySize + normalsMemorySize, NULL, GL_DYNAMIC_STORAGE_BIT);
 			glNamedBufferSubData(vbo, 0, verticesMemorySize, mesh->getVertices());
 			if (colorsMemorySize > 0)
@@ -41,7 +41,7 @@ std::vector<MeshResourceIdentifier> GLDevice::requestMeshResources(std::vector<M
 				glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)offset);
 				glEnableVertexAttribArray(1);
 				glNamedBufferSubData(vbo, offset, colorsMemorySize, mesh->getColors());
-				//glBufferSubData(GL_ARRAY_BUFFER, verticesMemorySize, colorsMemorySize, mesh->GetColors());
+				//glBufferSubData(GL_ARRAY_BUFFER, verticesMemorySize, colorsMemorySize, mesh->getColors());
 			}
 			if (uvsMemorySize > 0)
 			{
@@ -120,23 +120,23 @@ std::vector<TextureResourceIdentifier> GLDevice::requestTextureResources(std::ve
 				int index = textureIndices[i];
 				auto texturePtr = texturePtrs[index];
 				auto identifier = TextureResourceIdentifier(texturePtr->getInstanceId());
-				identifier.m_levels = texturePtr->GetLevels();
-				identifier.m_internalFormat = texturePtr->GetInternalFormat();
+				identifier.m_levels = texturePtr->getLevels();
+				identifier.m_internalFormat = texturePtr->getInternalFormat();
 				identifier.m_textureType = textureType;
-				identifier.m_width = texturePtr->GetWidth();
+				identifier.m_width = texturePtr->getWidth();
 				if (textureType == TextureType::Texture2D)
 				{
 					auto texture2DPtr = static_cast<Texture2D*>(texturePtr);
-					identifier.m_height = texture2DPtr->GetHeight();
+					identifier.m_height = texture2DPtr->getHeight();
 				}
 				else if (textureType == TextureType::Texture3D)
 				{
 					auto texture3DPtr = static_cast<Texture3D*>(texturePtr);
-					identifier.m_height = texture3DPtr->GetHeight();
-					identifier.m_depth = texture3DPtr->GetDepth();
+					identifier.m_height = texture3DPtr->getHeight();
+					identifier.m_depth = texture3DPtr->getDepth();
 				}
-				identifier.m_perChannelSize = texturePtr->GetPerChannelSize();
-				identifier.m_externalFormat = texturePtr->GetExternalFormat();
+				identifier.m_perChannelSize = texturePtr->getPerChannelSize();
+				identifier.m_externalFormat = texturePtr->getExternalFormat();
 
 				identifier.m_texture = tempTextures[i];
 				textureResourceIdentifiers[index] = identifier;
@@ -162,11 +162,11 @@ std::vector<TextureResourceIdentifier> GLDevice::requestTextureResources(std::ve
 			auto texture2DPtr = static_cast<Texture2D*>(texturePtr);
 			glBindTextureUnit(0, resourceIdentifier.m_texture);
 
-			setTextureWrapMode(resourceIdentifier.m_texture, GL_TEXTURE_WRAP_S, texture2DPtr->GetWrapModeS());
-			setTextureWrapMode(resourceIdentifier.m_texture, GL_TEXTURE_WRAP_T, texture2DPtr->GetWrapModeT());
+			setTextureWrapMode(resourceIdentifier.m_texture, GL_TEXTURE_WRAP_S, texture2DPtr->getWrapModeS());
+			setTextureWrapMode(resourceIdentifier.m_texture, GL_TEXTURE_WRAP_T, texture2DPtr->getWrapModeT());
 
-			setTextureFilter(resourceIdentifier.m_texture, GL_TEXTURE_MIN_FILTER, texture2DPtr->GetTextureFilter());
-			setTextureFilter(resourceIdentifier.m_texture, GL_TEXTURE_MAG_FILTER, texture2DPtr->GetTextureFilter());
+			setTextureFilter(resourceIdentifier.m_texture, GL_TEXTURE_MIN_FILTER, texture2DPtr->getTextureFilter());
+			setTextureFilter(resourceIdentifier.m_texture, GL_TEXTURE_MAG_FILTER, texture2DPtr->getTextureFilter());
 
 			glTextureStorage2D(resourceIdentifier.m_texture, resourceIdentifier.m_levels, internalFormat, resourceIdentifier.m_width, resourceIdentifier.m_height);
 			glTextureSubImage2D(resourceIdentifier.m_texture, 0, 0, 0, resourceIdentifier.m_width,
@@ -251,7 +251,7 @@ std::vector<RenderTargetIdentifier> GLDevice::requestRenderTargetResource(std::v
 		auto fbo = rts[i];
 		rtIdentifier.m_fbo = fbo;
 		auto attachmentIdentifiers = rtsAttachmentIdentifiers[i];
-		auto descriptor = rtPtr->GetRenderTargetDescriptor();
+		auto descriptor = rtPtr->getRenderTargetDescriptor();
 
 		rtIdentifier.m_attachmentIdentifiers = attachmentIdentifiers;
 
@@ -388,7 +388,7 @@ void GLDevice::requestConstantBufferResources(std::vector<ConstantBufferIdentifi
 	glCreateBuffers(size, ubos.data());
 	for (int i = 0; i < size; ++i)
 	{
-		constantBufferIdentifiers[i].SetUbo(ubos[i]);
+		constantBufferIdentifiers[i].setUbo(ubos[i]);
 		size_t bufferSize = constantBufferIdentifiers[i].getTotalBufferSize();
 		// ·ÖÅä´æ´¢¿Õ¼ä
 		glBindBuffer(GL_UNIFORM_BUFFER, ubos[i]);
@@ -404,7 +404,7 @@ void GLDevice::destroyConstantBufferResources(std::vector<ConstantBufferIdentifi
 	std::vector<GLuint> ubos = std::vector<GLuint>(size);
 	for (int i = 0; i < size; ++i)
 	{
-		ubos[i] = constantBufferIdentifiers[i].GetUbo();
+		ubos[i] = constantBufferIdentifiers[i].getUbo();
 	}
 	glDeleteBuffers(size, ubos.data());
 }
@@ -450,7 +450,7 @@ void GLDevice::bindBlockForProgram(Shader& shader)
 	ConstantBufferSet& globalBuffer = Shader::getShaderConstantBufferSet();
 	std::vector<ShaderUniformBlockReference>& blockRefs = shader.getReferencedBlocks();
 	auto program = shader.getShaderProgram();
-	//glBindBufferBase(GL_UNIFORM_BUFFER, 0, globalBufferIdentifier.GetUbo());
+	//glBindBufferBase(GL_UNIFORM_BUFFER, 0, globalBufferIdentifier.getUbo());
 	for (int i = 0; i < blockRefs.size(); ++i)
 	{
 		auto blockIndex = blockRefs[i].m_blockIndex;
@@ -459,7 +459,7 @@ void GLDevice::bindBlockForProgram(Shader& shader)
 		ConstantBufferIdentifier* globalBufferIdentifier = globalBuffer.getGlobalBufferIdentifierByBlockName(blockRefs[i].m_uniformBlockName);
 		if (globalBufferIdentifier->findBlock(blockRefs[i].m_uniformBlockName, block))
 		{
-			glBindBufferRange(GL_UNIFORM_BUFFER, block->m_blockBindingNum, globalBufferIdentifier->GetUbo(), block->m_blockOffset, block->m_preDefineSize);
+			glBindBufferRange(GL_UNIFORM_BUFFER, block->m_blockBindingNum, globalBufferIdentifier->getUbo(), block->m_blockOffset, block->m_preDefineSize);
 			glUniformBlockBinding(program, blockIndex, block->m_blockBindingNum);
 		}
 	}
@@ -511,7 +511,7 @@ void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, M
 
 	glBindBuffer(GL_ARRAY_BUFFER, meshResourceIdentifier->getVBO());
 
-	auto shader = material->GetShader();
+	auto shader = material->getShader();
 	GLuint program = shader->getShaderProgram();
 
 	if (program > 0 && glIsProgram(program))
@@ -533,7 +533,7 @@ void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, M
 					auto boolParam = static_cast<MaterialBoolProperty*>(matProperty.get());
 					if (boolParam != nullptr)
 					{
-						glUniform1i(uniforms[i].m_location, boolParam->GetValue() ? 1 : 0);
+						glUniform1i(uniforms[i].m_location, boolParam->getValue() ? 1 : 0);
 					}
 					break;
 				}
@@ -542,7 +542,7 @@ void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, M
 					auto intParam = static_cast<MaterialIntProperty*>(matProperty.get());
 					if (intParam != nullptr)
 					{
-						glUniform1i(uniforms[i].m_location, intParam->GetValue());
+						glUniform1i(uniforms[i].m_location, intParam->getValue());
 					}
 					break;
 				}
@@ -551,7 +551,7 @@ void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, M
 					auto floatParam = static_cast<MaterialFloatProperty*>(matProperty.get());
 					if (floatParam != nullptr)
 					{
-						glUniform1f(uniforms[i].m_location, floatParam->GetValue());
+						glUniform1f(uniforms[i].m_location, floatParam->getValue());
 					}
 					break;
 				}
@@ -560,7 +560,7 @@ void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, M
 					auto vec4Param = static_cast<MaterialVector4Property*>(matProperty.get());
 					if (vec4Param != nullptr)
 					{
-						auto vec4 = vec4Param->GetValue();
+						auto vec4 = vec4Param->getValue();
 						glUniform4f(uniforms[i].m_location, vec4.x, vec4.y, vec4.z, vec4.w);
 					}
 					break;
@@ -570,7 +570,7 @@ void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, M
 					auto mat4Param = static_cast<MaterialMatrix4Property*>(matProperty.get());
 					if (mat4Param != nullptr)
 					{
-						auto mat4 = mat4Param->GetValue();
+						auto mat4 = mat4Param->getValue();
 						glUniformMatrix4fv(uniforms[i].m_location, 1, false, glm::value_ptr(mat4));
 					}
 					break;
@@ -580,7 +580,7 @@ void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, M
 					auto textureParam = static_cast<MaterialTextureProperty*>(matProperty.get());
 					if (textureParam != nullptr)
 					{
-						auto texture = textureParam->GetTexture();
+						auto texture = textureParam->getTexture();
 						auto textureIdentifierIter = textureResources.find(texture->getInstanceId());
 						if (textureIdentifierIter != textureResources.end())
 						{
@@ -619,7 +619,7 @@ void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, M
 					auto boolParam = static_cast<MaterialBoolProperty*>(matProperty.get());
 					if (boolParam != nullptr)
 					{
-						Shader::setGlobalBool(uniform.m_uniformName.c_str(), boolParam->GetValue());
+						Shader::setGlobalBool(uniform.m_uniformName.c_str(), boolParam->getValue());
 					}
 					break;
 				}
@@ -628,7 +628,7 @@ void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, M
 					auto intParam = static_cast<MaterialIntProperty*>(matProperty.get());
 					if (intParam != nullptr)
 					{
-						Shader::setGlobalInt(uniform.m_uniformName.c_str(), intParam->GetValue());
+						Shader::setGlobalInt(uniform.m_uniformName.c_str(), intParam->getValue());
 					}
 					break;
 				}
@@ -637,7 +637,7 @@ void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, M
 					auto floatParam = static_cast<MaterialFloatProperty*>(matProperty.get());
 					if (floatParam != nullptr)
 					{
-						Shader::setGlobalFloat(uniform.m_uniformName.c_str(), floatParam->GetValue());
+						Shader::setGlobalFloat(uniform.m_uniformName.c_str(), floatParam->getValue());
 					}
 					break;
 				}
@@ -646,7 +646,7 @@ void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, M
 					auto vec4Param = static_cast<MaterialVector4Property*>(matProperty.get());
 					if (vec4Param != nullptr)
 					{
-						Shader::setGlobalVector(uniform.m_uniformName.c_str(), vec4Param->GetValue());
+						Shader::setGlobalVector(uniform.m_uniformName.c_str(), vec4Param->getValue());
 					}
 					break;
 				}
@@ -655,7 +655,7 @@ void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, M
 					auto mat4Param = static_cast<MaterialMatrix4Property*>(matProperty.get());
 					if (mat4Param != nullptr)
 					{
-						Shader::setGlobalMatrix(uniform.m_uniformName.c_str(), mat4Param->GetValue());
+						Shader::setGlobalMatrix(uniform.m_uniformName.c_str(), mat4Param->getValue());
 					}
 					break;
 				}

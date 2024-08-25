@@ -117,7 +117,7 @@ public:
 
 	inline std::unordered_map<GLuint, RenderTargetIdentifier>& getRenderTargetResources() { return m_renderTargetResources; }
 
-	inline void SetDevice(DeviceBase* device)
+	inline void setDevice(DeviceBase* device)
 	{
 		m_device = device;
 	}

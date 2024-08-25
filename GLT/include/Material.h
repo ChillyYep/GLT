@@ -119,7 +119,7 @@ public:
 		{
 			if (propertyPair.second->getMaterialPropertyType() == MaterialPropertyType::Texture)
 			{
-				textures.push_back(((MaterialTextureProperty*)propertyPair.second.get())->GetTexture());
+				textures.push_back(((MaterialTextureProperty*)propertyPair.second.get())->getTexture());
 			}
 		}
 		return textures;

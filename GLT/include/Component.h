@@ -35,7 +35,7 @@ public:
 	virtual ComponentType getComponentType() = 0;
 
 	inline bool IsDead() { return m_isDead; }
-	inline GameObject* GetGameObject() { return m_gameObjectPtr; }
+	inline GameObject* getGameObject() { return m_gameObjectPtr; }
 	__GET_SET_PROPERTY__(Enable, bool, m_enabled)
 protected:
 	virtual void OnAwake() {}
@@ -85,12 +85,12 @@ public:
 		}
 	}
 
-	void Setup(std::shared_ptr<Component> component)
+	void setup(std::shared_ptr<Component> component)
 	{
 		m_target = component;
 	}
 
-	inline ComponentLifeCycle GetComponentLifeStyle() { return m_target->m_state; }
+	inline ComponentLifeCycle getComponentLifeStyle() { return m_target->m_state; }
 private:
 	void PreAwake()
 	{

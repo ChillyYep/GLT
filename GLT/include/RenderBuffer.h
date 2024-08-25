@@ -1,6 +1,5 @@
 #pragma once
 #include <CommonDefine.h>
-#include <GLCommon.h>
 #include <Object.h>
 #include <TextureEnums.h>
 
