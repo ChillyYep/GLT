@@ -1,45 +1,41 @@
 #pragma once
 #include <CommonDefine.h>
 #include <GLCommon.h>
+#include <Object.h>
+#include <TextureEnums.h>
 
-class RenderBuffer
+class RenderBuffer :public Object
 {
 public:
-	RenderBuffer() {}
-	~RenderBuffer() {}
-	void create(int width, int height, GLenum internalFormat)
+	RenderBuffer(int width, int height, bool isDepthBuffer)
 	{
-		assert(!glIsRenderbuffer(m_renderBufferPtr));
+		reset(width, height, isDepthBuffer);
+	}
+	RenderBuffer() :RenderBuffer(0, 0, false) {}
+	~RenderBuffer() {}
+
+	void reset(int width, int height, bool isDepthBuffer)
+	{
 		m_width = width;
 		m_height = height;
-		m_internalFormat = internalFormat;
-		if (m_internalFormat != GL_NONE)
-		{
-			// 创建RenderBuffer
-			glCreateRenderbuffers(1, &m_renderBufferPtr);
-			// 分配RenderBuffer存储空间
-			glNamedRenderbufferStorage(m_renderBufferPtr, m_internalFormat, m_width, m_height);
-		}
+		m_isDepthBuffer = isDepthBuffer;
+		m_colorInternalFormat = TextureInternalFormat::None;
+		m_depthStencilType = RenderTextureDepthStencilType::None;
 	}
 
-	void release()
-	{
-		if (glIsRenderbuffer(m_renderBufferPtr))
-		{
-			glDeleteRenderbuffers(1, &m_renderBufferPtr);
-		}
-	}
-	inline GLTUInt32 getRenderBufferPtr()
-	{
-		return m_renderBufferPtr;
-	}
-	__GET_SET_PROPERTY__(InternalFormat,GLTUInt32, m_internalFormat)
-		__GET_SET_PROPERTY__(Width, int, m_width)
-		__GET_SET_PROPERTY__(Height, int, m_height)
+	int getWidth() const { return m_width; }
+	int getHeight() const { return m_height; }
+
+	TextureInternalFormat getColorInternalFormat() { return m_colorInternalFormat; }
+	void setColorInternalFormat(TextureInternalFormat colorInternalFormat) { m_colorInternalFormat = colorInternalFormat; }
+	RenderTextureDepthStencilType getDepthStencilType() { return m_depthStencilType; }
+	void setDepthStencilType(RenderTextureDepthStencilType depthStencilType) { m_depthStencilType = depthStencilType; }
+
+	bool IsDepthBuffer() { return m_isDepthBuffer; }
 private:
 	int m_width;
 	int m_height;
-	GLTUInt32 m_internalFormat;
-
-	GLTUInt32 m_renderBufferPtr;
+	bool m_isDepthBuffer;
+	TextureInternalFormat m_colorInternalFormat;
+	RenderTextureDepthStencilType m_depthStencilType;
 };

@@ -119,7 +119,7 @@ std::vector<TextureResourceIdentifier> GLDevice::requestTextureResources(std::ve
 			{
 				int index = textureIndices[i];
 				auto texturePtr = texturePtrs[index];
-				auto identifier = TextureResourceIdentifier();
+				auto identifier = TextureResourceIdentifier(texturePtr->getInstanceId());
 				identifier.m_levels = texturePtr->GetLevels();
 				identifier.m_internalFormat = texturePtr->GetInternalFormat();
 				identifier.m_textureType = textureType;
@@ -202,7 +202,7 @@ std::vector<SamplerResouceIdentifier> GLDevice::requestSamplerResources(std::vec
 	std::vector<SamplerResouceIdentifier> samplerResourceIdentifiers = std::vector<SamplerResouceIdentifier>(newSamplerCount);
 	for (int i = 0; i < newSamplerCount; ++i)
 	{
-		SamplerResouceIdentifier samplerResourceIdentifier;
+		SamplerResouceIdentifier samplerResourceIdentifier(samplerPtrs[i]->getInstanceId());
 		// Sampler -> SamplerResourceIdentifier 参数设置
 
 		samplerResourceIdentifiers[i] = samplerResourceIdentifier;
@@ -231,15 +231,13 @@ void GLDevice::destroySamplerResources(std::vector<SamplerResouceIdentifier>& sa
 	glDeleteSamplers((GLsizei)removedSamplers.size(), removedSamplers.data());
 }
 
-std::vector<RenderTargetIdentifier> GLDevice::requestRenderTargetResource(std::vector<RenderTarget*>& renderTargetPtrs)
+std::vector<RenderTargetIdentifier> GLDevice::requestRenderTargetResource(std::vector<RenderTarget*>& renderTargetPtrs, std::vector<std::vector<AttachmentEntityIdentifierWrapper>>& rtsAttachmentIdentifiers)
 {
 	GLsizei newRenderTextureCount = (GLsizei)renderTargetPtrs.size();
 	std::vector<RenderTargetIdentifier> renderTargetResources = std::vector<RenderTargetIdentifier>(newRenderTextureCount);
-
-	for (int i = 0; i < newRenderTextureCount; ++i)
+	if (renderTargetPtrs.size() != rtsAttachmentIdentifiers.size())
 	{
-		RenderTargetIdentifier rtResourceIdentifier;
-		renderTargetResources[i] = rtResourceIdentifier;
+		return renderTargetResources;
 	}
 
 	// 创建RT对象
@@ -247,62 +245,79 @@ std::vector<RenderTargetIdentifier> GLDevice::requestRenderTargetResource(std::v
 	glCreateFramebuffers(newRenderTextureCount, rts.data());
 	for (size_t i = 0; i < newRenderTextureCount; ++i)
 	{
-		auto rtIdentifier = renderTargetResources[i];
-		rtIdentifier.m_fbo = rts[i];
-	}
-	std::vector<RenderBuffer*> renderBuffers;
-	std::vector<Texture*> textures;
-	for (size_t i = 0; i < newRenderTextureCount; ++i)
-	{
 		auto rtPtr = renderTargetPtrs[i];
+		renderTargetResources[i] = RenderTargetIdentifier(rtPtr->getInstanceId());
 		auto& rtIdentifier = renderTargetResources[i];
-		auto fbo = rtIdentifier.m_fbo;
-		auto attachments = rtPtr->GetAttachments();
-		for (const auto& attachment : attachments)
+		auto fbo = rts[i];
+		rtIdentifier.m_fbo = fbo;
+		auto attachmentIdentifiers = rtsAttachmentIdentifiers[i];
+		auto descriptor = rtPtr->GetRenderTargetDescriptor();
+
+		rtIdentifier.m_attachmentIdentifiers = attachmentIdentifiers;
+
+		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+		for (const auto& attachment : attachmentIdentifiers)
 		{
-			auto resourceType = attachment.GetResourceType();
+			auto resourceType = attachment.getResourceType();
+			auto attachmentType = attachment.getAttachmentType();
 			if (resourceType == FBOAttachmentResourceType::RenderBuffer)
 			{
-				renderBuffers.push_back(attachment.GetRenderBuffer());
+				auto identifier = attachment.getRenderBufferIdentifier();
+				auto renderBuffer = identifier->m_renderBuffer;
+				if (!identifier->m_isDepthBuffer)
+				{
+					if (attachmentType == FBOAttachmentType::Color)
+					{
+						glNamedFramebufferRenderbuffer(fbo, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderBuffer);
+					}
+				}
+				else
+				{
+					if (attachmentType == FBOAttachmentType::DepthStencil)
+					{
+						glNamedFramebufferRenderbuffer(fbo, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderBuffer);
+					}
+					else if (attachmentType == FBOAttachmentType::Depth)
+					{
+						glNamedFramebufferRenderbuffer(fbo, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderBuffer);
+					}
+					else
+					{
+						glNamedFramebufferRenderbuffer(fbo, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderBuffer);
+					}
+				}
 			}
 			else if (resourceType == FBOAttachmentResourceType::Texture)
 			{
-				textures.push_back(attachment.GetTexture());
+				auto identifier = attachment.getTextureIdentifier();
+				auto texture = identifier->m_texture;
+				if (attachmentType == FBOAttachmentType::Color)
+				{
+					glBindTexture(GL_TEXTURE_2D, texture);
+					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+					glBindTexture(GL_TEXTURE_2D, 0);
+				}
+				else if (attachmentType == FBOAttachmentType::DepthStencil)
+				{
+					glBindTexture(GL_TEXTURE_2D, texture);
+					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, texture, 0);
+					glBindTexture(GL_TEXTURE_2D, 0);
+				}
+				else if (attachmentType == FBOAttachmentType::Depth)
+				{
+					glBindTexture(GL_TEXTURE_2D, texture);
+					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture, 0);
+					glBindTexture(GL_TEXTURE_2D, 0);
+				}
+				else
+				{
+					glBindTexture(GL_TEXTURE_2D, texture);
+					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, texture, 0);
+					glBindTexture(GL_TEXTURE_2D, 0);
+				}
 			}
 		}
-		auto descriptor = rtPtr->GetRenderTargetDescriptor();
-		requestRenderBufferResources(std::vector<RenderBuffer*>() { &rtIdentifier.m_colorRenderBuffer, & rtIdentifier.m_colorRenderBuffer, & rtIdentifier.m_colorRenderBuffer });
-		auto& colorRenderBuffer = rtIdentifier.m_colorRenderBuffer;
-		auto& depthRenderBuffer = rtIdentifier.m_depthRenderBuffer;
-		auto& stencilRenderBuffer = rtIdentifier.m_stencilRenderBuffer;
-		if (descriptor.m_colorInternalFormat != TextureInternalFormat::None)
-		{
-			auto colorInternalFormat = getGLTextureInternalFormat(descriptor.m_colorInternalFormat);
-			colorRenderBuffer.create(descriptor.m_width, descriptor.m_height, colorInternalFormat);
-			// 将RenderBuffer关联到FrameBuffer的附件
-			glNamedFramebufferRenderbuffer(fbo, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderBuffer.getRenderBufferPtr());
-		}
-		if (descriptor.m_depthInternalFormat == RenderTextureDepthStencilType::Depth_Stencil)
-		{
-			depthRenderBuffer.create(descriptor.m_width, descriptor.m_height, getDepthStencilGLType(descriptor.m_depthInternalFormat));
-			// 将RenderBuffer关联到FrameBuffer的附件
-			glNamedFramebufferRenderbuffer(fbo, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer.getRenderBufferPtr());
-		}
-		else
-		{
-			if (descriptor.m_depthInternalFormat != RenderTextureDepthStencilType::None)
-			{
-				depthRenderBuffer.create(descriptor.m_width, descriptor.m_height, getDepthStencilGLType(descriptor.m_depthInternalFormat));
-				// 将RenderBuffer关联到FrameBuffer的附件
-				glNamedFramebufferRenderbuffer(fbo, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer.getRenderBufferPtr());
-			}
-			if (descriptor.m_stencilInternalFormat != RenderTextureDepthStencilType::None)
-			{
-				stencilRenderBuffer.create(descriptor.m_width, descriptor.m_height, getDepthStencilGLType(descriptor.m_stencilInternalFormat));
-				// 将RenderBuffer关联到FrameBuffer的附件
-				glNamedFramebufferRenderbuffer(fbo, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, stencilRenderBuffer.getRenderBufferPtr());
-			}
-		}
+		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 	return renderTargetResources;
 }
@@ -310,17 +325,10 @@ std::vector<RenderTargetIdentifier> GLDevice::requestRenderTargetResource(std::v
 void GLDevice::destroyRenderTargetResource(std::vector<RenderTargetIdentifier>& renderTargetIdentifiers)
 {
 	size_t length = renderTargetIdentifiers.size();
-	std::vector<GLuint> removedRTs;
+	std::vector<GLuint> removedRTs(length);
 	for (size_t i = 0; i < length; ++i)
 	{
-		removedRTs.push_back(renderTargetIdentifiers[i].m_fbo);
-
-		auto& colorRenderBuffer = renderTargetIdentifiers[i].m_colorRenderBuffer;
-		auto& depthRenderBuffer = renderTargetIdentifiers[i].m_depthRenderBuffer;
-		auto& stencilRenderBuffer = renderTargetIdentifiers[i].m_stencilRenderBuffer;
-		colorRenderBuffer.release();
-		depthRenderBuffer.release();
-		stencilRenderBuffer.release();
+		removedRTs[i] = renderTargetIdentifiers[i].m_fbo;
 	}
 	glDeleteFramebuffers((GLsizei)removedRTs.size(), removedRTs.data());
 }
@@ -330,18 +338,34 @@ std::vector<RenderBufferIdentifier> GLDevice::requestRenderBufferResources(std::
 	std::vector<GLuint> renderBufferIds = std::vector<GLuint>(renderBufferPtrs.size());
 	std::vector<RenderBufferIdentifier> identifiers = std::vector<RenderBufferIdentifier>(renderBufferPtrs.size());
 	// 创建RenderBuffer
-	glCreateRenderbuffers(renderBufferPtrs.size(), renderBufferIds.data());
+	glCreateRenderbuffers((GLsizei)renderBufferPtrs.size(), renderBufferIds.data());
 	for (int i = 0; i < renderBufferPtrs.size(); ++i)
 	{
-		RenderBufferIdentifier identifier;
-		if (renderBufferPtrs[i]->GetInternalFormat() != GL_NONE)
+		RenderBufferIdentifier identifier(renderBufferPtrs[i]->getInstanceId());
+		identifier.m_renderBuffer = renderBufferIds[i];
+		identifier.m_isDepthBuffer = renderBufferPtrs[i]->IsDepthBuffer();
+		if (identifier.m_isDepthBuffer)
 		{
-			identifier.m_internalFormat = renderBufferPtrs[i]->GetInternalFormat();
-			identifier.m_width = renderBufferPtrs[i]->GetWidth();
-			identifier.m_height = renderBufferPtrs[i]->GetHeight();
-			// 分配RenderBuffer存储空间
-			glNamedRenderbufferStorage(renderBufferIds[i], identifier.m_internalFormat, identifier.m_width, identifier.m_height);
+			if (renderBufferPtrs[i]->getDepthStencilType() != RenderTextureDepthStencilType::None)
+			{
+				identifier.m_depthStencilType = renderBufferPtrs[i]->getDepthStencilType();
+				identifier.m_width = renderBufferPtrs[i]->getWidth();
+				identifier.m_height = renderBufferPtrs[i]->getHeight();
+				// 分配RenderBuffer存储空间
+				glNamedRenderbufferStorage(renderBufferIds[i], getGLDepthStencilType(identifier.m_depthStencilType), identifier.m_width, identifier.m_height);
+			}
 		}
+		else {
+			if (renderBufferPtrs[i]->getColorInternalFormat() != TextureInternalFormat::None)
+			{
+				identifier.m_internalFormat = renderBufferPtrs[i]->getColorInternalFormat();
+				identifier.m_width = renderBufferPtrs[i]->getWidth();
+				identifier.m_height = renderBufferPtrs[i]->getHeight();
+				// 分配RenderBuffer存储空间
+				glNamedRenderbufferStorage(renderBufferIds[i], getGLTextureInternalFormat(identifier.m_internalFormat), identifier.m_width, identifier.m_height);
+			}
+		}
+
 		identifiers[i] = identifier;
 	}
 	return identifiers;
@@ -354,7 +378,7 @@ void GLDevice::destroyRenderBufferResources(std::vector<RenderBufferIdentifier>&
 	{
 		renderBufferIds[i] = renderBufferIdentifiers[i].m_renderBuffer;
 	}
-	glDeleteRenderbuffers(renderBufferIds.size(), renderBufferIds.data());
+	glDeleteRenderbuffers((GLsizei)renderBufferIds.size(), renderBufferIds.data());
 }
 
 void GLDevice::requestConstantBufferResources(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers)

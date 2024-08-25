@@ -142,7 +142,7 @@ public:
 		return GL_NONE;
 	}
 
-	inline GLenum getDepthStencilGLType(RenderTextureDepthStencilType depthStencilType) const
+	inline GLenum getGLDepthStencilType(RenderTextureDepthStencilType depthStencilType) const
 	{
 		switch (depthStencilType)
 		{
@@ -199,7 +199,7 @@ public:
 	std::vector<SamplerResouceIdentifier> requestSamplerResources(std::vector<Sampler*>& samplerPtrs) override;
 	void destroySamplerResources(std::vector<SamplerResouceIdentifier>& samplerIdentifiers) override;
 
-	std::vector<RenderTargetIdentifier> requestRenderTargetResource(std::vector<RenderTarget*>& renderTargetPtrs) override;
+	std::vector<RenderTargetIdentifier> requestRenderTargetResource(std::vector<RenderTarget*>& renderTargetPtrs, std::vector<std::vector<AttachmentEntityIdentifierWrapper>>& attachmentIdentifiers) override;
 
 	void destroyRenderTargetResource(std::vector<RenderTargetIdentifier>& renderTargetIdentifiers) override;
 

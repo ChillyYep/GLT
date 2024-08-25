@@ -4,7 +4,7 @@
 #include <Transform.h>
 #include <Component.h>
 #include <Material.h>
-#include <ResourceManager.h>
+#include <RenderResourceManager.h>
 
 COMPONENT_CLASS(Renderer, ComponentType::Renderer)
 {
@@ -18,14 +18,14 @@ public:
 	{
 		if (m_mesh != nullptr)
 		{
-			ResourceManager::getInstance()->getMeshManagementCentre().add(m_mesh);
+			RenderResourceManager::getInstance()->getMeshManagementCentre().add(m_mesh);
 		}
 		if (m_material != nullptr)
 		{
 			auto textures = m_material->getAllTextures();
 			for (const auto& texture : textures)
 			{
-				ResourceManager::getInstance()->getTextureManagementCentre().add(texture);
+				RenderResourceManager::getInstance()->getTextureManagementCentre().add(texture);
 			}
 		}
 	}
@@ -34,14 +34,14 @@ public:
 	{
 		if (m_mesh != nullptr)
 		{
-			ResourceManager::getInstance()->getMeshManagementCentre().remove(m_mesh);
+			RenderResourceManager::getInstance()->getMeshManagementCentre().remove(m_mesh);
 		}
 		if (m_material != nullptr)
 		{
 			auto textures = m_material->getAllTextures();
 			for (const auto& texture : textures)
 			{
-				ResourceManager::getInstance()->getTextureManagementCentre().remove(texture);
+				RenderResourceManager::getInstance()->getTextureManagementCentre().remove(texture);
 			}
 		}
 	}

@@ -20,7 +20,7 @@ class RenderCommandParam
 {
 public:
 	RenderCommandParam() {}
-	~RenderCommandParam() {}
+	virtual ~RenderCommandParam() {}
 
 private:
 

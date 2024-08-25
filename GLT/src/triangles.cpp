@@ -146,9 +146,9 @@ int main(int argc, char** argv)
 	window->attachToEventSystem();
 
 	auto windowSize = window->getSize();
-	RenderTexture* renderTexture = new RenderTexture(windowSize.x, windowSize.y, TextureInternalFormat::RGB8, RenderTextureDepthStencilType::Depth16,
+	RenderTexture renderTexture(windowSize.x, windowSize.y, TextureInternalFormat::RGB8, RenderTextureDepthStencilType::Depth16,
 		RenderTextureDepthStencilType::None);
-	renderTexture->create(false);
+	renderTexture.create();
 
 	window->gameLoop(gameLoop);
 
@@ -156,9 +156,7 @@ int main(int argc, char** argv)
 	DestroyScene();
 
 	window->destroy();
-	renderTexture->release(false);
-	delete renderTexture;
-	renderTexture = nullptr;
+	renderTexture.release();
 	window->uninit();
 
 }

@@ -13,7 +13,7 @@ void ShaderUtils::loadAllShader(ScriptableRenderContext& renderContext)
 	CompiledResult compileResult;
 	compiler.compileShaderProgram(rawShaderInfos, compileResult);
 	// 收集编译结果
-	ResourceManager::getInstance()->requestConstantBufferResources(compileResult.constantBuffers);
+	RenderResourceManager::getInstance()->requestConstantBufferResources(compileResult.constantBuffers);
 	Shader::init(compileResult.outputShaderPrograms, compileResult.constantBuffers);
 }
 
@@ -26,7 +26,7 @@ void ShaderUtils::unloadAllShader(ScriptableRenderContext& renderContext)
 	{
 		identifiers.push_back(identifierPair.second);
 	}
-	ResourceManager::getInstance()->destroyConstantBufferResources(identifiers);
+	RenderResourceManager::getInstance()->destroyConstantBufferResources(identifiers);
 
 }
 

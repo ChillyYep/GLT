@@ -20,7 +20,7 @@ class DeviceBase
 {
 public:
 	DeviceBase() {}
-	virtual ~DeviceBase() = 0;
+	virtual ~DeviceBase() {}
 
 	virtual std::vector<MeshResourceIdentifier> requestMeshResources(std::vector<Mesh*>& meshPtrs) = 0;
 
@@ -33,7 +33,7 @@ public:
 	virtual std::vector<SamplerResouceIdentifier> requestSamplerResources(std::vector<Sampler*>& samplerPtrs) = 0;
 	virtual void destroySamplerResources(std::vector<SamplerResouceIdentifier>& samplerIdentifiers) = 0;
 
-	virtual std::vector<RenderTargetIdentifier> requestRenderTargetResource(std::vector<RenderTarget*>& renderTargetPtrs) = 0;
+	virtual std::vector<RenderTargetIdentifier> requestRenderTargetResource(std::vector<RenderTarget*>& renderTargetPtrs, std::vector<std::vector<AttachmentEntityIdentifierWrapper>>& attachmentIdentifiers) = 0;
 
 	virtual void destroyRenderTargetResource(std::vector<RenderTargetIdentifier>& renderTargetIdentifiers) = 0;
 

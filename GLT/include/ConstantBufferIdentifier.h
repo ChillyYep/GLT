@@ -8,7 +8,7 @@
 class ConstantBufferIdentifier :public ResourceIdentifier
 {
 public:
-	ConstantBufferIdentifier() {}
+	ConstantBufferIdentifier() :ResourceIdentifier(0) {}
 	~ConstantBufferIdentifier() {}
 
 	void addBlock(ShaderUniformBlockProperty& block);
@@ -31,6 +31,7 @@ public:
 	__GET_SET_PROPERTY__(Ubo, GLTUInt32, m_ubo)
 		__GET_SET_PROPERTY__(ConstantBufferType, ConstantBufferType, m_constantBufferType)
 private:
+
 	ConstantBufferType m_constantBufferType;
 
 	std::vector<ShaderUniformBlockProperty> m_globalBuffer;

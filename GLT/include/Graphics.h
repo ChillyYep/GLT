@@ -1,9 +1,6 @@
 #pragma once
 #include <Mesh.h>
 #include <Material.h>
-#include <Camera.h>
-#include <ResourceManager.h>
-#include <ShaderPropertyNames.h>
 #include <SceneManager.h>
 #include <SceneUtility.h>
 #include <ShaderUtils.h>

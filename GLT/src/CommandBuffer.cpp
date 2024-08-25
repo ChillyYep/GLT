@@ -38,8 +38,8 @@ void CommandBuffer::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatr
 	drawMeshParam->m_meshPtr = mesh;
 	drawMeshParam->m_materialPtr = material;
 	drawMeshParam->m_modelMatrix = modelMatrix;
-	drawMeshParam->m_meshResourceIdentifier = ResourceManager::getInstance()->getMeshResource(mesh->getInstanceId());
-	drawMeshParam->m_textureResources = ResourceManager::getInstance()->getTextureResources();
+	drawMeshParam->m_meshResourceIdentifier = RenderResourceManager::getInstance()->getMeshResource(mesh->getInstanceId());
+	drawMeshParam->m_textureResources = RenderResourceManager::getInstance()->getTextureResources();
 	command.commandType = RenderCommandType::DrawMesh;
 	command.param = drawMeshParam;
 	m_cmdList.push_back(command);

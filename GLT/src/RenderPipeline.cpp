@@ -14,11 +14,11 @@ void RenderPipeline::render() {
 	// do someting
 	updatePerFrameConstantBuffer();
 
-	auto& rtManagementCentre = ResourceManager::getInstance()->getRenderTargetManagementCentre();
+	auto& rtManagementCentre = RenderResourceManager::getInstance()->getRenderTargetManagementCentre();
 	auto instanceIds = rtManagementCentre.getAllObjectInstanceIds();
 	if (instanceIds.size() > 0)
 	{
-		auto rtIdentifier = ResourceManager::getInstance()->getRenderTargetResource(instanceIds[0]);
+		auto rtIdentifier = RenderResourceManager::getInstance()->getRenderTargetResource(instanceIds[0]);
 		m_cmd.setRenderTarget(rtIdentifier);
 		m_cmd.clearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		m_renderContext.scheduleCommandBuffer(m_cmd);
@@ -53,8 +53,8 @@ void RenderPipeline::render() {
 }
 void RenderPipeline::postUpdate()
 {
-	ResourceManager::getInstance()->getMeshManagementCentre().onSubmit();
-	ResourceManager::getInstance()->getTextureManagementCentre().onSubmit();
+	RenderResourceManager::getInstance()->getMeshManagementCentre().onSubmit();
+	RenderResourceManager::getInstance()->getTextureManagementCentre().onSubmit();
 }
 
 void RenderPipeline::updateSceneProperties4Render()
@@ -62,14 +62,14 @@ void RenderPipeline::updateSceneProperties4Render()
 	m_allScenes = SceneManager::getInstance()->getAllScenes(false);
 
 	// É¾³ý
-	clearExpiredObjects(&ResourceManager::getInstance()->getMeshManagementCentre(), ResourceType::Mesh);
-	clearExpiredObjects(&ResourceManager::getInstance()->getTextureManagementCentre(), ResourceType::Texture);
-	clearExpiredObjects(&ResourceManager::getInstance()->getRenderTargetManagementCentre(), ResourceType::RenderTarget);
+	clearExpiredObjects(&RenderResourceManager::getInstance()->getMeshManagementCentre(), ResourceType::Mesh);
+	clearExpiredObjects(&RenderResourceManager::getInstance()->getTextureManagementCentre(), ResourceType::Texture);
+	clearExpiredObjects(&RenderResourceManager::getInstance()->getRenderTargetManagementCentre(), ResourceType::RenderTarget);
 
 	// Ìí¼Ó
-	appendNewObjects(&ResourceManager::getInstance()->getMeshManagementCentre(), ResourceType::Mesh);
-	appendNewObjects(&ResourceManager::getInstance()->getTextureManagementCentre(), ResourceType::Texture);
-	appendNewObjects(&ResourceManager::getInstance()->getRenderTargetManagementCentre(), ResourceType::RenderTarget);
+	appendNewObjects(&RenderResourceManager::getInstance()->getMeshManagementCentre(), ResourceType::Mesh);
+	appendNewObjects(&RenderResourceManager::getInstance()->getTextureManagementCentre(), ResourceType::Texture);
+	appendNewObjects(&RenderResourceManager::getInstance()->getRenderTargetManagementCentre(), ResourceType::RenderTarget);
 }
 
 void RenderPipeline::updateLightProperties(std::shared_ptr<Camera>& camera)
@@ -103,7 +103,7 @@ void RenderPipeline::updateLightProperties(std::shared_ptr<Camera>& camera)
 void RenderPipeline::updatePerFrameConstantBuffer()
 {
 	// do something
-	ResourceManager::getInstance()->uploadConstantBufferResource(ConstantBufferType::PerFrame);
+	RenderResourceManager::getInstance()->uploadConstantBufferResource(ConstantBufferType::PerFrame);
 }
 
 void RenderPipeline::updatePerCameraConstantBuffer(std::shared_ptr<Camera>& camera)
@@ -113,7 +113,7 @@ void RenderPipeline::updatePerCameraConstantBuffer(std::shared_ptr<Camera>& came
 	Shader::setGlobalMatrix(ShaderPropertyNames::ProjectMatrix, camera->getProjectMatrix());
 	auto eyePosition = camera->getTransform()->GetPosition();
 	Shader::setGlobalVector(ShaderPropertyNames::EyePosition, glm::vec4(eyePosition.x, eyePosition.y, eyePosition.z, 1.0f));
-	ResourceManager::getInstance()->uploadConstantBufferResource(ConstantBufferType::PerCamera);
+	RenderResourceManager::getInstance()->uploadConstantBufferResource(ConstantBufferType::PerCamera);
 }
 
 void RenderPipeline::renderPerObject(Renderer& renderObject, std::shared_ptr<Camera>& camera)
@@ -134,7 +134,7 @@ void RenderPipeline::renderPerObject(Renderer& renderObject, std::shared_ptr<Cam
 
 void RenderPipeline::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix)
 {
-	auto* resourceIdentifier = ResourceManager::getInstance()->getMeshResource(mesh->getInstanceId());
+	auto* resourceIdentifier = RenderResourceManager::getInstance()->getMeshResource(mesh->getInstanceId());
 	if (resourceIdentifier == nullptr || !resourceIdentifier->isValid())
 	{
 		return;

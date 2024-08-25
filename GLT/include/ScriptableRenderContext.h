@@ -4,7 +4,7 @@
 #include <vector>
 #include <GLDevice.h>
 #include <CommandBuffer.h>
-#include <ResourceManager.h>
+#include <RenderResourceManager.h>
 
 class ScriptableRenderContext
 {
@@ -15,7 +15,7 @@ public:
 	void init()
 	{
 		m_device = new GLDevice();
-		ResourceManager::getInstance()->SetDevice(m_device);
+		RenderResourceManager::getInstance()->SetDevice(m_device);
 	}
 
 	void uninit()

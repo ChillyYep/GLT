@@ -20,7 +20,7 @@ public:
 	__GET_SET_PROPERTY__(Levels, GLTSizei, m_levels)
 		__GET_SET_PROPERTY__(Width, GLTSizei, m_width)
 		__GET_SET_PROPERTY__(IsProxy, GLTBool, m_isProxy)
-		__GET_SET_PROPERTY__(InternalFormat, TextureInternalFormat, m_internalFormat)
+		__GET_SET_PROPERTY__(InternalFormat, TextureInternalFormat, m_colorInternalFormat)
 		__GET_SET_PROPERTY__(ExternalFormat, TextureExternalFormat, m_externalFormat)
 		__GET_SET_PROPERTY__(PerChannelSize, TexturePerChannelSize, m_perChannelSize)
 		__GET_SET_PROPERTY__(CanReadWrite, GLTBool, m_readWrite)
@@ -36,7 +36,7 @@ protected:
 	GLTBool m_isProxy;
 	GLTSizei m_levels;
 	GLTSizei m_width;
-	TextureInternalFormat m_internalFormat;
+	TextureInternalFormat m_colorInternalFormat;
 	TextureExternalFormat m_externalFormat = TextureExternalFormat::RED;
 	TexturePerChannelSize m_perChannelSize;
 	TextureWrapMode m_wrapModeS;

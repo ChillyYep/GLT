@@ -70,3 +70,18 @@ enum class TextureExternalFormat {
 enum class TexturePerChannelSize {
 	UNSIGNED_BYTE,
 };
+
+enum class RenderTextureDepthStencilType {
+	None,
+	Depth8,
+	Depth16,
+	Depth24,
+	Depth32,
+	Depth32F,
+	Stencil0,
+	Stencil1,
+	Stencil4,
+	Stencil8,
+	Stencil16,
+	Depth_Stencil,
+};

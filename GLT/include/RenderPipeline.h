@@ -35,7 +35,7 @@ private:
 		{
 			return;
 		}
-		ResourceManager::getInstance()->requestResource(management, newObjectList, resourceType);
+		RenderResourceManager::getInstance()->requestResource(management, newObjectList, resourceType);
 		management->clearNewList();
 	}
 
@@ -49,7 +49,7 @@ private:
 		{
 			return;
 		}
-		ResourceManager::getInstance()->destroyResource(management, expiredMeshInstanceIdList, resourceType);
+		RenderResourceManager::getInstance()->destroyResource(management, expiredMeshInstanceIdList, resourceType);
 		management->clearExpiredList();
 	}
 

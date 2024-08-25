@@ -2,9 +2,6 @@
 #include <CommonDefine.h>
 #include <Renderer.h>
 #include <Camera.h>
-#include <ResourceManager.h>
-#include <MeshManagementCentre.h>
-#include <TextureManagementCentre.h>
 #include <Light.h>
 #include <GameObject.h>
 

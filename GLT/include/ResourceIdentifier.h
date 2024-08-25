@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include <CommonDefine.h>
 #include <TextureEnums.h>
 #include <RenderBuffer.h>
@@ -17,7 +18,7 @@ enum class FBOAttachmentResourceType {
 class ResourceIdentifier
 {
 public:
-	ResourceIdentifier() :m_instanceId(0) {}
+	ResourceIdentifier() {}
 	ResourceIdentifier(GLTUInt32 instanceId) :m_instanceId(instanceId) {}
 	~ResourceIdentifier() {}
 	inline GLTUInt32 getInstanceId() { return m_instanceId; }
@@ -30,7 +31,7 @@ private:
 RESOUCEIDENTIFIER_CLASS(MeshResourceIdentifier, ResourceIdentifierType::Mesh)
 {
 public:
-	MeshResourceIdentifier() :m_vao(0), m_vbo(0), m_ebo(0) {}
+	MeshResourceIdentifier() :ResourceIdentifier(0) {}
 	MeshResourceIdentifier(GLTUInt32 vao, GLTUInt32 vbo, GLTUInt32 ebo, GLTUInt32 instanceId) :m_vao(vao), m_vbo(vbo), m_ebo(ebo), ResourceIdentifier(instanceId) {}
 	~MeshResourceIdentifier() {}
 	inline GLTUInt32 getVAO() { return m_vao; }
@@ -83,6 +84,9 @@ private:
 RESOUCEIDENTIFIER_CLASS(SamplerResouceIdentifier, ResourceIdentifierType::Sampler)
 {
 public:
+	SamplerResouceIdentifier() :ResourceIdentifier(0) {}
+	SamplerResouceIdentifier(GLTUInt32 instanceId) :ResourceIdentifier(instanceId) {}
+	~SamplerResouceIdentifier() {}
 	GLTUInt32 m_sampler;
 private:
 };
@@ -90,36 +94,41 @@ private:
 RESOUCEIDENTIFIER_CLASS(RenderBufferIdentifier, ResourceIdentifierType::RenderBuffer)
 {
 public:
+	RenderBufferIdentifier() :ResourceIdentifier(0) {}
+	RenderBufferIdentifier(GLTUInt32 instanceId) :ResourceIdentifier(instanceId) {}
 	GLTUInt32 m_renderBuffer;
+	bool m_isDepthBuffer;
 	int m_width;
 	int m_height;
-	GLTUInt32 m_internalFormat;
+	TextureInternalFormat m_internalFormat;
+	RenderTextureDepthStencilType m_depthStencilType;
+private:
 };
 
-class AttachmentEntityWrapper
+class AttachmentEntityIdentifierWrapper
 {
 public:
-	AttachmentEntityWrapper(RenderBufferIdentifier* identifier, FBOAttachmentType fboAttachmentType) {
-		SetRenderBufferIdentifier(identifier);
+	AttachmentEntityIdentifierWrapper(RenderBufferIdentifier* identifier, FBOAttachmentType fboAttachmentType) {
+		setRenderBufferIdentifier(identifier);
 		m_fboAttachmentType = fboAttachmentType;
 	}
-	AttachmentEntityWrapper(TextureResourceIdentifier* identifier, FBOAttachmentType fboAttachmentType) {
-		SetTextureIdentifier(identifier);
+	AttachmentEntityIdentifierWrapper(TextureResourceIdentifier* identifier, FBOAttachmentType fboAttachmentType) {
+		setTextureIdentifier(identifier);
 		m_fboAttachmentType = fboAttachmentType;
 	}
-	void SetRenderBufferIdentifier(RenderBufferIdentifier* identifier)
+	void setRenderBufferIdentifier(RenderBufferIdentifier* identifier)
 	{
 		m_resourceType = FBOAttachmentResourceType::RenderBuffer;
 		m_identifier = identifier;
 	}
 
-	void SetTextureIdentifier(TextureResourceIdentifier* identifier)
+	void setTextureIdentifier(TextureResourceIdentifier* identifier)
 	{
 		m_resourceType = FBOAttachmentResourceType::Texture;
 		m_identifier = identifier;
 	}
 
-	RenderBufferIdentifier* GetRenderBufferIdentifier() const
+	RenderBufferIdentifier* getRenderBufferIdentifier() const
 	{
 		if (m_resourceType == FBOAttachmentResourceType::RenderBuffer)
 		{
@@ -128,7 +137,7 @@ public:
 		return nullptr;
 	}
 
-	TextureResourceIdentifier* GetTextureIdentifier() const
+	TextureResourceIdentifier* getTextureIdentifier() const
 	{
 		if (m_resourceType == FBOAttachmentResourceType::Texture)
 		{
@@ -137,10 +146,9 @@ public:
 		return nullptr;
 	}
 
-	FBOAttachmentResourceType GetResourceType() const
-	{
-		return m_resourceType;
-	}
+	FBOAttachmentResourceType getResourceType() const { return m_resourceType; }
+
+	FBOAttachmentType getAttachmentType() const { return m_fboAttachmentType; }
 private:
 	FBOAttachmentResourceType m_resourceType;
 	FBOAttachmentType m_fboAttachmentType;
@@ -150,7 +158,9 @@ private:
 RESOUCEIDENTIFIER_CLASS(RenderTargetIdentifier, ResourceIdentifierType::RenderTarget)
 {
 public:
-	GLTUInt32 m_fbo;
-
-	std::vector<AttachmentEntityWrapper> m_attachments;
+	RenderTargetIdentifier() :ResourceIdentifier(0) {}
+	RenderTargetIdentifier(GLTUInt32 instanceId) :ResourceIdentifier(instanceId) {}
+	std::vector<AttachmentEntityIdentifierWrapper> m_attachmentIdentifiers;
+	GLTUInt32 m_fbo = 0;
+private:
 };
