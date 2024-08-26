@@ -256,3 +256,16 @@ void RenderResourceManager::destroyConstantBufferResources(std::vector<ConstantB
 {
 	m_device->destroyConstantBufferResources(constantBufferIdentifiers);
 }
+
+void RenderResourceManager::update()
+{
+	// É¾³ý
+	clearExpiredObjects(&m_meshManagementCentre, ResourceType::Mesh);
+	clearExpiredObjects(&m_textureManagementCentre, ResourceType::Texture);
+	clearExpiredObjects(&m_renderTargetManagementCentre, ResourceType::RenderTarget);
+
+	// Ìí¼Ó
+	appendNewObjects(&m_meshManagementCentre, ResourceType::Mesh);
+	appendNewObjects(&m_textureManagementCentre, ResourceType::Texture);
+	appendNewObjects(&m_renderTargetManagementCentre, ResourceType::RenderTarget);
+}

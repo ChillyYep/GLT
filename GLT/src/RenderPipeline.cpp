@@ -61,15 +61,7 @@ void RenderPipeline::updateSceneProperties4Render()
 {
 	m_allScenes = SceneManager::getInstance()->getAllScenes(false);
 
-	// É¾³ý
-	clearExpiredObjects(&RenderResourceManager::getInstance()->getMeshManagementCentre(), ResourceType::Mesh);
-	clearExpiredObjects(&RenderResourceManager::getInstance()->getTextureManagementCentre(), ResourceType::Texture);
-	clearExpiredObjects(&RenderResourceManager::getInstance()->getRenderTargetManagementCentre(), ResourceType::RenderTarget);
-
-	// Ìí¼Ó
-	appendNewObjects(&RenderResourceManager::getInstance()->getMeshManagementCentre(), ResourceType::Mesh);
-	appendNewObjects(&RenderResourceManager::getInstance()->getTextureManagementCentre(), ResourceType::Texture);
-	appendNewObjects(&RenderResourceManager::getInstance()->getRenderTargetManagementCentre(), ResourceType::RenderTarget);
+	RenderResourceManager::getInstance()->update();
 }
 
 void RenderPipeline::updateLightProperties(std::shared_ptr<Camera>& camera)

@@ -84,9 +84,6 @@ public:
 			wrapModeS, wrapModeT, textureFilter)) {}
 	~RenderTarget() {}
 
-	//virtual void create(bool immediately = true) = 0;
-	//virtual void release(bool immediately = true) = 0;
-
 	void addAttachment(AttachmentEntityWrapper wrapper)
 	{
 		m_attachments.push_back(wrapper);
