@@ -31,7 +31,7 @@ void Graphics::drawMeshNow(const std::shared_ptr<Mesh>& mesh, const std::shared_
 	componentStateMachine.setup(renderer);
 	while (componentStateMachine.getComponentLifeStyle() != ComponentLifeCycle::Running)
 	{
-		componentStateMachine.Tick();
+		componentStateMachine.tick();
 	}
 	drawRequestedMesh(mesh, material, modelMatrix);
 }

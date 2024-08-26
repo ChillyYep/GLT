@@ -93,7 +93,7 @@ private:
 };
 
 
-class Material
+class Material :public Object
 {
 public:
 	Material(std::shared_ptr<Shader> shader) :m_shader(shader) {}
@@ -112,18 +112,7 @@ public:
 	{
 		return getProperty(ShaderPropertyNames::MainTex);
 	}
-	inline std::vector<std::shared_ptr<Texture>> getAllTextures()
-	{
-		std::vector<std::shared_ptr<Texture>> textures;
-		for (const auto& propertyPair : m_properties)
-		{
-			if (propertyPair.second->getMaterialPropertyType() == MaterialPropertyType::Texture)
-			{
-				textures.push_back(((MaterialTextureProperty*)propertyPair.second.get())->getTexture());
-			}
-		}
-		return textures;
-	}
+	std::vector<std::shared_ptr<Texture>> getAllTextures();
 
 	__GET_SET_PROPERTY__(Shader, std::shared_ptr<Shader>, m_shader)
 private:

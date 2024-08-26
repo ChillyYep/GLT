@@ -17,34 +17,9 @@ public:
 
 	inline std::vector<std::shared_ptr<GameObject>> getObjectList() { return m_gos; }
 
-	inline std::vector<std::shared_ptr<Light>> getLights()
-	{
-		std::vector<std::shared_ptr<Light>> lights;
-		for (const auto& go : m_gos)
-		{
-			auto light = go->getComponent<Light>();
-			if (light == nullptr)
-			{
-				continue;
-			}
-			lights.push_back(light);
-		}
-		return lights;
-	}
+	std::vector<std::shared_ptr<Light>> getLights();
 
-	inline std::shared_ptr<Camera> getMainCamera()
-	{
-		for (const auto& go : m_gos)
-		{
-			auto camera = go->getComponent<Camera>();
-			if (camera == nullptr || !camera->getMainCameraFlag())
-			{
-				continue;
-			}
-			return camera;
-		}
-		return nullptr;
-	}
+	std::shared_ptr<Camera> getMainCamera();
 
 	__GET_SET_PROPERTY__(Actived, bool, m_actived)
 		__GET_SET_BOOLEANPROPERTY__(MainScene, m_mainScene)

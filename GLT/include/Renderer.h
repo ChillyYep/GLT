@@ -14,37 +14,9 @@ public:
 	Renderer(std::shared_ptr<Mesh> mesh) { m_mesh = mesh; }
 	~Renderer() {}
 
-	void OnEnable() override
-	{
-		if (m_mesh != nullptr)
-		{
-			RenderResourceManager::getInstance()->getMeshManagementCentre().add(m_mesh);
-		}
-		if (m_material != nullptr)
-		{
-			auto textures = m_material->getAllTextures();
-			for (const auto& texture : textures)
-			{
-				RenderResourceManager::getInstance()->getTextureManagementCentre().add(texture);
-			}
-		}
-	}
+	void onEnable() override;
 
-	void OnDisable() override
-	{
-		if (m_mesh != nullptr)
-		{
-			RenderResourceManager::getInstance()->getMeshManagementCentre().remove(m_mesh);
-		}
-		if (m_material != nullptr)
-		{
-			auto textures = m_material->getAllTextures();
-			for (const auto& texture : textures)
-			{
-				RenderResourceManager::getInstance()->getTextureManagementCentre().remove(texture);
-			}
-		}
-	}
+	void onDisable() override;
 
 	__GET_SET_PROPERTY__(Mesh, std::shared_ptr<Mesh>, m_mesh)
 

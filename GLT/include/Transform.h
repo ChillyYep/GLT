@@ -22,14 +22,8 @@ public:
 		glm::vec3 skew;
 		glm::decompose(modelMatrix, m_scale, m_rotation, m_position, skew, perspective);
 	}
-	inline void LookAt(glm::vec3 target)
-	{
-		glm::vec3 forward = Forward();
-		auto targetForward = glm::normalize(m_position - target);
-		auto axis = glm::cross(forward, targetForward);
-		auto angle = glm::acos(glm::dot(forward, targetForward));
-		m_rotation = glm::rotate(m_rotation, angle, axis);
-	}
+	void lookAt(glm::vec3 target);
+
 	inline void Translate(glm::vec3 offset) {
 		m_position += offset;
 	}

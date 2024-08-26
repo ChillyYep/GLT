@@ -19,3 +19,33 @@ void Scene::removeObject(std::shared_ptr<GameObject> go)
 	}
 	m_gos.pop_back();
 }
+
+
+std::vector<std::shared_ptr<Light>> Scene::getLights()
+{
+	std::vector<std::shared_ptr<Light>> lights;
+	for (const auto& go : m_gos)
+	{
+		auto light = go->getComponent<Light>();
+		if (light == nullptr)
+		{
+			continue;
+		}
+		lights.push_back(light);
+	}
+	return lights;
+}
+
+std::shared_ptr<Camera> Scene::getMainCamera()
+{
+	for (const auto& go : m_gos)
+	{
+		auto camera = go->getComponent<Camera>();
+		if (camera == nullptr || !camera->getMainCameraFlag())
+		{
+			continue;
+		}
+		return camera;
+	}
+	return nullptr;
+}

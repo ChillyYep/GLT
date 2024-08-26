@@ -3,7 +3,7 @@
 #include <CommonDefine.h>
 #include <GLMath.h>
 #include <GLCommon.h>
-#include <glfwWindow.h>
+#include <GLFWWindow.h>
 class Window :public Singleton<Window>
 {
 public:

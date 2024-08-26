@@ -63,7 +63,7 @@ void CreateScene()
 	camera->setNearFar(glm::vec2(1.0f, 1000.0f));
 	camera->setHeight(4.0f);
 	camera->setMainCameraFlag(true);
-	cameraTransform->LookAt(cube1Transform->getPosition());
+	cameraTransform->lookAt(cube1Transform->getPosition());
 	camera->setCameraController(shared_ptr<CameraController>(new CameraController()));
 
 	auto lightGo = SceneUtility::CreateEmptyGameObject();

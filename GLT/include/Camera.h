@@ -19,7 +19,7 @@ public:
 
 	inline void lookAt(std::shared_ptr<Transform> target)
 	{
-		getTransform()->LookAt(target->getPosition());
+		getTransform()->lookAt(target->getPosition());
 	}
 
 	inline glm::mat4x4 getViewMatrix() { recomputeViewMatrix(); return m_viewMatrix; }
@@ -29,7 +29,7 @@ public:
 	inline void setCameraController(std::shared_ptr<CameraController> cameraController)
 	{
 		m_cameraController = cameraController;
-		m_cameraController->Attach(getTransform());
+		m_cameraController->attach(getTransform());
 	}
 
 	inline std::shared_ptr<Transform>& getTransform()

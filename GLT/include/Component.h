@@ -25,25 +25,24 @@ class Component :public Object
 public:
 	friend class ComponentStateMachine;
 	friend class GameObject;
-	Component() {}
+	Component() :m_enabled(true), m_gameObjectPtr(nullptr), m_isReadyDead(false),
+		m_isDead(false), m_inited(false), m_state(ComponentLifeCycle::None), m_subState(ComponentSubLifeCycle::None) {}
 	~Component() {}
 
-	void destroy()
-	{
-		m_isReadyDead = true;
-	}
+	inline void destroy() { m_isReadyDead = true; }
+	
 	virtual ComponentType getComponentType() = 0;
-
-	inline bool IsDead() { return m_isDead; }
+	inline bool isDead() { return m_isDead; }
 	inline GameObject* getGameObject() { return m_gameObjectPtr; }
+
 	__GET_SET_PROPERTY__(Enable, bool, m_enabled)
 protected:
-	virtual void OnAwake() {}
-	virtual void OnStart() {}
-	virtual void OnUpdate() {}
-	virtual void OnDestroy() {}
-	virtual void OnEnable() {}
-	virtual void OnDisable() {}
+	virtual void onAwake() {}
+	virtual void onStart() {}
+	virtual void onUpdate() {}
+	virtual void onDestroy() {}
+	virtual void onEnable() {}
+	virtual void onDisable() {}
 	bool m_enabled = true;
 	GameObject* m_gameObjectPtr;
 private:
@@ -56,128 +55,17 @@ private:
 class ComponentStateMachine
 {
 public:
-	void Tick()
-	{
-		switch (m_target->m_state)
-		{
-		case ComponentLifeCycle::None:
-		{
-			PreAwake();
-			break;
-		}
-		case ComponentLifeCycle::Awaked:
-		{
-			Awake();
-			break;
-		}
-		case ComponentLifeCycle::Running:
-		{
-			Running();
-			break;
-		}
-		case ComponentLifeCycle::Destroyed:
-		{
-			destroy();
-			break;
-		}
-		default:
-			break;
-		}
-	}
-
-	void setup(std::shared_ptr<Component> component)
-	{
-		m_target = component;
-	}
-
+	void tick();
+	inline void setup(std::shared_ptr<Component> component){m_target = component;}
 	inline ComponentLifeCycle getComponentLifeStyle() { return m_target->m_state; }
 private:
-	void PreAwake()
-	{
-		m_target->m_state = ComponentLifeCycle::Awaked;
-	}
-	void Awake()
-	{
-		m_target->OnAwake();
-		if (m_target->m_isReadyDead)
-		{
-			m_target->m_state = ComponentLifeCycle::Destroyed;
-		}
-		if (m_target->m_enabled)
-		{
-			m_target->m_state = ComponentLifeCycle::Running;
-			m_target->m_subState = ComponentSubLifeCycle::Enabled;
-		}
-	}
-
-	void Running()
-	{
-		switch (m_target->m_subState)
-		{
-		case ComponentSubLifeCycle::Enabled:
-		{
-			Enable();
-			break;
-		}
-		case ComponentSubLifeCycle::Start:
-		{
-			Start();
-			break;
-		}
-		case ComponentSubLifeCycle::Updating:
-		{
-			Update();
-			break;
-		}
-		case ComponentSubLifeCycle::Disabled:
-			Disable();
-			break;
-		default:
-			break;
-		}
-	}
-
-	void Start() {
-		m_target->OnStart();
-		m_target->m_subState = ComponentSubLifeCycle::Updating;
-	}
-
-	void Update()
-	{
-		if (!m_target->m_enabled || m_target->m_isReadyDead)
-		{
-			m_target->m_subState = ComponentSubLifeCycle::Disabled;
-		}
-		else {
-			m_target->OnUpdate();
-		}
-	}
-	void Enable() {
-		m_target->OnEnable();
-		if (!m_target->m_inited)
-		{
-			m_target->m_inited = true;
-			m_target->m_subState = ComponentSubLifeCycle::Start;
-		}
-		else {
-			m_target->m_subState = ComponentSubLifeCycle::Updating;
-		}
-	}
-
-	void Disable()
-	{
-		m_target->OnDisable();
-		if (m_target->m_isReadyDead)
-		{
-			m_target->m_state = ComponentLifeCycle::Destroyed;
-		}
-	}
-
-	void destroy()
-	{
-		m_target->OnDestroy();
-		m_target->m_isDead = true;
-		m_target = nullptr;
-	}
+	void preAwake();
+	void awake();
+	void running();
+	void start();
+	void update();
+	void enable();
+	void disable();
+	void destroy();
 	std::shared_ptr<Component> m_target;
 };

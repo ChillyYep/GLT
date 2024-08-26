@@ -1,3 +1,3 @@
-#include "glfwWindow.h"
+#include "GLFWWindow.h"
 
 bool GlFWWindowImplement::s_inited = false;
