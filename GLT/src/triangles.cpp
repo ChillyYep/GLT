@@ -9,7 +9,7 @@ using namespace std;
 RenderPipeline* pipeline;
 GameMain gameMain;
 
-void CreateScene()
+void createScene()
 {
 	glm::ivec2 screenSize = Window::getInstance()->getSize();
 	pipeline = new RenderPipeline();
@@ -91,7 +91,7 @@ void CreateScene()
 	Graphics::drawMeshNow(cubeMesh, mat, cube1Transform->getMatrix() * glm::translate(glm::vec3(-3.0f, 0.0f, 0.0f)));
 }
 
-void DestroyScene()
+void destroyScene()
 {
 	auto sceneManager = SceneManager::getInstance();
 	for (auto scene : sceneManager->getAllScenes())
@@ -132,7 +132,7 @@ int main(int argc, char** argv)
 	// 初始化gl3w库
 	gl3wInit();
 	// 初始化阶段，初始化VAO，VBO等
-	CreateScene();
+	createScene();
 	window->attachToEventSystem();
 
 	auto windowSize = window->getSize();
@@ -143,7 +143,7 @@ int main(int argc, char** argv)
 	window->gameLoop(gameLoop);
 
 	window->detachToEventSystem();
-	DestroyScene();
+	destroyScene();
 
 	window->destroy();
 	renderTexture.release();

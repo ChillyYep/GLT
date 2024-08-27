@@ -154,6 +154,9 @@
     <Filter Include="源文件\Render\Window\GLFW">
       <UniqueIdentifier>{b471d2d5-bbdd-4836-87cc-a1fce37073df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Render\PassManagement">
+      <UniqueIdentifier>{4e8404ba-d0a7-4a0a-a1f7-482d4196a9ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl3w.c">
@@ -388,9 +391,6 @@
     <ClInclude Include="include\RenderBuffer.h">
       <Filter>头文件\Render\RenderResourceManager\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="include\PassBase.h">
-      <Filter>头文件\Render\Shader</Filter>
-    </ClInclude>
     <ClInclude Include="include\Component.h">
       <Filter>头文件\Game\Component</Filter>
     </ClInclude>
@@ -498,6 +498,9 @@
     </ClInclude>
     <ClInclude Include="include\EventSystem.h">
       <Filter>头文件\Render\Window\GLFW</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PassBase.h">
+      <Filter>头文件\Render\PassManagement</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

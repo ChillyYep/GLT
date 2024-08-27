@@ -1,17 +1,28 @@
 #pragma once
+#include <Shader.h>
+
 class PassBase
 {
 public:
 	PassBase() {}
-	~PassBase() {}
-	/// <summary>
-	/// 编译
-	/// </summary>
-	virtual void compile() = 0;
-	/// <summary>
-	/// 设置变量，执行绘制
-	/// </summary>
-	virtual void execute() = 0;
-private:
+	virtual ~PassBase() {}
 
+	/// <summary>
+	/// 设置环境
+	/// </summary>
+	void setUp(){}
+
+	/// <summary>
+	/// 预备
+	/// </summary>
+	virtual void prepare(){}
+
+	/// <summary>
+	/// 执行命令
+	/// </summary>
+	virtual void execute(){}
+private:
+	Shader* m_shaderPtr;
 };
+
+using PassList = std::vector<PassBase*>;
