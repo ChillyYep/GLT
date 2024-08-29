@@ -502,5 +502,11 @@
     <ClInclude Include="include\PassBase.h">
       <Filter>头文件\Render\PassManagement</Filter>
     </ClInclude>
+    <ClInclude Include="include\DrawOpaquePass.h">
+      <Filter>头文件\Render\PassManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderStateBlock.h">
+      <Filter>头文件\Render\RenderPipeline</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

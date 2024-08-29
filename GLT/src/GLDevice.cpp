@@ -494,15 +494,73 @@ GLenum GLDevice::textureType2TextureTarget(TextureType textureType) const
 	}
 	return GL_NONE;
 }
+
+void GLDevice::setRenderStateBlock(RenderStateBlock& renderStateBlock)
+{
+	DeviceBase::setRenderStateBlock(renderStateBlock);
+	// 开启深度写入与否
+	glDepthRange(0, 1);
+	glDepthMask(renderStateBlock.m_depthState.m_writable ? GL_TRUE : GL_FALSE);
+	// 开启深度测试与否，及若开启配置哪种函数
+	if (renderStateBlock.m_depthState.m_compareFunc == CompareFunction::Disabled)
+	{
+		glDisable(GL_DEPTH_TEST);
+	}
+	else {
+		glEnable(GL_DEPTH_TEST);
+		CompareFunction compareFunc;
+		switch (renderStateBlock.m_depthState.m_compareFunc)
+		{
+		case CompareFunction::Never:
+			glDepthFunc(GL_NEVER);
+			break;
+		case CompareFunction::Less:
+			glDepthFunc(GL_LESS);
+			break;
+		case CompareFunction::Equal:
+			glDepthFunc(GL_EQUAL);
+			break;
+		case CompareFunction::LessEqual:
+			glDepthFunc(GL_LEQUAL);
+			break;
+		case CompareFunction::Greater:
+			glDepthFunc(GL_GREATER);
+			break;
+		case CompareFunction::NotEqual:
+			glDepthFunc(GL_NOTEQUAL);
+			break;
+		case CompareFunction::GreaterEqual:
+			glDepthFunc(GL_GEQUAL);
+			break;
+		case CompareFunction::Always:
+			glDepthFunc(GL_ALWAYS);
+			break;
+		default:
+			break;
+		}
+	}
+	if (renderStateBlock.m_colorState.m_cullMode == CullMode::Front)
+	{
+		switch (renderStateBlock.m_colorState.m_cullMode)
+		{
+		case CullMode::Off:
+			glDisable(GL_CULL_FACE);
+			break;
+		case CullMode::Front:
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_FRONT);
+			break;
+		case CullMode::Back:
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_BACK);
+			break;
+		default:
+			break;
+		}
+	}
+}
 void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, MeshResourceIdentifier* meshResourceIdentifier, std::unordered_map<GLuint, TextureResourceIdentifier>& textureResources)
 {
-	glEnable(GL_DEPTH_TEST);
-	glDepthMask(GL_TRUE);
-	glDepthFunc(GL_LESS);
-	glDepthRange(0, 1);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-
 	Shader::setGlobalMatrix(ShaderPropertyNames::ModelMatrix, modelMatrix);
 	// 绑定Mesh
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshResourceIdentifier->getEBO());

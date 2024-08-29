@@ -199,6 +199,7 @@
     <ClInclude Include="include\ConstantBuffers.h" />
     <ClInclude Include="include\ConstantBufferType.h" />
     <ClInclude Include="include\DeviceBase.h" />
+    <ClInclude Include="include\DrawOpaquePass.h" />
     <ClInclude Include="include\FileUtils.h" />
     <ClInclude Include="include\GLCommon.h" />
     <ClInclude Include="include\GLDevice.h" />
@@ -208,6 +209,7 @@
     <ClInclude Include="include\MemoryManager.h" />
     <ClInclude Include="include\PassBase.h" />
     <ClInclude Include="include\RenderCommand.h" />
+    <ClInclude Include="include\RenderStateBlock.h" />
     <ClInclude Include="include\RenderTarget.h" />
     <ClInclude Include="include\RenderTargetManagementCentre.h" />
     <ClInclude Include="include\ResourceIdentifier.h" />

@@ -7,6 +7,8 @@
 #include <ShaderUtils.h>
 #include <ScriptableRenderContext.h>
 #include <SceneManager.h>
+#include <PassBase.h>
+#include <DrawOpaquePass.h>
 
 class RenderPipeline
 {
@@ -33,4 +35,6 @@ private:
 	std::vector<std::shared_ptr<Scene>> m_allScenes;
 
 	CommandBuffer m_cmd;
+
+	PassList m_passList;
 };

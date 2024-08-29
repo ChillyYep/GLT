@@ -1,6 +1,7 @@
 #include "RenderPipeline.h"
 #include <RenderTexture.h>
 void RenderPipeline::init() {
+	m_passList.push_back(new DrawOpaquePass());
 	m_renderContext.init();
 	ShaderUtils::loadAllShader(m_renderContext);
 }
@@ -12,6 +13,15 @@ void RenderPipeline::render() {
 	updateSceneProperties4Render();
 
 	// do someting
+	for (const auto& pass : m_passList)
+	{
+		if (!pass->IsPrepared())
+		{
+			pass->setup(&m_renderContext);
+			pass->prepare();
+		}
+		pass->execute();
+	}
 	updatePerFrameConstantBuffer();
 
 	auto& rtManagementCentre = RenderResourceManager::getInstance()->getRenderTargetManagementCentre();
@@ -77,7 +87,7 @@ void RenderPipeline::updateLightProperties(std::shared_ptr<Camera>& camera)
 		Shader::setGlobalFloat(ShaderPropertyNames::MainLightData_EndDistance, -1);
 		Shader::setGlobalVector(ShaderPropertyNames::MainLightData_Attenuations, glm::vec4(0.5f, 1.0f, 1.0f, 1.0f));
 	}
-	for (int i = 0;i < m_lightProperties.size() - 1;++i)
+	for (int i = 0; i < m_lightProperties.size() - 1; ++i)
 	{
 		auto lightProperties = m_lightProperties[i + 1];
 		Shader::setGlobalVector(ShaderPropertyNames::getShaderArrayPropertyName(ShaderPropertyNames::AddtionalLightData, ShaderPropertyNames::AddtionalLightData_Ambient, i).c_str(), glm::vec4(0.1f, 0.1f, 0.1f, 0.0f));

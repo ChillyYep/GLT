@@ -187,6 +187,7 @@ public:
 		}
 		return GL_NONE;
 	}
+	void setRenderStateBlock(RenderStateBlock& renderStateBlock) override;
 
 	std::vector<MeshResourceIdentifier> requestMeshResources(std::vector<Mesh*>& meshPtrs) override;
 
@@ -283,6 +284,5 @@ public:
 		release(command);
 	}
 private:
-	RenderTargetIdentifier* m_curRT;
 
 };

@@ -16,6 +16,8 @@ public:
 
 	void uninit();
 
+	void setRenderStateBlock(RenderStateBlock& renderStateBlock) { m_device->setRenderStateBlock(renderStateBlock); }
+
 	void scheduleCommandBuffer(CommandBuffer commandBuffer);
 
 	void submit();

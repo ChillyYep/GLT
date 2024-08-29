@@ -8,6 +8,7 @@
 #include <RenderTarget.h>
 #include <ConstantBuffers.h>
 #include <ResourceIdentifier.h>
+#include <RenderStateBlock.h>
 
 enum class ResourceType {
 	Mesh,
@@ -21,6 +22,8 @@ class DeviceBase
 public:
 	DeviceBase() {}
 	virtual ~DeviceBase() {}
+
+	virtual void setRenderStateBlock(RenderStateBlock& renderStateBlock) { m_renderStateBlock = renderStateBlock; }
 
 	virtual std::vector<MeshResourceIdentifier> requestMeshResources(std::vector<Mesh*>& meshPtrs) = 0;
 
@@ -55,6 +58,8 @@ public:
 
 	virtual void uploadConstantBufferResource(ConstantBufferType constantBufferType) = 0;
 
-private:
+protected:
+	RenderStateBlock m_renderStateBlock;
+	RenderTargetIdentifier* m_curRT;
 
 };
