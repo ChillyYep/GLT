@@ -15,12 +15,26 @@ public:
 	/// <summary>
 	/// Ô¤±¸
 	/// </summary>
-	virtual void prepare() { m_isPrepared = true; }
+	void prepare()
+	{
+		m_isPrepared = true;
+		prepareRenderState();
+		prepareConstantBuffer();
+		prepareResources();
+	}
+
+	virtual void prepareRenderState() {}
+
+	virtual void prepareConstantBuffer() {}
+
+	virtual void prepareResources() {}
 
 	/// <summary>
 	/// Ö´ÐÐÃüÁî
 	/// </summary>
 	virtual void execute() {}
+
+	virtual void destroy() {}
 
 	bool IsPrepared() { return m_isPrepared; }
 protected:

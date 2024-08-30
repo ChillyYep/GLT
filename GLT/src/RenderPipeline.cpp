@@ -24,17 +24,6 @@ void RenderPipeline::render() {
 	}
 	updatePerFrameConstantBuffer();
 
-	auto& rtManagementCentre = RenderResourceManager::getInstance()->getRenderTargetManagementCentre();
-	auto instanceIds = rtManagementCentre.getAllObjectInstanceIds();
-	if (instanceIds.size() > 0)
-	{
-		auto rtIdentifier = RenderResourceManager::getInstance()->getRenderTargetResource(instanceIds[0]);
-		m_cmd.setRenderTarget(rtIdentifier);
-		m_cmd.clearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		m_renderContext.scheduleCommandBuffer(m_cmd);
-		m_cmd.clear();
-		m_renderContext.submit();
-	}
 	for (const auto& scene : m_allScenes)
 	{
 		auto mainCamera = scene->getMainCamera();
