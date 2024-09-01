@@ -88,7 +88,7 @@ void createScene()
 	scene->addObject(cameraGo);
 	scene->addObject(lightGo);
 	scene->addObject(lightGo2);
-	Graphics::drawMeshNow(cubeMesh, mat, cube1Transform->getMatrix() * glm::translate(glm::vec3(-3.0f, 0.0f, 0.0f)));
+	Graphics::drawMeshNow(cubeMesh, mat, cube1Transform->getModelMatrix() * glm::translate(glm::vec3(-3.0f, 0.0f, 0.0f)));
 }
 
 void destroyScene()
@@ -135,18 +135,12 @@ int main(int argc, char** argv)
 	createScene();
 	window->attachToEventSystem();
 
-	auto windowSize = window->getSize();
-	RenderTexture renderTexture(windowSize.x, windowSize.y, TextureInternalFormat::RGB8, RenderTextureDepthStencilType::Depth16,
-		RenderTextureDepthStencilType::None);
-	renderTexture.create();
-
 	window->gameLoop(gameLoop);
 
 	window->detachToEventSystem();
 	destroyScene();
 
 	window->destroy();
-	renderTexture.release();
 	window->uninit();
 
 }

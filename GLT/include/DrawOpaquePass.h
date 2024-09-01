@@ -48,11 +48,14 @@ public:
 		if (instanceIds.size() > 0)
 		{
 			auto rtIdentifier = RenderResourceManager::getInstance()->getRenderTargetResource(instanceIds[0]);
-			m_cmdBuffer.setRenderTarget(rtIdentifier);
-			m_cmdBuffer.clearColor(0.0f, 0.0f, 0.0f, 0.0f);
-			m_context->scheduleCommandBuffer(m_cmdBuffer);
-			m_cmdBuffer.clear();
-			m_context->submit();
+			if (rtIdentifier != nullptr)
+			{
+				m_cmdBuffer.setRenderTarget(rtIdentifier);
+				m_cmdBuffer.clearColor(0.0f, 0.0f, 0.0f, 0.0f);
+				m_context->scheduleCommandBuffer(m_cmdBuffer);
+				m_cmdBuffer.clear();
+				m_context->submit();
+			}
 		}
 	}
 private:

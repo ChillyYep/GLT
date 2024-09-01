@@ -10,14 +10,21 @@ public:
 		for (int i = 0;i < allScenes.size();++i)
 		{
 			auto scene = allScenes[i];
-			auto objects = scene->getObjectList();
+			auto objects = scene->getObjectListIncludeDestroying();
 			for (const auto& obj : objects)
 			{
-				for (const auto& comp : obj->getComponents())
+				if (obj->IsDestroyed())
 				{
-					m_componentStateMachine.setup(comp);
-					m_componentStateMachine.tick();
+					scene->removeObject(obj);
 				}
+				else {
+					for (const auto& comp : obj->getComponents())
+					{
+						m_componentStateMachine.setup(comp.get());
+						m_componentStateMachine.tick();
+					}
+				}
+
 			}
 		}
 	}

@@ -62,12 +62,27 @@ public:
 
 	void destroy()
 	{
+		if (m_isdestroyed)
+		{
+			return;
+		}
+		m_isdestroyed = true;
+		// 组件销毁
 		for (int i = 0;i < m_components.size();++i)
 		{
 			m_components[i]->destroy();
 		}
+		// 子节点销毁
+		auto children = m_transform->getChildren();
+		for (const auto& child : children)
+		{
+			child->getGameObject()->destroy();
+		}
+		m_transform->setParent(nullptr);
 	}
 
+	__GET_SET_PROPERTY__(Actived, bool, m_actived)
+		__GET_SET_BOOLEANPROPERTY__(Destroyed, m_isdestroyed)
 private:
 	int getComponentIndex(std::shared_ptr<Component> component)
 	{
@@ -84,6 +99,10 @@ private:
 		}
 		return -1;
 	}
+
+	bool m_actived = true;
+
+	bool m_isdestroyed;
 
 	std::shared_ptr<Transform> m_transform;
 

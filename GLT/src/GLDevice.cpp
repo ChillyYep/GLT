@@ -508,7 +508,6 @@ void GLDevice::setRenderStateBlock(RenderStateBlock& renderStateBlock)
 	}
 	else {
 		glEnable(GL_DEPTH_TEST);
-		CompareFunction compareFunc;
 		switch (renderStateBlock.m_depthState.m_compareFunc)
 		{
 		case CompareFunction::Never:

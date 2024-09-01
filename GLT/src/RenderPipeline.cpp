@@ -37,10 +37,9 @@ void RenderPipeline::render() {
 		auto windowSize = Window::getInstance()->getSize();
 		auto viewPortRect = glm::ivec4(viewPort.x * windowSize.x, viewPort.y * windowSize.y, viewPort.z * windowSize.x, viewPort.w * windowSize.y);
 		m_cmd.setViewport(viewPortRect.x, viewPortRect.y, viewPortRect.z, viewPortRect.w);
-		for (auto& renderObject : scene->getObjectList())
+		for (auto& renderer : scene->getComponents<Renderer>(false))
 		{
-			auto renderer = renderObject->getComponent<Renderer>();
-			if (renderer != nullptr)
+			if (renderer != nullptr && renderer->getEnable())
 			{
 				renderPerObject(*renderer, mainCamera);
 			}
@@ -120,7 +119,7 @@ void RenderPipeline::renderPerObject(Renderer& renderObject, std::shared_ptr<Cam
 		return;
 	}
 
-	drawMesh(renderObject.getMesh().get(), renderObject.getMaterial().get(), renderObject.getGameObject()->getTransform()->getMatrix());
+	drawMesh(renderObject.getMesh().get(), renderObject.getMaterial().get(), renderObject.getGameObject()->getTransform()->getModelMatrix());
 }
 
 void RenderPipeline::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix)

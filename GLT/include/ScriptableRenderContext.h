@@ -5,6 +5,8 @@
 #include <GLDevice.h>
 #include <CommandBuffer.h>
 #include <RenderResourceManager.h>
+#include <CullingResult.h>
+#include <Camera.h>
 
 class ScriptableRenderContext
 {
@@ -15,6 +17,15 @@ public:
 	void init();
 
 	void uninit();
+
+	void tryGetCullingResult(Camera* camera, CullingResult& cullingResult)
+	{
+		//auto scenes = SceneManager::getInstance()->getAllScenes();
+		//for (int i = 0;i < scenes.size();++i)
+		//{
+
+		//}
+	}
 
 	void setRenderStateBlock(RenderStateBlock& renderStateBlock) { m_device->setRenderStateBlock(renderStateBlock); }
 

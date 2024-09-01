@@ -1,46 +1,29 @@
 #include "Scene.h"
-void Scene::addObject(std::shared_ptr<GameObject> go)
+void Scene::addObject(std::shared_ptr<GameObject> go, std::shared_ptr<Transform> parent)
 {
-	m_gos.push_back(go);
-}
-
-void Scene::removeObject(std::shared_ptr<GameObject> go)
-{
-	for (int i = 0;i < m_gos.size();++i)
+	assert(m_allGos.find(go->getInstanceId()) == m_allGos.end() && !go->IsDestroyed());
+	m_allGos[go->getInstanceId()] = go;
+	if (parent == nullptr)
 	{
-		if (m_gos[i]->getInstanceId() == go->getInstanceId())
-		{
-			for (int j = i;j < m_gos.size() - 1;++j)
-			{
-				m_gos[j] = m_gos[j + 1];
-			}
-			break;
-		}
+		m_rootGo->getTransform()->addChild(go->getTransform().get());
 	}
-	m_gos.pop_back();
+	else {
+		parent->addChild(go->getTransform().get());
+	}
 }
-
-
-std::vector<std::shared_ptr<Light>> Scene::getLights()
+void Scene::removeObject(GameObject* go)
 {
-	std::vector<std::shared_ptr<Light>> lights;
-	for (const auto& go : m_gos)
+	if (!go->IsDestroyed())
 	{
-		auto light = go->getComponent<Light>();
-		if (light == nullptr)
-		{
-			continue;
-		}
-		lights.push_back(light);
+		go->destroy();
 	}
-	return lights;
+	assert(m_allGos.find(go->getInstanceId()) != m_allGos.end());
+	m_allGos.erase(go->getInstanceId());
 }
-
 std::shared_ptr<Camera> Scene::getMainCamera()
 {
-	for (const auto& go : m_gos)
+	for (const auto& camera : getComponents<Camera>(false))
 	{
-		auto camera = go->getComponent<Camera>();
 		if (camera == nullptr || !camera->getMainCameraFlag())
 		{
 			continue;

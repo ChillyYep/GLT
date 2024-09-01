@@ -43,8 +43,8 @@ void CameraController::onPointerMoved(MouseEvent mouseEvent)
 	{
 		if (m_transform != nullptr)
 		{
-			auto right = m_transform->Right();
-			auto up = m_transform->Up();
+			auto right = m_transform->getRight();
+			auto up = m_transform->getUp();
 			auto offset = (mouseEvent.m_pos - m_beginMovePos) * m_translateSensitivity;
 			m_transform->setPosition(m_beginCameraPos + right * -offset.x + up * offset.y);
 		}
@@ -72,8 +72,8 @@ void CameraController::onPointerReleased(MouseEvent mouseEvent)
 	{
 		if (m_transform != nullptr)
 		{
-			auto right = m_transform->Right();
-			auto up = m_transform->Up();
+			auto right = m_transform->getRight();
+			auto up = m_transform->getUp();
 			auto offset = (mouseEvent.m_pos - m_beginMovePos) * m_translateSensitivity;
 			m_transform->setPosition(m_beginCameraPos + right * -offset.x + up * offset.y);
 		}
@@ -83,8 +83,8 @@ void CameraController::onPointerReleased(MouseEvent mouseEvent)
 }
 
 void CameraController::onWheelScroll(WheelEvent wheelEvent) {
-	auto forward = m_transform->Forward();
-	m_transform->Translate(forward * -wheelEvent.m_yOffset * m_zoomSensitivity);
+	auto forward = m_transform->getForward();
+	m_transform->translate(forward * -wheelEvent.m_yOffset * m_zoomSensitivity);
 }
 
 glm::quat CameraController::rotate(glm::quat beginQuat, float offsetY, float offsetX)

@@ -6,7 +6,7 @@ LightProperties Light::getLightProperties()
 	lightProperties.isEnabled = m_enabled;
 	lightProperties.lightType = m_lightType;
 	lightProperties.position = getTransform()->getPosition();
-	lightProperties.direction = getTransform()->Forward();
+	lightProperties.direction = getTransform()->getForward();
 	lightProperties.color = m_color;
 	lightProperties.spotCosCutoff = 0.0f;
 	lightProperties.ambient = m_color * 0.1f;

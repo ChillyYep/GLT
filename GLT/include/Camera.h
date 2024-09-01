@@ -22,6 +22,11 @@ public:
 		getTransform()->lookAt(target->getPosition());
 	}
 
+	inline void isInFrustum()
+	{
+
+	}
+
 	inline glm::mat4x4 getViewMatrix() { recomputeViewMatrix(); return m_viewMatrix; }
 
 	inline glm::mat4x4 getProjectMatrix() { recomputeProjectMatrix(); return m_projectMatrix; }

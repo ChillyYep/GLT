@@ -508,5 +508,14 @@
     <ClInclude Include="include\RenderStateBlock.h">
       <Filter>头文件\Render\RenderPipeline</Filter>
     </ClInclude>
+    <ClInclude Include="include\CullingResult.h">
+      <Filter>头文件\Game\Component\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Math_Common.h">
+      <Filter>头文件\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="include\FilterSetting.h">
+      <Filter>头文件\Game\Component\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

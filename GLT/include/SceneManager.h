@@ -1,6 +1,7 @@
 #pragma once
 #include <Singleton.h>
 #include <Scene.h>
+#include <stack>
 class SceneManager :public Singleton<SceneManager>
 {
 public:

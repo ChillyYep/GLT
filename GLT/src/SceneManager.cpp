@@ -62,19 +62,18 @@ bool SceneManager::hasScene(std::shared_ptr<Scene>& scene)
 std::vector<LightProperties> SceneManager::getAffectedLights(std::shared_ptr<Camera>& camera)
 {
 	auto allScenes = SceneManager::getInstance()->getAllScenes(false);
-	std::vector<LightProperties> lights;
+	std::vector<LightProperties> allLightProperties;
 	for (const auto& scene : allScenes)
 	{
-		auto objs = scene->getObjectList();
-		for (const auto& obj : objs)
+		auto lights = scene->getComponents<Light>(false);
+		for (const auto& light : lights)
 		{
-			auto light = obj->getComponent<Light>();
-			if (light != nullptr && light->IsRealtime())
+			if (light != nullptr && light->IsRealtime() && light->getEnable())
 			{
 				auto lightProperties = light->getLightProperties();
-				lights.push_back(lightProperties);
+				allLightProperties.push_back(lightProperties);
 			}
 		}
 	}
-	return lights;
+	return allLightProperties;
 }

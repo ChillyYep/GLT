@@ -56,7 +56,7 @@ class ComponentStateMachine
 {
 public:
 	void tick();
-	inline void setup(std::shared_ptr<Component> component){m_target = component;}
+	inline void setup(Component* component){m_target = component;}
 	inline ComponentLifeCycle getComponentLifeStyle() { return m_target->m_state; }
 private:
 	void preAwake();
@@ -67,5 +67,5 @@ private:
 	void enable();
 	void disable();
 	void destroy();
-	std::shared_ptr<Component> m_target;
+	Component* m_target;
 };
