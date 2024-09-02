@@ -23,7 +23,7 @@ public:
 	DeviceBase() {}
 	virtual ~DeviceBase() {}
 
-	virtual void setRenderStateBlock(RenderStateBlock& renderStateBlock) { m_renderStateBlock = renderStateBlock; }
+	virtual void setRenderStateBlock(RenderStateBlock& renderStateBlock) = 0;
 
 	virtual std::vector<MeshResourceIdentifier> requestMeshResources(std::vector<Mesh*>& meshPtrs) = 0;
 
@@ -59,7 +59,6 @@ public:
 	virtual void uploadConstantBufferResource(ConstantBufferType constantBufferType) = 0;
 
 protected:
-	RenderStateBlock m_renderStateBlock;
 	RenderTargetIdentifier* m_curRT;
 
 };

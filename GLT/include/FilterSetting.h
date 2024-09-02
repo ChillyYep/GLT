@@ -1,7 +1,7 @@
 #pragma once
 enum class RenderType {
-	Opaque,
-	Transparent
+	Opaque = 1,
+	Transparent = 1 << 1
 };
 struct FilterSettings
 {

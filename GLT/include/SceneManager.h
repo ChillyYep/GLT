@@ -15,6 +15,8 @@ public:
 	bool hasScene(std::shared_ptr<Scene>& scene);
 
 	std::vector<LightProperties> getAffectedLights(std::shared_ptr<Camera>& camera);
+
+	std::vector<Renderer*> filterRenderers(RenderType renderType);
 private:
 	std::vector<std::shared_ptr<Scene>> m_allScenes;
 };

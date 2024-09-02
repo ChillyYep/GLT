@@ -497,7 +497,6 @@ GLenum GLDevice::textureType2TextureTarget(TextureType textureType) const
 
 void GLDevice::setRenderStateBlock(RenderStateBlock& renderStateBlock)
 {
-	DeviceBase::setRenderStateBlock(renderStateBlock);
 	// 开启深度写入与否
 	glDepthRange(0, 1);
 	glDepthMask(renderStateBlock.m_depthState.m_writable ? GL_TRUE : GL_FALSE);

@@ -77,3 +77,17 @@ std::vector<LightProperties> SceneManager::getAffectedLights(std::shared_ptr<Cam
 	}
 	return allLightProperties;
 }
+
+std::vector<Renderer*> SceneManager::filterRenderers(RenderType renderType)
+{
+	std::vector<Renderer*> renderers;
+	auto scenes = getAllScenes();
+	for (const auto& scene : scenes)
+	{
+		for (const auto& rd : scene->filterRenderers(renderType))
+		{
+			renderers.push_back(rd);
+		}
+	}
+	return renderers;
+}
