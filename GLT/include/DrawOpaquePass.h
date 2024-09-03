@@ -14,6 +14,11 @@ public:
 		m_renderStateBlock.m_colorState.m_cullMode = CullMode::Back;
 		m_renderStateBlock.m_depthState.m_writable = true;
 		m_renderStateBlock.m_depthState.m_compareFunc = CompareFunction::Less;
+
+		m_filterSettings.m_renderType = RenderType::Opaque;
+
+		m_drawSettings.m_sortType = SortType::Near2Far;
+		m_drawSettings.m_cameraPos = m_renderData->m_cameraDatas[m_renderData->m_curCameraIndex].m_worldPos;
 	}
 
 	void prepareConstantBuffer() override
@@ -55,10 +60,14 @@ public:
 				m_context->scheduleCommandBuffer(m_cmdBuffer);
 				m_cmdBuffer.clear();
 				m_context->submit();
+
+				m_context->drawRenderers(m_filterSettings, m_drawSettings);
 			}
 		}
 	}
 private:
+	FilterSettings m_filterSettings;
+	DrawSettings m_drawSettings;
 	RenderStateBlock m_renderStateBlock;
 	RenderTexture* m_renderTexture;
 

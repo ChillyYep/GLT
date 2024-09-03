@@ -1,5 +1,4 @@
 #include "RenderPipeline.h"
-#include <RenderTexture.h>
 void RenderPipeline::init() {
 	m_passList.push_back(new DrawOpaquePass());
 	m_renderContext.init();
@@ -17,7 +16,7 @@ void RenderPipeline::render() {
 	{
 		if (!pass->IsPrepared())
 		{
-			pass->setup(&m_renderContext);
+			pass->setup(&m_renderContext, &m_renderData);
 			pass->prepare();
 		}
 		pass->execute();

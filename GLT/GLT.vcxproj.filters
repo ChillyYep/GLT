@@ -517,5 +517,11 @@
     <ClInclude Include="include\FilterSetting.h">
       <Filter>头文件\Game\Component\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="include\DrawSettings.h">
+      <Filter>头文件\Game\Component\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderData.h">
+      <Filter>头文件\Render</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

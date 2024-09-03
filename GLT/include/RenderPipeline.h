@@ -36,5 +36,7 @@ private:
 
 	CommandBuffer m_cmd;
 
+	RenderData m_renderData;
+
 	PassList m_passList;
 };
