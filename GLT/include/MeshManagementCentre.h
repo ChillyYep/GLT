@@ -1,11 +1,10 @@
 #pragma once
 #include "Mesh.h"
 #include "ManagementCentreBase.h"
-#include <memory>
 /// <summary>
 /// 那些会进入渲染的Mesh的分配器
 /// </summary>
-class MeshManagementCentre :public ManagementCentreBase<std::shared_ptr<Mesh>>
+class MeshManagementCentre :public ManagementCentreBase<Mesh*>
 {
 public:
 	MeshManagementCentre() {}

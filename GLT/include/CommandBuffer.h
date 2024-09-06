@@ -4,6 +4,7 @@
 #include <RenderCommand.h>
 #include <Texture.h>
 #include <Mesh.h>
+#include <Renderer.h>
 #include <RenderResourceManager.h>
 
 class CommandBuffer
@@ -20,6 +21,8 @@ public:
 	void clear();
 
 	void drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix);
+
+	void drawRenderer(Renderer* renderer);
 
 	void setViewport(int x, int y, int width, int height);
 

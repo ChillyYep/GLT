@@ -257,26 +257,33 @@ public:
 		{
 			auto setViewPortParam = static_cast<SetViewPortParam*>(commandParam);
 			setViewport(setViewPortParam->m_x, setViewPortParam->m_y, setViewPortParam->m_width, setViewPortParam->m_height);
+			break;
 		}
-		break;
 		case RenderCommandType::SetRenderTarget:
 		{
 			auto setRenderTargetParam = static_cast<SetRenderTargetParam*>(commandParam);
 			activate(setRenderTargetParam->identifier);
+			break;
 		}
-		break;
 		case RenderCommandType::ClearColor:
 		{
 			auto clearColorParam = static_cast<ClearColorRenderParam*>(commandParam);
 			clearColor(clearColorParam->r, clearColorParam->g, clearColorParam->b, clearColorParam->a);
+			break;
 		}
-		break;
 		case RenderCommandType::DrawMesh:
 		{
 			auto drawMeshParam = static_cast<DrawMeshParam*>(commandParam);
 			drawMesh(drawMeshParam->m_meshPtr, drawMeshParam->m_materialPtr, drawMeshParam->m_modelMatrix, drawMeshParam->m_meshResourceIdentifier, drawMeshParam->m_textureResources);
+			break;
 		}
-		break;
+		case RenderCommandType::DrawRenderer:
+		{
+			auto drawRendererParam = static_cast<DrawRendererParam*>(commandParam);
+			drawMesh(drawRendererParam->m_rendererPtr->getMesh().get(), drawRendererParam->m_rendererPtr->getMaterial().get(), 
+				drawRendererParam->m_rendererPtr->getGameObject()->getTransform()->getModelMatrix(), drawRendererParam->m_meshResourceIdentifier, drawRendererParam->m_textureResources);
+			break;
+		}
 		default:
 			break;
 		}

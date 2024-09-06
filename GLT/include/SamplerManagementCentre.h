@@ -2,7 +2,7 @@
 #include <ManagementCentreBase.h>
 #include <Sampler.h>
 
-class SamplerManagementCentre :public ManagementCentreBase<std::shared_ptr<Sampler>>
+class SamplerManagementCentre :public ManagementCentreBase<Sampler*>
 {
 public:
 	SamplerManagementCentre() {}

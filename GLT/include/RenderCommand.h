@@ -5,6 +5,7 @@
 #include <Light.h>
 #include <Material.h>
 #include <Mesh.h>
+#include <Renderer.h>
 
 enum class RenderCommandType
 {
@@ -13,7 +14,8 @@ enum class RenderCommandType
 	SetRenderTarget,
 	SetViewPort,
 	ClearColor,
-	DrawMesh
+	DrawMesh,
+	DrawRenderer
 };
 
 class RenderCommandParam
@@ -77,6 +79,18 @@ public:
 	MeshResourceIdentifier* m_meshResourceIdentifier;
 	std::unordered_map<GLuint, TextureResourceIdentifier> m_textureResources;
 };
+
+RENDERCOMMANDPARAM_CLASS(DrawRendererParam, RenderCommandType::DrawRenderer)
+{
+public:
+	DrawRendererParam() {}
+	~DrawRendererParam() {}
+
+	Renderer* m_rendererPtr;
+	MeshResourceIdentifier* m_meshResourceIdentifier;
+	std::unordered_map<GLuint, TextureResourceIdentifier> m_textureResources;
+};
+
 
 RENDERCOMMANDPARAM_CLASS(SetViewPortParam, RenderCommandType::SetViewPort)
 {

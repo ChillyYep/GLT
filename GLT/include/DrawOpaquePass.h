@@ -18,7 +18,6 @@ public:
 		m_filterSettings.m_renderType = RenderType::Opaque;
 
 		m_drawSettings.m_sortType = SortType::Near2Far;
-		m_drawSettings.m_cameraPos = m_renderData->m_cameraDatas[m_renderData->m_curCameraIndex].m_worldPos;
 	}
 
 	void prepareConstantBuffer() override
@@ -48,6 +47,9 @@ public:
 	void execute() override
 	{
 		m_context->setRenderStateBlock(m_renderStateBlock);
+		// 如果多相机绘制，则相机会在同一帧发生变化，所以需要及时更新
+		m_drawSettings.m_cameraPos = m_renderData->m_cameraDatas[m_renderData->m_curRenderingCameraIndex].m_worldPos;
+
 		auto& rtManagementCentre = RenderResourceManager::getInstance()->getRenderTargetManagementCentre();
 		auto instanceIds = rtManagementCentre.getAllObjectInstanceIds();
 		if (instanceIds.size() > 0)

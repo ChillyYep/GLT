@@ -10,13 +10,6 @@
 #include <ResourceIdentifier.h>
 #include <RenderStateBlock.h>
 
-enum class ResourceType {
-	Mesh,
-	Texture,
-	Sampler,
-	RenderTarget
-};
-
 class DeviceBase
 {
 public:

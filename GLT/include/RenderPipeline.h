@@ -24,9 +24,8 @@ private:
 	void updateSceneProperties4Render();
 	void postUpdate();
 	void updatePerFrameConstantBuffer();
-	void updatePerCameraConstantBuffer(std::shared_ptr<Camera>& camera);
-	void updateLightProperties(std::shared_ptr<Camera>& camera);
-	void renderPerObject(Renderer& renderObject, std::shared_ptr<Camera>& camera);
+	void updatePerCameraConstantBuffer(CameraData& cameraData);
+	void updateLightProperties();
 
 	ScriptableRenderContext m_renderContext;
 

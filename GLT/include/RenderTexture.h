@@ -3,7 +3,7 @@
 #include <iostream>
 #include <Texture.h>
 #include <RenderTarget.h>
-#include <RenderResourceManager.h>
+#include <LogicResourceManagementCentre.h>
 
 class RenderTexture :public Texture2D
 {
@@ -43,29 +43,43 @@ public:
 		{
 			return;
 		}
-		m_renderTarget = std::shared_ptr<RenderTarget>(new RenderTarget(m_width, m_height, m_colorInternalFormat, m_depthInternalFormat, m_stencilInternalFormat, m_perChannelSize, m_wrapModeS, m_wrapModeT, m_textureFilter));
+		m_renderTarget = new RenderTarget(m_width, m_height, m_colorInternalFormat, m_depthInternalFormat, m_stencilInternalFormat, m_perChannelSize, m_wrapModeS, m_wrapModeT, m_textureFilter);
 		if (m_colorInternalFormat != TextureInternalFormat::None)
 		{
-			m_colorRB.reset(m_width, m_height, false);
-			m_colorRB.setColorInternalFormat(m_colorInternalFormat);
-			m_renderTarget->addAttachment(AttachmentEntityWrapper(&m_colorRB, FBOAttachmentType::Color));
+			RenderBufferDesc rbDesc;
+			rbDesc.m_width = m_width;
+			rbDesc.m_height = m_height;
+			rbDesc.m_isDepthBuffer = false;
+
+			m_colorRB = LogicResourceManagementCentre::getInstance()->addResource(rbDesc);
+			m_colorRB->setColorInternalFormat(m_colorInternalFormat);
+			m_renderTarget->addAttachment(AttachmentEntityWrapper(m_colorRB, FBOAttachmentType::Color));
 		}
 		if (m_depthInternalFormat != RenderTextureDepthStencilType::None)
 		{
-			m_depthRB.reset(m_width, m_height, true);
-			m_depthRB.setDepthStencilType(m_depthInternalFormat);
-			m_renderTarget->addAttachment(AttachmentEntityWrapper(&m_depthRB,
+			RenderBufferDesc rbDesc;
+			rbDesc.m_width = m_width;
+			rbDesc.m_height = m_height;
+			rbDesc.m_isDepthBuffer = true;
+
+			m_depthRB = LogicResourceManagementCentre::getInstance()->addResource(rbDesc);
+			m_depthRB->setDepthStencilType(m_depthInternalFormat);
+			m_renderTarget->addAttachment(AttachmentEntityWrapper(m_depthRB,
 				m_depthInternalFormat == RenderTextureDepthStencilType::Depth_Stencil ?
 				FBOAttachmentType::DepthStencil : FBOAttachmentType::Depth));
 		}
 		if (m_stencilInternalFormat != RenderTextureDepthStencilType::None)
 		{
-			m_stencilRB.reset(m_width, m_height, true);
-			m_stencilRB.setDepthStencilType(m_stencilInternalFormat);
-			m_renderTarget->addAttachment(AttachmentEntityWrapper(&m_stencilRB, FBOAttachmentType::Stencil));
+			RenderBufferDesc rbDesc;
+			rbDesc.m_width = m_width;
+			rbDesc.m_height = m_height;
+			rbDesc.m_isDepthBuffer = true;
+
+			m_stencilRB = LogicResourceManagementCentre::getInstance()->addResource(rbDesc);
+			m_stencilRB->setDepthStencilType(m_stencilInternalFormat);
+			m_renderTarget->addAttachment(AttachmentEntityWrapper(m_stencilRB, FBOAttachmentType::Stencil));
 		}
-		auto& rtManagementCentre = RenderResourceManager::getInstance()->getRenderTargetManagementCentre();
-		rtManagementCentre.add(m_renderTarget);
+		LogicResourceManagementCentre::getInstance()->addResource(ResourceType::RenderTarget, m_renderTarget);
 	}
 
 	void release()
@@ -74,12 +88,22 @@ public:
 		{
 			return;
 		}
-
-		m_colorRB.reset(0, 0, false);
-		m_depthRB.reset(0, 0, true);
-		m_stencilRB.reset(0, 0, true);
-		auto& rtManagementCentre = RenderResourceManager::getInstance()->getRenderTargetManagementCentre();
-		rtManagementCentre.remove(m_renderTarget);
+		if (m_colorRB != nullptr)
+		{
+			LogicResourceManagementCentre::getInstance()->destroyResource(m_colorRB);
+			m_colorRB = nullptr;
+		}
+		if (m_depthRB != nullptr)
+		{
+			LogicResourceManagementCentre::getInstance()->destroyResource(m_depthRB);
+			m_depthRB = nullptr;
+		}
+		if (m_stencilRB != nullptr)
+		{
+			LogicResourceManagementCentre::getInstance()->destroyResource(m_stencilRB);
+			m_stencilRB = nullptr;
+		}
+		LogicResourceManagementCentre::getInstance()->destroyResource(ResourceType::RenderTarget, m_renderTarget);
 		m_renderTarget = nullptr;
 		m_isCreated = false;
 	}
@@ -88,9 +112,9 @@ private:
 	bool m_isCreated = false;
 	RenderTextureDepthStencilType m_depthInternalFormat;
 	RenderTextureDepthStencilType m_stencilInternalFormat;
-	std::shared_ptr<RenderTarget> m_renderTarget;
+	RenderTarget* m_renderTarget;
 
-	RenderBuffer m_colorRB;
-	RenderBuffer m_depthRB;
-	RenderBuffer m_stencilRB;
+	RenderBuffer* m_colorRB;
+	RenderBuffer* m_depthRB;
+	RenderBuffer* m_stencilRB;
 };

@@ -157,6 +157,9 @@
     <Filter Include="头文件\Render\PassManagement">
       <UniqueIdentifier>{4e8404ba-d0a7-4a0a-a1f7-482d4196a9ea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Common\ObserverPattern">
+      <UniqueIdentifier>{7c7ae7e9-ec12-4c3e-a355-e2b80b1ee129}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl3w.c">
@@ -522,6 +525,27 @@
     </ClInclude>
     <ClInclude Include="include\RenderData.h">
       <Filter>头文件\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LogicResourceManagementCentre.h">
+      <Filter>头文件\Render\RenderResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderResourceManagment.h">
+      <Filter>头文件\Render\RenderResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ListenerBase.h">
+      <Filter>头文件\Common\ObserverPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EventObserver.h">
+      <Filter>头文件\Common\ObserverPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderEventSystem.h">
+      <Filter>头文件\Render\RenderResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderEventId.h">
+      <Filter>头文件\Render\RenderResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderBufferManagementCentre.h">
+      <Filter>头文件\Render\RenderResourceManager\ManagementCentre</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

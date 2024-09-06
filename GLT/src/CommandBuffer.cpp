@@ -45,6 +45,19 @@ void CommandBuffer::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatr
 	m_cmdList.push_back(command);
 }
 
+void CommandBuffer::drawRenderer(Renderer* renderer)
+{
+	RenderCommand command = RenderCommand();
+	DrawRendererParam* drawRendererParam = RenderCommandParamFactory::getInstance()->createParam<DrawRendererParam>();
+	drawRendererParam->m_rendererPtr = renderer;
+	drawRendererParam->m_meshResourceIdentifier= RenderResourceManager::getInstance()->getMeshResource(renderer->getMesh()->getInstanceId());
+	drawRendererParam->m_textureResources = RenderResourceManager::getInstance()->getTextureResources();
+	command.commandType = RenderCommandType::DrawRenderer;
+	command.param = drawRendererParam;
+
+	m_cmdList.push_back(command);
+}
+
 void CommandBuffer::setViewport(int x, int y, int width, int height)
 {
 	RenderCommand command = RenderCommand();
