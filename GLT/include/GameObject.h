@@ -1,110 +1,16 @@
 #pragma once
 #include <Object.h>
-#include <Component.h>
 #include <type_traits>
 #include <Transform.h>
-#include <memory>
 
-class GameObject :public Object
+class GameObject :public ComponentOwner
 {
 public:
 	GameObject() {}
 	~GameObject() {}
 
-	inline std::shared_ptr<Transform>& getTransform() { return m_transform; }
+	inline std::shared_ptr<Transform> getTransform() { return getComponent<Transform>(); }
 
-	void addComponent(std::shared_ptr<Component> component);
-
-	template<typename T>
-	std::shared_ptr<T> addComponent()
-	{
-		static_assert(TypeCheck::IsComponentType<T>(), "组件必须添加component_traits类型萃取");
-		bool existSameType = false;
-		for (int i = 0;i < m_components.size();++i)
-		{
-			if (m_components[i]->getComponentType() == component_traits<T>::value)
-			{
-				existSameType = true;
-				break;
-			}
-		}
-		assert(!existSameType);
-		auto component = std::shared_ptr<Component>(new T());
-		component->m_gameObjectPtr = this;
-		m_components.push_back(component);
-		if (component_traits<T>::value == ComponentType::Transform)
-		{
-			m_transform = std::static_pointer_cast<Transform>(component);
-		}
-		return std::static_pointer_cast<T>(component);
-	}
-
-	template<typename T>
-	std::shared_ptr<T> getComponent()
-	{
-		if (!TypeCheck::IsComponentType<T>())
-		{
-			return nullptr;
-		}
-		for (int i = 0;i < m_components.size();++i)
-		{
-			if (m_components[i]->getComponentType() == component_traits<T>::value)
-			{
-				return std::static_pointer_cast<T>(m_components[i]);
-			}
-		}
-		return nullptr;
-	}
-
-	void removeComponent(std::shared_ptr<Component> component);
-
-	inline std::vector<std::shared_ptr<Component>> getComponents() { return m_components; }
-
-	void destroy()
-	{
-		if (m_isdestroyed)
-		{
-			return;
-		}
-		m_isdestroyed = true;
-		// 组件销毁
-		for (int i = 0;i < m_components.size();++i)
-		{
-			m_components[i]->destroy();
-		}
-		// 子节点销毁
-		auto children = m_transform->getChildren();
-		for (const auto& child : children)
-		{
-			child->getGameObject()->destroy();
-		}
-		m_transform->setParent(nullptr);
-	}
-
-	__GET_SET_PROPERTY__(Actived, bool, m_actived)
-		__GET_SET_BOOLEANPROPERTY__(Destroyed, m_isdestroyed)
+	void destroy() override;
 private:
-	int getComponentIndex(std::shared_ptr<Component> component)
-	{
-		if (component == nullptr)
-		{
-			return -1;
-		}
-		for (int i = 0;i < m_components.size();++i)
-		{
-			if (m_components[i]->getInstanceId() == component->getInstanceId())
-			{
-				return i;
-			}
-		}
-		return -1;
-	}
-
-	bool m_actived = true;
-
-	bool m_isdestroyed;
-
-	std::shared_ptr<Transform> m_transform;
-
-	std::vector<std::shared_ptr<Component>> m_components;
 };

@@ -6,7 +6,7 @@
 #include <ResourceIdentifier.h>
 #include <DeviceBase.h>
 
-class RenderResourceManagement :public RenderEventListener
+class RenderResourceManagement :public Singleton<RenderResourceManagement>, public RenderEventListener
 {
 public:
 	void setup(DeviceBase* device)
@@ -14,12 +14,12 @@ public:
 		m_device = device;
 	}
 
-	void Register()
+	void regist()
 	{
 		RenderEventSystem::getInstance()->addListener(RenderEventId::RequestResource, this);
 	}
 
-	void Unregister()
+	void unregist()
 	{
 		RenderEventSystem::getInstance()->removeListener(RenderEventId::RequestResource, this);
 	}
@@ -28,15 +28,66 @@ public:
 	{
 		if (renderEvent.m_eventId == RenderEventId::RequestResource)
 		{
-			auto resourceRef = static_cast<ResourceRef*>(renderEvent.m_param);
+			auto resourceRef = static_cast<RequestResourceRef*>(renderEvent.m_param);
 			generateResourceIdentifier(resourceRef->m_resourceType, resourceRef->m_targets);
 		}
 		else if (renderEvent.m_eventId == RenderEventId::DestroyResource)
 		{
-			auto resourceRef = static_cast<ResourceRef*>(renderEvent.m_param);
+			auto resourceRef = static_cast<RequestResourceRef*>(renderEvent.m_param);
 			destroyResourceIdentifier(resourceRef->m_resourceType, resourceRef->m_targets);
 		}
 	}
+
+	ResourceIdentifier* getResourceIdentifier(ResourceType resourceType, unsigned int instanceId)
+	{
+		switch (resourceType)
+		{
+		case ResourceType::Mesh:
+		{
+			if (m_meshResources.find(instanceId) != m_meshResources.end())
+			{
+				return &m_meshResources[instanceId];
+			}
+			break;
+		}
+		case ResourceType::Texture:
+		{
+			if (m_textureResources.find(instanceId) != m_textureResources.end())
+			{
+				return &m_textureResources[instanceId];
+			}
+			break;
+		}
+		case ResourceType::Sampler:
+		{
+			if (m_samplerResources.find(instanceId) != m_samplerResources.end())
+			{
+				return &m_samplerResources[instanceId];
+			}
+			break;
+		}
+		case ResourceType::RenderBuffer:
+		{
+			if (m_renderBufferResources.find(instanceId) != m_renderBufferResources.end())
+			{
+				return &m_renderBufferResources[instanceId];
+			}
+			break;
+		}
+		case ResourceType::RenderTarget:
+		{
+			if (m_renderTargetResources.find(instanceId) != m_renderTargetResources.end())
+			{
+				return &m_renderTargetResources[instanceId];
+			}
+			break;
+		}
+		default:
+			break;
+		}
+		return nullptr;
+	}
+
 private:
 	void generateResourceIdentifier(ResourceType resourceType, std::vector<Object*>& objects)
 	{

@@ -10,8 +10,6 @@ public:
 
 	LightProperties getLightProperties();
 
-	inline std::shared_ptr<Transform> getTransform() { return m_gameObjectPtr->getTransform(); }
-
 	__GET_SET_PROPERTY__(Color, glm::vec4, m_color)
 		__GET_SET_PROPERTY__(LightType, LightType, m_lightType)
 		__GET_SET_BOOLEANPROPERTY__(Realtime, m_isRealtime)

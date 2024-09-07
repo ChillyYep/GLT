@@ -8,7 +8,7 @@ void TextureManagementCentre::onSubmit()
 		auto& texture = textureItem.m_target;
 		if (!texture->getCanReadWrite())
 		{
-			unloadTexture(texture.get());
+			unloadTexture(texture);
 		}
 	}
 }

@@ -49,8 +49,9 @@ std::vector<GameObject*> Scene::getObjectList(bool includeInactived)
 		auto children = curNode->getTransform()->getChildren();
 		for (int i = (int)children.size() - 1; i >= 0; i--)
 		{
-			auto go = children[i]->getGameObject();
-			if (includeInactived || go->getActived())
+			auto compOwner = children[i]->getGameObject();
+			auto go = static_cast<GameObject*>(compOwner);
+			if ((includeInactived || compOwner->getActived()) && go != nullptr)
 			{
 				nodes.push(go);
 			}

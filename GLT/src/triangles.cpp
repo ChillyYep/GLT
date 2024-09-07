@@ -23,7 +23,7 @@ void createScene()
 	auto shader = shared_ptr<Shader>(new Shader("cube_tex"));
 
 	auto mat = shared_ptr<Material>(new Material(shader));
-	auto tex = shared_ptr<Texture2D>(new Texture2D());
+	auto tex = new Texture2D();
 	// 需要引入一个从文件加载纹理的库
 	tex->load("Resources/wall.jpg");
 	tex->setInternalFormat(TextureInternalFormat::RGB8);
@@ -37,19 +37,19 @@ void createScene()
 	// 网格
 	auto cubeMesh = PrimitiveUtils::createCube();
 
-	auto go1 = SceneUtility::CreateMeshGameObject(cubeMesh, mat);
+	auto go1 = SceneUtility::createMeshGameObject(cubeMesh, mat);
 	auto cube1Transform = go1->getComponent<Transform>();
 	cube1Transform->setPosition(glm::vec3(0.0f));
 	cube1Transform->setScale(glm::vec3(1.0f));
 	cube1Transform->setEularAngle(glm::vec3(0.0f));
 
-	auto go2 = SceneUtility::CreateMeshGameObject(cubeMesh, mat);
+	auto go2 = SceneUtility::createMeshGameObject(cubeMesh, mat);
 	auto cube2Transform = go2->getComponent<Transform>();
 	cube2Transform->setPosition(glm::vec3(3.0f, 0.0f, 0.0f));
 	cube2Transform->setScale(glm::vec3(1.0f));
 	cube2Transform->setEularAngle(glm::vec3(0.0f));
 
-	auto cameraGo = SceneUtility::CreateEmptyGameObject();
+	auto cameraGo = SceneUtility::createEmptyGameObject();
 	auto cameraTransform = cameraGo->getTransform();
 	cameraTransform->setPosition(glm::vec3(10.0f, 2.0f, 10.0f));
 	cameraTransform->setScale(glm::vec3(1.0f));
@@ -66,8 +66,8 @@ void createScene()
 	cameraTransform->lookAt(cube1Transform->getPosition());
 	camera->setCameraController(shared_ptr<CameraController>(new CameraController()));
 
-	auto lightGo = SceneUtility::CreateEmptyGameObject();
-	auto lightGo2 = SceneUtility::CreateEmptyGameObject();
+	auto lightGo = SceneUtility::createEmptyGameObject();
+	auto lightGo2 = SceneUtility::createEmptyGameObject();
 
 	auto lightComp = lightGo->addComponent<Light>();
 	lightComp->setLightType(LightType::DirectionalLight);

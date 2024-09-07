@@ -15,7 +15,7 @@ enum class ResourceType {
 	RenderBuffer,
 	RenderTarget,
 };
-struct ResourceRef
+struct RequestResourceRef
 {
 	std::vector<Object*> m_targets;
 	ResourceType m_resourceType;
@@ -27,9 +27,9 @@ public:
 	LogicResourceManagementCentre() {}
 	~LogicResourceManagementCentre() {}
 
-	Object* addResource(ResourceType resouceType, Object* resource)
+	Object* addResource(ResourceType resourceType, Object* resource)
 	{
-		switch (resouceType)
+		switch (resourceType)
 		{
 		case ResourceType::Mesh:
 			m_meshManagementCentre.add(static_cast<Mesh*>(resource));
@@ -52,16 +52,18 @@ public:
 		return resource;
 	}
 
-	RenderBuffer* addResource(RenderBufferDesc& renderBufferDesc)
+	RenderBuffer* addResource(RenderBufferDescriptor& renderBufferDesc)
 	{
-		RenderBuffer* renderBufferPtr = new RenderBuffer();
+		RenderBuffer* renderBufferPtr = new RenderBuffer(renderBufferDesc);
 		m_renderBufferManagementCentre.add(renderBufferPtr);
 		return renderBufferPtr;
 	}
 
-	void destroyResource(RenderBuffer* renderBufferPtr)
+	RenderTarget* addResource(RenderTargetDescriptor& renderTargetDesc)
 	{
-		m_renderBufferManagementCentre.remove(renderBufferPtr);
+		RenderTarget* renderTargetPtr = new RenderTarget(renderTargetDesc);
+		m_renderTargetManagementCentre.add(renderTargetPtr);
+		return renderTargetPtr;
 	}
 
 	void destroyResource(ResourceType resouceType, Object* resource)
@@ -69,20 +71,45 @@ public:
 		switch (resouceType)
 		{
 		case ResourceType::Mesh:
-			m_meshManagementCentre.remove(static_cast<Mesh*>(resource));
+		{
+			if (m_meshManagementCentre.getRefObject(resource->getInstanceId()).m_target != nullptr)
+			{
+				m_meshManagementCentre.remove(static_cast<Mesh*>(resource));
+			}
 			break;
+		}
 		case ResourceType::Texture:
-			m_textureManagementCentre.remove(static_cast<Texture*>(resource));
+		{
+			if (m_textureManagementCentre.getRefObject(resource->getInstanceId()).m_target != nullptr)
+			{
+				m_textureManagementCentre.remove(static_cast<Texture*>(resource));
+			}
 			break;
+		}
 		case ResourceType::Sampler:
-			m_samplerManagementCentre.remove(static_cast<Sampler*>(resource));
+		{
+			if (m_samplerManagementCentre.getRefObject(resource->getInstanceId()).m_target != nullptr)
+			{
+				m_samplerManagementCentre.remove(static_cast<Sampler*> (resource));
+			}
 			break;
+		}
 		case ResourceType::RenderBuffer:
-			m_renderBufferManagementCentre.remove(static_cast<RenderBuffer*>(resource));
+		{
+			if (m_renderBufferManagementCentre.getRefObject(resource->getInstanceId()).m_target != nullptr)
+			{
+				m_renderBufferManagementCentre.remove(static_cast<RenderBuffer*>(resource));
+			}
 			break;
+		}
 		case ResourceType::RenderTarget:
-			m_renderTargetManagementCentre.remove(static_cast<RenderTarget*>(resource));
+		{
+			if (m_renderTargetManagementCentre.getRefObject(resource->getInstanceId()).m_target != nullptr)
+			{
+				m_renderTargetManagementCentre.remove(static_cast<RenderTarget*>(resource));
+			}
 			break;
+		}
 		default:
 			break;
 		}
@@ -108,6 +135,32 @@ public:
 		}
 	}
 
+	void tick()
+	{
+		tickResources(&m_meshManagementCentre, ResourceType::Mesh);
+		tickResources(&m_textureManagementCentre, ResourceType::Texture);
+		tickResources(&m_samplerManagementCentre, ResourceType::Sampler);
+		tickResources(&m_renderBufferManagementCentre, ResourceType::RenderBuffer);
+		tickResources(&m_renderTargetManagementCentre, ResourceType::RenderTarget);
+	}
+	template<typename T>
+	inline void tickResources(ManagementCentreBase<T*>* managementCentre, ResourceType resourceType)
+	{
+		managementCentre->getChangedObjects(m_newList, m_removedList);
+		onPushResources(resourceType, m_newList);
+		onPopResources(resourceType, m_removedList);
+
+		for (int i = 0;i < m_removedList.size(); ++i)
+		{
+			delete m_removedList[i];
+		}
+
+		m_newList.clear();
+		m_removedList.clear();
+
+		managementCentre->clearChangedObjectfs();
+	}
+
 	/// <summary>
 	/// 向渲染层资源管理器推送资源
 	/// </summary>
@@ -115,7 +168,7 @@ public:
 	/// <param name="resources"></param>
 	void onPushResources(ResourceType resourceType, std::vector<Object*> resources)
 	{
-		ResourceRef resourceRef;
+		RequestResourceRef resourceRef;
 		resourceRef.m_resourceType = resourceType;
 		resourceRef.m_targets = resources;
 
@@ -153,7 +206,51 @@ public:
 		}
 		RenderEventSystem::getInstance()->notify(renderEvent);
 	}
+
+	void onPopResources(ResourceType resourceType, std::vector<Object*> resources)
+	{
+		RequestResourceRef resourceRef;
+		resourceRef.m_resourceType = resourceType;
+		resourceRef.m_targets = resources;
+
+		RenderEvent renderEvent;
+		renderEvent.m_eventId = RenderEventId::DestroyResource;
+		renderEvent.m_param = &resourceRef;
+		// RenderTarget属于复合资源，需要保证其依赖的资源已被申请
+		if (resourceType == ResourceType::RenderTarget)
+		{
+			for (int i = 0; i < resources.size(); ++i)
+			{
+				auto rt = static_cast<RenderTarget*>(resources[i]);
+				std::vector<Object*> renderBuffers;
+				std::vector<Object*> textures;
+				auto& attachments = rt->getAttachments();
+				for (const auto& attachment : attachments)
+				{
+					if (attachment.getResourceType() == FBOAttachmentResourceType::Texture)
+					{
+						textures.push_back(attachment.getTexture());
+					}
+					else {
+						renderBuffers.push_back(attachment.getRenderBuffer());
+					}
+				}
+				if (renderBuffers.size() > 0)
+				{
+					onPopResources(ResourceType::RenderBuffer, renderBuffers);
+				}
+				if (textures.size() > 0)
+				{
+					onPopResources(ResourceType::Texture, textures);
+				}
+			}
+		}
+		RenderEventSystem::getInstance()->notify(renderEvent);
+	}
 private:
+	std::vector<Object*> m_newList;
+	std::vector<Object*> m_removedList;
+
 	MeshManagementCentre m_meshManagementCentre;
 	TextureManagementCentre m_textureManagementCentre;
 	RenderTargetManagementCentre m_renderTargetManagementCentre;

@@ -8,7 +8,7 @@ void MeshManagementCentre::onSubmit()
 		auto& mesh = meshItem.m_target;
 		if (!mesh->getCanReadWrite())
 		{
-			deallocateMesh(mesh.get());
+			deallocateMesh(mesh);
 		}
 	}
 }

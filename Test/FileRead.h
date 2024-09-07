@@ -159,7 +159,7 @@ private:
 		}
 		std::stringstream ss;
 		bool start = false;
-		for (int i = pattern.size();i < line.size();++i)
+		for (size_t i = pattern.size();i < line.size();++i)
 		{
 			if (line[i] == '\"')
 			{

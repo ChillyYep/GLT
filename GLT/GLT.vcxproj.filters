@@ -183,9 +183,6 @@
     <ClCompile Include="src\Shader.cpp">
       <Filter>源文件\Render\Shader</Filter>
     </ClCompile>
-    <ClCompile Include="src\RenderResourceManager.cpp">
-      <Filter>源文件\Render\RenderResourceManager</Filter>
-    </ClCompile>
     <ClCompile Include="src\ShaderPropertyNames.cpp">
       <Filter>源文件\Render\Shader</Filter>
     </ClCompile>
@@ -348,9 +345,6 @@
     </ClInclude>
     <ClInclude Include="include\Shader.h">
       <Filter>头文件\Render\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="include\RenderResourceManager.h">
-      <Filter>头文件\Render\RenderResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="include\ShaderPropertyNames.h">
       <Filter>头文件\Render\Shader</Filter>

@@ -26,13 +26,13 @@ private:
 class MaterialTextureProperty :public MaterialProperty
 {
 public:
-	MaterialTextureProperty(std::shared_ptr<Texture> texPtr) :m_texPtr(texPtr) {}
+	MaterialTextureProperty(Texture* texPtr) :m_texPtr(texPtr) {}
 	~MaterialTextureProperty() {}
 	MaterialPropertyType getMaterialPropertyType() override { return MaterialPropertyType::Texture; }
-	__GET_SET_PROPERTY__(Texture, std::shared_ptr<Texture>, m_texPtr)
+	__GET_SET_PROPERTY__(Texture, Texture*, m_texPtr)
 
 private:
-	std::shared_ptr<Texture> m_texPtr;
+	Texture* m_texPtr;
 };
 
 class MaterialVector4Property :public MaterialProperty
@@ -112,7 +112,7 @@ public:
 	{
 		return getProperty(ShaderPropertyNames::MainTex);
 	}
-	std::vector<std::shared_ptr<Texture>> getAllTextures();
+	std::vector<Texture*> getAllTextures();
 
 	__GET_SET_PROPERTY__(Shader, std::shared_ptr<Shader>, m_shader)
 private:

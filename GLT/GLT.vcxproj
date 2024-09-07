@@ -161,7 +161,6 @@
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\RenderPipeline.cpp" />
     <ClCompile Include="src\RenderTexture.cpp" />
-    <ClCompile Include="src\RenderResourceManager.cpp" />
     <ClCompile Include="src\RHICommon.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\ConstantBufferIdentifier.cpp" />
@@ -244,7 +243,6 @@
     <ClInclude Include="include\RenderPipeline.h" />
     <ClInclude Include="include\RenderTexture.h" />
     <ClInclude Include="include\ResourceIdentifierType.h" />
-    <ClInclude Include="include\RenderResourceManager.h" />
     <ClInclude Include="include\RHICommon.h" />
     <ClInclude Include="include\Sampler.h" />
     <ClInclude Include="include\SamplerManagementCentre.h" />

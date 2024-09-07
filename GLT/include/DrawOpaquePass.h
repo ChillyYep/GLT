@@ -1,7 +1,7 @@
 #pragma once
 #include <PassBase.h>
 #include <RenderTexture.h>
-#include <RenderResourceManager.h>
+#include <RenderResourceManagment.h>
 
 class DrawOpaquePass :public PassBase
 {
@@ -50,21 +50,15 @@ public:
 		// 如果多相机绘制，则相机会在同一帧发生变化，所以需要及时更新
 		m_drawSettings.m_cameraPos = m_renderData->m_cameraDatas[m_renderData->m_curRenderingCameraIndex].m_worldPos;
 
-		auto& rtManagementCentre = RenderResourceManager::getInstance()->getRenderTargetManagementCentre();
-		auto instanceIds = rtManagementCentre.getAllObjectInstanceIds();
-		if (instanceIds.size() > 0)
+		auto rtIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, m_renderTexture->getRTInstanceId()));
+		if (rtIdentifier != nullptr)
 		{
-			auto rtIdentifier = RenderResourceManager::getInstance()->getRenderTargetResource(instanceIds[0]);
-			if (rtIdentifier != nullptr)
-			{
-				m_cmdBuffer.setRenderTarget(rtIdentifier);
-				m_cmdBuffer.clearColor(0.0f, 0.0f, 0.0f, 0.0f);
-				m_context->scheduleCommandBuffer(m_cmdBuffer);
-				m_cmdBuffer.clear();
-				m_context->submit();
-
-				m_context->drawRenderers(m_filterSettings, m_drawSettings);
-			}
+			m_cmdBuffer.setRenderTarget(rtIdentifier);
+			m_cmdBuffer.clearColor(0.0f, 0.0f, 0.0f, 0.0f);
+			m_context->scheduleCommandBuffer(m_cmdBuffer);
+			m_cmdBuffer.clear();
+			m_context->submit();
+			m_context->drawRenderers(m_filterSettings, m_drawSettings);
 		}
 	}
 private:

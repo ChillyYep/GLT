@@ -3,7 +3,7 @@
 #include <Object.h>
 #include <TextureEnums.h>
 
-struct RenderBufferDesc {
+struct RenderBufferDescriptor {
 	int m_width;
 	int m_height;
 	bool m_isDepthBuffer;
@@ -14,11 +14,11 @@ struct RenderBufferDesc {
 class RenderBuffer :public Object
 {
 public:
-	RenderBuffer(RenderBufferDesc renderbufferDesc)
+	RenderBuffer(RenderBufferDescriptor renderbufferDesc)
 	{
 		m_renderBufferDesc = renderbufferDesc;
 	}
-	RenderBuffer() :RenderBuffer(RenderBufferDesc()) {}
+	RenderBuffer() :RenderBuffer(RenderBufferDescriptor()) {}
 	~RenderBuffer() {}
 
 	int getWidth() const { return m_renderBufferDesc.m_width; }
@@ -31,5 +31,5 @@ public:
 
 	bool IsDepthBuffer() { return m_renderBufferDesc.m_isDepthBuffer; }
 private:
-	RenderBufferDesc m_renderBufferDesc;
+	RenderBufferDescriptor m_renderBufferDesc;
 };

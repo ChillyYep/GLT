@@ -13,7 +13,7 @@ public:
 		TexturePerChannelSize perChannelSize = TexturePerChannelSize::UNSIGNED_BYTE,
 		TextureWrapMode wrapModeS = TextureWrapMode::ClampEdge, TextureWrapMode wrapModeT = TextureWrapMode::ClampEdge,
 		TextureFilterMode textureFilter = TextureFilterMode::Linear_Mipmap_Linear)
-		:Texture2D(), m_renderTarget(nullptr), m_colorRB(0, 0, false), m_depthRB(0, 0, true), m_stencilRB(0, 0, true)
+		:Texture2D(), m_renderTarget(nullptr), m_colorRB(nullptr), m_depthRB(nullptr), m_stencilRB(nullptr)
 	{
 		m_readWrite = false;
 		m_isProxy = false;
@@ -43,10 +43,11 @@ public:
 		{
 			return;
 		}
-		m_renderTarget = new RenderTarget(m_width, m_height, m_colorInternalFormat, m_depthInternalFormat, m_stencilInternalFormat, m_perChannelSize, m_wrapModeS, m_wrapModeT, m_textureFilter);
+		RenderTargetDescriptor rtDesc(m_width, m_height, m_colorInternalFormat, m_depthInternalFormat, m_stencilInternalFormat, m_perChannelSize, m_wrapModeS, m_wrapModeT, m_textureFilter);
+		m_renderTarget = LogicResourceManagementCentre::getInstance()->addResource(rtDesc);
 		if (m_colorInternalFormat != TextureInternalFormat::None)
 		{
-			RenderBufferDesc rbDesc;
+			RenderBufferDescriptor rbDesc;
 			rbDesc.m_width = m_width;
 			rbDesc.m_height = m_height;
 			rbDesc.m_isDepthBuffer = false;
@@ -57,7 +58,7 @@ public:
 		}
 		if (m_depthInternalFormat != RenderTextureDepthStencilType::None)
 		{
-			RenderBufferDesc rbDesc;
+			RenderBufferDescriptor rbDesc;
 			rbDesc.m_width = m_width;
 			rbDesc.m_height = m_height;
 			rbDesc.m_isDepthBuffer = true;
@@ -70,7 +71,7 @@ public:
 		}
 		if (m_stencilInternalFormat != RenderTextureDepthStencilType::None)
 		{
-			RenderBufferDesc rbDesc;
+			RenderBufferDescriptor rbDesc;
 			rbDesc.m_width = m_width;
 			rbDesc.m_height = m_height;
 			rbDesc.m_isDepthBuffer = true;
@@ -90,17 +91,17 @@ public:
 		}
 		if (m_colorRB != nullptr)
 		{
-			LogicResourceManagementCentre::getInstance()->destroyResource(m_colorRB);
+			LogicResourceManagementCentre::getInstance()->destroyResource(ResourceType::RenderBuffer, m_colorRB);
 			m_colorRB = nullptr;
 		}
 		if (m_depthRB != nullptr)
 		{
-			LogicResourceManagementCentre::getInstance()->destroyResource(m_depthRB);
+			LogicResourceManagementCentre::getInstance()->destroyResource(ResourceType::RenderBuffer, m_depthRB);
 			m_depthRB = nullptr;
 		}
 		if (m_stencilRB != nullptr)
 		{
-			LogicResourceManagementCentre::getInstance()->destroyResource(m_stencilRB);
+			LogicResourceManagementCentre::getInstance()->destroyResource(ResourceType::RenderBuffer, m_stencilRB);
 			m_stencilRB = nullptr;
 		}
 		LogicResourceManagementCentre::getInstance()->destroyResource(ResourceType::RenderTarget, m_renderTarget);
@@ -108,6 +109,7 @@ public:
 		m_isCreated = false;
 	}
 
+	unsigned int getRTInstanceId() { return m_renderTarget != nullptr ? m_renderTarget->getInstanceId() : 0; }
 private:
 	bool m_isCreated = false;
 	RenderTextureDepthStencilType m_depthInternalFormat;

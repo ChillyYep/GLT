@@ -1,23 +1,16 @@
 #include "GameObject.h"
-
-void GameObject::removeComponent(std::shared_ptr<Component> component)
+void GameObject::destroy()
 {
-	auto targetComponentIndex = getComponentIndex(component);
-	if (targetComponentIndex >= 0)
+	ComponentOwner::destroy();
+	// 子节点销毁
+	auto transform = getTransform();
+	if (transform != nullptr)
 	{
-		m_components[targetComponentIndex]->m_gameObjectPtr = nullptr;
-		m_components[targetComponentIndex] = nullptr;
-		for (int i = targetComponentIndex;i < m_components.size() - 1;++i)
+		auto children = transform->getChildren();
+		for (const auto& child : children)
 		{
-			m_components[i] = m_components[i + 1];
+			child->getGameObject()->destroy();
 		}
-		m_components.pop_back();
+		transform->setParent(nullptr);
 	}
-}
-
-void GameObject::addComponent(std::shared_ptr<Component> component)
-{
-	assert(getComponentIndex(component) < 0);
-	component->m_gameObjectPtr = this;
-	m_components.push_back(component);
 }

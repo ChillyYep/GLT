@@ -1,7 +1,9 @@
 #pragma once
 #include <CommonDefine.h>
+#include <Object.h>
 #include <map>
 #include <vector>
+#include <set>
 template<typename T>
 class ReferenceItem {
 public:
@@ -21,7 +23,7 @@ class ManagementCentreBase
 public:
 	typedef ReferenceItem<T> ReferencedObject;
 	ManagementCentreBase() {}
-	~ManagementCentreBase() {}
+	virtual ~ManagementCentreBase() {}
 
 	virtual void add(T target)
 	{
@@ -31,7 +33,7 @@ public:
 		{
 			m_allObjects[instanceId] = ReferencedObject(target);
 			m_sortedObjects.push_back(instanceId);
-			m_addList.push_back(instanceId);
+			m_addSet.insert(instanceId);
 		}
 		m_allObjects[instanceId].m_refCount++;
 	}
@@ -46,9 +48,36 @@ public:
 		}
 		if (m_allObjects[instanceId].m_refCount == 0)
 		{
-			m_removeList.push_back(ReferencedObject(target));
+			m_removeDict[instanceId] = m_allObjects[instanceId].m_target;
 			m_allObjects.erase(instanceId);
 		}
+	}
+
+	void getChangedObjects(std::vector<Object*>& addedList, std::vector<Object*>& removedList)
+	{
+		// 同一帧添加和删除视为抵消操作
+		for (const auto& addItem : m_addSet)
+		{
+			// 保证不在删除集合中
+			if (m_removeDict.find(addItem) == m_removeDict.end())
+			{
+				addedList.push_back(m_allObjects[addItem].m_target);
+			}
+		}
+		for (const auto& removedtem : m_removeDict)
+		{
+			// 保证不在添加集合中
+			if (m_addSet.find(removedtem.first) == m_addSet.end())
+			{
+				removedList.push_back(removedtem.second);
+			}
+		}
+	}
+
+	void clearChangedObjectfs()
+	{
+		m_removeDict.clear();
+		m_addSet.clear();
 	}
 
 	virtual void onSubmit() {}
@@ -64,30 +93,12 @@ public:
 		}
 		return ReferencedObject();
 	}
-
-	inline std::vector<ReferencedObject> getRemovedObjects() const { return m_removeList; }
-
-	inline std::vector<GLTUInt32> getExpiredObjectInstanceIds() const
-	{
-		std::vector<GLTUInt32> removedInstanceIds;
-		for (int i = 0;i < m_removeList.size();++i)
-		{
-			removedInstanceIds.push_back(m_removeList[i].m_target->getInstanceId());
-		}
-		return removedInstanceIds;
-	}
-
-	inline void clearExpiredList() { m_removeList.clear(); }
-
-	inline std::vector<GLTUInt32> getNewObjects() const { return m_addList; }
-
-	inline void clearNewList() { m_addList.clear(); }
 protected:
 	std::map<GLTUInt32, ReferencedObject> m_allObjects;
 
-	std::vector<ReferencedObject> m_removeList;
+	std::map<GLTUInt32, Object*> m_removeDict;
 
-	std::vector<GLTUInt32> m_addList;
+	std::set<GLTUInt32> m_addSet;
 
 	std::vector<GLTUInt32> m_sortedObjects;
 };

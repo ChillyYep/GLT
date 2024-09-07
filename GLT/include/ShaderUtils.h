@@ -1,6 +1,5 @@
 #pragma once
 #include <CommonDefine.h>
-#include <RenderResourceManager.h>
 #include <Shader.h>
 #include <vector>
 #include <StringUtility.h>

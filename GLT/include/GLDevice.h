@@ -222,7 +222,7 @@ public:
 
 	void bindBlockForProgram(Shader& shader);
 
-	void drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, MeshResourceIdentifier* meshResourceIdentifier, std::unordered_map<GLuint, TextureResourceIdentifier>& textureResources);
+	void drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, MeshResourceIdentifier* meshResourceIdentifier, std::vector<TextureResourceIdentifier*>& textureResources);
 
 	void setViewport(int x, int y, int width, int height)
 	{
@@ -280,8 +280,9 @@ public:
 		case RenderCommandType::DrawRenderer:
 		{
 			auto drawRendererParam = static_cast<DrawRendererParam*>(commandParam);
-			drawMesh(drawRendererParam->m_rendererPtr->getMesh().get(), drawRendererParam->m_rendererPtr->getMaterial().get(), 
-				drawRendererParam->m_rendererPtr->getGameObject()->getTransform()->getModelMatrix(), drawRendererParam->m_meshResourceIdentifier, drawRendererParam->m_textureResources);
+			auto transform = static_cast<GameObject*>(drawRendererParam->m_rendererPtr->getGameObject())->getTransform();
+			drawMesh(drawRendererParam->m_rendererPtr->getMesh(), drawRendererParam->m_rendererPtr->getMaterial().get(),
+				transform->getModelMatrix(), drawRendererParam->m_meshResourceIdentifier, drawRendererParam->m_textureResources);
 			break;
 		}
 		default:

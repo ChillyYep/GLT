@@ -1,13 +1,15 @@
-#include <ScriptableRenderContext.h>
+#include "ScriptableRenderContext.h"
 
 void ScriptableRenderContext::init()
 {
 	m_device = new GLDevice();
-	RenderResourceManager::getInstance()->setDevice(m_device);
+	RenderResourceManagement::getInstance()->setup(m_device);
+	RenderResourceManagement::getInstance()->regist();
 }
 
 void ScriptableRenderContext::uninit()
 {
+	RenderResourceManagement::getInstance()->unregist();
 	if (m_device != nullptr)
 	{
 		delete m_device;

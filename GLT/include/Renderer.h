@@ -2,17 +2,17 @@
 #include <CommonDefine.h>
 #include <Mesh.h>
 #include <Transform.h>
-#include <Component.h>
 #include <Material.h>
-#include <RenderResourceManager.h>
+#include <LogicResourceManagementCentre.h>
 #include <FilterSetting.h>
+#include <GameObject.h>
 
 COMPONENT_CLASS(Renderer, ComponentType::Renderer)
 {
 public:
 	ComponentType getComponentType() override { return ComponentType::Renderer; }
 	Renderer() {}
-	Renderer(std::shared_ptr<Mesh> mesh) { m_mesh = mesh; }
+	Renderer(Mesh * mesh) { m_mesh = mesh; }
 	~Renderer() {}
 
 	void onEnable() override;
@@ -32,7 +32,7 @@ public:
 	{
 		if (m_mesh != nullptr)
 		{
-			glm::mat4x4 modelMatrix = m_gameObjectPtr->getTransform()->getModelMatrix();
+			glm::mat4x4 modelMatrix = static_cast<GameObject*>(m_gameObjectPtr)->getTransform()->getModelMatrix();
 			auto verticesCount = m_mesh->getVerticesCount();
 			glm::vec4* newVertices = new glm::vec4[verticesCount];
 			auto oldVertices = m_mesh->getVertices();
@@ -45,12 +45,12 @@ public:
 		return Bound();
 	}
 
-	__GET_SET_PROPERTY__(Mesh, std::shared_ptr<Mesh>, m_mesh)
+	__GET_SET_PROPERTY__(Mesh, Mesh*, m_mesh)
 		__GET_SET_PROPERTY__(RenderType, RenderType, m_renderType)
 		__GET_SET_PROPERTY__(Material, std::shared_ptr<Material>, m_material)
 
 private:
 	RenderType m_renderType = RenderType::Opaque;
-	std::shared_ptr<Mesh> m_mesh;
+	Mesh* m_mesh;
 	std::shared_ptr<Material> m_material;
 };

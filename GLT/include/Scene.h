@@ -14,7 +14,7 @@ class Scene
 public:
 	Scene()
 	{
-		m_rootGo = SceneUtility::CreateEmptyGameObject();
+		m_rootGo = SceneUtility::createEmptyGameObject();
 	};
 	~Scene() {};
 

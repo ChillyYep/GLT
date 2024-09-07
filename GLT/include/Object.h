@@ -10,10 +10,12 @@ public:
 	{
 		m_instanceId = s_instanceIdProducer.produceInstanceId();
 	}
+	virtual ~Object() {}
 	inline GLTUInt32 getInstanceId() const { return m_instanceId; }
 
 protected:
 	GLTUInt32 m_instanceId;
+
 
 	std::string m_name;
 

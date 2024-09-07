@@ -19,12 +19,7 @@ public:
 
 	inline void lookAt(std::shared_ptr<Transform> target)
 	{
-		getTransform()->lookAt(target->getPosition());
-	}
-
-	inline void isInFrustum()
-	{
-
+		static_cast<GameObject*>(m_gameObjectPtr)->getTransform()->lookAt(target->getPosition());
 	}
 
 	inline glm::mat4x4 getViewMatrix() { recomputeViewMatrix(); return m_viewMatrix; }
@@ -34,12 +29,8 @@ public:
 	inline void setCameraController(std::shared_ptr<CameraController> cameraController)
 	{
 		m_cameraController = cameraController;
-		m_cameraController->attach(getTransform());
-	}
-
-	inline std::shared_ptr<Transform>& getTransform()
-	{
-		return m_gameObjectPtr->getTransform();
+		auto transform = static_cast<GameObject*>(m_gameObjectPtr)->getTransform();
+		m_cameraController->attach(transform);
 	}
 
 	__GET_SET_PROPERTY__(Ortho, GLboolean, m_ortho)

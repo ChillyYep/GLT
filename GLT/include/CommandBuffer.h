@@ -5,7 +5,7 @@
 #include <Texture.h>
 #include <Mesh.h>
 #include <Renderer.h>
-#include <RenderResourceManager.h>
+#include <RenderResourceManagment.h>
 
 class CommandBuffer
 {

@@ -77,7 +77,7 @@ public:
 	Material* m_materialPtr;
 	glm::mat4 m_modelMatrix;
 	MeshResourceIdentifier* m_meshResourceIdentifier;
-	std::unordered_map<GLuint, TextureResourceIdentifier> m_textureResources;
+	std::vector<TextureResourceIdentifier*> m_textureResources;
 };
 
 RENDERCOMMANDPARAM_CLASS(DrawRendererParam, RenderCommandType::DrawRenderer)
@@ -88,7 +88,7 @@ public:
 
 	Renderer* m_rendererPtr;
 	MeshResourceIdentifier* m_meshResourceIdentifier;
-	std::unordered_map<GLuint, TextureResourceIdentifier> m_textureResources;
+	std::vector<TextureResourceIdentifier*> m_textureResources;
 };
 
 

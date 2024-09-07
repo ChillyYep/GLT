@@ -557,7 +557,7 @@ void GLDevice::setRenderStateBlock(RenderStateBlock& renderStateBlock)
 		}
 	}
 }
-void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, MeshResourceIdentifier* meshResourceIdentifier, std::unordered_map<GLuint, TextureResourceIdentifier>& textureResources)
+void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, MeshResourceIdentifier* meshResourceIdentifier, std::vector<TextureResourceIdentifier*>& textureResources)
 {
 	Shader::setGlobalMatrix(ShaderPropertyNames::ModelMatrix, modelMatrix);
 	// °ó¶¨Mesh
@@ -637,14 +637,16 @@ void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, M
 					if (textureParam != nullptr)
 					{
 						auto texture = textureParam->getTexture();
-						auto textureIdentifierIter = textureResources.find(texture->getInstanceId());
-						if (textureIdentifierIter != textureResources.end())
+						for (const auto& texIdentifierPtr : textureResources)
 						{
-							auto textureIdentifier = textureIdentifierIter->second;
-							auto target = textureType2TextureTarget(textureIdentifier.m_textureType);
-							if (target != GL_NONE)
+							if (texIdentifierPtr->getInstanceId() == texture->getInstanceId())
 							{
-								glBindTextureUnit(texCount++, textureIdentifier.m_texture);
+								auto target = textureType2TextureTarget(texIdentifierPtr->m_textureType);
+								if (target != GL_NONE)
+								{
+									glBindTextureUnit(texCount++, texIdentifierPtr->m_texture);
+								}
+								break;
 							}
 						}
 					}

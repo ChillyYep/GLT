@@ -4,13 +4,13 @@
 #include <vector>
 #include <GLDevice.h>
 #include <CommandBuffer.h>
-#include <RenderResourceManager.h>
 #include <CullingResult.h>
 #include <FilterSetting.h>
 #include <SceneManager.h>
 #include <Camera.h>
 #include <DrawSettings.h>
 #include <algorithm>
+#include <RenderResourceManagment.h>
 
 class ScriptableRenderContext
 {
@@ -78,6 +78,21 @@ public:
 	{
 		m_curRenderStateBlock = renderStateBlock;
 		m_device->setRenderStateBlock(m_curRenderStateBlock);
+	}
+
+	void updateConstantBufferResources(ConstantBufferType constantBufferType)
+	{
+		m_device->uploadConstantBufferResource(constantBufferType);
+	}
+
+	void requestConstantBufferResources(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers)
+	{
+		m_device->requestConstantBufferResources(constantBufferIdentifiers);
+	}
+
+	void destroyConstantBufferResources(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers)
+	{
+		m_device->destroyConstantBufferResources(constantBufferIdentifiers);
 	}
 
 	void scheduleCommandBuffer(CommandBuffer commandBuffer);

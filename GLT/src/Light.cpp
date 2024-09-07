@@ -2,11 +2,12 @@
 
 LightProperties Light::getLightProperties()
 {
+	auto goPtr = static_cast<GameObject*>(m_gameObjectPtr);
 	LightProperties lightProperties;
 	lightProperties.isEnabled = m_enabled;
 	lightProperties.lightType = m_lightType;
-	lightProperties.position = getTransform()->getPosition();
-	lightProperties.direction = getTransform()->getForward();
+	lightProperties.position = goPtr->getTransform()->getPosition();
+	lightProperties.direction = goPtr->getTransform()->getForward();
 	lightProperties.color = m_color;
 	lightProperties.spotCosCutoff = 0.0f;
 	lightProperties.ambient = m_color * 0.1f;

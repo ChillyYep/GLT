@@ -9,9 +9,12 @@ void RenderPipeline::uninit() {
 	m_renderContext.uninit();
 }
 void RenderPipeline::render() {
-	updateSceneProperties4Render();
+
+	LogicResourceManagementCentre::getInstance()->tick();
 
 	updatePerFrameConstantBuffer();
+
+	m_allScenes = SceneManager::getInstance()->getAllScenes(false);
 
 	m_renderData.m_cameraDatas.clear();
 	// 收集一些绘制需要的数据
@@ -24,7 +27,7 @@ void RenderPipeline::render() {
 		}
 		// 相机数据
 		auto cameraData = CameraData();
-		cameraData.m_worldPos = mainCamera->getGameObject()->getTransform()->getPosition();
+		cameraData.m_worldPos = static_cast<GameObject*>(mainCamera->getGameObject())->getTransform()->getPosition();
 		cameraData.m_viewMatrix = mainCamera->getViewMatrix();
 		cameraData.m_projectionMatrix = mainCamera->getProjectMatrix();
 		cameraData.m_viewport = mainCamera->getViewPort();;
@@ -66,15 +69,6 @@ void RenderPipeline::render() {
 }
 void RenderPipeline::postUpdate()
 {
-	RenderResourceManager::getInstance()->getMeshManagementCentre().onSubmit();
-	RenderResourceManager::getInstance()->getTextureManagementCentre().onSubmit();
-}
-
-void RenderPipeline::updateSceneProperties4Render()
-{
-	m_allScenes = SceneManager::getInstance()->getAllScenes(false);
-
-	RenderResourceManager::getInstance()->update();
 }
 
 void RenderPipeline::updateLightProperties()
@@ -107,8 +101,7 @@ void RenderPipeline::updateLightProperties()
 
 void RenderPipeline::updatePerFrameConstantBuffer()
 {
-	// do something
-	RenderResourceManager::getInstance()->uploadConstantBufferResource(ConstantBufferType::PerFrame);
+	m_renderContext.updateConstantBufferResources(ConstantBufferType::PerFrame);
 }
 
 void RenderPipeline::updatePerCameraConstantBuffer(CameraData& cameraData)
@@ -118,12 +111,12 @@ void RenderPipeline::updatePerCameraConstantBuffer(CameraData& cameraData)
 	Shader::setGlobalMatrix(ShaderPropertyNames::ProjectMatrix, cameraData.m_projectionMatrix);
 	auto eyePosition = cameraData.m_worldPos;
 	Shader::setGlobalVector(ShaderPropertyNames::EyePosition, glm::vec4(eyePosition.x, eyePosition.y, eyePosition.z, 1.0f));
-	RenderResourceManager::getInstance()->uploadConstantBufferResource(ConstantBufferType::PerCamera);
+	m_renderContext.updateConstantBufferResources(ConstantBufferType::PerCamera);
 }
 
 void RenderPipeline::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix)
 {
-	auto* resourceIdentifier = RenderResourceManager::getInstance()->getMeshResource(mesh->getInstanceId());
+	auto resourceIdentifier = static_cast<MeshResourceIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::Mesh, mesh->getInstanceId()));
 	if (resourceIdentifier == nullptr || !resourceIdentifier->isValid())
 	{
 		return;

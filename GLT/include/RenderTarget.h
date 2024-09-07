@@ -1,5 +1,4 @@
 #pragma once
-#include <Object.h>
 #include <Texture.h>
 #include <RenderBuffer.h>
 #include <CommonDefine.h>
@@ -82,6 +81,9 @@ public:
 		TexturePerChannelSize perChannelSize, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, TextureFilterMode textureFilter)
 		:m_renderTextureDescriptor(RenderTargetDescriptor(width, height, colorInternalFormat, depthInternalFormat, stencilInternalFormat, perChannelSize,
 			wrapModeS, wrapModeT, textureFilter)) {}
+
+	RenderTarget(RenderTargetDescriptor renderTargetDesc)
+		:m_renderTextureDescriptor(renderTargetDesc) {}
 	~RenderTarget() {}
 
 	void addAttachment(AttachmentEntityWrapper wrapper)

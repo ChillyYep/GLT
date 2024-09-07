@@ -53,5 +53,4 @@ public:
 
 protected:
 	RenderTargetIdentifier* m_curRT;
-
 };

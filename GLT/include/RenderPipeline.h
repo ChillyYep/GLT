@@ -1,7 +1,6 @@
 #pragma once
 #include <CommonDefine.h>
 #include <Window.h>
-#include <Renderer.h>
 #include <Scene.h>
 #include <Texture.h>
 #include <ShaderUtils.h>
@@ -21,7 +20,6 @@ public:
 
 	void drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix);
 private:
-	void updateSceneProperties4Render();
 	void postUpdate();
 	void updatePerFrameConstantBuffer();
 	void updatePerCameraConstantBuffer(CameraData& cameraData);

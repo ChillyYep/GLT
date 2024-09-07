@@ -1,8 +1,8 @@
 #include "Material.h"
 
-std::vector<std::shared_ptr<Texture>> Material::getAllTextures()
+std::vector<Texture*> Material::getAllTextures()
 {
-	std::vector<std::shared_ptr<Texture>> textures;
+	std::vector<Texture*> textures;
 	for (const auto& propertyPair : m_properties)
 	{
 		if (propertyPair.second->getMaterialPropertyType() == MaterialPropertyType::Texture)

@@ -8,15 +8,15 @@
 class SceneUtility
 {
 public:
-	inline static std::shared_ptr<GameObject> CreateEmptyGameObject()
+	inline static std::shared_ptr<GameObject> createEmptyGameObject()
 	{
 		auto gameObject = std::shared_ptr<GameObject>(new GameObject());
 		gameObject->addComponent<Transform>();
 		return gameObject;
 	}
-	inline static std::shared_ptr<GameObject> CreateMeshGameObject(const std::shared_ptr<Mesh>& mesh, const std::shared_ptr<Material>& material)
+	inline static std::shared_ptr<GameObject> createMeshGameObject(Mesh* mesh, const std::shared_ptr<Material>& material)
 	{
-		auto gameObject = CreateEmptyGameObject();
+		auto gameObject = createEmptyGameObject();
 		auto renderer = gameObject->addComponent<Renderer>();
 		renderer->setMesh(mesh);
 		renderer->setMaterial(material);

@@ -29,7 +29,7 @@ void Allocator::Reset(size_t pageSize, size_t dataSize, size_t alignment)
 	m_szAlignmentSize = m_szBlockSize - minimal_size;
 
 	// 每一页起始4字节存放的是下一页的指针
-	m_nBlocksPerPage = (m_szPageSize - sizeof(PageHeader)) / m_szBlockSize;
+	m_nBlocksPerPage = (uint32_t)((m_szPageSize - sizeof(PageHeader)) / m_szBlockSize);
 }
 void* Allocator::Allocate()
 {
