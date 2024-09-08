@@ -12,9 +12,7 @@ public:
 	ComponentType getComponentType() override { return ComponentType::Transform; }
 
 	inline glm::mat4 getModelMatrix() {
-		auto mat = glm::scale(glm::identity<glm::mat4>(), m_scale);
-		mat = glm::mat4_cast(m_rotation) * mat;
-		return glm::translate(mat, m_position);
+		return glm::translate(m_position)* glm::mat4_cast(m_rotation)* glm::scale(m_scale);
 	}
 
 	inline void setModelMatrix(glm::mat4 modelMatrix)

@@ -22,7 +22,8 @@ void createScene()
 	// 材质
 	auto shader = shared_ptr<Shader>(new Shader("cube_tex"));
 
-	auto mat = shared_ptr<Material>(new Material(shader));
+	auto mat1 = shared_ptr<Material>(new Material(shader));
+	auto mat2 = shared_ptr<Material>(new Material(shader));
 	auto tex = new Texture2D();
 	// 需要引入一个从文件加载纹理的库
 	tex->load("Resources/wall.jpg");
@@ -33,21 +34,29 @@ void createScene()
 	tex->setWrapModeT(TextureWrapMode::Repeat);
 	tex->setTextureFilter(TextureFilterMode::Linear_Mipmap_Linear);
 
-	mat->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(tex)));
+	mat1->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(tex)));
+	mat2->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(Texture2D::getGrayTex2D())));
 	// 网格
 	auto cubeMesh = PrimitiveUtils::createCube();
+	auto planeMesh = PrimitiveUtils::createQuad();
 
-	auto go1 = SceneUtility::createMeshGameObject(cubeMesh, mat);
+	auto go1 = SceneUtility::createMeshGameObject(cubeMesh, mat1);
 	auto cube1Transform = go1->getComponent<Transform>();
 	cube1Transform->setPosition(glm::vec3(0.0f));
 	cube1Transform->setScale(glm::vec3(1.0f));
 	cube1Transform->setEularAngle(glm::vec3(0.0f));
 
-	auto go2 = SceneUtility::createMeshGameObject(cubeMesh, mat);
+	auto go2 = SceneUtility::createMeshGameObject(cubeMesh, mat1);
 	auto cube2Transform = go2->getComponent<Transform>();
 	cube2Transform->setPosition(glm::vec3(3.0f, 0.0f, 0.0f));
 	cube2Transform->setScale(glm::vec3(1.0f));
-	cube2Transform->setEularAngle(glm::vec3(0.0f));
+	cube2Transform->setEularAngle(glm::vec3(45.0f, 45.0f, 0.0f));
+
+	auto go3 = SceneUtility::createMeshGameObject(planeMesh, mat2);
+	auto planeTransform = go3->getComponent<Transform>();
+	planeTransform->setPosition(glm::vec3(1.5f, -3.0f, 0.0f));
+	planeTransform->setScale(glm::vec3(10.0f));
+	planeTransform->setEularAngle(glm::vec3(0.0f));
 
 	auto cameraGo = SceneUtility::createEmptyGameObject();
 	auto cameraTransform = cameraGo->getTransform();
@@ -75,7 +84,6 @@ void createScene()
 	lightComp2->setLightType(LightType::PointLight);
 	lightComp->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	lightComp2->setColor(glm::vec4(1.0f, 0.2f, 0.3f, 1.0f));
-	//lightComp2->setAngle(90.0f);
 
 	lightGo->getTransform()->setPosition(glm::vec3(10.0f, 10.0f, 10.0f));
 	lightGo->getTransform()->setEularAngle(glm::vec3(30.0f, 30.0f, 0.f));
@@ -85,10 +93,11 @@ void createScene()
 
 	scene->addObject(go1);
 	scene->addObject(go2);
+	scene->addObject(go3);
 	scene->addObject(cameraGo);
 	scene->addObject(lightGo);
 	scene->addObject(lightGo2);
-	Graphics::drawMeshNow(cubeMesh, mat, cube1Transform->getModelMatrix() * glm::translate(glm::vec3(-3.0f, 0.0f, 0.0f)));
+	//Graphics::drawMeshNow(cubeMesh, mat, cube1Transform->getModelMatrix() * glm::translate(glm::vec3(-3.0f, 0.0f, 0.0f)));
 }
 
 void destroyScene()

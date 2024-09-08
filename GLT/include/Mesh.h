@@ -86,7 +86,7 @@ public:
 	inline GLTBool isDirty() const { return m_dirty; }
 	inline void clearDirty() { m_dirty = false; }
 
-	static Bound computeBound(const glm::vec4 vertices[], GLTSizei verticesCount)
+	static Bound computeBound(const glm::vec4* vertices, GLTSizei verticesCount)
 	{
 		Bound bound;
 		float minX = 99999999.0f, minY = 99999999.0f, minZ = 99999999.0f;

@@ -4,19 +4,23 @@
 #include <stb_image.h>
 #include <TextureEnums.h>
 #include <GLCommon.h>
+#include <GLMath.h>
 #include <ResourceIdentifier.h>
 
 class Texture :public Object
 {
 public:
 	Texture(TextureType textureType) :m_textureType(textureType) {}
-	~Texture() {}
-	virtual void load(const char* filename) = 0;
-	virtual void unload() = 0;
+	virtual ~Texture() {}
+	virtual void load(const char* filename) {}
+	virtual void unload() {}
 
 	inline GLTUByte* getData() { return m_data; }
 
+	inline void setData(GLTUByte* data) { m_data = data; }
+
 	inline TextureType getTextureType() { return m_textureType; }
+
 	__GET_SET_PROPERTY__(Levels, GLTSizei, m_levels)
 		__GET_SET_PROPERTY__(Width, GLTSizei, m_width)
 		__GET_SET_PROPERTY__(IsProxy, GLTBool, m_isProxy)
@@ -46,48 +50,68 @@ class Texture1D :public Texture
 {
 public:
 	Texture1D() :Texture(TextureType::Texture1D) {}
-
+	~Texture1D() {}
+private:
 };
 class Texture2D :public Texture
 {
 public:
 	Texture2D() :Texture(TextureType::Texture2D) {}
-	void load(const char* filename) override {
-		if (m_data != nullptr)
+	~Texture2D()
+	{
+		if (!m_loaded && m_data != nullptr)
 		{
-			unload();
-		}
-		int channels;
-		m_data = stbi_load(filename, &m_width, &m_height, &channels, 0);
-		if (channels == 1)
-		{
-			m_externalFormat = TextureExternalFormat::RED;
-		}
-		else if (channels == 2)
-		{
-			m_externalFormat = TextureExternalFormat::RG;
-		}
-		else if (channels == 3)
-		{
-			m_externalFormat = TextureExternalFormat::RGB;
-		}
-		else if (channels == 4)
-		{
-			m_externalFormat = TextureExternalFormat::RGBA;
-		}
-	}
-	void unload() override {
-		if (m_data != nullptr)
-		{
-			stbi_image_free(m_data);
+			delete[] m_data;
 			m_data = nullptr;
 		}
 	}
+	void load(const char* filename) override;
+	void unload() override;
+	/// <summary>
+	/// 天青色
+	/// </summary>
+	/// <returns></returns>
+	static Texture2D* getCelesteTex2D();
+
+	/// <summary>
+	/// 灰色
+	/// </summary>
+	/// <returns></returns>
+	static Texture2D* getGrayTex2D();
+
+	/// <summary>
+	/// 黑色
+	/// </summary>
+	/// <returns></returns>
+	static Texture2D* getBlackTex2D();
+
+	/// <summary>
+	/// 白色
+	/// </summary>
+	/// <returns></returns>
+	static Texture2D* getWhiteTex2D();
+	/// <summary>
+	/// 设置单像素纹理
+	/// </summary>
+	/// <param name="tex"></param>
+	/// <param name="r"></param>
+	/// <param name="g"></param>
+	/// <param name="b"></param>
+	/// <param name="a"></param>
+	/// <returns></returns>
+	static Texture2D* setSinglePixelTex2D(Texture2D& tex, GLTUByte r, GLTUByte g, GLTUByte b, GLTUByte a);
 	__GET_SET_PROPERTY__(Height, GLTSizei, m_height)
 		__GET_SET_PROPERTY__(WrapModeT, TextureWrapMode, m_wrapModeT)
 protected:
+
+	bool m_loaded;
 	GLTSizei m_height;
 	TextureWrapMode m_wrapModeT;
+
+	static Texture2D s_celesteTex;
+	static Texture2D s_grayTex;
+	static Texture2D s_whiteTex;
+	static Texture2D s_blackTex;
 };
 
 class Texture3D :public Texture

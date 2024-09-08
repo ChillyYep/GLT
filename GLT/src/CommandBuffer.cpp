@@ -33,6 +33,11 @@ void CommandBuffer::clear()
 
 void CommandBuffer::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix)
 {
+	auto meshResourceIdentifier = static_cast<MeshResourceIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::Mesh, mesh->getInstanceId()));
+	if (meshResourceIdentifier == nullptr)
+	{
+		return;
+	}
 	RenderCommand command = RenderCommand();
 	DrawMeshParam* drawMeshParam = RenderCommandParamFactory::getInstance()->createParam<DrawMeshParam>();
 	drawMeshParam->m_meshPtr = mesh;
@@ -55,11 +60,16 @@ void CommandBuffer::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatr
 
 void CommandBuffer::drawRenderer(Renderer* renderer)
 {
+	auto meshResourceIdentifier = static_cast<MeshResourceIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::Mesh, (renderer->getMesh()->getInstanceId())));
+	if (meshResourceIdentifier == nullptr)
+	{
+		return;
+	}
 	RenderCommand command = RenderCommand();
 	DrawRendererParam* drawRendererParam = RenderCommandParamFactory::getInstance()->createParam<DrawRendererParam>();
 	drawRendererParam->m_rendererPtr = renderer;
-	drawRendererParam->m_meshResourceIdentifier = static_cast<MeshResourceIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::Mesh, (renderer->getMesh()->getInstanceId())));
-	
+	drawRendererParam->m_meshResourceIdentifier = meshResourceIdentifier;
+
 	if (renderer->getMaterial() != nullptr)
 	{
 		std::vector<Texture*> textures = renderer->getMaterial()->getAllTextures();

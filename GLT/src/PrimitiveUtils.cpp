@@ -149,3 +149,46 @@ Mesh* PrimitiveUtils::createCube()
 	object->setUVs(cube_uvs);
 	return object;
 }
+
+Mesh* PrimitiveUtils::createQuad()
+{
+	static const glm::vec4 plane_vertices[] = {
+		{-1.0f,  0.0f, -1.0f,1.0f},
+		{-1.0f,  0.0f,  1.0f,1.0f},
+		{ 1.0f,  0.0f,  1.0f,1.0f},
+		{ 1.0f,  0.0f, -1.0f,1.0f}
+	};
+
+
+	static const glm::vec4 plane_colors[] = {
+		{1.0f,1.0f,1.0f,1.0f},
+		{1.0f,1.0f,1.0f,1.0f},
+		{1.0f,1.0f,1.0f,1.0f},
+		{1.0f,1.0f,1.0f,1.0f}
+	};
+
+	static const glm::vec2 plane_uvs[] = {
+		{0.0f,0.0f},
+		{0.0f,1.0f},
+		{1.0f,1.0f},
+		{1.0f,0.0f}
+	};
+	static const GLTUInt16 plane_indices[] = {
+		0,1,2,2,3,0
+	};
+
+	static const glm::vec4 plane_normals[] = {
+		// ио
+		{0.0f,  1.0f,  0.0f,1.0f},
+		{0.0f,  1.0f,  0.0f,1.0f},
+		{0.0f,  1.0f,  0.0f,1.0f},
+		{0.0f,  1.0f,  0.0f,1.0f}
+	};
+	auto object = new Mesh(sizeof(plane_vertices) / sizeof(glm::vec4), sizeof(plane_indices) / sizeof(GLTUInt16));
+	object->setVertices(plane_vertices);
+	object->setIndices(plane_indices);
+	object->setColors(plane_colors);
+	object->setNormals(plane_normals);
+	object->setUVs(plane_uvs);
+	return object;
+}

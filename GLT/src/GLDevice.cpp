@@ -1,4 +1,5 @@
 #include "GLDevice.h"
+
 std::vector<MeshResourceIdentifier> GLDevice::requestMeshResources(std::vector<Mesh*>& meshPtrs)
 {
 	GLsizei length = (GLsizei)meshPtrs.size();
@@ -24,7 +25,6 @@ std::vector<MeshResourceIdentifier> GLDevice::requestMeshResources(std::vector<M
 
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 
 		if (verticesMemorySize > 0)
 		{
@@ -58,6 +58,8 @@ std::vector<MeshResourceIdentifier> GLDevice::requestMeshResources(std::vector<M
 				glNamedBufferSubData(vbo, offset, normalsMemorySize, mesh->getNormals());
 			}
 		}
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 		glNamedBufferStorage(ebo, mesh->getIndicesCount() * Mesh::IndexSize, mesh->getIndices(), GL_DYNAMIC_STORAGE_BIT);
 
 		meshResourceIdentifiers[i] = MeshResourceIdentifier(vao, vbo, ebo, instanceId);
@@ -501,68 +503,68 @@ void GLDevice::setRenderStateBlock(RenderStateBlock& renderStateBlock)
 	glDepthRange(0, 1);
 	glDepthMask(renderStateBlock.m_depthState.m_writable ? GL_TRUE : GL_FALSE);
 	// 开启深度测试与否，及若开启配置哪种函数
-	if (renderStateBlock.m_depthState.m_compareFunc == CompareFunction::Disabled)
+	switch (renderStateBlock.m_depthState.m_compareFunc)
 	{
+	case CompareFunction::Disabled:
 		glDisable(GL_DEPTH_TEST);
-	}
-	else {
+		break;
+	case CompareFunction::Never:
 		glEnable(GL_DEPTH_TEST);
-		switch (renderStateBlock.m_depthState.m_compareFunc)
-		{
-		case CompareFunction::Never:
-			glDepthFunc(GL_NEVER);
-			break;
-		case CompareFunction::Less:
-			glDepthFunc(GL_LESS);
-			break;
-		case CompareFunction::Equal:
-			glDepthFunc(GL_EQUAL);
-			break;
-		case CompareFunction::LessEqual:
-			glDepthFunc(GL_LEQUAL);
-			break;
-		case CompareFunction::Greater:
-			glDepthFunc(GL_GREATER);
-			break;
-		case CompareFunction::NotEqual:
-			glDepthFunc(GL_NOTEQUAL);
-			break;
-		case CompareFunction::GreaterEqual:
-			glDepthFunc(GL_GEQUAL);
-			break;
-		case CompareFunction::Always:
-			glDepthFunc(GL_ALWAYS);
-			break;
-		default:
-			break;
-		}
+		glDepthFunc(GL_NEVER);
+		break;
+	case CompareFunction::Less:
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
+		break;
+	case CompareFunction::Equal:
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_EQUAL);
+		break;
+	case CompareFunction::LessEqual:
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LEQUAL);
+		break;
+	case CompareFunction::Greater:
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_GREATER);
+		break;
+	case CompareFunction::NotEqual:
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_NOTEQUAL);
+		break;
+	case CompareFunction::GreaterEqual:
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_GEQUAL);
+		break;
+	case CompareFunction::Always:
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_ALWAYS);
+		break;
+	default:
+		break;
 	}
-	if (renderStateBlock.m_colorState.m_cullMode == CullMode::Front)
+	switch (renderStateBlock.m_colorState.m_cullMode)
 	{
-		switch (renderStateBlock.m_colorState.m_cullMode)
-		{
-		case CullMode::Off:
-			glDisable(GL_CULL_FACE);
-			break;
-		case CullMode::Front:
-			glEnable(GL_CULL_FACE);
-			glCullFace(GL_FRONT);
-			break;
-		case CullMode::Back:
-			glEnable(GL_CULL_FACE);
-			glCullFace(GL_BACK);
-			break;
-		default:
-			break;
-		}
+	case CullMode::Off:
+		glDisable(GL_CULL_FACE);
+		break;
+	case CullMode::Front:
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_FRONT);
+		break;
+	case CullMode::Back:
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		break;
+	default:
+		break;
 	}
 }
 void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, MeshResourceIdentifier* meshResourceIdentifier, std::vector<TextureResourceIdentifier*>& textureResources)
 {
 	Shader::setGlobalMatrix(ShaderPropertyNames::ModelMatrix, modelMatrix);
-	// 绑定Mesh
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshResourceIdentifier->getEBO());
 
+	// 保证顺序，先绑定VAO再绑定VBO，否则在绘制多个不同Mesh时会造成混乱
 	glBindVertexArray(meshResourceIdentifier->getVAO());
 
 	glBindBuffer(GL_ARRAY_BUFFER, meshResourceIdentifier->getVBO());
@@ -637,16 +639,19 @@ void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, M
 					if (textureParam != nullptr)
 					{
 						auto texture = textureParam->getTexture();
-						for (const auto& texIdentifierPtr : textureResources)
+						if (texture != nullptr)
 						{
-							if (texIdentifierPtr->getInstanceId() == texture->getInstanceId())
+							for (const auto& texIdentifierPtr : textureResources)
 							{
-								auto target = textureType2TextureTarget(texIdentifierPtr->m_textureType);
-								if (target != GL_NONE)
+								if (texIdentifierPtr->getInstanceId() == texture->getInstanceId())
 								{
-									glBindTextureUnit(texCount++, texIdentifierPtr->m_texture);
+									auto target = textureType2TextureTarget(texIdentifierPtr->m_textureType);
+									if (target != GL_NONE)
+									{
+										glBindTextureUnit(texCount++, texIdentifierPtr->m_texture);
+									}
+									break;
 								}
-								break;
 							}
 						}
 					}
@@ -726,6 +731,7 @@ void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, M
 		uploadConstantBufferResource(ConstantBufferType::PerPass);
 		bindBlockForProgram(*shader.get());
 	}
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshResourceIdentifier->getEBO());
 	// 绘制指令
 	glDrawElements(GL_TRIANGLES, mesh->getIndicesCount(), GL_UNSIGNED_SHORT, NULL);
 }

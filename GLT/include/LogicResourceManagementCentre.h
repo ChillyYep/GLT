@@ -168,6 +168,10 @@ public:
 	/// <param name="resources"></param>
 	void onPushResources(ResourceType resourceType, std::vector<Object*> resources)
 	{
+		if (resources.size() == 0)
+		{
+			return;
+		}
 		RequestResourceRef resourceRef;
 		resourceRef.m_resourceType = resourceType;
 		resourceRef.m_targets = resources;
@@ -209,6 +213,10 @@ public:
 
 	void onPopResources(ResourceType resourceType, std::vector<Object*> resources)
 	{
+		if (resources.size() == 0)
+		{
+			return;
+		}
 		RequestResourceRef resourceRef;
 		resourceRef.m_resourceType = resourceType;
 		resourceRef.m_targets = resources;

@@ -8,6 +8,7 @@ public:
 	~PrimitiveUtils() {};
 	static Mesh* createCube();
 
+	static Mesh* createQuad();
 private:
 
 };

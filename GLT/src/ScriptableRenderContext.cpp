@@ -16,6 +16,40 @@ void ScriptableRenderContext::uninit()
 		m_device = nullptr;
 	}
 }
+void ScriptableRenderContext::drawRenderers(FilterSettings& filterSetting, DrawSettings& drawSetting)
+{
+	m_filterSetting = filterSetting;
+
+	m_drawSetting = drawSetting;
+
+	m_renderers = SceneManager::getInstance()->filterRenderers(filterSetting.m_renderType);
+
+	std::vector<RendererSortStructure> simpleStructure(m_renderers.size());
+
+	for (int i = 0; i < m_renderers.size(); ++i)
+	{
+		auto pos = m_renderers[i]->getWorldBound().m_center;
+		simpleStructure[i].m_target = m_renderers[i];
+		simpleStructure[i].m_sortOrder = glm::length(pos - m_drawSetting.m_cameraPos);
+	}
+
+	if (drawSetting.m_sortType == SortType::Near2Far)
+	{
+		std::sort(simpleStructure.begin(), simpleStructure.end(), sortNear2FarCompare);
+	}
+	else if (drawSetting.m_sortType == SortType::Far2Near)
+	{
+		std::sort(simpleStructure.begin(), simpleStructure.end(), sortFar2NearCompare);
+	}
+	for (int i = 0; i < m_renderers.size(); ++i)
+	{
+		m_renderers[i] = simpleStructure[i].m_target;
+		m_cmdList.drawRenderer(m_renderers[i]);
+	}
+	scheduleCommandBuffer(m_cmdList);
+	m_cmdList.clear();
+	submit();
+}
 
 void ScriptableRenderContext::scheduleCommandBuffer(CommandBuffer commandBuffer)
 {
