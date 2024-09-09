@@ -17,6 +17,8 @@ enum class ResourceType {
 };
 struct RequestResourceRef
 {
+	RequestResourceRef(std::vector<Object*> targets, ResourceType resourceType)
+		:m_targets(targets), m_resourceType(resourceType) {}
 	std::vector<Object*> m_targets;
 	ResourceType m_resourceType;
 };
@@ -150,7 +152,7 @@ public:
 		onPushResources(resourceType, m_newList);
 		onPopResources(resourceType, m_removedList);
 
-		for (int i = 0;i < m_removedList.size(); ++i)
+		for (int i = 0; i < m_removedList.size(); ++i)
 		{
 			delete m_removedList[i];
 		}
@@ -172,9 +174,7 @@ public:
 		{
 			return;
 		}
-		RequestResourceRef resourceRef;
-		resourceRef.m_resourceType = resourceType;
-		resourceRef.m_targets = resources;
+		RequestResourceRef resourceRef(resources, resourceType);
 
 		RenderEvent renderEvent;
 		renderEvent.m_eventId = RenderEventId::RequestResource;
@@ -217,9 +217,7 @@ public:
 		{
 			return;
 		}
-		RequestResourceRef resourceRef;
-		resourceRef.m_resourceType = resourceType;
-		resourceRef.m_targets = resources;
+		RequestResourceRef resourceRef(resources, resourceType);
 
 		RenderEvent renderEvent;
 		renderEvent.m_eventId = RenderEventId::DestroyResource;

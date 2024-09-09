@@ -18,7 +18,7 @@ enum class FBOAttachmentResourceType {
 class ResourceIdentifier
 {
 public:
-	ResourceIdentifier() {}
+	ResourceIdentifier() :m_instanceId(0) {}
 	ResourceIdentifier(GLTUInt32 instanceId) :m_instanceId(instanceId) {}
 	~ResourceIdentifier() {}
 	inline GLTUInt32 getInstanceId() { return m_instanceId; }
@@ -31,8 +31,8 @@ private:
 RESOUCEIDENTIFIER_CLASS(MeshResourceIdentifier, ResourceIdentifierType::Mesh)
 {
 public:
-	MeshResourceIdentifier() :ResourceIdentifier(0) {}
 	MeshResourceIdentifier(GLTUInt32 vao, GLTUInt32 vbo, GLTUInt32 ebo, GLTUInt32 instanceId) :m_vao(vao), m_vbo(vbo), m_ebo(ebo), ResourceIdentifier(instanceId) {}
+	MeshResourceIdentifier() :MeshResourceIdentifier(0, 0, 0, 0) {}
 	~MeshResourceIdentifier() {}
 	inline GLTUInt32 getVAO() { return m_vao; }
 	inline GLTUInt32 getVBO() { return m_vbo; }
@@ -48,8 +48,12 @@ private:
 RESOUCEIDENTIFIER_CLASS(TextureResourceIdentifier, ResourceIdentifierType::Texture)
 {
 public:
-	TextureResourceIdentifier() :ResourceIdentifier(0) {}
-	TextureResourceIdentifier(GLTUInt32 instanceId) :ResourceIdentifier(instanceId) {}
+	TextureResourceIdentifier(GLTUInt32 instanceId)
+		:ResourceIdentifier(instanceId), m_texture(0), m_textureType(TextureType::Texture1D), m_internalFormat(TextureInternalFormat::None),
+		m_externalFormat(TextureExternalFormat::RED), m_perChannelSize(TexturePerChannelSize::UNSIGNED_BYTE),
+		m_width(0), m_height(0), m_depth(0), m_levels(0), m_isProxy(false)
+	{}
+	TextureResourceIdentifier() :TextureResourceIdentifier(0) {}
 	~TextureResourceIdentifier() {}
 
 	GLTUInt32 m_texture;
@@ -84,8 +88,8 @@ private:
 RESOUCEIDENTIFIER_CLASS(SamplerResouceIdentifier, ResourceIdentifierType::Sampler)
 {
 public:
-	SamplerResouceIdentifier() :ResourceIdentifier(0) {}
-	SamplerResouceIdentifier(GLTUInt32 instanceId) :ResourceIdentifier(instanceId) {}
+	SamplerResouceIdentifier(GLTUInt32 instanceId) :ResourceIdentifier(instanceId), m_sampler(0) {}
+	SamplerResouceIdentifier() :SamplerResouceIdentifier(0) {}
 	~SamplerResouceIdentifier() {}
 	GLTUInt32 m_sampler;
 private:
@@ -94,8 +98,10 @@ private:
 RESOUCEIDENTIFIER_CLASS(RenderBufferIdentifier, ResourceIdentifierType::RenderBuffer)
 {
 public:
-	RenderBufferIdentifier() :ResourceIdentifier(0) {}
-	RenderBufferIdentifier(GLTUInt32 instanceId) :ResourceIdentifier(instanceId) {}
+	RenderBufferIdentifier(GLTUInt32 instanceId)
+		:ResourceIdentifier(instanceId), m_renderBuffer(0), m_isDepthBuffer(false), m_width(0), m_height(0), m_internalFormat(TextureInternalFormat::None), m_depthStencilType(RenderTextureDepthStencilType::None)
+	{}
+	RenderBufferIdentifier() :RenderBufferIdentifier(0) {}
 	GLTUInt32 m_renderBuffer;
 	bool m_isDepthBuffer;
 	int m_width;

@@ -10,7 +10,12 @@
 class Texture :public Object
 {
 public:
-	Texture(TextureType textureType) :m_textureType(textureType) {}
+	Texture(TextureType textureType)
+		:m_textureType(textureType), m_data(nullptr), m_readWrite(false),
+		m_externalFormat(TextureExternalFormat::RED), m_isProxy(false), m_levels(0), m_width(0),
+		m_colorInternalFormat(TextureInternalFormat::None), m_perChannelSize(TexturePerChannelSize::UNSIGNED_BYTE), m_wrapModeS(TextureWrapMode::ClampEdge),
+		m_textureFilter(TextureFilterMode::Linear_Mipmap_Linear)
+	{}
 	virtual ~Texture() {}
 	virtual void load(const char* filename) {}
 	virtual void unload() {}
@@ -56,7 +61,9 @@ private:
 class Texture2D :public Texture
 {
 public:
-	Texture2D() :Texture(TextureType::Texture2D) {}
+	Texture2D()
+		:Texture(TextureType::Texture2D), m_loaded(false), m_height(0), m_wrapModeT(TextureWrapMode::ClampEdge)
+	{}
 	~Texture2D()
 	{
 		if (!m_loaded && m_data != nullptr)
@@ -117,7 +124,7 @@ protected:
 class Texture3D :public Texture
 {
 public:
-	Texture3D() :Texture(TextureType::Texture3D) {}
+	Texture3D() :m_height(0), m_depth(0), m_wrapModeT(TextureWrapMode::ClampEdge), m_wrapModeP(TextureWrapMode::ClampEdge), Texture(TextureType::Texture3D) {}
 	__GET_SET_PROPERTY__(Height, GLTSizei, m_height)
 		__GET_SET_PROPERTY__(Depth, GLTSizei, m_depth)
 		__GET_SET_PROPERTY__(WrapModeP, TextureWrapMode, m_wrapModeP)

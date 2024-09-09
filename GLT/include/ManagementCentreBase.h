@@ -7,8 +7,8 @@
 template<typename T>
 class ReferenceItem {
 public:
-	ReferenceItem() :m_refCount(0) {}
 	ReferenceItem(T target) :m_target(target), m_refCount(0) {}
+	ReferenceItem() :m_refCount(0), m_target(0) {}
 	T m_target;
 	GLTUInt32 m_refCount;
 };
@@ -91,7 +91,7 @@ public:
 		{
 			return (*iter).second;
 		}
-		return ReferencedObject();
+		return ReferencedObject(nullptr);
 	}
 protected:
 	std::map<GLTUInt32, ReferencedObject> m_allObjects;
