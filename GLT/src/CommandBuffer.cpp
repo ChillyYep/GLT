@@ -97,3 +97,23 @@ void CommandBuffer::setViewport(int x, int y, int width, int height)
 	command.param = setViewPortParam;
 	m_cmdList.push_back(command);
 }
+
+void CommandBuffer::setProjectionMatrix(glm::mat4 projection)
+{
+	RenderCommand command = RenderCommand();
+	SetProjectionMatrixParam* setProjectionMatrixParam = RenderCommandParamFactory::getInstance()->createParam<SetProjectionMatrixParam>();
+	setProjectionMatrixParam->m_projectionMatrix = projection;
+	command.commandType = RenderCommandType::SetProjectionMatrix;
+	command.param = setProjectionMatrixParam;
+	m_cmdList.push_back(command);
+}
+
+void CommandBuffer::setViewMatrix(glm::mat4 viewMatrix)
+{
+	RenderCommand command = RenderCommand();
+	SetViewMatrixParam* setViewMatrixParam = RenderCommandParamFactory::getInstance()->createParam<SetViewMatrixParam>();
+	setViewMatrixParam->m_viewMatrix = viewMatrix;
+	command.commandType = RenderCommandType::SetViewMatrix;
+	command.param = setViewMatrixParam;
+	m_cmdList.push_back(command);
+}

@@ -85,8 +85,8 @@ void createScene()
 	lightComp->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	lightComp2->setColor(glm::vec4(1.0f, 0.2f, 0.3f, 1.0f));
 
-	lightGo->getTransform()->setPosition(glm::vec3(10.0f, 10.0f, 10.0f));
-	lightGo->getTransform()->setEularAngle(glm::vec3(30.0f, 30.0f, 0.f));
+	lightGo->getTransform()->setPosition(glm::vec3(1.5f, 3.0f, 0.0f));
+	lightGo->getTransform()->setEularAngle(glm::vec3(90.0f, 0.0f, 0.f));
 
 	lightGo2->getTransform()->setPosition(glm::vec3(-10.0f, -10.0f, -10.0f));
 	lightGo2->getTransform()->setEularAngle(glm::vec3(30.0f, 30.0f, 0.f));

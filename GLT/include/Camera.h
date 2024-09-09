@@ -22,6 +22,8 @@ public:
 		static_cast<GameObject*>(m_gameObjectPtr)->getTransform()->lookAt(target->getPosition());
 	}
 
+	static glm::mat4x4 computeViewMatrix(glm::quat rotation, glm::vec3 position);
+
 	inline glm::mat4x4 getViewMatrix() { recomputeViewMatrix(); return m_viewMatrix; }
 
 	inline glm::mat4x4 getProjectMatrix() { recomputeProjectMatrix(); return m_projectMatrix; }

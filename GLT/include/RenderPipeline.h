@@ -8,6 +8,7 @@
 #include <SceneManager.h>
 #include <PassBase.h>
 #include <DrawOpaquePass.h>
+#include <ShadowMapPass.h>
 
 class RenderPipeline
 {
@@ -35,5 +36,7 @@ private:
 
 	RenderData m_renderData;
 
-	PassList m_passList;
+	PassList m_globalCameraPassList;
+
+	PassList m_perCameraPassList;
 };

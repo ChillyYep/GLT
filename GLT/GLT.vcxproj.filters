@@ -288,6 +288,9 @@
     <ClCompile Include="src\RenderResourceManagment.cpp">
       <Filter>源文件\Render\RenderResourceManager</Filter>
     </ClCompile>
+    <ClCompile Include="src\RenderEventSystem.cpp">
+      <Filter>源文件\Render\RenderResourceManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\cube.frag">
@@ -546,6 +549,9 @@
     </ClInclude>
     <ClInclude Include="include\RenderBufferManagementCentre.h">
       <Filter>头文件\Render\RenderResourceManager\ManagementCentre</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ShadowMapPass.h">
+      <Filter>头文件\Render\PassManagement</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

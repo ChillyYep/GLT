@@ -49,7 +49,6 @@ public:
 		m_context->setRenderStateBlock(m_renderStateBlock);
 		// 如果多相机绘制，则相机会在同一帧发生变化，所以需要及时更新
 		m_drawSettings.m_cameraPos = m_renderData->m_cameraDatas[m_renderData->m_curRenderingCameraIndex].m_worldPos;
-
 		auto rtIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, m_renderTexture->getRTInstanceId()));
 		if (rtIdentifier != nullptr)
 		{

@@ -560,6 +560,7 @@ void GLDevice::setRenderStateBlock(RenderStateBlock& renderStateBlock)
 		break;
 	}
 }
+
 void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, MeshResourceIdentifier* meshResourceIdentifier, std::vector<TextureResourceIdentifier*>& textureResources)
 {
 	Shader::setGlobalMatrix(ShaderPropertyNames::ModelMatrix, modelMatrix);
@@ -734,4 +735,18 @@ void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, M
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshResourceIdentifier->getEBO());
 	// »æÖÆÖ¸Áî
 	glDrawElements(GL_TRIANGLES, mesh->getIndicesCount(), GL_UNSIGNED_SHORT, NULL);
+}
+
+void GLDevice::uploadConstantBufferResource(ConstantBufferType constantBufferType)
+{
+	auto constantBufferSet = Shader::getShaderConstantBufferSet();
+
+	auto identifier = constantBufferSet.getGlobalBufferIdentifier(constantBufferType);
+	auto buffer = constantBufferSet.getGlobalByteBuffer(constantBufferType);
+
+	if (identifier != nullptr)
+	{
+		GLuint ubo = identifier->getUbo();
+		glNamedBufferSubData(ubo, 0, buffer->dataSize(), buffer->data());
+	}
 }

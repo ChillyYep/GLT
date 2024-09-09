@@ -229,24 +229,24 @@ public:
 		glViewport(x, y, width, height);
 	}
 
-	void uploadConstantBufferResource(ConstantBufferType constantBufferType) override
-	{
-		auto constantBufferSet = Shader::getShaderConstantBufferSet();
+	void uploadConstantBufferResource(ConstantBufferType constantBufferType) override;
 
-		auto identifier = constantBufferSet.getGlobalBufferIdentifier(constantBufferType);
-		auto buffer = constantBufferSet.getGlobalByteBuffer(constantBufferType);
-
-		if (identifier != nullptr)
-		{
-			GLuint ubo = identifier->getUbo();
-			glNamedBufferSubData(ubo, 0, buffer->dataSize(), buffer->data());
-		}
-	}
 	void release(RenderCommand& command)
 	{
 		RenderCommandParamFactory::getInstance()->releaseParam(command.param);
 		command.param = nullptr;
 	}
+
+	void setViewMatrix(glm::mat4& viewMatrix)
+	{
+		Shader::setGlobalMatrix(ShaderPropertyNames::ViewMatrix, viewMatrix);
+	}
+
+	void setProjectionMatrix(glm::mat4& projectionMatrix)
+	{
+		Shader::setGlobalMatrix(ShaderPropertyNames::ProjectMatrix, projectionMatrix);
+	}
+
 	void executeCommand(RenderCommand& command) override
 	{
 		auto commandType = command.commandType;
@@ -283,6 +283,18 @@ public:
 			auto transform = static_cast<GameObject*>(drawRendererParam->m_rendererPtr->getGameObject())->getTransform();
 			drawMesh(drawRendererParam->m_rendererPtr->getMesh(), drawRendererParam->m_rendererPtr->getMaterial().get(),
 				transform->getModelMatrix(), drawRendererParam->m_meshResourceIdentifier, drawRendererParam->m_textureResources);
+			break;
+		}
+		case RenderCommandType::SetViewMatrix:
+		{
+			auto setViewMatrixParam = static_cast<SetViewMatrixParam*>(commandParam);
+			setViewMatrix(setViewMatrixParam->m_viewMatrix);
+			break;
+		}
+		case RenderCommandType::SetProjectionMatrix:
+		{
+			auto setProjectionMatrixParam = static_cast<SetProjectionMatrixParam*>(commandParam);
+			setProjectionMatrix(setProjectionMatrixParam->m_projectionMatrix);
 			break;
 		}
 		default:

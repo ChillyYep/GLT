@@ -26,6 +26,10 @@ public:
 
 	void setViewport(int x, int y, int width, int height);
 
+	void setProjectionMatrix(glm::mat4 projection);
+
+	void setViewMatrix(glm::mat4 viewMatrix);
+
 	const std::vector<RenderCommand>& getAllCmdList() const {
 		return m_cmdList;
 	}

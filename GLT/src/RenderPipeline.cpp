@@ -1,12 +1,26 @@
 #include "RenderPipeline.h"
 void RenderPipeline::init() {
-	m_passList.push_back(new DrawOpaquePass());
+	m_globalCameraPassList.push_back(new ShadowMapPass());
+	//m_perCameraPassList.push_back(new DrawOpaquePass());
 	m_renderContext.init();
 	ShaderUtils::loadAllShader(m_renderContext);
 }
 void RenderPipeline::uninit() {
 	ShaderUtils::unloadAllShader(m_renderContext);
 	m_renderContext.uninit();
+
+	for (const auto& pass : m_perCameraPassList)
+	{
+		pass->destroy();
+		delete pass;
+	}
+	for (const auto& pass : m_globalCameraPassList)
+	{
+		pass->destroy();
+		delete pass;
+	}
+	m_perCameraPassList.clear();
+	m_globalCameraPassList.clear();
 }
 void RenderPipeline::render() {
 
@@ -17,6 +31,7 @@ void RenderPipeline::render() {
 	m_allScenes = SceneManager::getInstance()->getAllScenes(false);
 
 	m_renderData.m_cameraDatas.clear();
+
 	// 收集一些绘制需要的数据
 	for (const auto& scene : m_allScenes)
 	{
@@ -36,6 +51,17 @@ void RenderPipeline::render() {
 		m_renderData.m_lightDatas = SceneManager::getInstance()->getAffectedLights(mainCamera);
 	}
 
+	// 逐相机调用Pass执行
+	for (const auto& pass : m_globalCameraPassList)
+	{
+		if (!pass->IsPrepared())
+		{
+			pass->setup(&m_renderContext, &m_renderData);
+			pass->prepare();
+		}
+		pass->execute();
+	}
+
 	for (int i = 0; i < m_renderData.m_cameraDatas.size(); ++i)
 	{
 		m_renderData.m_curRenderingCameraIndex = i;
@@ -52,7 +78,7 @@ void RenderPipeline::render() {
 		m_cmd.clear();
 
 		// 逐相机调用Pass执行
-		for (const auto& pass : m_passList)
+		for (const auto& pass : m_perCameraPassList)
 		{
 			if (!pass->IsPrepared())
 			{
@@ -107,8 +133,11 @@ void RenderPipeline::updatePerFrameConstantBuffer()
 void RenderPipeline::updatePerCameraConstantBuffer(CameraData& cameraData)
 {
 	updateLightProperties();
-	Shader::setGlobalMatrix(ShaderPropertyNames::ViewMatrix, cameraData.m_viewMatrix);
-	Shader::setGlobalMatrix(ShaderPropertyNames::ProjectMatrix, cameraData.m_projectionMatrix);
+	m_cmd.setViewMatrix(cameraData.m_viewMatrix);
+	m_cmd.setProjectionMatrix(cameraData.m_projectionMatrix);
+	m_renderContext.scheduleCommandBuffer(m_cmd);
+	m_cmd.clear();
+	m_renderContext.submit();
 	auto eyePosition = cameraData.m_worldPos;
 	Shader::setGlobalVector(ShaderPropertyNames::EyePosition, glm::vec4(eyePosition.x, eyePosition.y, eyePosition.z, 1.0f));
 	m_renderContext.updateConstantBufferResources(ConstantBufferType::PerCamera);

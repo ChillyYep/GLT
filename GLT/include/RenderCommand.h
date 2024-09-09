@@ -15,7 +15,9 @@ enum class RenderCommandType
 	SetViewPort,
 	ClearColor,
 	DrawMesh,
-	DrawRenderer
+	DrawRenderer,
+	SetProjectionMatrix,
+	SetViewMatrix
 };
 
 class RenderCommandParam
@@ -100,6 +102,24 @@ public:
 
 	int m_x, m_y;
 	int m_width, m_height;
+};
+
+RENDERCOMMANDPARAM_CLASS(SetViewMatrixParam, RenderCommandType::SetViewMatrix)
+{
+public:
+	SetViewMatrixParam() {}
+	~SetViewMatrixParam() {}
+
+	glm::mat4 m_viewMatrix;
+};
+
+RENDERCOMMANDPARAM_CLASS(SetProjectionMatrixParam, RenderCommandType::SetProjectionMatrix)
+{
+public:
+	SetProjectionMatrixParam() {}
+	~SetProjectionMatrixParam() {}
+
+	glm::mat4 m_projectionMatrix;
 };
 
 class RenderCommandParamFactory :public Singleton<RenderCommandParamFactory>
