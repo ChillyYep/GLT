@@ -3,7 +3,7 @@
 #include <iostream>
 #include <Texture.h>
 #include <RenderTarget.h>
-#include <LogicResourceManagementCentre.h>
+#include <LogicResourceManager.h>
 
 class RenderTexture :public Texture2D
 {
@@ -44,7 +44,7 @@ public:
 			return;
 		}
 		RenderTargetDescriptor rtDesc(m_width, m_height, m_colorInternalFormat, m_depthInternalFormat, m_stencilInternalFormat, m_perChannelSize, m_wrapModeS, m_wrapModeT, m_textureFilter);
-		m_renderTarget = LogicResourceManagementCentre::getInstance()->addResource(rtDesc);
+		m_renderTarget = LogicResourceManager::getInstance()->addResource(rtDesc);
 		if (m_colorInternalFormat != TextureInternalFormat::None)
 		{
 			RenderBufferDescriptor rbDesc;
@@ -52,7 +52,7 @@ public:
 			rbDesc.m_height = m_height;
 			rbDesc.m_isDepthBuffer = false;
 
-			m_colorRB = LogicResourceManagementCentre::getInstance()->addResource(rbDesc);
+			m_colorRB = LogicResourceManager::getInstance()->addResource(rbDesc);
 			m_colorRB->setColorInternalFormat(m_colorInternalFormat);
 			m_renderTarget->addAttachment(AttachmentEntityWrapper(m_colorRB, FBOAttachmentType::Color));
 		}
@@ -63,7 +63,7 @@ public:
 			rbDesc.m_height = m_height;
 			rbDesc.m_isDepthBuffer = true;
 
-			m_depthRB = LogicResourceManagementCentre::getInstance()->addResource(rbDesc);
+			m_depthRB = LogicResourceManager::getInstance()->addResource(rbDesc);
 			m_depthRB->setDepthStencilType(m_depthInternalFormat);
 			m_renderTarget->addAttachment(AttachmentEntityWrapper(m_depthRB,
 				m_depthInternalFormat == RenderTextureDepthStencilType::Depth_Stencil ?
@@ -76,11 +76,11 @@ public:
 			rbDesc.m_height = m_height;
 			rbDesc.m_isDepthBuffer = true;
 
-			m_stencilRB = LogicResourceManagementCentre::getInstance()->addResource(rbDesc);
+			m_stencilRB = LogicResourceManager::getInstance()->addResource(rbDesc);
 			m_stencilRB->setDepthStencilType(m_stencilInternalFormat);
 			m_renderTarget->addAttachment(AttachmentEntityWrapper(m_stencilRB, FBOAttachmentType::Stencil));
 		}
-		LogicResourceManagementCentre::getInstance()->addResource(ResourceType::RenderTarget, m_renderTarget);
+		LogicResourceManager::getInstance()->addResource(ResourceType::RenderTarget, m_renderTarget);
 	}
 
 	void release()
@@ -91,20 +91,20 @@ public:
 		}
 		if (m_colorRB != nullptr)
 		{
-			LogicResourceManagementCentre::getInstance()->destroyResource(ResourceType::RenderBuffer, m_colorRB);
+			LogicResourceManager::getInstance()->destroyResource(ResourceType::RenderBuffer, m_colorRB);
 			m_colorRB = nullptr;
 		}
 		if (m_depthRB != nullptr)
 		{
-			LogicResourceManagementCentre::getInstance()->destroyResource(ResourceType::RenderBuffer, m_depthRB);
+			LogicResourceManager::getInstance()->destroyResource(ResourceType::RenderBuffer, m_depthRB);
 			m_depthRB = nullptr;
 		}
 		if (m_stencilRB != nullptr)
 		{
-			LogicResourceManagementCentre::getInstance()->destroyResource(ResourceType::RenderBuffer, m_stencilRB);
+			LogicResourceManager::getInstance()->destroyResource(ResourceType::RenderBuffer, m_stencilRB);
 			m_stencilRB = nullptr;
 		}
-		LogicResourceManagementCentre::getInstance()->destroyResource(ResourceType::RenderTarget, m_renderTarget);
+		LogicResourceManager::getInstance()->destroyResource(ResourceType::RenderTarget, m_renderTarget);
 		m_renderTarget = nullptr;
 		m_isCreated = false;
 	}

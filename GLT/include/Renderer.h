@@ -3,7 +3,7 @@
 #include <Mesh.h>
 #include <Transform.h>
 #include <Material.h>
-#include <LogicResourceManagementCentre.h>
+#include <LogicResourceManager.h>
 #include <FilterSetting.h>
 #include <GameObject.h>
 

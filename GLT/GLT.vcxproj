@@ -153,6 +153,7 @@
     <ClCompile Include="src\GLSLPreProcessCompiler.cpp" />
     <ClCompile Include="src\Graphics.cpp" />
     <ClCompile Include="src\Light.cpp" />
+    <ClCompile Include="src\LogicResourceManager.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\MemoryManager.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="src\PrimitiveUtils.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\RenderPipeline.cpp" />
+    <ClCompile Include="src\RenderResourceManagment.cpp" />
     <ClCompile Include="src\RenderTexture.cpp" />
     <ClCompile Include="src\RHICommon.cpp" />
     <ClCompile Include="src\Scene.cpp" />
@@ -210,7 +212,7 @@
     <ClInclude Include="include\GLSLCompiler.h" />
     <ClInclude Include="include\GLSLPreProcessCompiler.h" />
     <ClInclude Include="include\ListenerBase.h" />
-    <ClInclude Include="include\LogicResourceManagementCentre.h" />
+    <ClInclude Include="include\LogicResourceManager.h" />
     <ClInclude Include="include\Math_Common.h" />
     <ClInclude Include="include\MemoryManager.h" />
     <ClInclude Include="include\PassBase.h" />

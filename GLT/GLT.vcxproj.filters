@@ -282,6 +282,12 @@
     <ClCompile Include="src\SceneManager.cpp">
       <Filter>源文件\Game\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\LogicResourceManager.cpp">
+      <Filter>源文件\Render\RenderResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RenderResourceManagment.cpp">
+      <Filter>源文件\Render\RenderResourceManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\cube.frag">
@@ -520,7 +526,7 @@
     <ClInclude Include="include\RenderData.h">
       <Filter>头文件\Render</Filter>
     </ClInclude>
-    <ClInclude Include="include\LogicResourceManagementCentre.h">
+    <ClInclude Include="include\LogicResourceManager.h">
       <Filter>头文件\Render\RenderResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="include\RenderResourceManagment.h">

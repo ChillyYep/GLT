@@ -10,7 +10,7 @@ void RenderPipeline::uninit() {
 }
 void RenderPipeline::render() {
 
-	LogicResourceManagementCentre::getInstance()->tick();
+	LogicResourceManager::getInstance()->tick();
 
 	updatePerFrameConstantBuffer();
 
