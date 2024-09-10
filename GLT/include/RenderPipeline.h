@@ -36,7 +36,7 @@ private:
 
 	RenderData m_renderData;
 
-	PassList m_globalCameraPassList;
+	PassList m_globalPassList;
 
 	PassList m_perCameraPassList;
 };

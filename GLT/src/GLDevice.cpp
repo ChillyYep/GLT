@@ -426,8 +426,8 @@ void GLDevice::activate(RenderTargetIdentifier* rtIdentifier)
 
 void GLDevice::clearColor(float r, float g, float b, float a)
 {
-	auto size = Window::getInstance()->getSize();
-	glViewport(0, 0, size.x, size.y);
+	//auto size = Window::getInstance()->getSize();
+	//glViewport(0, 0, size.x, size.y);
 	glClearColor(r, g, b, a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
