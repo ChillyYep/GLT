@@ -26,7 +26,7 @@ public:
 
 		auto window = Window::getInstance();
 		auto windowSize = window->getSize();
-		m_depthRT = new RenderTexture(windowSize.x, windowSize.y, TextureInternalFormat::SRGBA8, RenderTextureDepthStencilType::Depth16,
+		m_depthRT = new RenderTexture(windowSize.x, windowSize.y, TextureInternalFormat::RGB8, RenderTextureDepthStencilType::Depth16,
 			RenderTextureDepthStencilType::None);
 		m_depthRT->create();
 	}
@@ -60,15 +60,15 @@ public:
 			auto window = Window::getInstance();
 			auto windowSize = window->getSize();
 
-			auto viewMatrix = Camera::computeViewMatrix(glm::quatLookAt(mainLightData.direction, glm::vec3(0.0f, 1.0f, 0.0f)), mainLightData.position);
+			auto viewMatrix = Camera::computeViewMatrix(glm::quatLookAt(mainLightData.direction, glm::vec3(0.0f, -1.0f, 0.0f)), mainLightData.position);
 			//auto pos = glm::inverse(viewMatrix) * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 			//std::cout << mainLightData.position.x << "," << mainLightData.position.y << "," << mainLightData.position.z << std::endl;
+			//std::cout << mainLightData.direction.x << "," << mainLightData.direction.y << "," << mainLightData.direction.z << std::endl;
 			//std::cout << pos.x << "," << pos.y << "," << pos.z << std::endl;
 			//std::cout << std::endl;
 			m_cmdBuffer.setViewport(0, 0, windowSize.x, windowSize.y);
 			m_cmdBuffer.setViewMatrix(viewMatrix);
 			m_cmdBuffer.setProjectionMatrix(m_renderData->m_cameraDatas[0].m_projectionMatrix);
-			m_cmdBuffer.setRenderTarget(rtIdentifier);
 			m_context->scheduleCommandBuffer(m_cmdBuffer);
 			m_cmdBuffer.clear();
 			m_context->submit();
@@ -76,6 +76,7 @@ public:
 			Shader::setGlobalVector(ShaderPropertyNames::EyePosition, glm::vec4(mainLightData.position.x, mainLightData.position.y, mainLightData.position.z, 1.0f));
 			m_context->updateConstantBufferResources(ConstantBufferType::PerCamera);
 
+			m_cmdBuffer.setRenderTarget(rtIdentifier);
 			m_cmdBuffer.clearColor(0.0f, 0.0f, 0.0f, 0.0f);
 			m_context->scheduleCommandBuffer(m_cmdBuffer);
 			m_cmdBuffer.clear();

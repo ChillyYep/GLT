@@ -16,7 +16,6 @@ public:
 		m_renderStateBlock.m_depthState.m_compareFunc = CompareFunction::Less;
 
 		m_filterSettings.m_renderType = RenderType::Opaque;
-
 		m_drawSettings.m_sortType = SortType::Near2Far;
 	}
 
