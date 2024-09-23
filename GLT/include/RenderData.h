@@ -21,6 +21,7 @@ struct LightProperties {
 	glm::vec4 ambient;
 	glm::vec4 color;
 	glm::vec3 position;
+	glm::quat rotation;
 	glm::vec3 direction;
 	float spotCosCutoff;
 	/// <summary>

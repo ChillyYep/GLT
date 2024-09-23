@@ -44,18 +44,15 @@ public:
 
 	static inline glm::vec3 getForward(glm::quat & quat) {
 		glm::vec3 forward = glm::vec3(0.0f, 0.0f, 1.0f);
-		forward = quat * forward;
-		return forward;
+		return glm::rotate(quat, forward);
 	}
 	static inline glm::vec3 getRight(glm::quat & quat) {
 		glm::vec3 right = glm::vec3(1.0f, 0.0f, 0.0f);
-		right = quat * right;
-		return right;
+		return glm::rotate(quat, right);
 	}
 	static inline glm::vec3 getUp(glm::quat & quat) {
 		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-		up = quat * up;
-		return up;
+		return glm::rotate(quat, up);
 	}
 	inline glm::vec3 getEularAngle() { return glm::degrees(glm::eulerAngles(m_rotation)); }
 

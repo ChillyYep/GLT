@@ -1,7 +1,7 @@
 #include "RenderPipeline.h"
 void RenderPipeline::init() {
-	m_globalPassList.push_back(new ShadowMapPass());
-	//m_perCameraPassList.push_back(new DrawOpaquePass());
+	//m_globalPassList.push_back(new ShadowMapPass());
+	m_perCameraPassList.push_back(new DrawOpaquePass());
 	m_renderContext.init();
 	ShaderUtils::loadAllShader(m_renderContext);
 }
@@ -104,7 +104,7 @@ void RenderPipeline::updateLightProperties()
 	if (lightDatas.size() > 0)
 	{
 		auto lightProperties = lightDatas[0];
-		Shader::setGlobalVector(ShaderPropertyNames::MainLightData_Ambient, glm::vec4(0.2f, 0.2f, 0.2f, 0.0f));
+		Shader::setGlobalVector(ShaderPropertyNames::MainLightData_Ambient, lightProperties.ambient);
 		Shader::setGlobalVector(ShaderPropertyNames::MainLightData_Color, lightProperties.color);
 		Shader::setGlobalVector(ShaderPropertyNames::MainLightData_Position, glm::vec4(lightProperties.position.x, lightProperties.position.y, lightProperties.position.z, 1.0f));
 		Shader::setGlobalVector(ShaderPropertyNames::MainLightData_ConeDirection, glm::vec4(lightProperties.direction.x, lightProperties.direction.y, lightProperties.direction.z, 1.0f));

@@ -29,16 +29,23 @@ float ApplyLightAttenuation(float distance,float endDistance, float attenuation)
 
 vec4 PhongShading_Directional(LightData lightData,vec3 eyePosition,vec3 worldPosition,vec3 worldNormal,vec4 fragementColor,float smoothness)
 {
+	worldNormal=normalize(worldNormal);
 	vec3 viewDir=normalize(eyePosition-worldPosition);
+	vec3 lightDir=normalize(-lightData.coneDirection.xyz);
+	// 计算光的衰减
 	vec3 lightDelta=lightData.position.xyz-worldPosition;
-	vec3 lightDir=normalize(-lightData.coneDirection.rgb);
-	float diffuseStrength=dot(worldNormal,lightDir);
-	vec3 reflectedLightDir=reflect(-lightDir,worldNormal)*step(0.0f,diffuseStrength);
-	float distance=dot(-lightDelta,lightDir);
+	float distance=dot(lightDelta,lightDir);
 	float lightStrength=ApplyLightAttenuation(distance,lightData.endDistance,lightData.attenuations.x);
-	vec3 diffuse=clamp(diffuseStrength,0,1)*fragementColor.rgb*lightData.color.rgb*lightStrength;
-	vec3 specular=0.5f*pow(clamp(dot(viewDir,reflectedLightDir),0,1),smoothness)*lightData.color.rgb*lightStrength;
+	// 漫反射
+	float diffuseStrength=clamp(dot(worldNormal,lightDir),0,1);
+	vec3 diffuse=diffuseStrength*fragementColor.rgb*lightData.color.rgb*lightStrength;
+	// 镜面反射
+	vec3 halfVec=normalize(viewDir+lightDir);
+	vec3 specular=0.3*pow(clamp(dot(halfVec,worldNormal),0,1),smoothness)*lightData.color.rgb*lightStrength;
+	// 环境光
 	vec3 ambient=lightData.ambient.rgb*fragementColor.rgb;
+	
+	// return specular.xyzz;
 	return vec4(clamp(diffuse+ambient+specular,vec3(0.0f,0.0f,0.0f),vec3(1.0f,1.0f,1.0f)),fragementColor.a);
 }
 

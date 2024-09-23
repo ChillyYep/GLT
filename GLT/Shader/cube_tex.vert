@@ -22,5 +22,5 @@ void main()
 	vs_out.fs_Color = vColor;
 	vs_out.fs_worldPosition = Model*vPosition;
 	vs_out.fs_Texcoord = vTexcoord;
-	vs_out.fs_worldNormal = normalize((Model*vNormal-Model*vec4(0,0,0,1)).xyz);
+	vs_out.fs_worldNormal = normalize((Model*vNormal).xyz);
 }

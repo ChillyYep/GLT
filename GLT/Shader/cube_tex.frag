@@ -46,6 +46,6 @@ void main()
 	fColor = vec4(fColor.rgb,1.0);
 
 	// fColor=vec4(1.0,1.0,1.0,1.0);
-	fColor = PhongShading_All(EyePosition.xyz,fs_in.fs_worldPosition.xyz,fs_in.fs_worldNormal,fColor,100);
+	fColor = PhongShading_All(EyePosition.xyz,fs_in.fs_worldPosition.xyz,fs_in.fs_worldNormal,fColor,10);
 
 }

@@ -168,4 +168,5 @@ void ComponentOwner::destroy()
 	{
 		m_components[i]->destroy();
 	}
+	m_components.clear();
 }

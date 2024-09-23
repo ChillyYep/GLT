@@ -62,7 +62,7 @@ void createScene()
 	auto cameraTransform = cameraGo->getTransform();
 	cameraTransform->setPosition(glm::vec3(10.0f, 2.0f, 10.0f));
 	cameraTransform->setScale(glm::vec3(1.0f));
-	cameraTransform->setEularAngle(glm::vec3(0.0f));
+	//cameraTransform->setEularAngle(glm::vec3(0.0f));
 
 	auto camera = cameraGo->addComponent<Camera>();
 	camera->setViewPort(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
@@ -85,8 +85,8 @@ void createScene()
 	lightComp->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	lightComp2->setColor(glm::vec4(1.0f, 0.2f, 0.3f, 1.0f));
 
-	lightGo->getTransform()->setPosition(glm::vec3(1.5f, 10.0f, 0.0f));
-	lightGo->getTransform()->setEularAngle(glm::vec3(450.0f, 0.0f, 0.f));
+	lightGo->getTransform()->setPosition(glm::vec3(0.0f, 15.0f, 0.0f));
+	lightGo->getTransform()->setEularAngle(glm::vec3(90.0f, 10.0f, 0.f));
 
 	auto forward = lightGo->getTransform()->getForward();
 	std::cout << forward.x << "," << forward.y << "," << forward.z << std::endl;
@@ -99,7 +99,7 @@ void createScene()
 	scene->addObject(go3);
 	scene->addObject(cameraGo);
 	scene->addObject(lightGo);
-	scene->addObject(lightGo2);
+	//scene->addObject(lightGo2);
 	//Graphics::drawMeshNow(cubeMesh, mat, cube1Transform->getModelMatrix() * glm::translate(glm::vec3(-3.0f, 0.0f, 0.0f)));
 }
 

@@ -7,10 +7,11 @@ LightProperties Light::getLightProperties()
 	lightProperties.isEnabled = m_enabled;
 	lightProperties.lightType = m_lightType;
 	lightProperties.position = goPtr->getTransform()->getPosition();
+	lightProperties.rotation = goPtr->getTransform()->getRotation();
 	lightProperties.direction = goPtr->getTransform()->getForward();
 	lightProperties.color = m_color;
 	lightProperties.spotCosCutoff = 0.0f;
-	lightProperties.ambient = m_color * 0.1f;
+	lightProperties.ambient = m_color * 0.5f;
 	if (m_lightType == LightType::DirectionalLight)
 	{
 		lightProperties.attenuations = glm::zero<glm::vec4>();
