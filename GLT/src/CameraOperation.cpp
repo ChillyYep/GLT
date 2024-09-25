@@ -35,7 +35,7 @@ void CameraController::onPointerMoved(MouseEvent mouseEvent)
 		auto offset = (mouseEvent.m_pos - m_beginRotatePos) * m_rotateSensitivity;
 		if (m_transform != nullptr)
 		{
-			auto newRotation = rotate(m_beginRotation, -offset.y, -offset.x);
+			auto newRotation = rotate(m_beginRotation, offset.x, offset.y);
 			m_transform->setRotation(newRotation);
 		}
 	}
@@ -43,10 +43,9 @@ void CameraController::onPointerMoved(MouseEvent mouseEvent)
 	{
 		if (m_transform != nullptr)
 		{
-			auto right = m_transform->getRight();
-			auto up = m_transform->getUp();
-			auto offset = (mouseEvent.m_pos - m_beginMovePos) * m_translateSensitivity;
-			m_transform->setPosition(m_beginCameraPos + right * -offset.x + up * offset.y);
+			auto offsetXY = (mouseEvent.m_pos - m_beginMovePos) * m_translateSensitivity;
+			auto newPosition = translate(m_beginCameraPos, offsetXY.x, offsetXY.y);
+			m_transform->setPosition(newPosition);
 		}
 	}
 }
@@ -62,7 +61,7 @@ void CameraController::onPointerReleased(MouseEvent mouseEvent)
 		auto offset = (mouseEvent.m_pos - m_beginRotatePos) * m_rotateSensitivity;
 		if (m_transform != nullptr)
 		{
-			auto newRotation = rotate(m_beginRotation, -offset.y, -offset.x);
+			auto newRotation = rotate(m_beginRotation, offset.x, offset.y);
 			m_transform->setRotation(newRotation);
 		}
 		m_beginRotatePos = glm::vec2(0.0f);
@@ -72,10 +71,9 @@ void CameraController::onPointerReleased(MouseEvent mouseEvent)
 	{
 		if (m_transform != nullptr)
 		{
-			auto right = m_transform->getRight();
-			auto up = m_transform->getUp();
-			auto offset = (mouseEvent.m_pos - m_beginMovePos) * m_translateSensitivity;
-			m_transform->setPosition(m_beginCameraPos + right * -offset.x + up * offset.y);
+			auto offsetXY = (mouseEvent.m_pos - m_beginMovePos) * m_translateSensitivity;
+			auto newPosition = translate(m_beginCameraPos, offsetXY.x, offsetXY.y);
+			m_transform->setPosition(newPosition);
 		}
 		m_beginMovePos = glm::vec2(0.0f);
 		m_beginCameraPos = glm::vec3(0.0f);
@@ -83,13 +81,21 @@ void CameraController::onPointerReleased(MouseEvent mouseEvent)
 }
 
 void CameraController::onWheelScroll(WheelEvent wheelEvent) {
-	auto forward = m_transform->getForward();
-	m_transform->translate(forward * -wheelEvent.m_yOffset * m_zoomSensitivity);
+	auto newPosition = translate(m_transform->getPosition(), .0f, .0f, -wheelEvent.m_yOffset * m_zoomSensitivity);
+	m_transform->setPosition(newPosition);
 }
 
-glm::quat CameraController::rotate(glm::quat beginQuat, float offsetY, float offsetX)
+glm::quat CameraController::rotate(glm::quat beginQuat, float offsetX, float offsetY)
 {
 	auto rotateQuat = glm::quat_cast(glm::eulerAngleXYZ(glm::radians(offsetY), glm::radians(offsetX), 0.0f));
-	beginQuat = beginQuat * rotateQuat;
+	beginQuat = rotateQuat * beginQuat;
 	return beginQuat;
+}
+
+glm::vec3 CameraController::translate(glm::vec3 position, float offsetX, float offsetY, float offsetZ)
+{
+	auto offset = glm::vec3(-offsetX, offsetY, offsetZ);
+	auto view2World = glm::inverse(m_transform->getRotation());
+	offset = glm::rotate(view2World, offset);
+	return position + offset;
 }

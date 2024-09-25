@@ -29,8 +29,9 @@ public:
 
 	void onWheelScroll(WheelEvent wheelEvent) override;
 
-	inline glm::quat rotate(glm::quat beginQuat, float offsetY, float offsetX);
+	glm::quat rotate(glm::quat beginQuat, float offsetX, float offsetY);
 
+	glm::vec3 translate(glm::vec3 position, float offsetX, float offsetY, float offsetZ = 0.0f);
 private:
 	glm::vec2 m_beginRotatePos;
 	glm::vec2 m_beginMovePos;

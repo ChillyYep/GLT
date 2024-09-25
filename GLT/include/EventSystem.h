@@ -3,7 +3,7 @@
 #include <GLCommon.h>
 #include <GLMath.h>
 #include <list>
-enum MouseButtonType {
+enum class MouseButtonType {
 	None = -1,
 	LeftButton = GLFW_MOUSE_BUTTON_LEFT,
 	RightButton = GLFW_MOUSE_BUTTON_RIGHT,
