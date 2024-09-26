@@ -502,6 +502,10 @@ void GLDevice::setRenderStateBlock(RenderStateBlock& renderStateBlock)
 	// 开启深度写入与否
 	glDepthRange(0, 1);
 	glDepthMask(renderStateBlock.m_depthState.m_writable ? GL_TRUE : GL_FALSE);
+	glColorMask(renderStateBlock.m_colorState.m_rgbaWritable.x ? GL_TRUE : GL_FALSE,
+		renderStateBlock.m_colorState.m_rgbaWritable.y ? GL_TRUE : GL_FALSE,
+		renderStateBlock.m_colorState.m_rgbaWritable.z ? GL_TRUE : GL_FALSE,
+		renderStateBlock.m_colorState.m_rgbaWritable.w ? GL_TRUE : GL_FALSE);
 	// 开启深度测试与否，及若开启配置哪种函数
 	switch (renderStateBlock.m_depthState.m_compareFunc)
 	{

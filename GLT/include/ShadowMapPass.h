@@ -14,6 +14,7 @@ public:
 	void prepareRenderState() override
 	{
 		m_renderStateBlock.m_colorState.m_cullMode = CullMode::Back;
+		m_renderStateBlock.m_colorState.m_rgbaWritable = glm::bvec4(false, false, false, false);
 		m_renderStateBlock.m_depthState.m_writable = true;
 		m_renderStateBlock.m_depthState.m_compareFunc = CompareFunction::Less;
 
@@ -58,10 +59,6 @@ public:
 			auto windowSize = window->getSize();
 
 			auto viewMatrix = Camera::computeViewMatrix(mainLightData.rotation, mainLightData.position);
-			//auto pos = glm::inverse(viewMatrix) * glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
-			//std::cout << mainLightData.position.x << "," << mainLightData.position.y << "," << mainLightData.position.z << std::endl;
-			//std::cout << pos.x << "," << pos.y << "," << pos.z << std::endl;
-			//std::cout << std::endl;
 			m_cmdBuffer.setViewport(0, 0, windowSize.x, windowSize.y);
 			m_cmdBuffer.setViewMatrix(viewMatrix);
 			m_cmdBuffer.setProjectionMatrix(m_renderData->m_cameraDatas[0].m_projectionMatrix);

@@ -47,6 +47,7 @@ enum class CullMode
 struct ColorState 
 {
 	CullMode m_cullMode;
+	glm::bvec4 m_rgbaWritable;
 };
 
 struct DepthState
