@@ -43,7 +43,13 @@ public:
 
 	void setRenderStateBlock(RenderStateBlock& renderStateBlock)
 	{
-		m_curRenderStateBlock = renderStateBlock;
+		// 配置相同则不必再刷新
+		if (m_renderStateInited && m_curRenderStateBlock.isSame(renderStateBlock))
+		{
+			return;
+		}
+		m_renderStateInited = true;
+		renderStateBlock.copyTo(m_curRenderStateBlock);
 		m_device->setRenderStateBlock(m_curRenderStateBlock);
 	}
 
@@ -66,7 +72,7 @@ public:
 
 	void submit();
 
-	void blitToWindow();
+	void blitCurrentRTToWindow();
 private:
 
 
@@ -79,7 +85,10 @@ private:
 	{
 		return b.m_sortOrder > a.m_sortOrder;
 	}
-
+	/// <summary>
+	/// 渲染状态是否初始化过
+	/// </summary>
+	bool m_renderStateInited = false;
 	/// <summary>
 	/// 当前渲染状态
 	/// </summary>

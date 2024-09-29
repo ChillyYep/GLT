@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <CommonDefine.h>
-#include <TextureEnums.h>
+#include <RenderTargetDescriptor.h>
 #include <RenderBuffer.h>
 #include <ResourceIdentifierType.h>
 
@@ -164,9 +164,10 @@ private:
 RESOUCEIDENTIFIER_CLASS(RenderTargetIdentifier, ResourceIdentifierType::RenderTarget)
 {
 public:
-	RenderTargetIdentifier() :ResourceIdentifier(0) {}
+	RenderTargetIdentifier() :ResourceIdentifier(0), m_descriptor(RenderTargetDescriptor()){}
 	RenderTargetIdentifier(GLTUInt32 instanceId) :ResourceIdentifier(instanceId) {}
 	std::vector<AttachmentEntityIdentifierWrapper> m_attachmentIdentifiers;
 	GLTUInt32 m_fbo = 0;
+	RenderTargetDescriptor m_descriptor;
 private:
 };

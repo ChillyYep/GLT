@@ -67,6 +67,14 @@ enum class TextureExternalFormat {
 	RGBA
 };
 
+enum class ColorChannel
+{
+	R = 1,
+	G = 1 << 1,
+	B = 1 << 2,
+	A = 1 << 3
+};
+
 enum class TexturePerChannelSize {
 	UNSIGNED_BYTE,
 };

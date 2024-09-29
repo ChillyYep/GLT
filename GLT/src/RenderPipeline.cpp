@@ -1,7 +1,7 @@
 #include "RenderPipeline.h"
 void RenderPipeline::init() {
-	m_globalPassList.push_back(new ShadowMapPass());
-	//m_perCameraPassList.push_back(new DrawOpaquePass());
+	//m_globalPassList.push_back(new ShadowMapPass());
+	m_perCameraPassList.push_back(new DrawOpaquePass());
 	m_renderContext.init();
 	ShaderUtils::loadAllShader(m_renderContext);
 }
@@ -90,7 +90,7 @@ void RenderPipeline::render() {
 		}
 	}
 	// 绘制完毕后,从绘制区FBO Blit到窗口区FBO
-	m_renderContext.blitToWindow();
+	m_renderContext.blitCurrentRTToWindow();
 
 	postUpdate();
 }

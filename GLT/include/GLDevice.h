@@ -216,7 +216,11 @@ public:
 
 	void clearColor(float r, float g, float b, float a) override;
 
-	void blitToWindow() override;
+	void blitCurrentRTToWindow() override;
+
+	void blitDebugRTToWindow() override;
+
+	void blitRTToWindow(RenderTargetIdentifier* rt);
 
 	GLenum textureType2TextureTarget(TextureType textureType) const;
 
@@ -302,6 +306,11 @@ public:
 		}
 
 		release(command);
+	}
+
+	void blitToRenderBuffer(RenderBufferIdentifier* src, RenderBufferIdentifier* dst, ColorChannel srcChannels, ColorChannel dstChannels) override
+	{
+
 	}
 private:
 

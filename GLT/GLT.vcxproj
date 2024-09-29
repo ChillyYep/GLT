@@ -201,6 +201,7 @@
     <ClInclude Include="include\ConstantBuffers.h" />
     <ClInclude Include="include\ConstantBufferType.h" />
     <ClInclude Include="include\CullingResult.h" />
+    <ClInclude Include="include\DebugPassBase.h" />
     <ClInclude Include="include\DeviceBase.h" />
     <ClInclude Include="include\DrawOpaquePass.h" />
     <ClInclude Include="include\DrawSettings.h" />
@@ -224,6 +225,7 @@
     <ClInclude Include="include\RenderResourceManagment.h" />
     <ClInclude Include="include\RenderStateBlock.h" />
     <ClInclude Include="include\RenderTarget.h" />
+    <ClInclude Include="include\RenderTargetDescriptor.h" />
     <ClInclude Include="include\RenderTargetManagementCentre.h" />
     <ClInclude Include="include\RenderEventSystem.h" />
     <ClInclude Include="include\ResourceIdentifier.h" />

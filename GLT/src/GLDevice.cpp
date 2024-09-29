@@ -252,6 +252,7 @@ std::vector<RenderTargetIdentifier> GLDevice::requestRenderTargetResource(std::v
 		auto& rtIdentifier = renderTargetResources[i];
 		auto fbo = rts[i];
 		rtIdentifier.m_fbo = fbo;
+		rtIdentifier.m_descriptor = rtPtr->getRenderTargetDescriptor();
 		auto attachmentIdentifiers = rtsAttachmentIdentifiers[i];
 		auto descriptor = rtPtr->getRenderTargetDescriptor();
 
@@ -432,19 +433,34 @@ void GLDevice::clearColor(float r, float g, float b, float a)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void GLDevice::blitToWindow()
+void GLDevice::blitCurrentRTToWindow()
 {
-	if (m_curRT == nullptr)
+	blitRTToWindow(m_curRT);
+}
+
+void GLDevice::blitRTToWindow(RenderTargetIdentifier* rt)
+{
+	if (rt == nullptr)
 	{
 		return;
 	}
 	auto windowSize = Window::getInstance()->getSize();
+
+	auto width = rt->m_descriptor.m_width;
+	auto height = rt->m_descriptor.m_height;
+
 	assert(glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
 	// 将FBO绑定到读取FB目标上
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, m_curRT->m_fbo);
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, rt->m_fbo);
 	// 绘制窗口设置为0，意思是重新绑定到窗口的帧缓存上
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	glBlitFramebuffer(0, 0, windowSize.x, windowSize.y, 0, 0, windowSize.x, windowSize.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+	glBlitFramebuffer(0, 0, width, height, 0, 0, windowSize.x, windowSize.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+}
+
+void GLDevice::blitDebugRTToWindow()
+{
+	blitRTToWindow(m_debugRT);
 }
 
 void GLDevice::bindBlockForProgram(Shader& shader)
@@ -500,68 +516,89 @@ GLenum GLDevice::textureType2TextureTarget(TextureType textureType) const
 void GLDevice::setRenderStateBlock(RenderStateBlock& renderStateBlock)
 {
 	// 开启深度写入与否
-	glDepthRange(0, 1);
-	glDepthMask(renderStateBlock.m_depthState.m_writable ? GL_TRUE : GL_FALSE);
-	glColorMask(renderStateBlock.m_colorState.m_rgbaWritable.x ? GL_TRUE : GL_FALSE,
-		renderStateBlock.m_colorState.m_rgbaWritable.y ? GL_TRUE : GL_FALSE,
-		renderStateBlock.m_colorState.m_rgbaWritable.z ? GL_TRUE : GL_FALSE,
-		renderStateBlock.m_colorState.m_rgbaWritable.w ? GL_TRUE : GL_FALSE);
-	// 开启深度测试与否，及若开启配置哪种函数
-	switch (renderStateBlock.m_depthState.m_compareFunc)
+	if (renderStateBlock.m_depthState.m_depthRange.isDirty())
 	{
-	case CompareFunction::Disabled:
-		glDisable(GL_DEPTH_TEST);
-		break;
-	case CompareFunction::Never:
-		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_NEVER);
-		break;
-	case CompareFunction::Less:
-		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LESS);
-		break;
-	case CompareFunction::Equal:
-		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_EQUAL);
-		break;
-	case CompareFunction::LessEqual:
-		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LEQUAL);
-		break;
-	case CompareFunction::Greater:
-		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_GREATER);
-		break;
-	case CompareFunction::NotEqual:
-		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_NOTEQUAL);
-		break;
-	case CompareFunction::GreaterEqual:
-		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_GEQUAL);
-		break;
-	case CompareFunction::Always:
-		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_ALWAYS);
-		break;
-	default:
-		break;
+		renderStateBlock.m_depthState.m_depthRange.clearDirty();
+		auto depthRange = renderStateBlock.m_depthState.m_depthRange.getValue();
+		glDepthRange(depthRange.x, depthRange.y);
 	}
-	switch (renderStateBlock.m_colorState.m_cullMode)
+	if (renderStateBlock.m_depthState.m_writable.isDirty())
 	{
-	case CullMode::Off:
-		glDisable(GL_CULL_FACE);
-		break;
-	case CullMode::Front:
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_FRONT);
-		break;
-	case CullMode::Back:
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
-		break;
-	default:
-		break;
+		renderStateBlock.m_depthState.m_writable.clearDirty();
+		glDepthMask(renderStateBlock.m_depthState.m_writable.getValue() ? GL_TRUE : GL_FALSE);
+	}
+	if (renderStateBlock.m_depthState.m_compareFunc.isDirty())
+	{
+		renderStateBlock.m_depthState.m_compareFunc.clearDirty();
+		// 开启深度测试与否，及若开启配置哪种函数
+		switch (renderStateBlock.m_depthState.m_compareFunc.getValue())
+		{
+		case CompareFunction::Disabled:
+			glDisable(GL_DEPTH_TEST);
+			break;
+		case CompareFunction::Never:
+			glEnable(GL_DEPTH_TEST);
+			glDepthFunc(GL_NEVER);
+			break;
+		case CompareFunction::Less:
+			glEnable(GL_DEPTH_TEST);
+			glDepthFunc(GL_LESS);
+			break;
+		case CompareFunction::Equal:
+			glEnable(GL_DEPTH_TEST);
+			glDepthFunc(GL_EQUAL);
+			break;
+		case CompareFunction::LessEqual:
+			glEnable(GL_DEPTH_TEST);
+			glDepthFunc(GL_LEQUAL);
+			break;
+		case CompareFunction::Greater:
+			glEnable(GL_DEPTH_TEST);
+			glDepthFunc(GL_GREATER);
+			break;
+		case CompareFunction::NotEqual:
+			glEnable(GL_DEPTH_TEST);
+			glDepthFunc(GL_NOTEQUAL);
+			break;
+		case CompareFunction::GreaterEqual:
+			glEnable(GL_DEPTH_TEST);
+			glDepthFunc(GL_GEQUAL);
+			break;
+		case CompareFunction::Always:
+			glEnable(GL_DEPTH_TEST);
+			glDepthFunc(GL_ALWAYS);
+			break;
+		default:
+			break;
+		}
+	}
+	if (renderStateBlock.m_colorState.m_rgbaWritable.isDirty())
+	{
+		renderStateBlock.m_colorState.m_rgbaWritable.clearDirty();
+		glColorMask(renderStateBlock.m_colorState.m_rgbaWritable.getValue().x ? GL_TRUE : GL_FALSE,
+			renderStateBlock.m_colorState.m_rgbaWritable.getValue().y ? GL_TRUE : GL_FALSE,
+			renderStateBlock.m_colorState.m_rgbaWritable.getValue().z ? GL_TRUE : GL_FALSE,
+			renderStateBlock.m_colorState.m_rgbaWritable.getValue().w ? GL_TRUE : GL_FALSE);
+	}
+	if (renderStateBlock.m_colorState.m_cullMode.isDirty())
+	{
+		renderStateBlock.m_colorState.m_cullMode.clearDirty();
+		switch (renderStateBlock.m_colorState.m_cullMode.getValue())
+		{
+		case CullMode::Off:
+			glDisable(GL_CULL_FACE);
+			break;
+		case CullMode::Front:
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_FRONT);
+			break;
+		case CullMode::Back:
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_BACK);
+			break;
+		default:
+			break;
+		}
 	}
 }
 

@@ -69,7 +69,7 @@ void ScriptableRenderContext::submit()
 	m_commands.clear();
 }
 
-void ScriptableRenderContext::blitToWindow()
+void ScriptableRenderContext::blitCurrentRTToWindow()
 {
-	m_device->blitToWindow();
+	m_device->blitCurrentRTToWindow();
 }

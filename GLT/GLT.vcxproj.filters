@@ -160,6 +160,9 @@
     <Filter Include="头文件\Common\ObserverPattern">
       <UniqueIdentifier>{7c7ae7e9-ec12-4c3e-a355-e2b80b1ee129}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Render\RenderResourceManager\ResourceDescriptor">
+      <UniqueIdentifier>{d3976870-d2ba-4411-98de-4ead4b8477c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl3w.c">
@@ -551,6 +554,12 @@
       <Filter>头文件\Render\RenderResourceManager\ManagementCentre</Filter>
     </ClInclude>
     <ClInclude Include="include\ShadowMapPass.h">
+      <Filter>头文件\Render\PassManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderTargetDescriptor.h">
+      <Filter>头文件\Render\RenderResourceManager\ResourceDescriptor</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DebugPassBase.h">
       <Filter>头文件\Render\PassManagement</Filter>
     </ClInclude>
   </ItemGroup>

@@ -9,10 +9,8 @@ void Camera::recomputeViewMatrix()
 glm::mat4x4 Camera::computeViewMatrix(glm::quat rotation, glm::vec3 position)
 {
 	glm::mat4 viewMatrix;
-	// 正交矩阵的转置矩阵就是其逆矩阵
 	// 旋转+平移还原相机矩阵
 	viewMatrix = glm::mat4_cast(rotation) * glm::translate(glm::identity<glm::mat4>(), -position);
-	//viewMatrix = glm::translate(glm::identity<glm::mat4>(), -position) * glm::mat4_cast(rotation);
 	return viewMatrix;
 }
 

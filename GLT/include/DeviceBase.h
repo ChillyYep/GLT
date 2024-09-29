@@ -47,10 +47,19 @@ public:
 
 	virtual void clearColor(float r, float g, float b, float a) = 0;
 
-	virtual void blitToWindow() = 0;
+	virtual void blitCurrentRTToWindow() = 0;
+
+	virtual void blitRTToWindow(RenderTargetIdentifier* rt) = 0;
 
 	virtual void uploadConstantBufferResource(ConstantBufferType constantBufferType) = 0;
 
+	virtual void blitDebugRTToWindow() = 0;
+
+	virtual void blitToRenderBuffer(RenderBufferIdentifier* src, RenderBufferIdentifier* dst, ColorChannel srcChannels, ColorChannel dstChannels) = 0;
+
 protected:
 	RenderTargetIdentifier* m_curRT;
+#ifdef GLTDEBUG
+	RenderTargetIdentifier* m_debugRT;
+#endif
 };
