@@ -16,19 +16,10 @@ public:
 	/// <summary>
 	/// Ô¤±¸
 	/// </summary>
-	void prepare()
+	virtual void prepare()
 	{
 		m_isPrepared = true;
-		prepareRenderState();
-		prepareConstantBuffer();
-		prepareResources();
 	}
-
-	virtual void prepareRenderState() {}
-
-	virtual void prepareConstantBuffer() {}
-
-	virtual void prepareResources() {}
 
 	/// <summary>
 	/// Ö´ÐÐÃüÁî

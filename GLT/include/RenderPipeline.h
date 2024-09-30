@@ -9,6 +9,7 @@
 #include <PassBase.h>
 #include <DrawOpaquePass.h>
 #include <ShadowMapPass.h>
+#include <DebugPassBase.h>
 
 class RenderPipeline
 {

@@ -73,6 +73,11 @@ public:
 	void submit();
 
 	void blitCurrentRTToWindow();
+
+	void blitToRenderBuffer(RenderBufferIdentifier* src, RenderBufferIdentifier* dst)
+	{
+		m_device->blitToRenderBuffer(src, dst);
+	}
 private:
 
 

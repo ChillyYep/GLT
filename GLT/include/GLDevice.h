@@ -308,9 +308,10 @@ public:
 		release(command);
 	}
 
-	void blitToRenderBuffer(RenderBufferIdentifier* src, RenderBufferIdentifier* dst, ColorChannel srcChannels, ColorChannel dstChannels) override
+	void blitToRenderBuffer(RenderBufferIdentifier* src, RenderBufferIdentifier* dst) override
 	{
-
+		//glCopyTexSubImage2D(GL_RENDERBUFFER,1)
+		glCopyImageSubData(src->m_renderBuffer, GL_RENDERBUFFER, 1, 0, 0, 0, dst->m_renderBuffer, GL_RENDERBUFFER, 1, 0, 0, 0, src->m_width, src->m_height, 0);
 	}
 private:
 

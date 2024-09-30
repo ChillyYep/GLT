@@ -45,6 +45,7 @@ public:
 		}
 		RenderTargetDescriptor rtDesc(m_width, m_height, m_colorInternalFormat, m_depthInternalFormat, m_stencilInternalFormat, m_perChannelSize, m_wrapModeS, m_wrapModeT, m_textureFilter);
 		m_renderTarget = LogicResourceManager::getInstance()->addResource(rtDesc);
+		m_renderTarget->m_name = m_name;
 		if (m_colorInternalFormat != TextureInternalFormat::None)
 		{
 			RenderBufferDescriptor rbDesc;

@@ -186,7 +186,11 @@
     <None Include="Shader\cube.vert" />
     <None Include="Shader\cube_tex.frag" />
     <None Include="Shader\cube_tex.vert" />
+    <None Include="Shader\debug_view.frag" />
+    <None Include="Shader\debug_view.vert" />
     <None Include="Shader\lightdata.attr" />
+    <None Include="Shader\PostProcessing.frag" />
+    <None Include="Shader\PostProcessing.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Allocator.h" />
@@ -218,6 +222,7 @@
     <ClInclude Include="include\Math_Common.h" />
     <ClInclude Include="include\MemoryManager.h" />
     <ClInclude Include="include\PassBase.h" />
+    <ClInclude Include="include\PostprocessPass.h" />
     <ClInclude Include="include\RenderBufferManagementCentre.h" />
     <ClInclude Include="include\RenderCommand.h" />
     <ClInclude Include="include\RenderData.h" />

@@ -7,6 +7,7 @@
 #include <RenderTargetManagementCentre.h>
 #include <RenderBufferManagementCentre.h>
 #include <RenderEventSystem.h>
+#include <string>
 
 enum class ResourceType {
 	Mesh,
@@ -37,8 +38,7 @@ public:
 
 	void destroyResource(ResourceType resouceType, Object* resource);
 
-	template<typename T>
-	std::shared_ptr<T> getResource(ResourceType resourceType, unsigned int instanceId)
+	Object* getResource(ResourceType resourceType, unsigned int instanceId)
 	{
 		switch (resourceType)
 		{
@@ -55,8 +55,80 @@ public:
 		default:
 			break;
 		}
+		return nullptr;
 	}
-	
+
+	Object* getResource(ResourceType resourceType, std::string name)
+	{
+		if (name == "")
+		{
+			return nullptr;
+		}
+		switch (resourceType)
+		{
+		case ResourceType::Mesh:
+		{
+			for (const auto instanceId : m_meshManagementCentre.getAllObjectInstanceIds())
+			{
+				auto resource = m_meshManagementCentre.getRefObject(instanceId);
+				if (name == resource.m_target->m_name)
+				{
+					return resource.m_target;
+				}
+			}
+			break;
+		}
+		case ResourceType::Texture:
+		{
+			for (const auto instanceId : m_textureManagementCentre.getAllObjectInstanceIds())
+			{
+				auto resource = m_textureManagementCentre.getRefObject(instanceId);
+				if (name == resource.m_target->m_name)
+				{
+					return resource.m_target;
+				}
+			}
+			break;
+		}
+		case ResourceType::Sampler:
+		{
+			for (const auto instanceId : m_samplerManagementCentre.getAllObjectInstanceIds())
+			{
+				auto resource = m_samplerManagementCentre.getRefObject(instanceId);
+				if (name == resource.m_target->m_name)
+				{
+					return resource.m_target;
+				}
+			}
+			break;
+		}
+		case ResourceType::RenderBuffer:
+		{
+			for (const auto instanceId : m_renderBufferManagementCentre.getAllObjectInstanceIds())
+			{
+				auto resource = m_renderBufferManagementCentre.getRefObject(instanceId);
+				if (name == resource.m_target->m_name)
+				{
+					return resource.m_target;
+				}
+			}
+			break;
+		}
+		case ResourceType::RenderTarget:
+			for (const auto instanceId : m_renderTargetManagementCentre.getAllObjectInstanceIds())
+			{
+				auto resource = m_renderTargetManagementCentre.getRefObject(instanceId);
+				if (name == resource.m_target->m_name)
+				{
+					return resource.m_target;
+				}
+			}
+			break;
+		default:
+			break;
+		}
+		return nullptr;
+	}
 	template<typename T>
 	inline void tickResourcesQueue(ManagementCentreBase<T*>* managementCentre, ResourceType resourceType)
 	{

@@ -19,9 +19,9 @@ std::vector<MeshResourceIdentifier> GLDevice::requestMeshResources(std::vector<M
 		auto mesh = meshPtrs[i];
 		GLuint instanceId = mesh->getInstanceId();
 		size_t verticesMemorySize = mesh->getVerticesCount() * Mesh::VertexSize;
-		size_t colorsMemorySize = mesh->getVerticesCount() * Mesh::ColorSize;
-		size_t uvsMemorySize = mesh->getVerticesCount() * Mesh::UVSize;
-		size_t normalsMemorySize = mesh->getVerticesCount() * Mesh::NormalSize;
+		size_t colorsMemorySize = mesh->getColors() == nullptr ? 0 : mesh->getVerticesCount() * Mesh::ColorSize;
+		size_t uvsMemorySize = mesh->getUvs() == nullptr ? 0 : mesh->getVerticesCount() * Mesh::UVSize;
+		size_t normalsMemorySize = mesh->getNormals() == nullptr ? 0 : mesh->getVerticesCount() * Mesh::NormalSize;
 
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);

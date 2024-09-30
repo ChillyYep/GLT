@@ -1,7 +1,8 @@
 #include "RenderPipeline.h"
 void RenderPipeline::init() {
-	//m_globalPassList.push_back(new ShadowMapPass());
-	m_perCameraPassList.push_back(new DrawOpaquePass());
+	m_globalPassList.push_back(new ShadowMapPass());
+	//m_globalPassList.push_back(new DebugPass());
+	//m_perCameraPassList.push_back(new DrawOpaquePass());
 	m_renderContext.init();
 	ShaderUtils::loadAllShader(m_renderContext);
 }

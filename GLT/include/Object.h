@@ -12,11 +12,7 @@ public:
 	}
 	virtual ~Object() {}
 	inline GLTUInt32 getInstanceId() const { return m_instanceId; }
-
+	std::string m_name;
 protected:
 	GLTUInt32 m_instanceId;
-
-
-	std::string m_name;
-
 };

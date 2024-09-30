@@ -11,35 +11,37 @@ public:
 	ShadowMapPass() {}
 	~ShadowMapPass() {}
 
-	void prepareRenderState() override
+	void prepare() override
 	{
+		PassBase::prepare();
+		// prepareRenderState
 		m_renderStateBlock.m_colorState.m_cullMode = CullMode::Back;
-		m_renderStateBlock.m_colorState.m_rgbaWritable = glm::bvec4(false, false, false, false);
+		//m_renderStateBlock.m_colorState.m_rgbaWritable = glm::bvec4(false, false, false, false);
+		m_renderStateBlock.m_colorState.m_rgbaWritable = glm::bvec4(true, true, true, true);
 		m_renderStateBlock.m_depthState.m_depthRange = glm::ivec2(0, 1);
 		m_renderStateBlock.m_depthState.m_writable = true;
 		m_renderStateBlock.m_depthState.m_compareFunc = CompareFunction::Less;
 
 		m_filterSettings.m_renderType = RenderType::Opaque;
 		m_drawSettings.m_sortType = SortType::Near2Far;
-	}
 
-	void prepareResources() override
-	{
+		// prepareResources
 		auto window = Window::getInstance();
 		auto windowSize = window->getSize();
 
-		m_depthRT = new RenderTexture(windowSize.x, windowSize.y, TextureInternalFormat::RGB8, RenderTextureDepthStencilType::Depth16,
+		m_shadowMapRT = new RenderTexture(windowSize.x, windowSize.y, TextureInternalFormat::RGB8, RenderTextureDepthStencilType::Depth16,
 			RenderTextureDepthStencilType::None);
-		m_depthRT->create();
+		m_shadowMapRT->m_name = "ShadowMapRT";
+		m_shadowMapRT->create();
 	}
 
 	void destroy() override
 	{
 		if (IsPrepared())
 		{
-			m_depthRT->release();
-			delete m_depthRT;
-			m_depthRT = nullptr;
+			m_shadowMapRT->release();
+			delete m_shadowMapRT;
+			m_shadowMapRT = nullptr;
 		}
 	}
 
@@ -53,7 +55,7 @@ public:
 		m_context->setRenderStateBlock(m_renderStateBlock);
 
 		m_drawSettings.m_cameraPos = mainLightData.position;
-		auto rtIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, m_depthRT->getRTInstanceId()));
+		auto rtIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, m_shadowMapRT->getRTInstanceId()));
 		if (rtIdentifier != nullptr)
 		{
 			auto window = Window::getInstance();
@@ -82,5 +84,5 @@ private:
 	FilterSettings m_filterSettings;
 	DrawSettings m_drawSettings;
 	RenderStateBlock m_renderStateBlock;
-	RenderTexture* m_depthRT;
+	RenderTexture* m_shadowMapRT;
 };

@@ -314,6 +314,18 @@
     <None Include="Shader\common.attr">
       <Filter>源文件\ShaderSourceCode</Filter>
     </None>
+    <None Include="Shader\debug_view.vert">
+      <Filter>源文件\ShaderSourceCode</Filter>
+    </None>
+    <None Include="Shader\debug_view.frag">
+      <Filter>源文件\ShaderSourceCode</Filter>
+    </None>
+    <None Include="Shader\PostProcessing.frag">
+      <Filter>源文件\ShaderSourceCode</Filter>
+    </None>
+    <None Include="Shader\PostProcessing.vert">
+      <Filter>源文件\ShaderSourceCode</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Common.h">
@@ -560,6 +572,9 @@
       <Filter>头文件\Render\RenderResourceManager\ResourceDescriptor</Filter>
     </ClInclude>
     <ClInclude Include="include\DebugPassBase.h">
+      <Filter>头文件\Render\PassManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PostprocessPass.h">
       <Filter>头文件\Render\PassManagement</Filter>
     </ClInclude>
   </ItemGroup>

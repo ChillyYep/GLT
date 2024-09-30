@@ -55,7 +55,7 @@ public:
 
 	virtual void blitDebugRTToWindow() = 0;
 
-	virtual void blitToRenderBuffer(RenderBufferIdentifier* src, RenderBufferIdentifier* dst, ColorChannel srcChannels, ColorChannel dstChannels) = 0;
+	virtual void blitToRenderBuffer(RenderBufferIdentifier* src, RenderBufferIdentifier* dst) = 0;
 
 protected:
 	RenderTargetIdentifier* m_curRT;

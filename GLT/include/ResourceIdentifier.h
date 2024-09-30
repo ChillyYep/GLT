@@ -164,10 +164,27 @@ private:
 RESOUCEIDENTIFIER_CLASS(RenderTargetIdentifier, ResourceIdentifierType::RenderTarget)
 {
 public:
-	RenderTargetIdentifier() :ResourceIdentifier(0), m_descriptor(RenderTargetDescriptor()){}
+	RenderTargetIdentifier() :ResourceIdentifier(0), m_descriptor(RenderTargetDescriptor()) {}
 	RenderTargetIdentifier(GLTUInt32 instanceId) :ResourceIdentifier(instanceId) {}
 	std::vector<AttachmentEntityIdentifierWrapper> m_attachmentIdentifiers;
 	GLTUInt32 m_fbo = 0;
 	RenderTargetDescriptor m_descriptor;
+
+	ResourceIdentifier* getAttachmentIdentifier(FBOAttachmentType attachmentType, FBOAttachmentResourceType resourceType) {
+		for (const auto& identifierWrapper : m_attachmentIdentifiers)
+		{
+			if (identifierWrapper.getAttachmentType() == attachmentType && identifierWrapper.getResourceType() == resourceType)
+			{
+				if (resourceType == FBOAttachmentResourceType::RenderBuffer)
+				{
+					return identifierWrapper.getRenderBufferIdentifier();
+				}
+				else {
+					return identifierWrapper.getTextureIdentifier();
+				}
+			}
+		}
+		return nullptr;
+	}
 private:
 };

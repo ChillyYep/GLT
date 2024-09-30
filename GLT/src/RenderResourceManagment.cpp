@@ -64,7 +64,6 @@ ResourceIdentifier* RenderResourceManagement::getResourceIdentifier(ResourceType
 	return nullptr;
 }
 
-
 void RenderResourceManagement::generateResourceIdentifier(ResourceType resourceType, std::vector<Object*>& objects)
 {
 	switch (resourceType)
