@@ -10,7 +10,7 @@ public:
 	DrawOpaquePass() :PassBase() {}
 	~DrawOpaquePass() {}
 
-	bool isExecutable() override { return false; }
+	bool isExecutable() override { return true; }
 	
 	void prepare() override
 	{

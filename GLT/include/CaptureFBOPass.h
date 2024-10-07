@@ -29,11 +29,27 @@ public:
 
 	virtual void define()
 	{
+		defineShadowMapCaptureSetting();
+	}
+
+	void defineShadowMapCaptureSetting()
+	{
+		m_readChannels = 1;
 		m_debugInternalFormat = TextureInternalFormat::R8;
 		m_debugRTName = ResourceName::CaptureFBODebugRTName;
 		m_targetRTName = ResourceName::ShadowMapRTName;
-		m_targetAttachmentType = FBOAttachmentType::Color;
-		m_targetColorChannel = ReadColorChannel::BLUE;
+		m_targetAttachmentType = FBOAttachmentType::Depth;
+		m_targetColorChannel = ReadColorChannel::None;
+	}
+
+	void defineOpauqeRTDepthSetting()
+	{
+		m_readChannels = 1;
+		m_debugInternalFormat = TextureInternalFormat::R16;
+		m_debugRTName = ResourceName::CaptureFBODebugRTName;
+		m_targetRTName = ResourceName::OpaqueRTName;
+		m_targetAttachmentType = FBOAttachmentType::DepthStencil;
+		m_targetColorChannel = ReadColorChannel::None;
 	}
 
 	Texture* getDebugColorTexture()
@@ -92,7 +108,7 @@ public:
 
 		if (m_debugColorTexture != nullptr && targetRtIdentifier != nullptr)
 		{
-			auto size = targetRtIdentifier->m_descriptor.m_width * targetRtIdentifier->m_descriptor.m_height * 1;
+			auto size = targetRtIdentifier->m_descriptor.m_width * targetRtIdentifier->m_descriptor.m_height * m_readChannels;
 			// 第一次
 			if (m_readPixels == nullptr)
 			{
@@ -112,6 +128,10 @@ public:
 					m_readPixels = new GLTUByte[size];
 				}
 			}
+			//m_cmdBuffer.setRenderTarget(targetRtIdentifier);
+			//m_context->scheduleCommandBuffer(m_cmdBuffer);
+			//m_cmdBuffer.clear();
+			//m_context->submit();
 			m_context->blitCurrentRTToWindow();
 			// 获取Pixels
 			m_context->capture(targetRtIdentifier, m_targetAttachmentType, m_readPixels, m_targetColorChannel);
@@ -141,4 +161,6 @@ private:
 	FBOAttachmentType m_targetAttachmentType;
 
 	ReadColorChannel m_targetColorChannel;
+
+	int m_readChannels;
 };

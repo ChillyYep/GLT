@@ -67,7 +67,7 @@ public:
 			auto windowSize = window->getSize();
 
 			auto viewMatrix = Camera::computeViewMatrix(mainLightData.rotation, mainLightData.position);
-			auto projectionMatrix = Camera::computeOrthoProjectionMatrix((float)windowSize.x / windowSize.y, m_bound, 0.1f, 100.f);
+			auto projectionMatrix = Camera::computeOrthoProjectionMatrix((float)windowSize.x / windowSize.y, m_bound, 1.f, 100.f);
 			m_cmdBuffer.setViewport(0, 0, windowSize.x, windowSize.y);
 			m_cmdBuffer.setViewMatrix(viewMatrix);
 			m_cmdBuffer.setProjectionMatrix(projectionMatrix);

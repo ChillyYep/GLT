@@ -210,7 +210,7 @@ public:
 		case FBOAttachmentType::Stencil:
 			return GL_STENCIL_INDEX;
 		case FBOAttachmentType::DepthStencil:
-			return GL_DEPTH_STENCIL;
+			return GL_DEPTH_COMPONENT;
 		default:
 			break;
 		}
@@ -294,7 +294,7 @@ public:
 					{
 						continue;
 					}
-					//glReadBuffer(GL_BACK);
+					glBindFramebuffer(GL_READ_FRAMEBUFFER, target->m_fbo);
 					glReadPixels(0, 0, textureIdentifier->m_width, textureIdentifier->m_height, getGLReadPixelsType(fboAttachmentType, colorChannel), getGLTextureChannelSize(textureIdentifier->m_perChannelSize), pixels);
 					break;
 				}
@@ -306,6 +306,7 @@ public:
 						continue;
 					}
 					//glReadBuffer(GL_BACK);
+					glBindFramebuffer(GL_READ_FRAMEBUFFER, target->m_fbo);
 					glReadPixels(0, 0, renderBufferIdentifier->m_width, renderBufferIdentifier->m_height, getGLReadPixelsType(fboAttachmentType, colorChannel), GL_UNSIGNED_BYTE, pixels);
 					break;
 				}

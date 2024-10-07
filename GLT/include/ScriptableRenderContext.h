@@ -87,7 +87,13 @@ public:
 	{
 		m_device->copyRenderBuffer(src, dst, srcX, srcY, dstX, dstY, width, height);
 	}
-
+	/// <summary>
+	/// 从帧缓冲中读取像素到内存
+	/// </summary>
+	/// <param name="target"></param>
+	/// <param name="fboAttachmentType"></param>
+	/// <param name="pixels"></param>
+	/// <param name="colorChannel"></param>
 	void capture(RenderTargetIdentifier* target, FBOAttachmentType fboAttachmentType, void* pixels, ReadColorChannel colorChannel = ReadColorChannel::None)
 	{
 		m_device->capture(target, fboAttachmentType, pixels, colorChannel);
