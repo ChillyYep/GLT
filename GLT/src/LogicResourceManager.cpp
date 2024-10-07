@@ -106,7 +106,7 @@ void LogicResourceManager::onPushResources(ResourceType resourceType, std::vecto
 	RequestResourceRef resourceRef(resources, resourceType);
 
 	RenderEvent renderEvent;
-	renderEvent.m_eventId = RenderEventId::RequestResource;
+	renderEvent.m_eventId = RenderEventId::RequestResources;
 	renderEvent.m_param = &resourceRef;
 	// RenderTarget属于复合资源，需要保证其依赖的资源已被申请
 	if (resourceType == ResourceType::RenderTarget)
@@ -140,6 +140,49 @@ void LogicResourceManager::onPushResources(ResourceType resourceType, std::vecto
 	RenderEventSystem::getInstance()->notify(renderEvent);
 }
 
+void LogicResourceManager::onUpdateResources(ResourceType resourceType, std::vector<Object*> resources)
+{
+	if (resources.size() == 0)
+	{
+		return;
+	}
+	RequestResourceRef resourceRef(resources, resourceType);
+
+	RenderEvent renderEvent;
+	renderEvent.m_eventId = RenderEventId::UpdateResources;
+	renderEvent.m_param = &resourceRef;
+	// RenderTarget属于复合资源，需要保证其依赖的资源已被申请
+	//if (resourceType == ResourceType::RenderTarget)
+	//{
+	//	for (int i = 0; i < resources.size(); ++i)
+	//	{
+	//		auto rt = static_cast<RenderTarget*>(resources[i]);
+	//		std::vector<Object*> renderBuffers;
+	//		std::vector<Object*> textures;
+	//		auto& attachments = rt->getAttachments();
+	//		for (const auto& attachment : attachments)
+	//		{
+	//			if (attachment.getResourceType() == FBOAttachmentResourceType::Texture)
+	//			{
+	//				textures.push_back(attachment.getTexture());
+	//			}
+	//			else {
+	//				renderBuffers.push_back(attachment.getRenderBuffer());
+	//			}
+	//		}
+	//		if (renderBuffers.size() > 0)
+	//		{
+	//			onUpdateResources(ResourceType::RenderBuffer, renderBuffers);
+	//		}
+	//		if (textures.size() > 0)
+	//		{
+	//			onUpdateResources(ResourceType::Texture, textures);
+	//		}
+	//	}
+	//}
+	RenderEventSystem::getInstance()->notify(renderEvent);
+}
+
 void LogicResourceManager::onPopResources(ResourceType resourceType, std::vector<Object*> resources)
 {
 	if (resources.size() == 0)
@@ -149,7 +192,7 @@ void LogicResourceManager::onPopResources(ResourceType resourceType, std::vector
 	RequestResourceRef resourceRef(resources, resourceType);
 
 	RenderEvent renderEvent;
-	renderEvent.m_eventId = RenderEventId::DestroyResource;
+	renderEvent.m_eventId = RenderEventId::DestroyResources;
 	renderEvent.m_param = &resourceRef;
 	// RenderTarget属于复合资源，需要保证其依赖的资源已被申请
 	if (resourceType == ResourceType::RenderTarget)

@@ -98,7 +98,10 @@ class Material :public Object
 public:
 	Material(std::shared_ptr<Shader> shader) :m_shader(shader) {}
 	~Material() {}
-	inline void setProperty(std::string name, std::shared_ptr<MaterialProperty> property) { m_properties[name] = property; }
+	inline void setProperty(std::string name, std::shared_ptr<MaterialProperty> property) 
+	{ 
+		m_properties[name] = property; 
+	}
 	inline std::shared_ptr<MaterialProperty> getProperty(std::string name) const
 	{
 		const auto ptr = m_properties.find(name);

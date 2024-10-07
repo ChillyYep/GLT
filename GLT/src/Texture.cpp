@@ -1,36 +1,37 @@
 #include "Texture.h"
 
-void Texture2D::load(const char* filename) {
-	m_loaded = true;
+void Texture::unload() {
 	if (m_data != nullptr)
 	{
-		unload();
+		delete[] m_data;
+		m_data = nullptr;
 	}
+}
+
+void Texture2D::load(const char* filename) {
+	assert(m_data == nullptr);
 	int channels;
-	m_data = stbi_load(filename, &m_width, &m_height, &channels, 0);
+	// 加载后再拷贝，消除stb库影响
+	GLTUByte* imageData = stbi_load(filename, &m_width, &m_height, &channels, 0);
+	m_data = new GLTUByte[m_width * m_height * channels];
+	memcpy(m_data, imageData, m_width * m_height * channels);
+	stbi_image_free(imageData);
+	imageData = nullptr;
 	if (channels == 1)
 	{
-		m_externalFormat = TextureExternalFormat::RED;
+		m_colorExternalFormat = TextureExternalFormat::RED;
 	}
 	else if (channels == 2)
 	{
-		m_externalFormat = TextureExternalFormat::RG;
+		m_colorExternalFormat = TextureExternalFormat::RG;
 	}
 	else if (channels == 3)
 	{
-		m_externalFormat = TextureExternalFormat::RGB;
+		m_colorExternalFormat = TextureExternalFormat::RGB;
 	}
 	else if (channels == 4)
 	{
-		m_externalFormat = TextureExternalFormat::RGBA;
-	}
-}
-void Texture2D::unload() {
-	m_loaded = false;
-	if (m_data != nullptr)
-	{
-		stbi_image_free(m_data);
-		m_data = nullptr;
+		m_colorExternalFormat = TextureExternalFormat::RGBA;
 	}
 }
 
@@ -52,7 +53,6 @@ Texture2D* Texture2D::setSinglePixelTex2D(Texture2D& tex, GLTUByte r, GLTUByte g
 {
 	if (tex.m_data == nullptr)
 	{
-		tex.m_loaded = false;
 		//glm::vec4 black = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
 		tex.m_data = new GLTUByte[4]{ r,g,b,a };
 		//memcpy(s_blackTex.m_data, glm::value_ptr(black), sizeof(black));

@@ -24,6 +24,10 @@ public:
 
 	static glm::mat4x4 computeViewMatrix(glm::quat rotation, glm::vec3 position);
 
+	static glm::mat4x4 computeOrthoProjectionMatrix(float aspect, float height, float nearPlane, float farPlane);
+
+	static glm::mat4x4 computePerspectiveProjectionMatrix(float aspect, float fov, float nearPlane, float farPlane);
+
 	inline glm::mat4x4 getViewMatrix() { recomputeViewMatrix(); return m_viewMatrix; }
 
 	inline glm::mat4x4 getProjectMatrix() { recomputeProjectMatrix(); return m_projectMatrix; }

@@ -93,7 +93,7 @@ struct ColorState
 
 struct DepthState
 {
-	RenderStateParam<glm::ivec2> m_depthRange;
+	RenderStateParam<glm::vec2> m_depthRange;
 	RenderStateParam<bool> m_writable;
 	RenderStateParam<CompareFunction> m_compareFunc;
 	bool isSame(const DepthState& other)

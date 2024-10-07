@@ -132,9 +132,10 @@ public:
 	template<typename T>
 	inline void tickResourcesQueue(ManagementCentreBase<T*>* managementCentre, ResourceType resourceType)
 	{
-		managementCentre->getChangedObjects(m_newList, m_removedList);
+		managementCentre->getChangedObjects(m_newList, m_removedList, m_modifiedList);
 		onPushResources(resourceType, m_newList);
 		onPopResources(resourceType, m_removedList);
+		onUpdateResources(resourceType, m_modifiedList);
 
 		for (int i = 0; i < m_removedList.size(); ++i)
 		{
@@ -143,6 +144,7 @@ public:
 
 		m_newList.clear();
 		m_removedList.clear();
+		m_modifiedList.clear();
 
 		managementCentre->clearChangedObjectfs();
 	}
@@ -157,6 +159,13 @@ public:
 	void onPushResources(ResourceType resourceType, std::vector<Object*> resources);
 
 	/// <summary>
+	/// 向渲染层资源管理器请求更新资源
+	/// </summary>
+	/// <param name="resourceType"></param>
+	/// <param name="resources"></param>
+	void onUpdateResources(ResourceType resourceType, std::vector<Object*> resources);
+
+	/// <summary>
 	/// 从渲染层资源管理器销毁资源
 	/// </summary>
 	/// <param name="resourceType"></param>
@@ -165,6 +174,7 @@ public:
 private:
 	std::vector<Object*> m_newList;
 	std::vector<Object*> m_removedList;
+	std::vector<Object*> m_modifiedList;
 
 	MeshManagementCentre m_meshManagementCentre;
 	TextureManagementCentre m_textureManagementCentre;

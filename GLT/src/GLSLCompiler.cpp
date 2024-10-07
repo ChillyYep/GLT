@@ -177,7 +177,7 @@ void GLSLCompiler::extractBlocks(GLuint program, GLint numBlocks, GLint maxBlock
 			}
 			else
 			{
-				assert(*targetBlockPtr != blockProperty);
+				assert(*targetBlockPtr == blockProperty);
 			}
 		}
 	}

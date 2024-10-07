@@ -6,10 +6,10 @@
 #include <ResourceIdentifierType.h>
 
 enum class FBOAttachmentType {
-	Color,
-	Depth,
-	Stencil,
-	DepthStencil
+	Color = 1,
+	Depth = 2,
+	Stencil = 4,
+	DepthStencil = 8
 };
 enum class FBOAttachmentResourceType {
 	Texture,
@@ -99,7 +99,7 @@ RESOUCEIDENTIFIER_CLASS(RenderBufferIdentifier, ResourceIdentifierType::RenderBu
 {
 public:
 	RenderBufferIdentifier(GLTUInt32 instanceId)
-		:ResourceIdentifier(instanceId), m_renderBuffer(0), m_isDepthBuffer(false), m_width(0), m_height(0), m_internalFormat(TextureInternalFormat::None), m_depthStencilType(RenderTextureDepthStencilType::None)
+		:ResourceIdentifier(instanceId), m_renderBuffer(0), m_isDepthBuffer(false), m_width(0), m_height(0), m_internalFormat(TextureInternalFormat::None)
 	{}
 	RenderBufferIdentifier() :RenderBufferIdentifier(0) {}
 	GLTUInt32 m_renderBuffer;
@@ -107,7 +107,6 @@ public:
 	int m_width;
 	int m_height;
 	TextureInternalFormat m_internalFormat;
-	RenderTextureDepthStencilType m_depthStencilType;
 private:
 };
 

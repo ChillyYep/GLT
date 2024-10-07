@@ -53,8 +53,11 @@ public:
 		}
 	}
 
-	void getChangedObjects(std::vector<Object*>& addedList, std::vector<Object*>& removedList)
+	virtual void updateModifiedObjects() {}
+
+	virtual void getChangedObjects(std::vector<Object*>& addedList, std::vector<Object*>& removedList, std::vector<Object*>& modifiedList)
 	{
+		updateModifiedObjects();
 		// 同一帧添加和删除视为抵消操作
 		for (const auto& addItem : m_addSet)
 		{
@@ -72,12 +75,20 @@ public:
 				removedList.push_back(removedtem.second);
 			}
 		}
+		for (const auto& modifiedObjectInstancedId : m_modifiedObjects)
+		{
+			if (m_allObjects.find(modifiedObjectInstancedId) != m_allObjects.end())
+			{
+				modifiedList.push_back(m_allObjects[modifiedObjectInstancedId].m_target);
+			}
+		}
 	}
 
 	void clearChangedObjectfs()
 	{
 		m_removeDict.clear();
 		m_addSet.clear();
+		m_modifiedObjects.clear();
 	}
 
 	virtual void onSubmit() {}
@@ -99,6 +110,8 @@ protected:
 	std::map<GLTUInt32, Object*> m_removeDict;
 
 	std::set<GLTUInt32> m_addSet;
+
+	std::set<GLTUInt32> m_modifiedObjects;
 
 	std::vector<GLTUInt32> m_sortedObjects;
 };

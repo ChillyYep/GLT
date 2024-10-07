@@ -28,7 +28,9 @@ public:
 
 	virtual void destroy() {}
 
-	bool IsPrepared() { return m_isPrepared; }
+	bool isPrepared() { return m_isPrepared; }
+
+	virtual bool isExecutable() { return true; }
 protected:
 	bool m_isPrepared;
 	CommandBuffer m_cmdBuffer;

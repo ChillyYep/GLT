@@ -2,15 +2,20 @@
 
 void RenderResourceManagement::onNotify(RenderEvent& renderEvent)
 {
-	if (renderEvent.m_eventId == RenderEventId::RequestResource)
+	if (renderEvent.m_eventId == RenderEventId::RequestResources)
 	{
 		auto resourceRef = static_cast<RequestResourceRef*>(renderEvent.m_param);
 		generateResourceIdentifier(resourceRef->m_resourceType, resourceRef->m_targets);
 	}
-	else if (renderEvent.m_eventId == RenderEventId::DestroyResource)
+	else if (renderEvent.m_eventId == RenderEventId::DestroyResources)
 	{
 		auto resourceRef = static_cast<RequestResourceRef*>(renderEvent.m_param);
 		destroyResourceIdentifier(resourceRef->m_resourceType, resourceRef->m_targets);
+	}
+	else if (renderEvent.m_eventId == RenderEventId::UpdateResources)
+	{
+		auto resourceRef = static_cast<RequestResourceRef*>(renderEvent.m_param);
+		updateResouceIdentifier(resourceRef->m_resourceType, resourceRef->m_targets);
 	}
 }
 
@@ -252,6 +257,32 @@ void RenderResourceManagement::destroyResourceIdentifier(ResourceType resourceTy
 		break;
 	}
 	default:
+		break;
+	}
+}
+
+void RenderResourceManagement::updateResouceIdentifier(ResourceType resourceType, std::vector<Object*>& objects)
+{
+	auto&& instanceIds = getInstanceIds(objects);
+	auto removedCount = instanceIds.size();
+	switch (resourceType)
+	{
+	case ResourceType::Texture:
+	{
+		std::vector<TextureResourceIdentifier>&& identifiers = getResourceIdentifier(instanceIds, m_textureResources);
+		std::vector<Texture*> textures(objects.size());
+		for (int i = 0;i < objects.size();++i)
+		{
+			textures[i] = static_cast<Texture*>(objects[i]);
+		}
+		if (identifiers.size() > 0 && textures.size() > 0)
+		{
+			m_device->updateTextureResources(textures, identifiers);
+			break;
+		}
+	}
+	default:
+		assert(false && "updateResouceIdentifier not support!");
 		break;
 	}
 }

@@ -20,9 +20,13 @@ public:
 
 	virtual std::vector<MeshResourceIdentifier> requestMeshResources(std::vector<Mesh*>& meshPtrs) = 0;
 
+	virtual void updateMeshResources(std::vector<Mesh*>& meshPtrs, std::vector<MeshResourceIdentifier>& meshResourceIdentifiers) = 0;
+
 	virtual void destroyMeshResources(std::vector<MeshResourceIdentifier>& meshIdentifiers) = 0;
 
 	virtual std::vector<TextureResourceIdentifier> requestTextureResources(std::vector<Texture*>& texturePtrs) = 0;
+
+	virtual void updateTextureResources(std::vector<Texture*>& texturePtrs, std::vector<TextureResourceIdentifier>& textureResourceIdentifiers) = 0;
 
 	virtual void destroyTextureResources(std::vector<TextureResourceIdentifier>& textureIdentifiers) = 0;
 
@@ -55,11 +59,13 @@ public:
 
 	virtual void blitDebugRTToWindow() = 0;
 
-	virtual void blitToRenderBuffer(RenderBufferIdentifier* src, RenderBufferIdentifier* dst) = 0;
+	virtual void blitRT(RenderTargetIdentifier* src, RenderTargetIdentifier* dst, FBOAttachmentType attachmentType = FBOAttachmentType::Color) = 0;
 
+	virtual void copyTexture2D(TextureResourceIdentifier* src, TextureResourceIdentifier* dst, int srcLevel, int srcX, int srcY, int dstX, int dstY, int width, int height, int dstLevel) = 0;
+
+	virtual void copyRenderBuffer(RenderBufferIdentifier* src, RenderBufferIdentifier* dst, int srcX, int srcY, int dstX, int dstY, int width, int height) = 0;
+
+	virtual void capture(RenderTargetIdentifier* target, FBOAttachmentType fboAttachmentType, void* pixels, ReadColorChannel colorChannel) = 0;
 protected:
 	RenderTargetIdentifier* m_curRT;
-#ifdef GLTDEBUG
-	RenderTargetIdentifier* m_debugRT;
-#endif
 };

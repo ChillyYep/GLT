@@ -13,15 +13,28 @@ glm::mat4x4 Camera::computeViewMatrix(glm::quat rotation, glm::vec3 position)
 	viewMatrix = glm::mat4_cast(rotation) * glm::translate(glm::identity<glm::mat4>(), -position);
 	return viewMatrix;
 }
+glm::mat4x4 Camera::computeOrthoProjectionMatrix(float aspect, float height, float nearPlane, float farPlane)
+{
+	glm::mat4x4 projectMatrix;
+	GLfloat width = aspect * height;
+	projectMatrix = glm::ortho(-width, width, -height, height, nearPlane, farPlane);
+	return projectMatrix;
+}
+
+glm::mat4x4 Camera::computePerspectiveProjectionMatrix(float aspect, float fov, float nearPlane, float farPlane)
+{
+	glm::mat4x4 projectMatrix;
+	projectMatrix = glm::perspective(glm::radians(fov), aspect, nearPlane, farPlane);
+	return projectMatrix;
+}
 
 void Camera::recomputeProjectMatrix()
 {
 	if (m_ortho)
 	{
-		GLfloat width = m_aspect * m_height;
-		m_projectMatrix = glm::ortho(-width, width, -m_height, m_height, m_nearFar.x, m_nearFar.y);
+		m_projectMatrix = computeOrthoProjectionMatrix(m_aspect, m_height, m_nearFar.x, m_nearFar.y);
 	}
 	else {
-		m_projectMatrix = glm::perspective(glm::radians(m_fov), m_aspect, m_nearFar.x, m_nearFar.y);
+		m_projectMatrix = computePerspectiveProjectionMatrix(m_aspect, m_fov, m_nearFar.x, m_nearFar.y);
 	}
 }

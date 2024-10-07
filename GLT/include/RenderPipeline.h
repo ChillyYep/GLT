@@ -10,6 +10,8 @@
 #include <DrawOpaquePass.h>
 #include <ShadowMapPass.h>
 #include <DebugPassBase.h>
+#include <PostProcessingPass.h>
+#include <CaptureFBOPass.h>
 
 class RenderPipeline
 {

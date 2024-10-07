@@ -2,19 +2,23 @@
 #include <PassBase.h>
 #include <RenderTexture.h>
 #include <RenderResourceManagment.h>
+#include <ResourceNames.h>
 
 class DrawOpaquePass :public PassBase
 {
 public:
 	DrawOpaquePass() :PassBase() {}
 	~DrawOpaquePass() {}
+
+	bool isExecutable() override { return false; }
+	
 	void prepare() override
 	{
 		PassBase::prepare();
 		// prepareRenderState
 		m_renderStateBlock.m_colorState.m_cullMode = CullMode::Back;
 		m_renderStateBlock.m_colorState.m_rgbaWritable = glm::bvec4(true, true, true, true);
-		m_renderStateBlock.m_depthState.m_depthRange = glm::ivec2(0, 1);
+		m_renderStateBlock.m_depthState.m_depthRange = glm::vec2(0, 1);
 		m_renderStateBlock.m_depthState.m_writable = true;
 		m_renderStateBlock.m_depthState.m_compareFunc = CompareFunction::Less;
 
@@ -24,15 +28,17 @@ public:
 		// prepareResources
 		auto window = Window::getInstance();
 		auto windowSize = window->getSize();
-		m_colorRT = new RenderTexture(windowSize.x, windowSize.y, TextureInternalFormat::RGB8, RenderTextureDepthStencilType::Depth16,
-			RenderTextureDepthStencilType::None);
-		m_colorRT->m_name = "OpaqueRT";
+		m_colorRT = new RenderTexture(windowSize.x, windowSize.y, TextureInternalFormat::RGBA8, TextureInternalFormat::Depth_Stencil,
+			TextureInternalFormat::None);
+		m_colorRT->m_name = ResourceName::OpaqueRTName;
+		m_colorRT->setColorAttachmentSampleEnabled(true);
+		m_colorRT->setDepthAttachmentSampleEnabled(true);
 		m_colorRT->create();
 	}
 
 	void destroy() override
 	{
-		if (IsPrepared())
+		if (isPrepared())
 		{
 			m_colorRT->release();
 			delete m_colorRT;

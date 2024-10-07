@@ -7,8 +7,7 @@ struct RenderBufferDescriptor {
 	int m_width;
 	int m_height;
 	bool m_isDepthBuffer;
-	TextureInternalFormat m_colorInternalFormat;
-	RenderTextureDepthStencilType m_depthStencilType;
+	TextureInternalFormat m_internalFormat;
 };
 
 class RenderBuffer :public Object
@@ -24,10 +23,8 @@ public:
 	int getWidth() const { return m_renderBufferDesc.m_width; }
 	int getHeight() const { return m_renderBufferDesc.m_height; }
 
-	TextureInternalFormat getColorInternalFormat() { return m_renderBufferDesc.m_colorInternalFormat; }
-	void setColorInternalFormat(TextureInternalFormat colorInternalFormat) { m_renderBufferDesc.m_colorInternalFormat = colorInternalFormat; }
-	RenderTextureDepthStencilType getDepthStencilType() { return m_renderBufferDesc.m_depthStencilType; }
-	void setDepthStencilType(RenderTextureDepthStencilType depthStencilType) { m_renderBufferDesc.m_depthStencilType = depthStencilType; }
+	TextureInternalFormat getInternalFormat() { return m_renderBufferDesc.m_internalFormat; }
+	void setInternalFormat(TextureInternalFormat colorInternalFormat) { m_renderBufferDesc.m_internalFormat = colorInternalFormat; }
 
 	bool IsDepthBuffer() { return m_renderBufferDesc.m_isDepthBuffer; }
 private:

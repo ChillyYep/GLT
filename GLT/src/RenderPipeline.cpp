@@ -1,8 +1,9 @@
 #include "RenderPipeline.h"
 void RenderPipeline::init() {
 	m_globalPassList.push_back(new ShadowMapPass());
-	//m_globalPassList.push_back(new DebugPass());
-	//m_perCameraPassList.push_back(new DrawOpaquePass());
+	m_globalPassList.push_back(new CaptureFBOPass());
+	m_perCameraPassList.push_back(new DrawOpaquePass());
+	m_perCameraPassList.push_back(new PostProcessingPass());
 	m_renderContext.init();
 	ShaderUtils::loadAllShader(m_renderContext);
 }
@@ -54,7 +55,11 @@ void RenderPipeline::render() {
 
 	for (const auto& pass : m_globalPassList)
 	{
-		if (!pass->IsPrepared())
+		if (!pass->isExecutable())
+		{
+			continue;
+		}
+		if (!pass->isPrepared())
 		{
 			pass->setup(&m_renderContext, &m_renderData);
 			pass->prepare();
@@ -81,7 +86,11 @@ void RenderPipeline::render() {
 			// 逐相机调用Pass执行
 			for (const auto& pass : m_perCameraPassList)
 			{
-				if (!pass->IsPrepared())
+				if (!pass->isExecutable())
+				{
+					continue;
+				}
+				if (!pass->isPrepared())
 				{
 					pass->setup(&m_renderContext, &m_renderData);
 					pass->prepare();

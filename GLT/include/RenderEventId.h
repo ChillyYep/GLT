@@ -1,5 +1,6 @@
 #pragma once
 enum class RenderEventId {
-	RequestResource,
-	DestroyResource
+	RequestResources,
+	DestroyResources,
+	UpdateResources,
 };

@@ -13,8 +13,6 @@ using GLTUInt64 = unsigned long long int;
 using GLTSize = size_t;
 using GLTSizei = GLTInt32;
 
-#define GLTDEBUG 1
-
 #define ENUM_BINDING_CLASS(CLASSTYPE,BASECLASSTYPE,ENUMTYPE,CLASSTYPEENUM,TRAITSCLASS) \
 class CLASSTYPE; \
 template<>	\

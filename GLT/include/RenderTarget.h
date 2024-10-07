@@ -56,8 +56,8 @@ private:
 class RenderTarget :public Object
 {
 public:
-	RenderTarget(int width, int height, TextureInternalFormat colorInternalFormat, RenderTextureDepthStencilType depthInternalFormat,
-		RenderTextureDepthStencilType stencilInternalFormat,
+	RenderTarget(int width, int height, TextureInternalFormat colorInternalFormat, TextureInternalFormat depthInternalFormat,
+		TextureInternalFormat stencilInternalFormat,
 		TexturePerChannelSize perChannelSize, TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, TextureFilterMode textureFilter)
 		:m_renderTextureDescriptor(RenderTargetDescriptor(width, height, colorInternalFormat, depthInternalFormat, stencilInternalFormat, perChannelSize,
 			wrapModeS, wrapModeT, textureFilter)) {}

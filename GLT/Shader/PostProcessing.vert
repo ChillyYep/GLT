@@ -8,6 +8,6 @@ out VS_Out{
 
 void main()
 {
-	gl_Position = float4(vPosition.xy,0.0,1.0);
-	vs_out.fs_Texcoord = vPosition.xy;
+	gl_Position = vec4(vPosition.xy,0.0,1.0);
+	vs_out.fs_Texcoord = (vPosition.xy+vec2(1.0,1.0))*0.5f;
 }

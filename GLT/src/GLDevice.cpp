@@ -11,6 +11,7 @@ std::vector<MeshResourceIdentifier> GLDevice::requestMeshResources(std::vector<M
 	glCreateVertexArrays(length, newMeshVaos.data());
 	glCreateBuffers(length, newMeshVbos.data());
 	glCreateBuffers(length, newMeshEbos.data());
+	// 申请存储空间，并设置Mesh相关属性
 	for (int i = 0; i < length; ++i)
 	{
 		GLuint vao = newMeshVaos[i];
@@ -31,31 +32,25 @@ std::vector<MeshResourceIdentifier> GLDevice::requestMeshResources(std::vector<M
 			// 0号位置属性，4个浮点数组成的向量，指针指向缓存起始位置
 			glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL);
 			glEnableVertexAttribArray(0);
-			/*glBufferData(GL_ARRAY_BUFFER, verticesMemorySize + colorsMemorySize, NULL, GL_STATIC_DRAW);
-			glBufferSubData(GL_ARRAY_BUFFER, 0, verticesMemorySize, mesh->getVertices());*/
+
 			glNamedBufferStorage(vbo, verticesMemorySize + colorsMemorySize + uvsMemorySize + normalsMemorySize, NULL, GL_DYNAMIC_STORAGE_BIT);
-			glNamedBufferSubData(vbo, 0, verticesMemorySize, mesh->getVertices());
 			if (colorsMemorySize > 0)
 			{
 				auto offset = verticesMemorySize;
 				glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)offset);
 				glEnableVertexAttribArray(1);
-				glNamedBufferSubData(vbo, offset, colorsMemorySize, mesh->getColors());
-				//glBufferSubData(GL_ARRAY_BUFFER, verticesMemorySize, colorsMemorySize, mesh->getColors());
 			}
 			if (uvsMemorySize > 0)
 			{
 				auto offset = colorsMemorySize + verticesMemorySize;
 				glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)offset);
 				glEnableVertexAttribArray(2);
-				glNamedBufferSubData(vbo, offset, uvsMemorySize, mesh->getUvs());
 			}
 			if (normalsMemorySize > 0)
 			{
 				auto offset = colorsMemorySize + verticesMemorySize + uvsMemorySize;
 				glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, (void*)offset);
 				glEnableVertexAttribArray(3);
-				glNamedBufferSubData(vbo, offset, normalsMemorySize, mesh->getNormals());
 			}
 		}
 
@@ -64,8 +59,54 @@ std::vector<MeshResourceIdentifier> GLDevice::requestMeshResources(std::vector<M
 
 		meshResourceIdentifiers[i] = MeshResourceIdentifier(vao, vbo, ebo, instanceId);
 	}
+	updateMeshResources(meshPtrs, meshResourceIdentifiers);
 	return meshResourceIdentifiers;
 }
+
+void GLDevice::updateMeshResources(std::vector<Mesh*>& meshPtrs, std::vector<MeshResourceIdentifier>& meshResourceIdentifiers)
+{
+	GLsizei length = (GLsizei)meshPtrs.size();
+
+	for (int i = 0; i < length; ++i)
+	{
+		auto mesh = meshPtrs[i];
+		auto meshResourceIdentifier = meshResourceIdentifiers[i];
+
+		GLuint vao = meshResourceIdentifier.getVAO();
+		GLuint vbo = meshResourceIdentifier.getVBO();
+		GLuint ebo = meshResourceIdentifier.getEBO();
+
+		GLuint instanceId = mesh->getInstanceId();
+		size_t verticesMemorySize = mesh->getVerticesCount() * Mesh::VertexSize;
+		size_t colorsMemorySize = mesh->getColors() == nullptr ? 0 : mesh->getVerticesCount() * Mesh::ColorSize;
+		size_t uvsMemorySize = mesh->getUvs() == nullptr ? 0 : mesh->getVerticesCount() * Mesh::UVSize;
+		size_t normalsMemorySize = mesh->getNormals() == nullptr ? 0 : mesh->getVerticesCount() * Mesh::NormalSize;
+
+		glBindVertexArray(vao);
+		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+		if (verticesMemorySize > 0)
+		{
+			glNamedBufferSubData(vbo, 0, verticesMemorySize, mesh->getVertices());
+			if (colorsMemorySize > 0)
+			{
+				auto offset = verticesMemorySize;
+				glNamedBufferSubData(vbo, offset, colorsMemorySize, mesh->getColors());
+			}
+			if (uvsMemorySize > 0)
+			{
+				auto offset = colorsMemorySize + verticesMemorySize;
+				glNamedBufferSubData(vbo, offset, uvsMemorySize, mesh->getUvs());
+			}
+			if (normalsMemorySize > 0)
+			{
+				auto offset = colorsMemorySize + verticesMemorySize + uvsMemorySize;
+				glNamedBufferSubData(vbo, offset, normalsMemorySize, mesh->getNormals());
+			}
+		}
+	}
+}
+
 
 void GLDevice::destroyMeshResources(std::vector<MeshResourceIdentifier>& meshIdentifiers)
 {
@@ -146,7 +187,7 @@ std::vector<TextureResourceIdentifier> GLDevice::requestTextureResources(std::ve
 		}
 	}
 
-	// 分配存储空间
+	// 分配存储空间，并设置纹理基础信息
 	for (int i = 0; i < newTextureCount; ++i)
 	{
 		const auto& texturePtr = texturePtrs[i];
@@ -162,7 +203,7 @@ std::vector<TextureResourceIdentifier> GLDevice::requestTextureResources(std::ve
 		else if (textureType == TextureType::Texture2D)
 		{
 			auto texture2DPtr = static_cast<Texture2D*>(texturePtr);
-			glBindTextureUnit(0, resourceIdentifier.m_texture);
+			//glBindTextureUnit(0, resourceIdentifier.m_texture);
 
 			setTextureWrapMode(resourceIdentifier.m_texture, GL_TEXTURE_WRAP_S, texture2DPtr->getWrapModeS());
 			setTextureWrapMode(resourceIdentifier.m_texture, GL_TEXTURE_WRAP_T, texture2DPtr->getWrapModeT());
@@ -170,11 +211,9 @@ std::vector<TextureResourceIdentifier> GLDevice::requestTextureResources(std::ve
 			setTextureFilter(resourceIdentifier.m_texture, GL_TEXTURE_MIN_FILTER, texture2DPtr->getTextureFilter());
 			setTextureFilter(resourceIdentifier.m_texture, GL_TEXTURE_MAG_FILTER, texture2DPtr->getTextureFilter());
 
-			glTextureStorage2D(resourceIdentifier.m_texture, resourceIdentifier.m_levels, internalFormat, resourceIdentifier.m_width, resourceIdentifier.m_height);
-			glTextureSubImage2D(resourceIdentifier.m_texture, 0, 0, 0, resourceIdentifier.m_width,
-				resourceIdentifier.m_height, externalFormat, perChannelSize, texturePtr->getData());
+			//glTextureParameteri(resourceIdentifier.m_texture,GL_DEPTH_STENCIL_TEXTURE_MODE, GL_STENCIL_COMPONENTS);
 
-			glGenerateTextureMipmap(resourceIdentifier.m_texture);
+			glTextureStorage2D(resourceIdentifier.m_texture, resourceIdentifier.m_levels, internalFormat, resourceIdentifier.m_width, resourceIdentifier.m_height);
 		}
 		else if (textureType == TextureType::Texture3D)
 		{
@@ -184,7 +223,46 @@ std::vector<TextureResourceIdentifier> GLDevice::requestTextureResources(std::ve
 		// Todo其他类型
 	}
 
+	// 更新纹理数据
+	updateTextureResources(texturePtrs, textureResourceIdentifiers);
+
 	return textureResourceIdentifiers;
+}
+
+void GLDevice::updateTextureResources(std::vector<Texture*>& texturePtrs, std::vector<TextureResourceIdentifier>& textureResourceIdentifiers)
+{
+	GLsizei newTextureCount = (GLsizei)texturePtrs.size();
+	// 分配存储空间
+	for (int i = 0; i < newTextureCount; ++i)
+	{
+		const auto& texturePtr = texturePtrs[i];
+		auto resourceIdentifier = textureResourceIdentifiers[i];
+		auto textureType = resourceIdentifier.m_textureType;
+		auto externalFormat = getGLTextureExternalFormat(resourceIdentifier.m_externalFormat);
+		auto perChannelSize = getGLTextureChannelSize(resourceIdentifier.m_perChannelSize);
+		if (textureType == TextureType::Texture1D)
+		{
+		}
+		else if (textureType == TextureType::Texture2D)
+		{
+			auto texture2DPtr = static_cast<Texture2D*>(texturePtr);
+			//glBindTextureUnit(0, resourceIdentifier->m_texture);
+
+			auto data = texturePtr->getData();
+			if (data != nullptr)
+			{
+				glTextureSubImage2D(resourceIdentifier.m_texture, 0, 0, 0, resourceIdentifier.m_width,
+					resourceIdentifier.m_height, externalFormat, perChannelSize, texturePtr->getData());
+			}
+
+			glGenerateTextureMipmap(resourceIdentifier.m_texture);
+		}
+		else if (textureType == TextureType::Texture3D)
+		{
+		}
+		// Todo其他类型
+	}
+
 }
 
 void GLDevice::destroyTextureResources(std::vector<TextureResourceIdentifier>& textureIdentifiers)
@@ -320,7 +398,7 @@ std::vector<RenderTargetIdentifier> GLDevice::requestRenderTargetResource(std::v
 				}
 			}
 		}
-		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 	return renderTargetResources;
 }
@@ -349,19 +427,19 @@ std::vector<RenderBufferIdentifier> GLDevice::requestRenderBufferResources(std::
 		identifier.m_isDepthBuffer = renderBufferPtrs[i]->IsDepthBuffer();
 		if (identifier.m_isDepthBuffer)
 		{
-			if (renderBufferPtrs[i]->getDepthStencilType() != RenderTextureDepthStencilType::None)
+			if (renderBufferPtrs[i]->getInternalFormat() != TextureInternalFormat::None)
 			{
-				identifier.m_depthStencilType = renderBufferPtrs[i]->getDepthStencilType();
+				identifier.m_internalFormat = renderBufferPtrs[i]->getInternalFormat();
 				identifier.m_width = renderBufferPtrs[i]->getWidth();
 				identifier.m_height = renderBufferPtrs[i]->getHeight();
 				// 分配RenderBuffer存储空间
-				glNamedRenderbufferStorage(renderBufferIds[i], getGLDepthStencilType(identifier.m_depthStencilType), identifier.m_width, identifier.m_height);
+				glNamedRenderbufferStorage(renderBufferIds[i], getGLTextureInternalFormat(identifier.m_internalFormat), identifier.m_width, identifier.m_height);
 			}
 		}
 		else {
-			if (renderBufferPtrs[i]->getColorInternalFormat() != TextureInternalFormat::None)
+			if (renderBufferPtrs[i]->getInternalFormat() != TextureInternalFormat::None)
 			{
-				identifier.m_internalFormat = renderBufferPtrs[i]->getColorInternalFormat();
+				identifier.m_internalFormat = renderBufferPtrs[i]->getInternalFormat();
 				identifier.m_width = renderBufferPtrs[i]->getWidth();
 				identifier.m_height = renderBufferPtrs[i]->getHeight();
 				// 分配RenderBuffer存储空间
@@ -430,7 +508,7 @@ void GLDevice::clearColor(float r, float g, float b, float a)
 	//auto size = Window::getInstance()->getSize();
 	//glViewport(0, 0, size.x, size.y);
 	glClearColor(r, g, b, a);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
 void GLDevice::blitCurrentRTToWindow()
@@ -444,23 +522,69 @@ void GLDevice::blitRTToWindow(RenderTargetIdentifier* rt)
 	{
 		return;
 	}
+	int fboAttachmentType = 0;
+	for (const auto& attachmentIdentifier : rt->m_attachmentIdentifiers)
+	{
+		fboAttachmentType |= (int)attachmentIdentifier.getAttachmentType();
+	}
+	blitRT(rt, nullptr, (FBOAttachmentType)fboAttachmentType);
+}
+void GLDevice::blitRT(RenderTargetIdentifier* src, RenderTargetIdentifier* dst, FBOAttachmentType attachmentType)
+{
+	if (src == nullptr)
+	{
+		return;
+	}
+
 	auto windowSize = Window::getInstance()->getSize();
 
-	auto width = rt->m_descriptor.m_width;
-	auto height = rt->m_descriptor.m_height;
+	auto srcWidth = src->m_descriptor.m_width;
+	auto srcHeight = src->m_descriptor.m_height;
 
-	assert(glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
-	// 将FBO绑定到读取FB目标上
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, rt->m_fbo);
-	// 绘制窗口设置为0，意思是重新绑定到窗口的帧缓存上
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	auto dstWidth = windowSize.x;
+	auto dstHeight = windowSize.y;
+	bool isBlitToWindow = dst == nullptr;
 
-	glBlitFramebuffer(0, 0, width, height, 0, 0, windowSize.x, windowSize.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+	if (!isBlitToWindow)
+	{
+		dstWidth = dst->m_descriptor.m_width;
+		dstHeight = dst->m_descriptor.m_height;
+	}
+
+	if (src != nullptr)
+	{
+		//assert(glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
+		// 将FBO绑定到读取FB目标上
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, src->m_fbo);
+		// 绘制窗口设置为0，意思是重新绑定到窗口的帧缓存上
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, isBlitToWindow ? 0 : dst->m_fbo);
+		// 传到窗口FBO忽略深度/模板缓冲
+		if (((int)attachmentType & (int)FBOAttachmentType::Color) > 0)
+		{
+			glBlitFramebuffer(0, 0, srcWidth, srcHeight, 0, 0, dstWidth, dstHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+		}
+		if (!isBlitToWindow)
+		{
+			if (((int)attachmentType & (int)FBOAttachmentType::DepthStencil) == (int)FBOAttachmentType::DepthStencil)
+			{
+				glBlitFramebuffer(0, 0, srcWidth, srcHeight, 0, 0, dstWidth, dstHeight, GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT, GL_LINEAR);
+			}
+			if (((int)attachmentType & (int)FBOAttachmentType::Depth) > 0)
+			{
+				glBlitFramebuffer(0, 0, srcWidth, srcHeight, 0, 0, dstWidth, dstHeight, GL_DEPTH_BUFFER_BIT, GL_LINEAR);
+			}
+			if (((int)attachmentType & (int)FBOAttachmentType::Stencil) > 0)
+			{
+				glBlitFramebuffer(0, 0, srcWidth, srcHeight, 0, 0, dstWidth, dstHeight, GL_STENCIL_BUFFER_BIT, GL_LINEAR);
+			}
+		}
+
+	}
 }
 
 void GLDevice::blitDebugRTToWindow()
 {
-	blitRTToWindow(m_debugRT);
+	//blitRTToWindow(m_debugRT);
 }
 
 void GLDevice::bindBlockForProgram(Shader& shader)

@@ -58,29 +58,7 @@ enum class TextureInternalFormat {
 	RGB16_SNORM,
 	RGBA8_SNORM,
 	RGBA16_SNORM,
-};
 
-enum class TextureExternalFormat {
-	RED,
-	RG,
-	RGB,
-	RGBA
-};
-
-enum class ColorChannel
-{
-	R = 1,
-	G = 1 << 1,
-	B = 1 << 2,
-	A = 1 << 3
-};
-
-enum class TexturePerChannelSize {
-	UNSIGNED_BYTE,
-};
-
-enum class RenderTextureDepthStencilType {
-	None,
 	Depth8,
 	Depth16,
 	Depth24,
@@ -92,4 +70,25 @@ enum class RenderTextureDepthStencilType {
 	Stencil8,
 	Stencil16,
 	Depth_Stencil,
+};
+
+enum class TextureExternalFormat {
+	RED,
+	RG,
+	RGB,
+	RGBA
+};
+
+enum class ReadColorChannel
+{
+	None,
+	RED,
+	GREEN,
+	BLUE,
+	ALPHA,
+	RGB,
+	RGBA
+};
+enum class TexturePerChannelSize {
+	UNSIGNED_BYTE,
 };

@@ -294,6 +294,9 @@
     <ClCompile Include="src\RenderEventSystem.cpp">
       <Filter>源文件\Render\RenderResourceManager</Filter>
     </ClCompile>
+    <ClCompile Include="src\ResourceNames.cpp">
+      <Filter>源文件\Render\Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\cube.frag">
@@ -314,16 +317,16 @@
     <None Include="Shader\common.attr">
       <Filter>源文件\ShaderSourceCode</Filter>
     </None>
-    <None Include="Shader\debug_view.vert">
+    <None Include="Shader\depthview.vert">
       <Filter>源文件\ShaderSourceCode</Filter>
     </None>
-    <None Include="Shader\debug_view.frag">
+    <None Include="Shader\depthview.frag">
       <Filter>源文件\ShaderSourceCode</Filter>
     </None>
-    <None Include="Shader\PostProcessing.frag">
+    <None Include="Shader\postProcessing.frag">
       <Filter>源文件\ShaderSourceCode</Filter>
     </None>
-    <None Include="Shader\PostProcessing.vert">
+    <None Include="Shader\postProcessing.vert">
       <Filter>源文件\ShaderSourceCode</Filter>
     </None>
   </ItemGroup>
@@ -574,7 +577,16 @@
     <ClInclude Include="include\DebugPassBase.h">
       <Filter>头文件\Render\PassManagement</Filter>
     </ClInclude>
-    <ClInclude Include="include\PostprocessPass.h">
+    <ClInclude Include="include\PostProcessingPass.h">
+      <Filter>头文件\Render\PassManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CameraDepthPass.h">
+      <Filter>头文件\Render\PassManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ResourceNames.h">
+      <Filter>头文件\Render\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CaptureFBOPass.h">
       <Filter>头文件\Render\PassManagement</Filter>
     </ClInclude>
   </ItemGroup>

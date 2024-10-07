@@ -10,7 +10,6 @@
 #include <Camera.h>
 #include <DrawSettings.h>
 #include <algorithm>
-#include <RenderResourceManagment.h>
 
 class ScriptableRenderContext
 {
@@ -74,12 +73,26 @@ public:
 
 	void blitCurrentRTToWindow();
 
-	void blitToRenderBuffer(RenderBufferIdentifier* src, RenderBufferIdentifier* dst)
+	void blitRT(RenderTargetIdentifier* src, RenderTargetIdentifier* dst, FBOAttachmentType attachmentType = FBOAttachmentType::Color)
 	{
-		m_device->blitToRenderBuffer(src, dst);
+		m_device->blitRT(src, dst, attachmentType);
+	}
+
+	void copyTexture2D(TextureResourceIdentifier* src, TextureResourceIdentifier* dst, int srcLevel, int srcX, int srcY, int dstLevel, int dstX, int dstY, int width, int height)
+	{
+		m_device->copyTexture2D(src, dst, srcLevel, srcX, srcY, dstLevel, dstX, dstY, width, height);
+	}
+
+	void copyRenderbuffer(RenderBufferIdentifier* src, RenderBufferIdentifier* dst, int srcX, int srcY, int dstX, int dstY, int width, int height)
+	{
+		m_device->copyRenderBuffer(src, dst, srcX, srcY, dstX, dstY, width, height);
+	}
+
+	void capture(RenderTargetIdentifier* target, FBOAttachmentType fboAttachmentType, void* pixels, ReadColorChannel colorChannel = ReadColorChannel::None)
+	{
+		m_device->capture(target, fboAttachmentType, pixels, colorChannel);
 	}
 private:
-
 
 	static bool sortNear2FarCompare(RendererSortStructure a, RendererSortStructure b)
 	{

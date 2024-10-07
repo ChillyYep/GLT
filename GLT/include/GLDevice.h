@@ -2,6 +2,7 @@
 #include <DeviceBase.h>
 #include <GLCommon.h>
 #include <Window.h>
+#include <RenderResourceManagment.h>
 
 class GLDevice :public DeviceBase
 {
@@ -136,40 +137,29 @@ public:
 			return GL_RGBA8_SNORM;
 		case TextureInternalFormat::RGBA16_SNORM:
 			return GL_RGBA16_SNORM;
-		default:
-			break;
-		}
-		return GL_NONE;
-	}
 
-	inline GLenum getGLDepthStencilType(RenderTextureDepthStencilType depthStencilType) const
-	{
-		switch (depthStencilType)
-		{
-		case RenderTextureDepthStencilType::None:
-			return GL_NONE;
-		case RenderTextureDepthStencilType::Depth8:
+		case TextureInternalFormat::Depth8:
 			return GL_DEPTH_COMPONENT;
-		case RenderTextureDepthStencilType::Depth16:
+		case TextureInternalFormat::Depth16:
 			return GL_DEPTH_COMPONENT16;
-		case RenderTextureDepthStencilType::Depth24:
+		case TextureInternalFormat::Depth24:
 			return GL_DEPTH_COMPONENT24;
-		case RenderTextureDepthStencilType::Depth32:
+		case TextureInternalFormat::Depth32:
 			return GL_DEPTH_COMPONENT32;
-		case RenderTextureDepthStencilType::Depth32F:
+		case TextureInternalFormat::Depth32F:
 			return GL_DEPTH_COMPONENT32F;
-		case RenderTextureDepthStencilType::Stencil0:
+		case TextureInternalFormat::Stencil0:
 			return GL_STENCIL_INDEX;
-		case RenderTextureDepthStencilType::Stencil1:
+		case TextureInternalFormat::Stencil1:
 			return GL_STENCIL_INDEX1;
-		case RenderTextureDepthStencilType::Stencil4:
+		case TextureInternalFormat::Stencil4:
 			return GL_STENCIL_INDEX4;
-		case RenderTextureDepthStencilType::Stencil8:
+		case TextureInternalFormat::Stencil8:
 			return GL_STENCIL_INDEX8;
-		case RenderTextureDepthStencilType::Stencil16:
+		case TextureInternalFormat::Stencil16:
 			return GL_STENCIL_INDEX16;
-		case RenderTextureDepthStencilType::Depth_Stencil:
-			return GL_DEPTH_STENCIL;
+		case TextureInternalFormat::Depth_Stencil:
+			return GL_DEPTH24_STENCIL8;
 		default:
 			break;
 		}
@@ -187,14 +177,53 @@ public:
 		}
 		return GL_NONE;
 	}
+
+	inline GLenum getGLReadPixelsType(FBOAttachmentType attachmentType, ReadColorChannel colorChannel)
+	{
+		switch (attachmentType)
+		{
+		case FBOAttachmentType::Color:
+		{
+			switch (colorChannel)
+			{
+			case ReadColorChannel::None:
+				return GL_NONE;
+			case ReadColorChannel::RED:
+				return GL_RED;
+			case ReadColorChannel::GREEN:
+				return GL_GREEN;
+			case ReadColorChannel::BLUE:
+				return GL_BLUE;
+			case ReadColorChannel::ALPHA:
+				return GL_ALPHA;
+			case ReadColorChannel::RGB:
+				return GL_RGB;
+			case ReadColorChannel::RGBA:
+				return GL_RGBA;
+			default:
+				break;
+			}
+			return GL_RGBA;
+		}
+		case FBOAttachmentType::Depth:
+			return GL_DEPTH_COMPONENT;
+		case FBOAttachmentType::Stencil:
+			return GL_STENCIL_INDEX;
+		case FBOAttachmentType::DepthStencil:
+			return GL_DEPTH_STENCIL;
+		default:
+			break;
+		}
+		return GL_NONE;
+	}
 	void setRenderStateBlock(RenderStateBlock& renderStateBlock) override;
 
 	std::vector<MeshResourceIdentifier> requestMeshResources(std::vector<Mesh*>& meshPtrs) override;
-
+	void updateMeshResources(std::vector<Mesh*>& meshPtrs, std::vector<MeshResourceIdentifier>& meshResourceIdentifiers) override;
 	void destroyMeshResources(std::vector<MeshResourceIdentifier>& meshIdentifiers) override;
 
 	std::vector<TextureResourceIdentifier> requestTextureResources(std::vector<Texture*>& texturePtrs) override;
-
+	void updateTextureResources(std::vector<Texture*>& texturePtrs, std::vector<TextureResourceIdentifier>& textureResourceIdentifiers) override;
 	void destroyTextureResources(std::vector<TextureResourceIdentifier>& textureIdentifiers) override;
 
 	std::vector<SamplerResouceIdentifier> requestSamplerResources(std::vector<Sampler*>& samplerPtrs) override;
@@ -220,7 +249,69 @@ public:
 
 	void blitDebugRTToWindow() override;
 
-	void blitRTToWindow(RenderTargetIdentifier* rt);
+	void blitRTToWindow(RenderTargetIdentifier* rt) override;
+
+	void blitRT(RenderTargetIdentifier* src, RenderTargetIdentifier* dst, FBOAttachmentType attachmentType = FBOAttachmentType::Color) override;
+
+	void initDefaultFBO()
+	{
+		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		//glFramebufferTexture2D()
+	}
+
+	void copyTexture2D(TextureResourceIdentifier* src, TextureResourceIdentifier* dst, int srcLevel, int srcX, int srcY, int dstLevel, int dstX, int dstY, int width, int height) override
+	{
+		if (src == nullptr || dst == nullptr)
+		{
+			return;
+		}
+		glCopyImageSubData(src->m_texture, GL_TEXTURE_2D, srcLevel, srcX, srcY, 0, dst->m_texture, GL_TEXTURE_2D, dstLevel, dstX, dstY, 0, width, height, 1);
+	}
+
+	void copyRenderBuffer(RenderBufferIdentifier* src, RenderBufferIdentifier* dst, int srcX, int srcY, int dstX, int dstY, int width, int height) override
+	{
+		if (src == nullptr || dst == nullptr)
+		{
+			return;
+		}
+		glCopyImageSubData(src->m_renderBuffer, GL_RENDERBUFFER, 0, srcX, srcY, 0, dst->m_renderBuffer, GL_RENDERBUFFER, 0, dstX, dstY, 0, width, height, 1);
+	}
+
+	void capture(RenderTargetIdentifier* target, FBOAttachmentType fboAttachmentType, void* pixels, ReadColorChannel colorChannel = ReadColorChannel::None) override
+	{
+		if (target == nullptr || pixels == nullptr)
+		{
+			return;
+		}
+		for (const auto& attachmentIdentifier : target->m_attachmentIdentifiers)
+		{
+			if (attachmentIdentifier.getAttachmentType() == fboAttachmentType)
+			{
+				if (attachmentIdentifier.getResourceType() == FBOAttachmentResourceType::Texture)
+				{
+					auto textureIdentifier = attachmentIdentifier.getTextureIdentifier();
+					if (textureIdentifier == nullptr)
+					{
+						continue;
+					}
+					//glReadBuffer(GL_BACK);
+					glReadPixels(0, 0, textureIdentifier->m_width, textureIdentifier->m_height, getGLReadPixelsType(fboAttachmentType, colorChannel), getGLTextureChannelSize(textureIdentifier->m_perChannelSize), pixels);
+					break;
+				}
+				else if (attachmentIdentifier.getResourceType() == FBOAttachmentResourceType::RenderBuffer)
+				{
+					auto renderBufferIdentifier = attachmentIdentifier.getRenderBufferIdentifier();
+					if (renderBufferIdentifier == nullptr)
+					{
+						continue;
+					}
+					//glReadBuffer(GL_BACK);
+					glReadPixels(0, 0, renderBufferIdentifier->m_width, renderBufferIdentifier->m_height, getGLReadPixelsType(fboAttachmentType, colorChannel), GL_UNSIGNED_BYTE, pixels);
+					break;
+				}
+			}
+		}
+	}
 
 	GLenum textureType2TextureTarget(TextureType textureType) const;
 
@@ -308,11 +399,6 @@ public:
 		release(command);
 	}
 
-	void blitToRenderBuffer(RenderBufferIdentifier* src, RenderBufferIdentifier* dst) override
-	{
-		//glCopyTexSubImage2D(GL_RENDERBUFFER,1)
-		glCopyImageSubData(src->m_renderBuffer, GL_RENDERBUFFER, 1, 0, 0, 0, dst->m_renderBuffer, GL_RENDERBUFFER, 1, 0, 0, 0, src->m_width, src->m_height, 0);
-	}
 private:
 
 };

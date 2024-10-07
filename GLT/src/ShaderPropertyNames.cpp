@@ -7,6 +7,8 @@ const char* ShaderPropertyNames::ViewMatrix = "View";
 const char* ShaderPropertyNames::ProjectMatrix = "Project";
 const char* ShaderPropertyNames::EyePosition = "EyePosition";
 
+const char* ShaderPropertyNames::ZBufferParams = "ZBufferParams";
+
 const char* ShaderPropertyNames::MainLightData_Ambient = "m_mainLightData.ambient";
 const char* ShaderPropertyNames::MainLightData_Color = "m_mainLightData.color";
 const char* ShaderPropertyNames::MainLightData_Position = "m_mainLightData.position";

@@ -12,12 +12,16 @@ public:
 
 	inline void regist()
 	{
-		RenderEventSystem::getInstance()->addListener(RenderEventId::RequestResource, this);
+		RenderEventSystem::getInstance()->addListener(RenderEventId::RequestResources, this);
+		RenderEventSystem::getInstance()->addListener(RenderEventId::DestroyResources, this);
+		RenderEventSystem::getInstance()->addListener(RenderEventId::UpdateResources, this);
 	}
 
 	inline void unregist()
 	{
-		RenderEventSystem::getInstance()->removeListener(RenderEventId::RequestResource, this);
+		RenderEventSystem::getInstance()->removeListener(RenderEventId::RequestResources, this);
+		RenderEventSystem::getInstance()->removeListener(RenderEventId::DestroyResources, this);
+		RenderEventSystem::getInstance()->removeListener(RenderEventId::UpdateResources, this);
 	}
 
 	void onNotify(RenderEvent& renderEvent) override;
@@ -28,6 +32,8 @@ private:
 	void generateResourceIdentifier(ResourceType resourceType, std::vector<Object*>& objects);
 
 	void destroyResourceIdentifier(ResourceType resourceType, std::vector<Object*>& objects);
+
+	void updateResouceIdentifier(ResourceType resourceType, std::vector<Object*>& objects);
 
 	inline std::vector<unsigned int> getInstanceIds(std::vector<Object*>& objects)
 	{

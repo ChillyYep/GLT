@@ -21,10 +21,12 @@ void createScene()
 	SceneManager::getInstance()->addScene(scene);
 	// 材质
 	auto shader = shared_ptr<Shader>(new Shader("cube_tex"));
+	//auto shader = shared_ptr<Shader>(new Shader("depthview"));
 
 	auto mat1 = shared_ptr<Material>(new Material(shader));
 	auto mat2 = shared_ptr<Material>(new Material(shader));
 	auto tex = new Texture2D();
+	tex->m_name = "wall";
 	// 需要引入一个从文件加载纹理的库
 	tex->load("Resources/wall.jpg");
 	tex->setInternalFormat(TextureInternalFormat::RGB8);

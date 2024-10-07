@@ -10,6 +10,8 @@ public:
 	static const char* ProjectMatrix;
 	static const char* EyePosition;
 
+	static const char* ZBufferParams;
+
 	static const char* MainLightData_Ambient;
 	static const char* MainLightData_Color;
 	static const char* MainLightData_Position;

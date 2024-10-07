@@ -4,12 +4,15 @@
 #include <iostream>
 #include <memory>
 #include <CameraOperation.h>
+#include <ResourceNames.h>
 
 class ShadowMapPass :public PassBase
 {
 public:
 	ShadowMapPass() {}
 	~ShadowMapPass() {}
+
+	bool isExecutable() override { return true; }
 
 	void prepare() override
 	{
@@ -18,7 +21,7 @@ public:
 		m_renderStateBlock.m_colorState.m_cullMode = CullMode::Back;
 		//m_renderStateBlock.m_colorState.m_rgbaWritable = glm::bvec4(false, false, false, false);
 		m_renderStateBlock.m_colorState.m_rgbaWritable = glm::bvec4(true, true, true, true);
-		m_renderStateBlock.m_depthState.m_depthRange = glm::ivec2(0, 1);
+		m_renderStateBlock.m_depthState.m_depthRange = glm::vec2(0, 1);
 		m_renderStateBlock.m_depthState.m_writable = true;
 		m_renderStateBlock.m_depthState.m_compareFunc = CompareFunction::Less;
 
@@ -29,15 +32,17 @@ public:
 		auto window = Window::getInstance();
 		auto windowSize = window->getSize();
 
-		m_shadowMapRT = new RenderTexture(windowSize.x, windowSize.y, TextureInternalFormat::RGB8, RenderTextureDepthStencilType::Depth16,
-			RenderTextureDepthStencilType::None);
-		m_shadowMapRT->m_name = "ShadowMapRT";
+		m_shadowMapRT = new RenderTexture(windowSize.x, windowSize.y, TextureInternalFormat::RGBA8, TextureInternalFormat::Depth16,
+			TextureInternalFormat::None);
+		m_shadowMapRT->m_name = ResourceName::ShadowMapRTName;
+		m_shadowMapRT->setColorAttachmentSampleEnabled(true);
+		m_shadowMapRT->setDepthAttachmentSampleEnabled(true);
 		m_shadowMapRT->create();
 	}
 
 	void destroy() override
 	{
-		if (IsPrepared())
+		if (isPrepared())
 		{
 			m_shadowMapRT->release();
 			delete m_shadowMapRT;
@@ -62,9 +67,10 @@ public:
 			auto windowSize = window->getSize();
 
 			auto viewMatrix = Camera::computeViewMatrix(mainLightData.rotation, mainLightData.position);
+			auto projectionMatrix = Camera::computeOrthoProjectionMatrix((float)windowSize.x / windowSize.y, m_bound, 0.1f, 100.f);
 			m_cmdBuffer.setViewport(0, 0, windowSize.x, windowSize.y);
 			m_cmdBuffer.setViewMatrix(viewMatrix);
-			m_cmdBuffer.setProjectionMatrix(m_renderData->m_cameraDatas[0].m_projectionMatrix);
+			m_cmdBuffer.setProjectionMatrix(projectionMatrix);
 			m_context->scheduleCommandBuffer(m_cmdBuffer);
 			m_cmdBuffer.clear();
 			m_context->submit();
@@ -85,4 +91,6 @@ private:
 	DrawSettings m_drawSettings;
 	RenderStateBlock m_renderStateBlock;
 	RenderTexture* m_shadowMapRT;
+
+	float m_bound = 20.f;
 };
