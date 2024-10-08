@@ -11,6 +11,17 @@ void CommandBuffer::setRenderTarget(RenderTargetIdentifier* renderTargetIdentifi
 	command.param = setRenderTargetParam;
 	m_cmdList.push_back(command);
 }
+void CommandBuffer::setShadowMap(Texture2D* shadowMap)
+{
+	assert(shadowMap != nullptr);
+	RenderCommand command = RenderCommand();
+	SetShadowMapParam* setShadowMapParam = RenderCommandParamFactory::getInstance()->createParam<SetShadowMapParam>();
+	setShadowMapParam->m_shadowMap= shadowMap;
+
+	command.commandType = RenderCommandType::SetShadowMap;
+	command.param = setShadowMapParam;
+	m_cmdList.push_back(command);
+}
 
 void CommandBuffer::clearColor(float r, float g, float b, float a)
 {

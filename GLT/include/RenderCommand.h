@@ -17,7 +17,8 @@ enum class RenderCommandType
 	DrawMesh,
 	DrawRenderer,
 	SetProjectionMatrix,
-	SetViewMatrix
+	SetViewMatrix,
+	SetShadowMap
 };
 
 class RenderCommandParam
@@ -120,6 +121,14 @@ public:
 	~SetProjectionMatrixParam() {}
 
 	glm::mat4 m_projectionMatrix;
+};
+RENDERCOMMANDPARAM_CLASS(SetShadowMapParam, RenderCommandType::SetShadowMap)
+{
+public:
+	SetShadowMapParam() {}
+	~SetShadowMapParam() {}
+
+	Texture2D* m_shadowMap;
 };
 
 class RenderCommandParamFactory :public Singleton<RenderCommandParamFactory>

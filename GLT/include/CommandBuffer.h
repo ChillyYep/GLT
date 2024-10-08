@@ -16,6 +16,9 @@ public:
 	~CommandBuffer() {}
 
 	void setRenderTarget(RenderTargetIdentifier* renderTargetIdentifier);
+
+	void setShadowMap(Texture2D* shadowMap);
+
 	void clearColor(float r, float g, float b, float a);
 	//void blitto(RenderTargetIdentifier* renderTargetIdentifier);
 	void clear();

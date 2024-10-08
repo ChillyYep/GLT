@@ -11,7 +11,7 @@ public:
 	~DrawOpaquePass() {}
 
 	bool isExecutable() override { return true; }
-	
+
 	void prepare() override
 	{
 		PassBase::prepare();
@@ -54,6 +54,20 @@ public:
 		auto rtIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, m_colorRT->getRTInstanceId()));
 		if (rtIdentifier != nullptr)
 		{
+			auto shadowMapRT = static_cast<RenderTarget*>(LogicResourceManager::getInstance()->getResource(ResourceType::RenderTarget, ShaderPropertyNames::ShadowMapTex));
+
+			auto shadowMapIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, shadowMapRT->getInstanceId()));
+			auto attachments = shadowMapRT->getAttachments();
+			Texture2D* shadowTexture = nullptr;
+			for (const auto& attachment : attachments)
+			{
+				if (attachment.getAttachmentType() == FBOAttachmentType::Depth && attachment.getResourceType() == FBOAttachmentResourceType::Texture)
+				{
+					shadowTexture = static_cast<Texture2D*>(attachment.getTexture());
+					break;
+				}
+			}
+			m_cmdBuffer.setShadowMap(shadowTexture);
 			m_cmdBuffer.setRenderTarget(rtIdentifier);
 			m_cmdBuffer.clearColor(0.0f, 0.0f, 0.0f, 0.0f);
 			m_context->scheduleCommandBuffer(m_cmdBuffer);

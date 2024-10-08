@@ -30,6 +30,8 @@ const char* ShaderPropertyNames::VP = "VP";
 
 const char* ShaderPropertyNames::MainTex = "mainTex";
 
+const char* ShaderPropertyNames::ShadowMapTex = "shadowMapTex";
+
 const char* ShaderPropertyNames::Ambient = "Ambient";
 
 const char* ShaderPropertyNames::Lights = "Lights";
