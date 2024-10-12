@@ -35,7 +35,6 @@ struct LightProperties {
 };
 struct ShadowMapData {
 	std::string m_shadowMapRTName;
-	ShadowMapType m_shadowType;
 };
 struct RenderData
 {

@@ -7,7 +7,6 @@ void RenderPipeline::init() {
 	m_perCameraPassList.push_back(new PostProcessingPass());
 	m_renderContext.init();
 
-	m_renderData.m_shadowData.m_shadowType = ShadowMapType::SimpleShadowMap;
 	m_renderData.m_shadowData.m_shadowMapRTName = ResourceName::ShadowMapRTName;
 
 	ShaderUtils::loadAllShader(m_renderContext);

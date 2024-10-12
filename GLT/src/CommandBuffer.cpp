@@ -11,16 +11,15 @@ void CommandBuffer::setRenderTarget(RenderTargetIdentifier* renderTargetIdentifi
 	command.param = setRenderTargetParam;
 	m_cmdList.push_back(command);
 }
-void CommandBuffer::setShadowMap(Texture2D* shadowMap, ShadowMapType shadowType)
+void CommandBuffer::setGlobalTextureResource(TextureResourceIdentifier* textureResource)
 {
-	assert(shadowMap != nullptr);
+	assert(textureResource != nullptr);
 	RenderCommand command = RenderCommand();
-	SetShadowMapParam* setShadowMapParam = RenderCommandParamFactory::getInstance()->createParam<SetShadowMapParam>();
-	setShadowMapParam->m_shadowMap = shadowMap;
-	setShadowMapParam->m_shadowType = shadowType;
+	SetGlobalTextureResource* setGlobalTextureResourceParam = RenderCommandParamFactory::getInstance()->createParam<SetGlobalTextureResource>();
+	setGlobalTextureResourceParam->m_globalTextureResource = textureResource;
 
-	command.commandType = RenderCommandType::SetShadowMap;
-	command.param = setShadowMapParam;
+	command.commandType = RenderCommandType::SetGlobalTextureResource;
+	command.param = setGlobalTextureResourceParam;
 	m_cmdList.push_back(command);
 }
 

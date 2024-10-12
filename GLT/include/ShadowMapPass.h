@@ -84,6 +84,15 @@ public:
 			m_cmdBuffer.clear();
 			m_context->submit();
 			m_context->drawRenderers(m_filterSettings, m_drawSettings);
+
+			auto depthTextureAttachmentIdentifier = static_cast<TextureResourceIdentifier*>(rtIdentifier->getAttachmentIdentifier(FBOAttachmentType::Depth, FBOAttachmentResourceType::Texture));
+			if (depthTextureAttachmentIdentifier != nullptr)
+			{
+				m_cmdBuffer.setGlobalTextureResource(depthTextureAttachmentIdentifier);
+			}
+			m_context->scheduleCommandBuffer(m_cmdBuffer);
+			m_cmdBuffer.clear();
+			m_context->submit();
 		}
 	}
 private:

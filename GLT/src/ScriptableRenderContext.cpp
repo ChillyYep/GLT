@@ -157,6 +157,20 @@ void ScriptableRenderContext::executeCommand(RenderCommand& command)
 		m_device->setProjectionMatrix(setProjectionMatrixParam->m_projectionMatrix);
 		break;
 	}
+	case RenderCommandType::SetGlobalTextureResource:
+	{
+		auto setGlobalTextureResource = static_cast<SetGlobalTextureResource*>(commandParam);
+
+		if (setGlobalTextureResource->m_globalTextureResource != nullptr)
+		{
+			auto texturePtr = static_cast<Texture*>(LogicResourceManager::getInstance()->getResource(ResourceType::Texture, setGlobalTextureResource->m_globalTextureResource->getInstanceId()));
+			if (texturePtr != nullptr)
+			{
+				addGlobalTextureResource(texturePtr->m_name, setGlobalTextureResource->m_globalTextureResource);
+			}
+		}
+		break;
+	}
 	default:
 		break;
 	}

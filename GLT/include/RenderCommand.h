@@ -18,7 +18,7 @@ enum class RenderCommandType
 	DrawRenderer,
 	SetProjectionMatrix,
 	SetViewMatrix,
-	SetShadowMap
+	SetGlobalTextureResource
 };
 
 class RenderCommandParam
@@ -118,13 +118,12 @@ public:
 
 	glm::mat4 m_projectionMatrix;
 };
-RENDERCOMMANDPARAM_CLASS(SetShadowMapParam, RenderCommandType::SetShadowMap)
+RENDERCOMMANDPARAM_CLASS(SetGlobalTextureResource, RenderCommandType::SetGlobalTextureResource)
 {
 public:
-	SetShadowMapParam() {}
-	~SetShadowMapParam() {}
-	ShadowMapType m_shadowType;
-	Texture2D* m_shadowMap;
+	SetGlobalTextureResource() {}
+	~SetGlobalTextureResource() {}
+	TextureResourceIdentifier* m_globalTextureResource;
 };
 
 class RenderCommandParamFactory :public Singleton<RenderCommandParamFactory>

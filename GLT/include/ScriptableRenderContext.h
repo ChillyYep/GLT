@@ -126,7 +126,11 @@ private:
 		m_pso.m_constantBufferSet = &Shader::getShaderConstantBufferSet();
 		m_pso.m_uniforms = shader->getShaderUniforms();
 		m_pso.m_uniformBlockRefs = shader->getReferencedBlocks();
-		//m_pso.m_globalTextureResources[ResourceName::ShadowMapRTName]=
+	}
+
+	void addGlobalTextureResource(std::string textureName, TextureResourceIdentifier* textureResource)
+	{
+		m_pso.m_globalTextureResources[textureName] = textureResource;
 	}
 
 	PipelineStateObject m_pso;
