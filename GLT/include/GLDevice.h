@@ -2,7 +2,6 @@
 #include <DeviceBase.h>
 #include <GLCommon.h>
 #include <Window.h>
-#include <RenderResourceManagment.h>
 
 class GLDevice :public DeviceBase
 {
@@ -316,90 +315,38 @@ public:
 
 	GLenum textureType2TextureTarget(TextureType textureType) const;
 
-	void bindBlockForProgram(Shader& shader);
+	void draw(PipelineStateObject& pso);
 
-	void drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, MeshResourceIdentifier* meshResourceIdentifier, std::vector<TextureResourceIdentifier*>& textureResources);
+	void fillNoMaterialProperties(PipelineStateObject& pso, std::string propertyName);
 
-	void setViewport(int x, int y, int width, int height)
+	void setViewport(int x, int y, int width, int height) override
 	{
 		glViewport(x, y, width, height);
 	}
 
 	void uploadConstantBufferResource(ConstantBufferType constantBufferType) override;
 
-	void release(RenderCommand& command)
-	{
-		RenderCommandParamFactory::getInstance()->releaseParam(command.param);
-		command.param = nullptr;
-	}
-
-	void setViewMatrix(glm::mat4& viewMatrix)
+	void setViewMatrix(glm::mat4& viewMatrix) override
 	{
 		Shader::setGlobalMatrix(ShaderPropertyNames::ViewMatrix, viewMatrix);
 	}
 
-	void setProjectionMatrix(glm::mat4& projectionMatrix)
+	void setProjectionMatrix(glm::mat4& projectionMatrix) override
 	{
 		Shader::setGlobalMatrix(ShaderPropertyNames::ProjectMatrix, projectionMatrix);
 	}
-
-	void executeCommand(RenderCommand& command) override
-	{
-		auto commandType = command.commandType;
-		auto commandParam = command.param;
-		switch (commandType)
-		{
-		case RenderCommandType::SetViewPort:
-		{
-			auto setViewPortParam = static_cast<SetViewPortParam*>(commandParam);
-			setViewport(setViewPortParam->m_x, setViewPortParam->m_y, setViewPortParam->m_width, setViewPortParam->m_height);
-			break;
-		}
-		case RenderCommandType::SetRenderTarget:
-		{
-			auto setRenderTargetParam = static_cast<SetRenderTargetParam*>(commandParam);
-			activate(setRenderTargetParam->identifier);
-			break;
-		}
-		case RenderCommandType::ClearColor:
-		{
-			auto clearColorParam = static_cast<ClearColorRenderParam*>(commandParam);
-			clearColor(clearColorParam->r, clearColorParam->g, clearColorParam->b, clearColorParam->a);
-			break;
-		}
-		case RenderCommandType::DrawMesh:
-		{
-			auto drawMeshParam = static_cast<DrawMeshParam*>(commandParam);
-			drawMesh(drawMeshParam->m_meshPtr, drawMeshParam->m_materialPtr, drawMeshParam->m_modelMatrix, drawMeshParam->m_meshResourceIdentifier, drawMeshParam->m_textureResources);
-			break;
-		}
-		case RenderCommandType::DrawRenderer:
-		{
-			auto drawRendererParam = static_cast<DrawRendererParam*>(commandParam);
-			auto transform = static_cast<GameObject*>(drawRendererParam->m_rendererPtr->getGameObject())->getTransform();
-			drawMesh(drawRendererParam->m_rendererPtr->getMesh(), drawRendererParam->m_rendererPtr->getMaterial().get(),
-				transform->getModelMatrix(), drawRendererParam->m_meshResourceIdentifier, drawRendererParam->m_textureResources);
-			break;
-		}
-		case RenderCommandType::SetViewMatrix:
-		{
-			auto setViewMatrixParam = static_cast<SetViewMatrixParam*>(commandParam);
-			setViewMatrix(setViewMatrixParam->m_viewMatrix);
-			break;
-		}
-		case RenderCommandType::SetProjectionMatrix:
-		{
-			auto setProjectionMatrixParam = static_cast<SetProjectionMatrixParam*>(commandParam);
-			setProjectionMatrix(setProjectionMatrixParam->m_projectionMatrix);
-			break;
-		}
-		default:
-			break;
-		}
-
-		release(command);
-	}
-
 private:
+	void bindTextureUnit(PipelineStateObject& pso, TextureResourceIdentifier* textureIdentifier);
 
+	void fillShaderProperties(PipelineStateObject& pso);
+
+	void fillMaterialPropertyBlocks(PipelineStateObject& pso);
+
+	void bindBlockForProgram(PipelineStateObject& pso);
+
+	void useProgram(PipelineStateObject& pso);
+
+	void bindMesh(PipelineStateObject& pso);
+
+	void drawElements(PipelineStateObject& pso);
 };

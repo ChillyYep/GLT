@@ -1,11 +1,15 @@
 #pragma once
 #include <GLMath.h>
 #include <vector>
+#include <string>
 
 enum class LightType {
 	DirectionalLight,
 	SpotLight,
 	PointLight
+};
+enum class ShadowMapType {
+	SimpleShadowMap
 };
 
 struct CameraData {
@@ -29,9 +33,14 @@ struct LightProperties {
 	/// </summary>
 	glm::vec4 attenuations;
 };
+struct ShadowMapData {
+	std::string m_shadowMapRTName;
+	ShadowMapType m_shadowType;
+};
 struct RenderData
 {
 	int m_curRenderingCameraIndex;
 	std::vector<CameraData> m_cameraDatas;
 	std::vector<LightProperties> m_lightDatas;
+	ShadowMapData m_shadowData;
 };

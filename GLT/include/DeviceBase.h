@@ -9,6 +9,7 @@
 #include <ConstantBuffers.h>
 #include <ResourceIdentifier.h>
 #include <RenderStateBlock.h>
+#include <PipelineStateObject.h>
 
 class DeviceBase
 {
@@ -45,8 +46,6 @@ public:
 
 	virtual void destroyConstantBufferResources(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers) = 0;
 
-	virtual void executeCommand(RenderCommand& renderCommand) = 0;
-
 	virtual void activate(RenderTargetIdentifier* rtIdentifier) = 0;
 
 	virtual void clearColor(float r, float g, float b, float a) = 0;
@@ -66,6 +65,20 @@ public:
 	virtual void copyRenderBuffer(RenderBufferIdentifier* src, RenderBufferIdentifier* dst, int srcX, int srcY, int dstX, int dstY, int width, int height) = 0;
 
 	virtual void capture(RenderTargetIdentifier* target, FBOAttachmentType fboAttachmentType, void* pixels, ReadColorChannel colorChannel) = 0;
+
+	virtual void setViewport(int x, int y, int width, int height) = 0;
+
+	virtual void draw(PipelineStateObject& pso) = 0;
+
+	virtual void setViewMatrix(glm::mat4& viewMatrix) = 0;
+
+	virtual void setProjectionMatrix(glm::mat4& projectionMatrix) = 0;
+
+	void release(RenderCommand& command)
+	{
+		RenderCommandParamFactory::getInstance()->releaseParam(command.param);
+		command.param = nullptr;
+	}
 protected:
 	RenderTargetIdentifier* m_curRT;
 };

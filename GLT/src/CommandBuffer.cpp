@@ -11,12 +11,13 @@ void CommandBuffer::setRenderTarget(RenderTargetIdentifier* renderTargetIdentifi
 	command.param = setRenderTargetParam;
 	m_cmdList.push_back(command);
 }
-void CommandBuffer::setShadowMap(Texture2D* shadowMap)
+void CommandBuffer::setShadowMap(Texture2D* shadowMap, ShadowMapType shadowType)
 {
 	assert(shadowMap != nullptr);
 	RenderCommand command = RenderCommand();
 	SetShadowMapParam* setShadowMapParam = RenderCommandParamFactory::getInstance()->createParam<SetShadowMapParam>();
-	setShadowMapParam->m_shadowMap= shadowMap;
+	setShadowMapParam->m_shadowMap = shadowMap;
+	setShadowMapParam->m_shadowType = shadowType;
 
 	command.commandType = RenderCommandType::SetShadowMap;
 	command.param = setShadowMapParam;
@@ -54,16 +55,6 @@ void CommandBuffer::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatr
 	drawMeshParam->m_meshPtr = mesh;
 	drawMeshParam->m_materialPtr = material;
 	drawMeshParam->m_modelMatrix = modelMatrix;
-	drawMeshParam->m_meshResourceIdentifier = static_cast<MeshResourceIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::Mesh, mesh->getInstanceId()));
-	if (material != nullptr)
-	{
-		std::vector<Texture*> textures = material->getAllTextures();
-		for (const auto& texPtr : textures)
-		{
-			auto texIdentifierPtr = RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::Texture, texPtr->getInstanceId());
-			drawMeshParam->m_textureResources.push_back(static_cast<TextureResourceIdentifier*>(texIdentifierPtr));
-		}
-	}
 	command.commandType = RenderCommandType::DrawMesh;
 	command.param = drawMeshParam;
 	m_cmdList.push_back(command);
@@ -79,17 +70,7 @@ void CommandBuffer::drawRenderer(Renderer* renderer)
 	RenderCommand command = RenderCommand();
 	DrawRendererParam* drawRendererParam = RenderCommandParamFactory::getInstance()->createParam<DrawRendererParam>();
 	drawRendererParam->m_rendererPtr = renderer;
-	drawRendererParam->m_meshResourceIdentifier = meshResourceIdentifier;
 
-	if (renderer->getMaterial() != nullptr)
-	{
-		std::vector<Texture*> textures = renderer->getMaterial()->getAllTextures();
-		for (const auto& texPtr : textures)
-		{
-			auto texIdentifierPtr = RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::Texture, texPtr->getInstanceId());
-			drawRendererParam->m_textureResources.push_back(static_cast<TextureResourceIdentifier*>(texIdentifierPtr));
-		}
-	}
 	command.commandType = RenderCommandType::DrawRenderer;
 	command.param = drawRendererParam;
 

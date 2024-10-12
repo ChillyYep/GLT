@@ -589,5 +589,8 @@
     <ClInclude Include="include\CaptureFBOPass.h">
       <Filter>头文件\Render\PassManagement</Filter>
     </ClInclude>
+    <ClInclude Include="include\PipelineStateObject.h">
+      <Filter>头文件\Render\RenderHardwareInterface</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -17,7 +17,7 @@ public:
 
 	void setRenderTarget(RenderTargetIdentifier* renderTargetIdentifier);
 
-	void setShadowMap(Texture2D* shadowMap);
+	void setShadowMap(Texture2D* shadowMap, ShadowMapType shadowType);
 
 	void clearColor(float r, float g, float b, float a);
 	//void blitto(RenderTargetIdentifier* renderTargetIdentifier);

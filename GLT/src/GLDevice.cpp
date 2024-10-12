@@ -57,7 +57,7 @@ std::vector<MeshResourceIdentifier> GLDevice::requestMeshResources(std::vector<M
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 		glNamedBufferStorage(ebo, mesh->getIndicesCount() * Mesh::IndexSize, mesh->getIndices(), GL_DYNAMIC_STORAGE_BIT);
 
-		meshResourceIdentifiers[i] = MeshResourceIdentifier(vao, vbo, ebo, instanceId);
+		meshResourceIdentifiers[i] = MeshResourceIdentifier(vao, vbo, ebo, instanceId, mesh->getVerticesCount(), mesh->getIndicesCount());
 	}
 	updateMeshResources(meshPtrs, meshResourceIdentifiers);
 	return meshResourceIdentifiers;
@@ -587,11 +587,11 @@ void GLDevice::blitDebugRTToWindow()
 	//blitRTToWindow(m_debugRT);
 }
 
-void GLDevice::bindBlockForProgram(Shader& shader)
+void GLDevice::bindBlockForProgram(PipelineStateObject& pso)
 {
 	ConstantBufferSet& globalBuffer = Shader::getShaderConstantBufferSet();
-	std::vector<ShaderUniformBlockReference>& blockRefs = shader.getReferencedBlocks();
-	auto program = shader.getShaderProgram();
+	std::vector<ShaderUniformBlockReference>& blockRefs = pso.m_uniformBlockRefs;
+	auto program = pso.m_program;
 	//glBindBufferBase(GL_UNIFORM_BUFFER, 0, globalBufferIdentifier.getUbo());
 	for (int i = 0; i < blockRefs.size(); ++i)
 	{
@@ -726,180 +726,228 @@ void GLDevice::setRenderStateBlock(RenderStateBlock& renderStateBlock)
 	}
 }
 
-void GLDevice::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix, MeshResourceIdentifier* meshResourceIdentifier, std::vector<TextureResourceIdentifier*>& textureResources)
+void GLDevice::fillNoMaterialProperties(PipelineStateObject& pso, std::string propertyName)
 {
-	Shader::setGlobalMatrix(ShaderPropertyNames::ModelMatrix, modelMatrix);
+	if (pso.m_globalTextureResources.find(propertyName) != pso.m_globalTextureResources.end())
+	{
+		auto texRes = pso.m_globalTextureResources[propertyName];
+		if (texRes != nullptr)
+		{
+			bindTextureUnit(pso, texRes);
+		}
+	}
+}
+
+void GLDevice::bindMesh(PipelineStateObject& pso)
+{
+	Shader::setGlobalMatrix(ShaderPropertyNames::ModelMatrix, pso.m_modelMatrix);
 
 	// 保证顺序，先绑定VAO再绑定VBO，否则在绘制多个不同Mesh时会造成混乱
-	glBindVertexArray(meshResourceIdentifier->getVAO());
+	glBindVertexArray(pso.m_meshIdentifier->getVAO());
 
-	glBindBuffer(GL_ARRAY_BUFFER, meshResourceIdentifier->getVBO());
+	glBindBuffer(GL_ARRAY_BUFFER, pso.m_meshIdentifier->getVBO());
 
-	auto shader = material->getShader();
-	GLuint program = shader->getShaderProgram();
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pso.m_meshIdentifier->getEBO());
+}
 
-	if (program > 0 && glIsProgram(program))
+void GLDevice::useProgram(PipelineStateObject& pso)
+{
+	glUseProgram(pso.m_program);
+}
+
+void GLDevice::bindTextureUnit(PipelineStateObject& pso, TextureResourceIdentifier* textureIdentifier)
+{
+	if (textureIdentifier != nullptr)
 	{
-		glUseProgram(program);
+		glBindTextureUnit(pso.m_texUnit++, textureIdentifier->m_texture);
+	}
+}
 
-		// uniform变量设置
-		auto& uniforms = shader->getShaderUniforms();
-		int texCount = 0;
-		for (int i = 0; i < uniforms.size(); ++i)
+void GLDevice::fillShaderProperties(PipelineStateObject& pso)
+{
+	auto& uniforms = pso.m_uniforms;
+	auto material = pso.m_material;
+	for (int i = 0; i < uniforms.size(); ++i)
+	{
+		auto matProperty = material == nullptr ? nullptr : material->getProperty(uniforms[i].m_name);
+		if (matProperty != nullptr)
 		{
-			auto matProperty = material->getProperty(uniforms[i].m_name);
-			if (matProperty != nullptr)
+			switch (matProperty->getMaterialPropertyType())
 			{
-				switch (matProperty->getMaterialPropertyType())
+			case MaterialPropertyType::Bool:
+			{
+				auto boolParam = static_cast<MaterialBoolProperty*>(matProperty.get());
+				if (boolParam != nullptr)
 				{
-				case MaterialPropertyType::Bool:
-				{
-					auto boolParam = static_cast<MaterialBoolProperty*>(matProperty.get());
-					if (boolParam != nullptr)
-					{
-						glUniform1i(uniforms[i].m_location, boolParam->getValue() ? 1 : 0);
-					}
-					break;
+					glUniform1i(uniforms[i].m_location, boolParam->getValue() ? 1 : 0);
 				}
-				case MaterialPropertyType::Int:
+				break;
+			}
+			case MaterialPropertyType::Int:
+			{
+				auto intParam = static_cast<MaterialIntProperty*>(matProperty.get());
+				if (intParam != nullptr)
 				{
-					auto intParam = static_cast<MaterialIntProperty*>(matProperty.get());
-					if (intParam != nullptr)
-					{
-						glUniform1i(uniforms[i].m_location, intParam->getValue());
-					}
-					break;
+					glUniform1i(uniforms[i].m_location, intParam->getValue());
 				}
-				case MaterialPropertyType::Float:
+				break;
+			}
+			case MaterialPropertyType::Float:
+			{
+				auto floatParam = static_cast<MaterialFloatProperty*>(matProperty.get());
+				if (floatParam != nullptr)
 				{
-					auto floatParam = static_cast<MaterialFloatProperty*>(matProperty.get());
-					if (floatParam != nullptr)
-					{
-						glUniform1f(uniforms[i].m_location, floatParam->getValue());
-					}
-					break;
+					glUniform1f(uniforms[i].m_location, floatParam->getValue());
 				}
-				case MaterialPropertyType::Vector4:
+				break;
+			}
+			case MaterialPropertyType::Vector4:
+			{
+				auto vec4Param = static_cast<MaterialVector4Property*>(matProperty.get());
+				if (vec4Param != nullptr)
 				{
-					auto vec4Param = static_cast<MaterialVector4Property*>(matProperty.get());
-					if (vec4Param != nullptr)
-					{
-						auto vec4 = vec4Param->getValue();
-						glUniform4f(uniforms[i].m_location, vec4.x, vec4.y, vec4.z, vec4.w);
-					}
-					break;
+					auto vec4 = vec4Param->getValue();
+					glUniform4f(uniforms[i].m_location, vec4.x, vec4.y, vec4.z, vec4.w);
 				}
-				case MaterialPropertyType::Matrix4:
+				break;
+			}
+			case MaterialPropertyType::Matrix4:
+			{
+				auto mat4Param = static_cast<MaterialMatrix4Property*>(matProperty.get());
+				if (mat4Param != nullptr)
 				{
-					auto mat4Param = static_cast<MaterialMatrix4Property*>(matProperty.get());
-					if (mat4Param != nullptr)
-					{
-						auto mat4 = mat4Param->getValue();
-						glUniformMatrix4fv(uniforms[i].m_location, 1, false, glm::value_ptr(mat4));
-					}
-					break;
+					auto mat4 = mat4Param->getValue();
+					glUniformMatrix4fv(uniforms[i].m_location, 1, false, glm::value_ptr(mat4));
 				}
-				case MaterialPropertyType::Texture:
+				break;
+			}
+			case MaterialPropertyType::Texture:
+			{
+				auto textureParam = static_cast<MaterialTextureProperty*>(matProperty.get());
+				if (textureParam != nullptr)
 				{
-					auto textureParam = static_cast<MaterialTextureProperty*>(matProperty.get());
-					if (textureParam != nullptr)
+					auto texture = textureParam->getTexture();
+					for (const auto& texIdentifierPtr : pso.m_textureResources)
 					{
-						auto texture = textureParam->getTexture();
-						if (texture != nullptr)
+						if (texIdentifierPtr->getInstanceId() == texture->getInstanceId())
 						{
-							for (const auto& texIdentifierPtr : textureResources)
-							{
-								if (texIdentifierPtr->getInstanceId() == texture->getInstanceId())
-								{
-									auto target = textureType2TextureTarget(texIdentifierPtr->m_textureType);
-									if (target != GL_NONE)
-									{
-										glBindTextureUnit(texCount++, texIdentifierPtr->m_texture);
-									}
-									break;
-								}
-							}
+							bindTextureUnit(pso, texIdentifierPtr);
+							break;
 						}
 					}
-					break;
 				}
-				default:
-					break;
-				}
+				break;
+			}
+			default:
+				break;
 			}
 		}
-		// 全局缓冲，逐材质设置
-		auto& constantBufferSet = Shader::getShaderConstantBufferSet();
-		auto& blockRefs = shader->getReferencedBlocks();
-		for (int i = 0; i < blockRefs.size(); ++i)
-		{
-			auto& blockRef = blockRefs[i];
-			auto blockPtr = constantBufferSet.findBlock(blockRef.m_uniformBlockName);
-			auto uniformsInBlock = blockPtr->m_blockUniforms;
-			for (int j = 0; j < uniformsInBlock.size(); ++j)
-			{
-				auto& uniform = uniformsInBlock[j];
-				auto matProperty = material->getProperty(uniform.m_uniformName);
-
-				switch (matProperty->getMaterialPropertyType())
-				{
-				case MaterialPropertyType::Bool:
-				{
-					auto boolParam = static_cast<MaterialBoolProperty*>(matProperty.get());
-					if (boolParam != nullptr)
-					{
-						Shader::setGlobalBool(uniform.m_uniformName.c_str(), boolParam->getValue());
-					}
-					break;
-				}
-				case MaterialPropertyType::Int:
-				{
-					auto intParam = static_cast<MaterialIntProperty*>(matProperty.get());
-					if (intParam != nullptr)
-					{
-						Shader::setGlobalInt(uniform.m_uniformName.c_str(), intParam->getValue());
-					}
-					break;
-				}
-				case MaterialPropertyType::Float:
-				{
-					auto floatParam = static_cast<MaterialFloatProperty*>(matProperty.get());
-					if (floatParam != nullptr)
-					{
-						Shader::setGlobalFloat(uniform.m_uniformName.c_str(), floatParam->getValue());
-					}
-					break;
-				}
-				case MaterialPropertyType::Vector4:
-				{
-					auto vec4Param = static_cast<MaterialVector4Property*>(matProperty.get());
-					if (vec4Param != nullptr)
-					{
-						Shader::setGlobalVector(uniform.m_uniformName.c_str(), vec4Param->getValue());
-					}
-					break;
-				}
-				case MaterialPropertyType::Matrix4:
-				{
-					auto mat4Param = static_cast<MaterialMatrix4Property*>(matProperty.get());
-					if (mat4Param != nullptr)
-					{
-						Shader::setGlobalMatrix(uniform.m_uniformName.c_str(), mat4Param->getValue());
-					}
-					break;
-				}
-				default:
-					break;
-				}
-			}
-
+		else {
+			fillNoMaterialProperties(pso, uniforms[i].m_name);
 		}
-		uploadConstantBufferResource(ConstantBufferType::PerPass);
-		bindBlockForProgram(*shader.get());
 	}
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshResourceIdentifier->getEBO());
+}
+
+void GLDevice::fillMaterialPropertyBlocks(PipelineStateObject& pso)
+{
+	// 全局缓冲，逐材质设置
+	auto& constantBufferSet = Shader::getShaderConstantBufferSet();
+	auto& blockRefs = pso.m_uniformBlockRefs;
+	auto material = pso.m_material;
+	if (material == nullptr)
+	{
+		return;
+	}
+	for (int i = 0; i < blockRefs.size(); ++i)
+	{
+		auto& blockRef = blockRefs[i];
+		auto blockPtr = constantBufferSet.findBlock(blockRef.m_uniformBlockName);
+		auto uniformsInBlock = blockPtr->m_blockUniforms;
+		for (int j = 0; j < uniformsInBlock.size(); ++j)
+		{
+			auto& uniform = uniformsInBlock[j];
+			auto matProperty = material->getProperty(uniform.m_uniformName);
+
+			switch (matProperty->getMaterialPropertyType())
+			{
+			case MaterialPropertyType::Bool:
+			{
+				auto boolParam = static_cast<MaterialBoolProperty*>(matProperty.get());
+				if (boolParam != nullptr)
+				{
+					Shader::setGlobalBool(uniform.m_uniformName.c_str(), boolParam->getValue());
+				}
+				break;
+			}
+			case MaterialPropertyType::Int:
+			{
+				auto intParam = static_cast<MaterialIntProperty*>(matProperty.get());
+				if (intParam != nullptr)
+				{
+					Shader::setGlobalInt(uniform.m_uniformName.c_str(), intParam->getValue());
+				}
+				break;
+			}
+			case MaterialPropertyType::Float:
+			{
+				auto floatParam = static_cast<MaterialFloatProperty*>(matProperty.get());
+				if (floatParam != nullptr)
+				{
+					Shader::setGlobalFloat(uniform.m_uniformName.c_str(), floatParam->getValue());
+				}
+				break;
+			}
+			case MaterialPropertyType::Vector4:
+			{
+				auto vec4Param = static_cast<MaterialVector4Property*>(matProperty.get());
+				if (vec4Param != nullptr)
+				{
+					Shader::setGlobalVector(uniform.m_uniformName.c_str(), vec4Param->getValue());
+				}
+				break;
+			}
+			case MaterialPropertyType::Matrix4:
+			{
+				auto mat4Param = static_cast<MaterialMatrix4Property*>(matProperty.get());
+				if (mat4Param != nullptr)
+				{
+					Shader::setGlobalMatrix(uniform.m_uniformName.c_str(), mat4Param->getValue());
+				}
+				break;
+			}
+			default:
+				break;
+			}
+		}
+
+	}
+	uploadConstantBufferResource(ConstantBufferType::PerPass);
+	bindBlockForProgram(pso);
+}
+
+void GLDevice::drawElements(PipelineStateObject& pso)
+{
 	// 绘制指令
-	glDrawElements(GL_TRIANGLES, mesh->getIndicesCount(), GL_UNSIGNED_SHORT, NULL);
+	glDrawElements(GL_TRIANGLES, pso.m_meshIdentifier->getIndicesCount(), GL_UNSIGNED_SHORT, NULL);
+}
+
+void GLDevice::draw(PipelineStateObject& pso)
+{
+	GLuint program = pso.m_program;
+	if (program <= 0 || !glIsProgram(program))
+	{
+		return;
+	}
+
+	bindMesh(pso);
+
+	useProgram(pso);
+
+	fillShaderProperties(pso);
+
+	fillMaterialPropertyBlocks(pso);
+
+	drawElements(pso);
 }
 
 void GLDevice::uploadConstantBufferResource(ConstantBufferType constantBufferType)

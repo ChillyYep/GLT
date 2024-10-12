@@ -31,18 +31,26 @@ private:
 RESOUCEIDENTIFIER_CLASS(MeshResourceIdentifier, ResourceIdentifierType::Mesh)
 {
 public:
-	MeshResourceIdentifier(GLTUInt32 vao, GLTUInt32 vbo, GLTUInt32 ebo, GLTUInt32 instanceId) :m_vao(vao), m_vbo(vbo), m_ebo(ebo), ResourceIdentifier(instanceId) {}
-	MeshResourceIdentifier() :MeshResourceIdentifier(0, 0, 0, 0) {}
+	MeshResourceIdentifier(GLTUInt32 vao, GLTUInt32 vbo, GLTUInt32 ebo, GLTUInt32 instanceId,
+		GLTUInt32 verticesCount, GLTUInt32 indicesCount) :m_vao(vao), m_vbo(vbo), m_ebo(ebo), m_verticesCount(verticesCount), m_indicesCount(indicesCount),
+		ResourceIdentifier(instanceId) {}
+	MeshResourceIdentifier() :MeshResourceIdentifier(0, 0, 0, 0, 0, 0) {}
 	~MeshResourceIdentifier() {}
 	inline GLTUInt32 getVAO() { return m_vao; }
 	inline GLTUInt32 getVBO() { return m_vbo; }
 	inline GLTUInt32 getEBO() { return m_ebo; }
+
+	inline GLTUInt32 getVerticesCount() { return m_verticesCount; }
+	inline GLTUInt32 getIndicesCount() { return m_indicesCount; }
 	inline GLTUInt32 isValid() { return m_vao > 0; }
 
 private:
 	GLTUInt32 m_vao;
 	GLTUInt32 m_vbo;
 	GLTUInt32 m_ebo;
+
+	GLTUInt32 m_verticesCount;
+	GLTUInt32 m_indicesCount;
 };
 
 RESOUCEIDENTIFIER_CLASS(TextureResourceIdentifier, ResourceIdentifierType::Texture)

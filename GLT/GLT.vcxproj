@@ -232,6 +232,7 @@
     <ClInclude Include="include\Math_Common.h" />
     <ClInclude Include="include\MemoryManager.h" />
     <ClInclude Include="include\PassBase.h" />
+    <ClInclude Include="include\PipelineStateObject.h" />
     <ClInclude Include="include\PostProcessingPass.h" />
     <ClInclude Include="include\RenderBufferManagementCentre.h" />
     <ClInclude Include="include\RenderCommand.h" />

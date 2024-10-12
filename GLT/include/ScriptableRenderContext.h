@@ -98,6 +98,7 @@ public:
 	{
 		m_device->capture(target, fboAttachmentType, pixels, colorChannel);
 	}
+
 private:
 
 	static bool sortNear2FarCompare(RendererSortStructure a, RendererSortStructure b)
@@ -109,6 +110,26 @@ private:
 	{
 		return b.m_sortOrder > a.m_sortOrder;
 	}
+
+	void executeCommand(RenderCommand& command);
+
+	void setupPSO(MeshResourceIdentifier* meshResourceIdentifier, glm::mat4 modelMatrix, Material* material,
+		std::vector<TextureResourceIdentifier*> textureResources)
+	{
+		m_pso = PipelineStateObject();
+		auto shader = material->getShader().get();
+		m_pso.m_meshIdentifier = meshResourceIdentifier;
+		m_pso.m_material = material;
+		m_pso.m_modelMatrix = modelMatrix;
+		m_pso.m_textureResources = textureResources;
+		m_pso.m_program = shader->getShaderProgram();
+		m_pso.m_constantBufferSet = &Shader::getShaderConstantBufferSet();
+		m_pso.m_uniforms = shader->getShaderUniforms();
+		m_pso.m_uniformBlockRefs = shader->getReferencedBlocks();
+		//m_pso.m_globalTextureResources[ResourceName::ShadowMapRTName]=
+	}
+
+	PipelineStateObject m_pso;
 	/// <summary>
 	/// 渲染状态是否初始化过
 	/// </summary>

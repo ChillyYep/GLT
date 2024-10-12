@@ -79,8 +79,6 @@ public:
 	Mesh* m_meshPtr;
 	Material* m_materialPtr;
 	glm::mat4 m_modelMatrix;
-	MeshResourceIdentifier* m_meshResourceIdentifier;
-	std::vector<TextureResourceIdentifier*> m_textureResources;
 };
 
 RENDERCOMMANDPARAM_CLASS(DrawRendererParam, RenderCommandType::DrawRenderer)
@@ -90,8 +88,6 @@ public:
 	~DrawRendererParam() {}
 
 	Renderer* m_rendererPtr;
-	MeshResourceIdentifier* m_meshResourceIdentifier;
-	std::vector<TextureResourceIdentifier*> m_textureResources;
 };
 
 
@@ -127,7 +123,7 @@ RENDERCOMMANDPARAM_CLASS(SetShadowMapParam, RenderCommandType::SetShadowMap)
 public:
 	SetShadowMapParam() {}
 	~SetShadowMapParam() {}
-
+	ShadowMapType m_shadowType;
 	Texture2D* m_shadowMap;
 };
 

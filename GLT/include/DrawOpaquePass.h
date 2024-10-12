@@ -52,10 +52,9 @@ public:
 		// 如果多相机绘制，则相机会在同一帧发生变化，所以需要及时更新
 		m_drawSettings.m_cameraPos = m_renderData->m_cameraDatas[m_renderData->m_curRenderingCameraIndex].m_worldPos;
 		auto rtIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, m_colorRT->getRTInstanceId()));
-		if (rtIdentifier != nullptr)
+		auto shadowMapRT = static_cast<RenderTarget*>(LogicResourceManager::getInstance()->getResource(ResourceType::RenderTarget, m_renderData->m_shadowData.m_shadowMapRTName));
+		if (rtIdentifier != nullptr && shadowMapRT != nullptr)
 		{
-			auto shadowMapRT = static_cast<RenderTarget*>(LogicResourceManager::getInstance()->getResource(ResourceType::RenderTarget, ShaderPropertyNames::ShadowMapTex));
-
 			auto shadowMapIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, shadowMapRT->getInstanceId()));
 			auto attachments = shadowMapRT->getAttachments();
 			Texture2D* shadowTexture = nullptr;
@@ -67,7 +66,7 @@ public:
 					break;
 				}
 			}
-			m_cmdBuffer.setShadowMap(shadowTexture);
+			//m_cmdBuffer.setShadowMap(shadowTexture, m_renderData->m_shadowData.m_shadowType);
 			m_cmdBuffer.setRenderTarget(rtIdentifier);
 			m_cmdBuffer.clearColor(0.0f, 0.0f, 0.0f, 0.0f);
 			m_context->scheduleCommandBuffer(m_cmdBuffer);
