@@ -212,8 +212,8 @@ std::vector<TextureResourceIdentifier> GLDevice::requestTextureResources(std::ve
 			setTextureFilter(resourceIdentifier.m_texture, GL_TEXTURE_MAG_FILTER, texture2DPtr->getTextureFilter());
 			if (texture2DPtr->IsDepthTexture())
 			{
-				glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
-				glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+				glTextureParameteri(resourceIdentifier.m_texture, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+				glTextureParameteri(resourceIdentifier.m_texture, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 			}
 			//glTextureParameteri(resourceIdentifier.m_texture,GL_DEPTH_STENCIL_TEXTURE_MODE, GL_STENCIL_COMPONENTS);
 

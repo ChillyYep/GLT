@@ -124,7 +124,7 @@ public:
 		}
 		if (m_stencilInternalFormat != TextureInternalFormat::None)
 		{
-			if (m_depthAttachmentAllowSampled)
+			if (m_stencilAttachmentAllowSampled)
 			{
 				Texture2D* stencilTexture = new Texture2D();
 				stencilTexture->m_name = m_name;
