@@ -59,7 +59,7 @@ void CommandBuffer::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatr
 	m_cmdList.push_back(command);
 }
 
-void CommandBuffer::drawRenderer(Renderer* renderer)
+void CommandBuffer::drawRenderer(Renderer* renderer, Material* replacedMaterial)
 {
 	auto meshResourceIdentifier = static_cast<MeshResourceIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::Mesh, (renderer->getMesh()->getInstanceId())));
 	if (meshResourceIdentifier == nullptr)
@@ -69,6 +69,7 @@ void CommandBuffer::drawRenderer(Renderer* renderer)
 	RenderCommand command = RenderCommand();
 	DrawRendererParam* drawRendererParam = RenderCommandParamFactory::getInstance()->createParam<DrawRendererParam>();
 	drawRendererParam->m_rendererPtr = renderer;
+	drawRendererParam->m_replacedMaterial = replacedMaterial;
 
 	command.commandType = RenderCommandType::DrawRenderer;
 	command.param = drawRendererParam;

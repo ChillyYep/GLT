@@ -38,7 +38,7 @@ public:
 			}*/
 	}
 
-	void drawRenderers(FilterSettings& filterSetting, DrawSettings& drawSetting);
+	void drawRenderers(FilterSettings& filterSetting, DrawSettings& drawSetting, Material* replacedMaterial = nullptr);
 
 	void setRenderStateBlock(RenderStateBlock& renderStateBlock)
 	{

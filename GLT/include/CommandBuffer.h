@@ -25,7 +25,7 @@ public:
 
 	void drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix);
 
-	void drawRenderer(Renderer* renderer);
+	void drawRenderer(Renderer* renderer, Material* replacedMaterial = nullptr);
 
 	void setViewport(int x, int y, int width, int height);
 

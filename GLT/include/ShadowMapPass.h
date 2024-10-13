@@ -32,6 +32,8 @@ public:
 		auto window = Window::getInstance();
 		auto windowSize = window->getSize();
 
+		m_replacedMaterialPtr = new Material(std::shared_ptr<Shader>(new Shader("shadowmap")));
+
 		m_shadowMapRT = new RenderTexture(windowSize.x, windowSize.y, TextureInternalFormat::RGBA8, TextureInternalFormat::Depth16,
 			TextureInternalFormat::None);
 		m_shadowMapRT->m_name = ResourceName::ShadowMapRTName;
@@ -42,6 +44,11 @@ public:
 
 	void destroy() override
 	{
+		if (m_replacedMaterialPtr != nullptr)
+		{
+			delete m_replacedMaterialPtr;
+			m_replacedMaterialPtr = nullptr;
+		}
 		if (isPrepared())
 		{
 			m_shadowMapRT->release();
@@ -83,7 +90,7 @@ public:
 			m_context->scheduleCommandBuffer(m_cmdBuffer);
 			m_cmdBuffer.clear();
 			m_context->submit();
-			m_context->drawRenderers(m_filterSettings, m_drawSettings);
+			m_context->drawRenderers(m_filterSettings, m_drawSettings, m_replacedMaterialPtr);
 
 			auto depthTextureAttachmentIdentifier = static_cast<TextureResourceIdentifier*>(rtIdentifier->getAttachmentIdentifier(FBOAttachmentType::Depth, FBOAttachmentResourceType::Texture));
 			if (depthTextureAttachmentIdentifier != nullptr)
@@ -100,6 +107,7 @@ private:
 	DrawSettings m_drawSettings;
 	RenderStateBlock m_renderStateBlock;
 	RenderTexture* m_shadowMapRT;
+	Material* m_replacedMaterialPtr;
 
 	float m_bound = 20.f;
 };

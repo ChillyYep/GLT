@@ -329,6 +329,12 @@
     <None Include="Shader\postProcessing.vert">
       <Filter>源文件\ShaderSourceCode</Filter>
     </None>
+    <None Include="Shader\shadowmap.frag">
+      <Filter>源文件\ShaderSourceCode</Filter>
+    </None>
+    <None Include="Shader\shadowmap.vert">
+      <Filter>源文件\ShaderSourceCode</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Common.h">

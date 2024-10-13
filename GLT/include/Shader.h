@@ -47,11 +47,26 @@ public:
 	{
 		_setGlobalValueInternal(propertyName, value);
 	}
-	
+
 	static inline void setGlobalVector(const char* propertyName, glm::vec4 vec4)
 	{
 		_setGlobalValueInternal(propertyName, vec4);
 	}
+
+	/*inline void setReplacedShader(std::string shaderName)
+	{
+		assert(m_programs.find(shaderName) != m_programs.end());
+		m_replacedShaderInfo = m_programs[shaderName];
+		m_hasReplacedShader = true;
+	}
+
+	inline void clearReplacedShader()
+	{
+		m_replacedShaderInfo = ShaderProgramInfo();
+		m_hasReplacedShader = false;
+	}
+
+	inline bool hasReplacedShader() { return m_hasReplacedShader; }*/
 
 	static inline ConstantBufferSet& getShaderConstantBufferSet() { return m_globalBuffer; }
 	// Todo:需要有卸载的接口，用于shader切换，或者将所有shader一次性载入且不再卸载
@@ -74,6 +89,10 @@ private:
 		}
 	}
 	ShaderProgramInfo m_shaderInfo;
+
+	//ShaderProgramInfo m_replacedShaderInfo;
+
+	//bool m_hasReplacedShader;
 
 	static std::unordered_map<std::string, ShaderProgramInfo> m_programs;
 

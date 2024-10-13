@@ -16,7 +16,7 @@ void ScriptableRenderContext::uninit()
 		m_device = nullptr;
 	}
 }
-void ScriptableRenderContext::drawRenderers(FilterSettings& filterSetting, DrawSettings& drawSetting)
+void ScriptableRenderContext::drawRenderers(FilterSettings& filterSetting, DrawSettings& drawSetting, Material* replacedMaterial)
 {
 	m_filterSetting = filterSetting;
 
@@ -44,7 +44,7 @@ void ScriptableRenderContext::drawRenderers(FilterSettings& filterSetting, DrawS
 	for (int i = 0; i < m_renderers.size(); ++i)
 	{
 		m_renderers[i] = simpleStructure[i].m_target;
-		m_cmdList.drawRenderer(m_renderers[i]);
+		m_cmdList.drawRenderer(m_renderers[i], replacedMaterial);
 	}
 	scheduleCommandBuffer(m_cmdList);
 	m_cmdList.clear();
@@ -123,7 +123,7 @@ void ScriptableRenderContext::executeCommand(RenderCommand& command)
 	{
 		auto drawRendererParam = static_cast<DrawRendererParam*>(commandParam);
 		auto renderer = drawRendererParam->m_rendererPtr;
-		auto material = renderer->getMaterial().get();
+		auto material = drawRendererParam->m_replacedMaterial == nullptr ? renderer->getMaterial().get() : drawRendererParam->m_replacedMaterial;
 		auto mesh = renderer->getMesh();
 		auto transform = static_cast<GameObject*>(renderer->getGameObject())->getTransform();
 

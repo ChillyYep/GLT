@@ -199,6 +199,8 @@
     <None Include="Shader\lightdata.attr" />
     <None Include="Shader\postProcessing.frag" />
     <None Include="Shader\postProcessing.vert" />
+    <None Include="Shader\shadowmap.frag" />
+    <None Include="Shader\shadowmap.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Allocator.h" />

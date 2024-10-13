@@ -88,6 +88,7 @@ public:
 	~DrawRendererParam() {}
 
 	Renderer* m_rendererPtr;
+	Material* m_replacedMaterial;
 };
 
 
