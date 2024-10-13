@@ -99,6 +99,7 @@ public:
 				depthTexture->setTextureFilter(TextureFilterMode::Point_Mipmap_Point);
 				depthTexture->setWrapModeS(TextureWrapMode::ClampEdge);
 				depthTexture->setWrapModeT(TextureWrapMode::ClampEdge);
+				depthTexture->setDepthTexture(true);
 				LogicResourceManager::getInstance()->addResource(ResourceType::Texture, depthTexture);
 				m_depthAttachment = AttachmentEntityWrapper(depthTexture,
 					m_depthInternalFormat == TextureInternalFormat::Depth_Stencil ?

@@ -173,7 +173,9 @@ public:
 	static Texture2D* setSinglePixelTex2D(Texture2D& tex, GLTUByte r, GLTUByte g, GLTUByte b, GLTUByte a);
 	__GET_SET_PROPERTY__(Height, GLTSizei, m_height)
 		__GET_SET_PROPERTY__(WrapModeT, TextureWrapMode, m_wrapModeT)
+		__GET_SET_BOOLEANPROPERTY__(DepthTexture, m_isDepth)
 protected:
+	bool m_isDepth;
 
 	GLTSizei m_height;
 	TextureWrapMode m_wrapModeT;

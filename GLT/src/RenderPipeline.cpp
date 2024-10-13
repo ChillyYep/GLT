@@ -1,7 +1,7 @@
 #include "RenderPipeline.h"
 void RenderPipeline::init() {
 	m_globalPassList.push_back(new ShadowMapPass());
-	//m_globalPassList.push_back(new CaptureFBOPass());
+	m_globalPassList.push_back(new CaptureFBOPass());
 	//m_perCameraPassList.push_back(new DrawOpaquePass());
 	//m_perCameraPassList.push_back(new CaptureFBOPass());
 	//m_perCameraPassList.push_back(new PostProcessingPass());
@@ -117,13 +117,23 @@ void RenderPipeline::updateLightProperties()
 	auto& lightDatas = m_renderData.m_lightDatas;
 	if (lightDatas.size() > 0)
 	{
-		auto lightProperties = lightDatas[0];
-		Shader::setGlobalVector(ShaderPropertyNames::MainLightData_Ambient, lightProperties.ambient);
-		Shader::setGlobalVector(ShaderPropertyNames::MainLightData_Color, lightProperties.color);
-		Shader::setGlobalVector(ShaderPropertyNames::MainLightData_Position, glm::vec4(lightProperties.position.x, lightProperties.position.y, lightProperties.position.z, 1.0f));
-		Shader::setGlobalVector(ShaderPropertyNames::MainLightData_ConeDirection, glm::vec4(lightProperties.direction.x, lightProperties.direction.y, lightProperties.direction.z, 1.0f));
+		auto mainLightData = lightDatas[0];
+		auto windowSize = Window::getInstance()->getSize();
+		Shader::setGlobalVector(ShaderPropertyNames::MainLightData_Ambient, mainLightData.ambient);
+		Shader::setGlobalVector(ShaderPropertyNames::MainLightData_Color, mainLightData.color);
+		Shader::setGlobalVector(ShaderPropertyNames::MainLightData_Position, glm::vec4(mainLightData.position.x, mainLightData.position.y, mainLightData.position.z, 1.0f));
+		Shader::setGlobalVector(ShaderPropertyNames::MainLightData_ConeDirection, glm::vec4(mainLightData.direction.x, mainLightData.direction.y, mainLightData.direction.z, 1.0f));
 		Shader::setGlobalFloat(ShaderPropertyNames::MainLightData_EndDistance, -1);
 		Shader::setGlobalVector(ShaderPropertyNames::MainLightData_Attenuations, glm::vec4(0.5f, 1.0f, 1.0f, 1.0f));
+
+		m_renderData.m_shadowData.m_shadowMapRTName = ResourceName::ShadowMapRTName;
+		m_renderData.m_shadowData.m_shadowBound = 20.f;
+		auto viewMatrix = Camera::computeViewMatrix(mainLightData.rotation, mainLightData.position);
+		auto projectionMatrix = Camera::computeOrthoProjectionMatrix((float)windowSize.x / windowSize.y, m_renderData.m_shadowData.m_shadowBound, 1.f, 100.f);
+		m_renderData.m_shadowData.m_shadowViewMatrix = viewMatrix;
+		m_renderData.m_shadowData.m_shadowProjectionMatrix = projectionMatrix;
+		m_renderData.m_shadowData.m_shadowVPMatrix = projectionMatrix * viewMatrix;
+		Shader::setGlobalMatrix(ShaderPropertyNames::ShadowMatrixVP, m_renderData.m_shadowData.m_shadowVPMatrix);
 	}
 	for (int i = 0; i < lightDatas.size() - 1; ++i)
 	{

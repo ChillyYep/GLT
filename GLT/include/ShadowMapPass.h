@@ -29,12 +29,10 @@ public:
 		m_drawSettings.m_sortType = SortType::Near2Far;
 
 		// prepareResources
-		auto window = Window::getInstance();
-		auto windowSize = window->getSize();
 
 		m_replacedMaterialPtr = new Material(std::shared_ptr<Shader>(new Shader("shadowmap")));
 
-		m_shadowMapRT = new RenderTexture(windowSize.x, windowSize.y, TextureInternalFormat::RGBA8, TextureInternalFormat::Depth16,
+		m_shadowMapRT = new RenderTexture(m_shadowMapSize, m_shadowMapSize, TextureInternalFormat::RGBA8, TextureInternalFormat::Depth16,
 			TextureInternalFormat::None);
 		m_shadowMapRT->m_name = ResourceName::ShadowMapRTName;
 		m_shadowMapRT->setColorAttachmentSampleEnabled(true);
@@ -70,19 +68,15 @@ public:
 		auto rtIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, m_shadowMapRT->getRTInstanceId()));
 		if (rtIdentifier != nullptr)
 		{
-			auto window = Window::getInstance();
-			auto windowSize = window->getSize();
-
 			auto viewMatrix = Camera::computeViewMatrix(mainLightData.rotation, mainLightData.position);
-			auto projectionMatrix = Camera::computeOrthoProjectionMatrix((float)windowSize.x / windowSize.y, m_bound, 1.f, 100.f);
-			m_cmdBuffer.setViewport(0, 0, windowSize.x, windowSize.y);
+			auto projectionMatrix = Camera::computeOrthoProjectionMatrix(1, m_bound, 1.f, 100.f);
+			m_cmdBuffer.setViewport(0, 0, m_shadowMapSize, m_shadowMapSize);
 			m_cmdBuffer.setViewMatrix(viewMatrix);
 			m_cmdBuffer.setProjectionMatrix(projectionMatrix);
 			m_context->scheduleCommandBuffer(m_cmdBuffer);
 			m_cmdBuffer.clear();
 			m_context->submit();
 
-			Shader::setGlobalVector(ShaderPropertyNames::EyePosition, glm::vec4(mainLightData.position.x, mainLightData.position.y, mainLightData.position.z, 1.0f));
 			m_context->updateConstantBufferResources(ConstantBufferType::PerCamera);
 
 			m_cmdBuffer.setRenderTarget(rtIdentifier);
@@ -95,8 +89,9 @@ public:
 			auto depthTextureAttachmentIdentifier = static_cast<TextureResourceIdentifier*>(rtIdentifier->getAttachmentIdentifier(FBOAttachmentType::Depth, FBOAttachmentResourceType::Texture));
 			if (depthTextureAttachmentIdentifier != nullptr)
 			{
-				m_cmdBuffer.setGlobalTextureResource(depthTextureAttachmentIdentifier);
+				m_cmdBuffer.setGlobalTextureResource(ShaderPropertyNames::ShadowMapTex, depthTextureAttachmentIdentifier);
 			}
+
 			m_context->scheduleCommandBuffer(m_cmdBuffer);
 			m_cmdBuffer.clear();
 			m_context->submit();
@@ -108,6 +103,8 @@ private:
 	RenderStateBlock m_renderStateBlock;
 	RenderTexture* m_shadowMapRT;
 	Material* m_replacedMaterialPtr;
+
+	int m_shadowMapSize = 2048;
 
 	float m_bound = 20.f;
 };

@@ -29,6 +29,7 @@ public:
 	static const char* AddtionalLightData_SpotCosCutOff;
 
 
+	static const char* ShadowMatrixVP;
 	static const char* MVP;
 	static const char* VP;
 

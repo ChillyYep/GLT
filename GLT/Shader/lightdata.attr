@@ -12,6 +12,8 @@ struct LightData{
 const int MaxLights = 8;
 
 uniform LightData_PerFrame{
+	// 光源VP矩阵
+	mat4 ShadowMatrix;
     LightData m_mainLightData;
     LightData m_additionalLightData[MaxLights];
 };
@@ -27,7 +29,7 @@ float ApplyLightAttenuation(float distance,float endDistance, float attenuation)
 	return pow((endDistance- distance)/endDistance,attenuation);
 }
 
-vec4 PhongShading_Directional(LightData lightData,vec3 eyePosition,vec3 worldPosition,vec3 worldNormal,vec4 fragementColor,float smoothness)
+vec4 PhongShading_Directional(LightData lightData,vec3 eyePosition,vec3 worldPosition,vec3 worldNormal,vec4 fragementColor,float smoothness,float shadowStrength)
 {
 	worldNormal=normalize(worldNormal);
 	vec3 viewDir=normalize(eyePosition-worldPosition);
@@ -46,10 +48,10 @@ vec4 PhongShading_Directional(LightData lightData,vec3 eyePosition,vec3 worldPos
 	vec3 ambient=lightData.ambient.rgb*fragementColor.rgb;
 	
 	// return specular.xyzz;
-	return vec4(clamp(diffuse+ambient+specular,vec3(0.0f,0.0f,0.0f),vec3(1.0f,1.0f,1.0f)),fragementColor.a);
+	return vec4(clamp(ambient+shadowStrength*(diffuse+specular),vec3(0.0f,0.0f,0.0f),vec3(1.0f,1.0f,1.0f)),fragementColor.a);
 }
 
-vec4 PhongShading_NonDirectional(LightData lightData,vec3 eyePosition,vec3 worldPosition,vec3 worldNormal,vec4 fragementColor,float smoothness)
+vec4 PhongShading_NonDirectional(LightData lightData,vec3 eyePosition,vec3 worldPosition,vec3 worldNormal,vec4 fragementColor,float smoothness,float shadowStrength)
 {
 	vec3 viewDir=normalize(eyePosition-worldPosition);
 	vec3 lightDelta=lightData.position.xyz-worldPosition;
@@ -61,15 +63,15 @@ vec4 PhongShading_NonDirectional(LightData lightData,vec3 eyePosition,vec3 world
 	vec3 diffuse=clamp(diffuseStrength,0,1)*fragementColor.rgb*lightData.color.rgb*lightStrength;
 	vec3 specular=0.5f*pow(clamp(dot(viewDir,reflectedLightDir),0,1),smoothness)*lightData.color.rgb*lightStrength;
 	vec3 ambient=lightData.ambient.rgb*fragementColor.rgb;
-	return vec4(clamp(diffuse+ambient+specular,vec3(0.0f,0.0f,0.0f),vec3(1.0f,1.0f,1.0f)),fragementColor.a);
+	return vec4(clamp(ambient+shadowStrength*(diffuse+specular),vec3(0.0f,0.0f,0.0f),vec3(1.0f,1.0f,1.0f)),fragementColor.a);
 }
 
-vec4 PhongShading_All(vec3 eyePosition,vec3 worldPosition,vec3 worldNormal,vec4 fragementColor,float smoothness)
+vec4 PhongShading_All(vec3 eyePosition,vec3 worldPosition,vec3 worldNormal,vec4 fragementColor,float smoothness,float shadowStrength)
 {
-	vec4 fColor = PhongShading_Directional(m_mainLightData,eyePosition,worldPosition,worldNormal,fragementColor,smoothness);
+	vec4 fColor = PhongShading_Directional(m_mainLightData,eyePosition,worldPosition,worldNormal,fragementColor,smoothness,shadowStrength);
 	for(int i=0;i<MaxLights;++i)
 	{
-		fColor += PhongShading_NonDirectional(m_additionalLightData[i],eyePosition,worldPosition,worldNormal,fragementColor,smoothness);
+		fColor += PhongShading_NonDirectional(m_additionalLightData[i],eyePosition,worldPosition,worldNormal,fragementColor,smoothness,shadowStrength);
 	}
 	return fColor;
 }

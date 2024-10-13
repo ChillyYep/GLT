@@ -66,7 +66,6 @@ public:
 					break;
 				}
 			}
-			//m_cmdBuffer.setShadowMap(shadowTexture, m_renderData->m_shadowData.m_shadowType);
 			m_cmdBuffer.setRenderTarget(rtIdentifier);
 			m_cmdBuffer.clearColor(0.0f, 0.0f, 0.0f, 0.0f);
 			m_context->scheduleCommandBuffer(m_cmdBuffer);

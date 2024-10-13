@@ -210,7 +210,11 @@ std::vector<TextureResourceIdentifier> GLDevice::requestTextureResources(std::ve
 
 			setTextureFilter(resourceIdentifier.m_texture, GL_TEXTURE_MIN_FILTER, texture2DPtr->getTextureFilter());
 			setTextureFilter(resourceIdentifier.m_texture, GL_TEXTURE_MAG_FILTER, texture2DPtr->getTextureFilter());
-
+			if (texture2DPtr->IsDepthTexture())
+			{
+				glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+				glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+			}
 			//glTextureParameteri(resourceIdentifier.m_texture,GL_DEPTH_STENCIL_TEXTURE_MODE, GL_STENCIL_COMPONENTS);
 
 			glTextureStorage2D(resourceIdentifier.m_texture, resourceIdentifier.m_levels, internalFormat, resourceIdentifier.m_width, resourceIdentifier.m_height);
@@ -387,6 +391,7 @@ std::vector<RenderTargetIdentifier> GLDevice::requestRenderTargetResource(std::v
 				else if (attachmentType == FBOAttachmentType::Depth)
 				{
 					glBindTexture(GL_TEXTURE_2D, texture);
+					// 设置textureProj采样时的比较模式
 					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture, 0);
 					glBindTexture(GL_TEXTURE_2D, 0);
 				}

@@ -124,6 +124,7 @@ RENDERCOMMANDPARAM_CLASS(SetGlobalTextureResource, RenderCommandType::SetGlobalT
 public:
 	SetGlobalTextureResource() {}
 	~SetGlobalTextureResource() {}
+	std::string m_shaderPropertyName;
 	TextureResourceIdentifier* m_globalTextureResource;
 };
 

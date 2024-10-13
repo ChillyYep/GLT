@@ -1,6 +1,7 @@
 #version 450 core
 
 #include "common.attr"
+#include "lightdata.attr"
 
 layout (location = 0) in vec4 vPosition;
 layout (location = 1) in vec4 vColor;
@@ -12,7 +13,9 @@ out VS_Out{
 	vec2 fs_Texcoord;
 	vec3 fs_worldNormal;
 	vec4 fs_worldPosition;
+	vec4 fs_shadowCoord;
 } vs_out;
+
 
 void main()
 {
@@ -23,4 +26,5 @@ void main()
 	vs_out.fs_worldPosition = Model*vPosition;
 	vs_out.fs_Texcoord = vTexcoord;
 	vs_out.fs_worldNormal = normalize((Model*vNormal).xyz);
+	vs_out.fs_shadowCoord = ShadowMatrix * vs_out.fs_worldPosition;
 }

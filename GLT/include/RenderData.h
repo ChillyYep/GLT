@@ -35,6 +35,10 @@ struct LightProperties {
 };
 struct ShadowMapData {
 	std::string m_shadowMapRTName;
+	glm::mat4 m_shadowViewMatrix;
+	glm::mat4 m_shadowProjectionMatrix;
+	glm::mat4 m_shadowVPMatrix;
+	float m_shadowBound;
 };
 struct RenderData
 {
