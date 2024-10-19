@@ -29,7 +29,7 @@ float ApplyLightAttenuation(float distance,float endDistance, float attenuation)
 	return pow((endDistance- distance)/endDistance,attenuation);
 }
 
-vec4 PhongShading_Directional(LightData lightData,vec3 eyePosition,vec3 worldPosition,vec3 worldNormal,vec4 fragementColor,float smoothness,float shadowStrength)
+vec4 PhongShading_Directional(LightData lightData,vec3 eyePosition,vec3 worldPosition,vec3 worldNormal,vec4 fragementColor,float smoothness)
 {
 	worldNormal=normalize(worldNormal);
 	vec3 viewDir=normalize(eyePosition-worldPosition);
@@ -40,18 +40,18 @@ vec4 PhongShading_Directional(LightData lightData,vec3 eyePosition,vec3 worldPos
 	float lightStrength=ApplyLightAttenuation(distance,lightData.endDistance,lightData.attenuations.x);
 	// 漫反射
 	float diffuseStrength=clamp(dot(worldNormal,lightDir),0,1);
-	vec3 diffuse=diffuseStrength*fragementColor.rgb*lightData.color.rgb*lightStrength;
+	vec3 diffuse=lightStrength*diffuseStrength*fragementColor.rgb*lightData.color.rgb;
 	// 镜面反射
 	vec3 halfVec=normalize(viewDir+lightDir);
 	vec3 specular=0.3*pow(clamp(dot(halfVec,worldNormal),0,1),smoothness)*lightData.color.rgb*lightStrength;
 	// 环境光
 	vec3 ambient=lightData.ambient.rgb*fragementColor.rgb;
 	
-	// return specular.xyzz;
-	return vec4(clamp(ambient+shadowStrength*(diffuse+specular),vec3(0.0f,0.0f,0.0f),vec3(1.0f,1.0f,1.0f)),fragementColor.a);
+	return vec4(diffuse+specular+ambient,1.0);
+	
 }
 
-vec4 PhongShading_NonDirectional(LightData lightData,vec3 eyePosition,vec3 worldPosition,vec3 worldNormal,vec4 fragementColor,float smoothness,float shadowStrength)
+vec4 PhongShading_NonDirectional(LightData lightData,vec3 eyePosition,vec3 worldPosition,vec3 worldNormal,vec4 fragementColor,float smoothness)
 {
 	vec3 viewDir=normalize(eyePosition-worldPosition);
 	vec3 lightDelta=lightData.position.xyz-worldPosition;
@@ -63,15 +63,30 @@ vec4 PhongShading_NonDirectional(LightData lightData,vec3 eyePosition,vec3 world
 	vec3 diffuse=clamp(diffuseStrength,0,1)*fragementColor.rgb*lightData.color.rgb*lightStrength;
 	vec3 specular=0.5f*pow(clamp(dot(viewDir,reflectedLightDir),0,1),smoothness)*lightData.color.rgb*lightStrength;
 	vec3 ambient=lightData.ambient.rgb*fragementColor.rgb;
-	return vec4(clamp(ambient+shadowStrength*(diffuse+specular),vec3(0.0f,0.0f,0.0f),vec3(1.0f,1.0f,1.0f)),fragementColor.a);
+	return vec4(clamp(ambient+(diffuse+specular),vec3(0.0f,0.0f,0.0f),vec3(1.0f,1.0f,1.0f)),fragementColor.a);
 }
 
-vec4 PhongShading_All(vec3 eyePosition,vec3 worldPosition,vec3 worldNormal,vec4 fragementColor,float smoothness,float shadowStrength)
+vec4 PhongShading_All(vec3 eyePosition,vec3 worldPosition,vec3 worldNormal,vec4 fragementColor,float smoothness)
 {
-	vec4 fColor = PhongShading_Directional(m_mainLightData,eyePosition,worldPosition,worldNormal,fragementColor,smoothness,shadowStrength);
-	for(int i=0;i<MaxLights;++i)
-	{
-		fColor += PhongShading_NonDirectional(m_additionalLightData[i],eyePosition,worldPosition,worldNormal,fragementColor,smoothness,shadowStrength);
-	}
+	vec4 fColor = PhongShading_Directional(m_mainLightData,eyePosition,worldPosition,worldNormal,fragementColor,smoothness);
+	//for(int i=0;i<MaxLights;++i)
+	//{
+	//	fColor += PhongShading_NonDirectional(m_additionalLightData[i],eyePosition,worldPosition,worldNormal,fragementColor,smoothness);
+	//}
 	return fColor;
+}
+
+float ShadowCalculation(vec4 fragPosLightSpace,sampler2D shadowMap,float shadowBias)
+{
+	 // 执行透视除法
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    // 变换到[0,1]的范围
+    projCoords = projCoords * 0.5 + 0.5;
+	float closestDepth = texture(shadowMap, projCoords.xy).r; 
+    // 取得当前片元在光源视角下的深度
+    float currentDepth = projCoords.z;
+    // 检查当前片元是否在阴影中
+    float shadow = (currentDepth-shadowBias) > closestDepth  ? 1.0 : 0.0;
+
+    return shadow;
 }

@@ -127,9 +127,11 @@ void RenderPipeline::updateLightProperties()
 		Shader::setGlobalVector(ShaderPropertyNames::MainLightData_Attenuations, glm::vec4(0.5f, 1.0f, 1.0f, 1.0f));
 
 		m_renderData.m_shadowData.m_shadowMapRTName = ResourceName::ShadowMapRTName;
-		m_renderData.m_shadowData.m_shadowBound = 20.f;
+		m_renderData.m_shadowData.m_shadowSize = glm::ivec2(2048, 2048);
+		m_renderData.m_shadowData.m_shadowBound = 30.f;
 		auto viewMatrix = Camera::computeViewMatrix(mainLightData.rotation, mainLightData.position);
-		auto projectionMatrix = Camera::computeOrthoProjectionMatrix((float)windowSize.x / windowSize.y, m_renderData.m_shadowData.m_shadowBound, 1.f, 100.f);
+		auto projectionMatrix = Camera::computeOrthoProjectionMatrix((float)m_renderData.m_shadowData.m_shadowSize.x / m_renderData.m_shadowData.m_shadowSize.y,
+			m_renderData.m_shadowData.m_shadowBound, 1.f, 100.f);
 		m_renderData.m_shadowData.m_shadowViewMatrix = viewMatrix;
 		m_renderData.m_shadowData.m_shadowProjectionMatrix = projectionMatrix;
 		m_renderData.m_shadowData.m_shadowVPMatrix = projectionMatrix * viewMatrix;

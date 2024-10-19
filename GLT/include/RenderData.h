@@ -38,6 +38,7 @@ struct ShadowMapData {
 	glm::mat4 m_shadowViewMatrix;
 	glm::mat4 m_shadowProjectionMatrix;
 	glm::mat4 m_shadowVPMatrix;
+	glm::ivec2 m_shadowSize;
 	float m_shadowBound;
 };
 struct RenderData

@@ -55,13 +55,13 @@ std::unordered_map<std::string, RawShaderInfo> GLSLPreProcessCompiler::parse(std
 		}
 	}
 
-	for (const auto& pair : map)
-	{
-		std::cout << pair.first << ".vert" << std::endl;
-		std::cout << pair.second.m_vertexShader << std::endl;
-		std::cout << pair.first << ".frag" << std::endl;
-		std::cout << pair.second.m_fragmentShader << std::endl;
-	}
+	//for (const auto& pair : map)
+	//{
+	//	std::cout << pair.first << ".vert" << std::endl;
+	//	std::cout << pair.second.m_vertexShader << std::endl;
+	//	std::cout << pair.first << ".frag" << std::endl;
+	//	std::cout << pair.second.m_fragmentShader << std::endl;
+	//}
 
 	return map;
 }
