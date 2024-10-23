@@ -574,7 +574,7 @@
     <ClInclude Include="include\RenderBufferManagementCentre.h">
       <Filter>头文件\Render\RenderResourceManager\ManagementCentre</Filter>
     </ClInclude>
-    <ClInclude Include="include\ShadowMapPass.h">
+    <ClInclude Include="include\SimpleShadowMapPass.h">
       <Filter>头文件\Render\PassManagement</Filter>
     </ClInclude>
     <ClInclude Include="include\RenderTargetDescriptor.h">
@@ -586,9 +586,6 @@
     <ClInclude Include="include\PostProcessingPass.h">
       <Filter>头文件\Render\PassManagement</Filter>
     </ClInclude>
-    <ClInclude Include="include\CameraDepthPass.h">
-      <Filter>头文件\Render\PassManagement</Filter>
-    </ClInclude>
     <ClInclude Include="include\ResourceNames.h">
       <Filter>头文件\Render\Shader</Filter>
     </ClInclude>
@@ -597,6 +594,9 @@
     </ClInclude>
     <ClInclude Include="include\PipelineStateObject.h">
       <Filter>头文件\Render\RenderHardwareInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DrawTransparentPass.h">
+      <Filter>头文件\Render\PassManagement</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

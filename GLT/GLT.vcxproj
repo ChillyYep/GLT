@@ -206,7 +206,6 @@
     <ClInclude Include="include\Allocator.h" />
     <ClInclude Include="include\BytesBuffer.h" />
     <ClInclude Include="include\Camera.h" />
-    <ClInclude Include="include\CameraDepthPass.h" />
     <ClInclude Include="include\CameraOperation.h" />
     <ClInclude Include="include\CaptureFBOPass.h" />
     <ClInclude Include="include\CommandBuffer.h" />
@@ -221,6 +220,7 @@
     <ClInclude Include="include\DeviceBase.h" />
     <ClInclude Include="include\DrawOpaquePass.h" />
     <ClInclude Include="include\DrawSettings.h" />
+    <ClInclude Include="include\DrawTransparentPass.h" />
     <ClInclude Include="include\EventObserver.h" />
     <ClInclude Include="include\FileUtils.h" />
     <ClInclude Include="include\FilterSetting.h" />
@@ -276,7 +276,7 @@
     <ClInclude Include="include\ShaderPreProcessCompilerBase.h" />
     <ClInclude Include="include\ShaderUtils.h" />
     <ClInclude Include="include\SceneUtility.h" />
-    <ClInclude Include="include\ShadowMapPass.h" />
+    <ClInclude Include="include\SimpleShadowMapPass.h" />
     <ClInclude Include="include\Singleton.h" />
     <ClInclude Include="include\StringUtility.h" />
     <ClInclude Include="include\TextureEnums.h" />

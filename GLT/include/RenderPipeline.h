@@ -8,7 +8,7 @@
 #include <SceneManager.h>
 #include <PassBase.h>
 #include <DrawOpaquePass.h>
-#include <ShadowMapPass.h>
+#include <SimpleShadowMapPass.h>
 #include <DebugPassBase.h>
 #include <PostProcessingPass.h>
 #include <CaptureFBOPass.h>
