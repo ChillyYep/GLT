@@ -38,6 +38,8 @@ public:
 	static const char* Ambient;
 	static const char* Lights;
 
+	static const char* CommonAlpha;
+
 	inline static std::string getShaderArrayPropertyName(const char* arrayPropertyName, const char* memberPropertyName, int index)
 	{
 		s_sstream.str("");

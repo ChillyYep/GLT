@@ -65,7 +65,7 @@ struct RenderStateParam {
 	}
 private:
 	T m_value;
-	bool m_dirty;
+	bool m_dirty = true;
 };
 
 enum class CullMode
@@ -74,19 +74,41 @@ enum class CullMode
 	Front,
 	Back
 };
+enum class BlendMode {
+	One,
+	Zero,
+	DstColor,
+	SrcColor,
+	DstAlpha,
+	SrcAlpha,
+	OneMinusDscColor,
+	OneMinusSrcColor,
+	OneMinuesDstAlpha,
+	OneMinuesSrcAlpha,
+	SrcAlphaSaturate,
+};
 struct ColorState
 {
 	RenderStateParam<CullMode> m_cullMode;
+	RenderStateParam<bool> m_blendModeEnabled;
+	RenderStateParam<BlendMode> m_srcBlendMode;
+	RenderStateParam<BlendMode> m_dstBlendMode;
 	RenderStateParam<glm::bvec4> m_rgbaWritable;
 
 	void copyTo(ColorState& colorState)
 	{
 		colorState.m_cullMode = m_cullMode.getValue();
+		colorState.m_blendModeEnabled = m_blendModeEnabled.getValue();
+		colorState.m_srcBlendMode = m_srcBlendMode.getValue();
+		colorState.m_dstBlendMode = m_dstBlendMode.getValue();
 		colorState.m_rgbaWritable = m_rgbaWritable.getValue();
 	}
 	bool isSame(const ColorState& other)
 	{
 		return m_cullMode == other.m_cullMode &&
+			m_blendModeEnabled == other.m_blendModeEnabled &&
+			m_srcBlendMode == other.m_srcBlendMode &&
+			m_dstBlendMode == other.m_dstBlendMode &&
 			m_rgbaWritable == other.m_rgbaWritable;
 	}
 };

@@ -497,7 +497,8 @@ void GLDevice::destroyConstantBufferResources(std::vector<ConstantBufferIdentifi
 
 void GLDevice::activate(RenderTargetIdentifier* rtIdentifier)
 {
-	if (rtIdentifier == nullptr)
+	// 同一RT不必重复设置，减少指令提交
+	if (rtIdentifier == nullptr || (m_curRT != nullptr && m_curRT->getInstanceId() == rtIdentifier->getInstanceId()))
 	{
 		return;
 	}
@@ -728,6 +729,26 @@ void GLDevice::setRenderStateBlock(RenderStateBlock& renderStateBlock)
 		default:
 			break;
 		}
+	}
+
+	if (renderStateBlock.m_colorState.m_blendModeEnabled.isDirty())
+	{
+		renderStateBlock.m_colorState.m_blendModeEnabled.clearDirty();
+		if (renderStateBlock.m_colorState.m_blendModeEnabled.getValue())
+		{
+			glEnable(GL_BLEND);
+		}
+		else {
+			glDisable(GL_BLEND);
+		}
+
+	}
+	if (renderStateBlock.m_colorState.m_srcBlendMode.isDirty())
+	{
+		renderStateBlock.m_colorState.m_srcBlendMode.clearDirty();
+		auto srcBlendMode = getGLBlendMode(renderStateBlock.m_colorState.m_srcBlendMode.getValue());
+		auto dstBlendMode = getGLBlendMode(renderStateBlock.m_colorState.m_dstBlendMode.getValue());
+		glBlendFunc(srcBlendMode, dstBlendMode);
 	}
 }
 

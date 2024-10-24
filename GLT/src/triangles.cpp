@@ -20,11 +20,13 @@ void createScene()
 	scene->setMainScene(true);
 	SceneManager::getInstance()->addScene(scene);
 	// 材质
-	auto shader = shared_ptr<Shader>(new Shader("cube_tex"));
+	auto opaqueShader = shared_ptr<Shader>(new Shader("cube_tex"));
+	auto transparentShader = shared_ptr<Shader>(new Shader("cube_tex_transparent"));
 	//auto shader = shared_ptr<Shader>(new Shader("depthview"));
 
-	auto mat1 = shared_ptr<Material>(new Material(shader));
-	auto mat2 = shared_ptr<Material>(new Material(shader));
+	auto mat1 = shared_ptr<Material>(new Material(opaqueShader));
+	auto mat2 = shared_ptr<Material>(new Material(opaqueShader));
+	auto mat3 = shared_ptr<Material>(new Material(transparentShader));
 	auto tex = new Texture2D();
 	tex->m_name = "wall";
 	// 需要引入一个从文件加载纹理的库
@@ -38,6 +40,8 @@ void createScene()
 
 	mat1->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(tex)));
 	mat2->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(Texture2D::getGrayTex2D())));
+	mat3->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(tex)));
+	mat3->setProperty(ShaderPropertyNames::CommonAlpha, std::shared_ptr<MaterialFloatProperty>(new MaterialFloatProperty(0.5f)));
 	// 网格
 	auto cubeMesh = PrimitiveUtils::createCube();
 	auto planeMesh = PrimitiveUtils::createQuad();
@@ -48,11 +52,13 @@ void createScene()
 	cube1Transform->setScale(glm::vec3(1.0f));
 	cube1Transform->setEularAngle(glm::vec3(0.0f));
 
-	auto go2 = SceneUtility::createMeshGameObject(cubeMesh, mat1);
+	auto go2 = SceneUtility::createMeshGameObject(cubeMesh, mat3);
+	go2->getComponent<Renderer>()->setRenderType(RenderType::Transparent);
 	auto cube2Transform = go2->getComponent<Transform>();
 	cube2Transform->setPosition(glm::vec3(3.0f, 0.0f, 0.0f));
 	cube2Transform->setScale(glm::vec3(1.0f));
 	cube2Transform->setEularAngle(glm::vec3(45.0f, 45.0f, 0.0f));
+
 
 	auto go3 = SceneUtility::createMeshGameObject(planeMesh, mat2);
 	auto planeTransform = go3->getComponent<Transform>();

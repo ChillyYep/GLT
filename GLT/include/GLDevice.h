@@ -215,6 +215,40 @@ public:
 		}
 		return GL_NONE;
 	}
+
+	inline GLenum getGLBlendMode(BlendMode blendMode)
+	{
+		switch (blendMode)
+		{
+		case BlendMode::Zero:
+			return GL_ZERO;
+		case BlendMode::One:
+			return GL_ONE;
+		case BlendMode::DstColor:
+			return GL_DST_COLOR;
+		case BlendMode::SrcColor:
+			return GL_SRC_COLOR;
+		case BlendMode::DstAlpha:
+			return GL_DST_ALPHA;
+		case BlendMode::SrcAlpha:
+			return GL_SRC_ALPHA;
+		case BlendMode::OneMinusDscColor:
+			return GL_ONE_MINUS_DST_COLOR;
+		case BlendMode::OneMinusSrcColor:
+			return GL_ONE_MINUS_SRC_COLOR;
+		case BlendMode::OneMinuesDstAlpha:
+			return GL_ONE_MINUS_DST_ALPHA;
+		case BlendMode::OneMinuesSrcAlpha:
+			return GL_ONE_MINUS_SRC_ALPHA;
+		case BlendMode::SrcAlphaSaturate:
+			// todo
+			break;
+		default:
+			break;
+		}
+		return GL_ONE;
+	}
+
 	void setRenderStateBlock(RenderStateBlock& renderStateBlock) override;
 
 	std::vector<MeshResourceIdentifier> requestMeshResources(std::vector<Mesh*>& meshPtrs) override;

@@ -13,8 +13,11 @@ public:
 	void prepare() override
 	{
 		m_renderStateBlock.m_colorState.m_cullMode = CullMode::Off;
-		// 渲染ShadowMap不需要写入颜色
 		m_renderStateBlock.m_colorState.m_rgbaWritable = glm::bvec4(true, true, true, true);
+		m_renderStateBlock.m_colorState.m_blendModeEnabled = true;
+		m_renderStateBlock.m_colorState.m_srcBlendMode = BlendMode::SrcAlpha;
+		m_renderStateBlock.m_colorState.m_dstBlendMode = BlendMode::OneMinuesSrcAlpha;
+
 		m_renderStateBlock.m_depthState.m_depthRange = glm::vec2(0, 1);
 		m_renderStateBlock.m_depthState.m_writable = false;
 		m_renderStateBlock.m_depthState.m_compareFunc = CompareFunction::Less;
@@ -41,6 +44,10 @@ public:
 		auto colorRTIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, colorRT->getInstanceId()));
 		if (colorRTIdentifier != nullptr)
 		{
+			m_cmdBuffer.setRenderTarget(colorRTIdentifier);
+			m_context->scheduleCommandBuffer(m_cmdBuffer);
+			m_cmdBuffer.clear();
+			m_context->submit();
 			m_context->drawRenderers(m_filterSettings, m_drawSettings);
 		}
 	}

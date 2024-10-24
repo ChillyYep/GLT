@@ -3,6 +3,7 @@ void RenderPipeline::init() {
 	m_globalPassList.push_back(new SimpleShadowMapPass());
 	//m_globalPassList.push_back(new CaptureFBOPass());
 	m_perCameraPassList.push_back(new DrawOpaquePass());
+	m_perCameraPassList.push_back(new DrawTransparentPass());
 	//m_perCameraPassList.push_back(new CaptureFBOPass());
 	//m_perCameraPassList.push_back(new PostProcessingPass());
 	m_renderContext.init();

@@ -194,6 +194,8 @@
     <None Include="Shader\cube.vert" />
     <None Include="Shader\cube_tex.frag" />
     <None Include="Shader\cube_tex.vert" />
+    <None Include="Shader\cube_tex_transparent.frag" />
+    <None Include="Shader\cube_tex_transparent.vert" />
     <None Include="Shader\depthview.frag" />
     <None Include="Shader\depthview.vert" />
     <None Include="Shader\lightdata.attr" />

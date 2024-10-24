@@ -335,6 +335,12 @@
     <None Include="Shader\shadowmap.vert">
       <Filter>源文件\ShaderSourceCode</Filter>
     </None>
+    <None Include="Shader\cube_tex_transparent.frag">
+      <Filter>源文件\ShaderSourceCode</Filter>
+    </None>
+    <None Include="Shader\cube_tex_transparent.vert">
+      <Filter>源文件\ShaderSourceCode</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Common.h">
