@@ -25,6 +25,6 @@ public:
 
 	void onSubmit() override;
 private:
-	inline void unloadTexture(Texture* texture) { texture->unload(); }
+	inline void unloadTexture(Texture* texture) { texture->release(); }
 
 };

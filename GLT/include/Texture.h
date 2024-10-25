@@ -1,7 +1,6 @@
 #pragma once
 #include <CommonDefine.h>
 #include <Object.h>
-#include <stb_image.h>
 #include <TextureEnums.h>
 #include <GLCommon.h>
 #include <GLMath.h>
@@ -16,15 +15,14 @@ public:
 		m_colorInternalFormat(TextureInternalFormat::None), m_perChannelSize(TexturePerChannelSize::UNSIGNED_BYTE), m_wrapModeS(TextureWrapMode::ClampEdge),
 		m_textureFilter(TextureFilterMode::Linear_Mipmap_Linear), m_dirty(false)
 	{}
-	virtual ~Texture() { unload(); }
-	virtual void load(const char* filename) {}
-	void unload();
+	virtual ~Texture() { release(); }
+	void release();
 
 	inline GLTUByte* getData() { return m_data; }
 
 	inline void setData(GLTUByte* data, int size = 0)
 	{
-		unload();
+		release();
 		if (data == nullptr)
 		{
 			return;
@@ -36,7 +34,7 @@ public:
 
 	inline TextureType getTextureType() { return m_textureType; }
 
-	inline static TextureExternalFormat getDefaultTextureExternalFormat(TextureInternalFormat internalFormat)
+	static TextureExternalFormat getDefaultTextureExternalFormat(TextureInternalFormat internalFormat)
 	{
 		switch (internalFormat)
 		{
@@ -137,7 +135,6 @@ public:
 		:Texture(TextureType::Texture2D), m_height(0), m_wrapModeT(TextureWrapMode::ClampEdge)
 	{}
 	~Texture2D() {}
-	void load(const char* filename) override;
 	/// <summary>
 	/// ÌìÇàÉ«
 	/// </summary>

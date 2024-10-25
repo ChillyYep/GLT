@@ -163,6 +163,9 @@
     <Filter Include="头文件\Render\RenderResourceManager\ResourceDescriptor">
       <UniqueIdentifier>{d3976870-d2ba-4411-98de-4ead4b8477c4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\plugins\assimp">
+      <UniqueIdentifier>{013efc8d-a116-4b97-9201-c70e78214dec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl3w.c">
@@ -191,9 +194,6 @@
     </ClCompile>
     <ClCompile Include="src\Graphics.cpp">
       <Filter>源文件\Render\RenderPipeline</Filter>
-    </ClCompile>
-    <ClCompile Include="src\stb_image.cpp">
-      <Filter>源文件\plugins\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\MeshManagementCentre.cpp">
       <Filter>源文件\Render\RenderResourceManager\ManagementCentre</Filter>
@@ -297,6 +297,9 @@
     <ClCompile Include="src\ResourceNames.cpp">
       <Filter>源文件\Render\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="src\3rdParty\stb_image.cpp">
+      <Filter>源文件\plugins\stb_image</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\cube.frag">
@@ -340,6 +343,30 @@
     </None>
     <None Include="Shader\cube_tex_transparent.vert">
       <Filter>源文件\ShaderSourceCode</Filter>
+    </None>
+    <None Include="include\3rdParty\assimp\color4.inl">
+      <Filter>头文件\plugins\assimp</Filter>
+    </None>
+    <None Include="include\3rdParty\assimp\material.inl">
+      <Filter>头文件\plugins\assimp</Filter>
+    </None>
+    <None Include="include\3rdParty\assimp\matrix3x3.inl">
+      <Filter>头文件\plugins\assimp</Filter>
+    </None>
+    <None Include="include\3rdParty\assimp\matrix4x4.inl">
+      <Filter>头文件\plugins\assimp</Filter>
+    </None>
+    <None Include="include\3rdParty\assimp\quaternion.inl">
+      <Filter>头文件\plugins\assimp</Filter>
+    </None>
+    <None Include="include\3rdParty\assimp\SmoothingGroups.inl">
+      <Filter>头文件\plugins\assimp</Filter>
+    </None>
+    <None Include="include\3rdParty\assimp\vector2.inl">
+      <Filter>头文件\plugins\assimp</Filter>
+    </None>
+    <None Include="include\3rdParty\assimp\vector3.inl">
+      <Filter>头文件\plugins\assimp</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -396,9 +423,6 @@
     </ClInclude>
     <ClInclude Include="include\Graphics.h">
       <Filter>头文件\Render\RenderPipeline</Filter>
-    </ClInclude>
-    <ClInclude Include="include\stb_image.h">
-      <Filter>头文件\plugins\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="include\MeshManagementCentre.h">
       <Filter>头文件\Render\RenderResourceManager\ManagementCentre</Filter>
@@ -603,6 +627,258 @@
     </ClInclude>
     <ClInclude Include="include\DrawTransparentPass.h">
       <Filter>头文件\Render\PassManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AssetUtils.h">
+      <Filter>头文件\Common\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\stb_image\stb_image.h">
+      <Filter>头文件\plugins\stb_image</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\aabb.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\ai_assert.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\anim.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\AssertHandler.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\Base64.hpp">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\BaseImporter.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\Bitmap.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\BlobIOSystem.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\ByteSwapper.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\camera.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\cexport.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\cfileio.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\cimport.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\ColladaMetaData.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\color4.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\commonMetaData.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\Compiler\poppack1.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\Compiler\pstdint.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\Compiler\pushpack1.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\CreateAnimMesh.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\DefaultIOStream.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\DefaultIOSystem.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\DefaultLogger.hpp">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\defs.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\Exceptional.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\Exporter.hpp">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\fast_atof.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\GenericProperty.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\GltfMaterial.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\Hash.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\Importer.hpp">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\importerdesc.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\IOStream.hpp">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\IOStreamBuffer.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\IOSystem.hpp">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\light.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\LineSplitter.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\LogAux.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\Logger.hpp">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\LogStream.hpp">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\material.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\MathFunctions.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\matrix3x3.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\matrix4x4.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\MemoryIOWrapper.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\mesh.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\metadata.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\NullLogger.hpp">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\ObjMaterial.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\ParsingUtils.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\pbrmaterial.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\port\AndroidJNI\AndroidJNIIOSystem.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\port\AndroidJNI\BundledAssetIOSystem.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\postprocess.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\Profiler.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\ProgressHandler.hpp">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\qnan.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\quaternion.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\RemoveComments.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\scene.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\SceneCombiner.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\SGSpatialSort.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\SkeletonMeshBuilder.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\SmallVector.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\SmoothingGroups.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\SpatialSort.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\StandardShapes.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\StreamReader.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\StreamWriter.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\StringComparison.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\StringUtils.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\Subdivision.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\texture.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\TinyFormatter.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\types.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\vector2.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\vector3.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\version.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\Vertex.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\XmlParser.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\XMLTools.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\ZipArchiveIOSystem.h">
+      <Filter>头文件\plugins\assimp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

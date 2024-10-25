@@ -1,37 +1,10 @@
 #include "Texture.h"
 
-void Texture::unload() {
+void Texture::release() {
 	if (m_data != nullptr)
 	{
 		delete[] m_data;
 		m_data = nullptr;
-	}
-}
-
-void Texture2D::load(const char* filename) {
-	assert(m_data == nullptr);
-	int channels;
-	// 加载后再拷贝，消除stb库影响
-	GLTUByte* imageData = stbi_load(filename, &m_width, &m_height, &channels, 0);
-	m_data = new GLTUByte[m_width * m_height * channels];
-	memcpy(m_data, imageData, m_width * m_height * channels);
-	stbi_image_free(imageData);
-	imageData = nullptr;
-	if (channels == 1)
-	{
-		m_colorExternalFormat = TextureExternalFormat::RED;
-	}
-	else if (channels == 2)
-	{
-		m_colorExternalFormat = TextureExternalFormat::RG;
-	}
-	else if (channels == 3)
-	{
-		m_colorExternalFormat = TextureExternalFormat::RGB;
-	}
-	else if (channels == 4)
-	{
-		m_colorExternalFormat = TextureExternalFormat::RGBA;
 	}
 }
 

@@ -2,8 +2,9 @@
 #include "Common.h"
 #include <Graphics.h>
 #include <CameraOperation.h>
-#include <stb_image.h>
 #include <gamemain.h>
+#include <AssetUtils.h>
+
 using namespace std;
 
 RenderPipeline* pipeline;
@@ -27,10 +28,10 @@ void createScene()
 	auto mat1 = shared_ptr<Material>(new Material(opaqueShader));
 	auto mat2 = shared_ptr<Material>(new Material(opaqueShader));
 	auto mat3 = shared_ptr<Material>(new Material(transparentShader));
-	auto tex = new Texture2D();
-	tex->m_name = "wall";
 	// 需要引入一个从文件加载纹理的库
-	tex->load("Resources/wall.jpg");
+
+	auto tex = AssetUtils::getInstance()->loadTexture2D("Resources/wall.jpg");
+	tex->m_name = "wall";
 	tex->setInternalFormat(TextureInternalFormat::RGB8);
 	tex->setLevels(4);
 	tex->setPerChannelSize(TexturePerChannelSize::UNSIGNED_BYTE);
