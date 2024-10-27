@@ -26,9 +26,7 @@ Texture2D* Texture2D::setSinglePixelTex2D(Texture2D& tex, GLTUByte r, GLTUByte g
 {
 	if (tex.m_data == nullptr)
 	{
-		//glm::vec4 black = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
 		tex.m_data = new GLTUByte[4]{ r,g,b,a };
-		//memcpy(s_blackTex.m_data, glm::value_ptr(black), sizeof(black));
 		tex.m_width = 1;
 		tex.m_height = 1;
 		tex.setExternalFormat(TextureExternalFormat::RGB);

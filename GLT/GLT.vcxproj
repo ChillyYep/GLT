@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="src\3rdParty\stb_image.cpp" />
     <ClCompile Include="src\Allocator.cpp" />
+    <ClCompile Include="src\AssetUtils.cpp" />
     <ClCompile Include="src\BytesBuffer.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\CameraOperation.cpp" />
@@ -232,6 +233,7 @@
     <ClInclude Include="include\3rdParty\assimp\Compiler\poppack1.h" />
     <ClInclude Include="include\3rdParty\assimp\Compiler\pstdint.h" />
     <ClInclude Include="include\3rdParty\assimp\Compiler\pushpack1.h" />
+    <ClInclude Include="include\3rdParty\assimp\config.h" />
     <ClInclude Include="include\3rdParty\assimp\CreateAnimMesh.h" />
     <ClInclude Include="include\3rdParty\assimp\DefaultIOStream.h" />
     <ClInclude Include="include\3rdParty\assimp\DefaultIOSystem.h" />
@@ -272,6 +274,7 @@
     <ClInclude Include="include\3rdParty\assimp\qnan.h" />
     <ClInclude Include="include\3rdParty\assimp\quaternion.h" />
     <ClInclude Include="include\3rdParty\assimp\RemoveComments.h" />
+    <ClInclude Include="include\3rdParty\assimp\revision.h" />
     <ClInclude Include="include\3rdParty\assimp\scene.h" />
     <ClInclude Include="include\3rdParty\assimp\SceneCombiner.h" />
     <ClInclude Include="include\3rdParty\assimp\SGSpatialSort.h" />
@@ -327,6 +330,7 @@
     <ClInclude Include="include\LogicResourceManager.h" />
     <ClInclude Include="include\Math_Common.h" />
     <ClInclude Include="include\MemoryManager.h" />
+    <ClInclude Include="include\Model.h" />
     <ClInclude Include="include\PassBase.h" />
     <ClInclude Include="include\PipelineStateObject.h" />
     <ClInclude Include="include\PostProcessingPass.h" />

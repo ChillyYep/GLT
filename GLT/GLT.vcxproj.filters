@@ -300,6 +300,9 @@
     <ClCompile Include="src\3rdParty\stb_image.cpp">
       <Filter>源文件\plugins\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\AssetUtils.cpp">
+      <Filter>源文件\Common\Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\cube.frag">
@@ -878,6 +881,15 @@
       <Filter>头文件\plugins\assimp</Filter>
     </ClInclude>
     <ClInclude Include="include\3rdParty\assimp\ZipArchiveIOSystem.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Model.h">
+      <Filter>头文件\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\config.h">
+      <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\3rdParty\assimp\revision.h">
       <Filter>头文件\plugins\assimp</Filter>
     </ClInclude>
   </ItemGroup>
