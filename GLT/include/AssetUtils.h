@@ -48,7 +48,7 @@ private:
 	void insertAssetToDatabase(std::string filepath, AssetType assetType, Object* asset);
 	void removeAssetFromDatabase(Object* asset, AssetType assetType);
 
-	void processNode(aiNode* node, const aiScene* scene, std::vector<aiMesh*> meshes);
+	void processNode(aiNode* node, const aiScene* scene, std::vector<aiMesh*>& meshes);
 	Mesh* processMesh(aiMesh* mesh, const aiScene* scene);
 	std::vector<Texture*> processTextures(aiMesh* mesh, const aiScene* scene);
 	std::vector<Texture*> processMaterialTextures(aiMaterial* mat, aiTextureType textureType, std::string typeName);

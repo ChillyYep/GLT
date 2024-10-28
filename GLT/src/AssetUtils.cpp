@@ -70,16 +70,16 @@ void AssetUtils::removeAssetFromDatabase(Object* asset, AssetType assetType)
 	}
 }
 
-void AssetUtils::processNode(aiNode* node, const aiScene* scene, std::vector<aiMesh*> meshes)
+void AssetUtils::processNode(aiNode* node, const aiScene* scene, std::vector<aiMesh*>& meshes)
 {
 	// 获取节点上Mesh
-	for (int i = 0;i < node->mNumMeshes;++i)
+	for (unsigned int i = 0; i < node->mNumMeshes; ++i)
 	{
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		meshes.push_back(mesh);
 	}
 	// 处理子节点
-	for (int i = 0;i < node->mNumChildren;++i)
+	for (unsigned int i = 0; i < node->mNumChildren; ++i)
 	{
 		processNode(node->mChildren[i], scene, meshes);
 	}
@@ -89,16 +89,16 @@ Mesh* AssetUtils::processMesh(aiMesh* mesh, const aiScene* scene)
 	std::vector<glm::vec4> vertices(mesh->mNumVertices);
 	std::vector<unsigned short> indices(mesh->mNumFaces * 3);
 	Mesh* customMesh = new Mesh(mesh->mNumVertices, mesh->mNumFaces * 3);
-	for (int i = 0;i < mesh->mNumVertices;++i)
+	for (unsigned int i = 0; i < mesh->mNumVertices; ++i)
 	{
 		auto aiVertex = mesh->mVertices[i];
 		vertices[i] = glm::vec4(aiVertex.x, aiVertex.y, aiVertex.z, 1.f);
 	}
 	customMesh->setVertices(vertices.data());
-	for (int i = 0;i < mesh->mNumFaces;++i)
+	for (unsigned int i = 0; i < mesh->mNumFaces; ++i)
 	{
 		auto aiFace = mesh->mFaces[i];
-		for (int j = 0;j < aiFace.mNumIndices;++j)
+		for (unsigned int j = 0; j < aiFace.mNumIndices; ++j)
 		{
 			indices[j] = aiFace.mIndices[j];
 		}
@@ -107,7 +107,7 @@ Mesh* AssetUtils::processMesh(aiMesh* mesh, const aiScene* scene)
 	if (mesh->HasNormals())
 	{
 		std::vector<glm::vec4> normals(mesh->mNumVertices);
-		for (int i = 0;i < mesh->mNumVertices;++i)
+		for (unsigned int i = 0; i < mesh->mNumVertices; ++i)
 		{
 			auto aiNormal = mesh->mNormals[i];
 			normals[i] = glm::vec4(aiNormal.x, aiNormal.y, aiNormal.z, 1.f);
@@ -119,7 +119,7 @@ Mesh* AssetUtils::processMesh(aiMesh* mesh, const aiScene* scene)
 	{
 		std::vector<glm::vec4> colors(mesh->mNumVertices);
 		auto aiColors = mesh->mColors[0];
-		for (int i = 0;i < mesh->mNumVertices;++i)
+		for (unsigned int i = 0; i < mesh->mNumVertices; ++i)
 		{
 			auto aiColor = aiColors[i];
 			colors[i] = glm::vec4(aiColor.r, aiColor.g, aiColor.b, aiColor.a);
@@ -130,7 +130,7 @@ Mesh* AssetUtils::processMesh(aiMesh* mesh, const aiScene* scene)
 	{
 		std::vector<glm::vec2> uvs(mesh->mNumVertices);
 		auto aiUVs = mesh->mTextureCoords[0];
-		for (int i = 0;i < mesh->mNumVertices;++i)
+		for (unsigned int i = 0; i < mesh->mNumVertices; ++i)
 		{
 			auto aiUv = aiUVs[i];
 			uvs[i] = glm::vec2(aiUv.x, aiUv.y);
@@ -157,13 +157,17 @@ std::vector<Texture*> AssetUtils::processMaterialTextures(aiMaterial* mat, aiTex
 	auto subDatabase = m_assetDatabase[AssetType::Texture];
 	std::vector<Texture*> textures;
 
-	for (int i = 0;i < mat->GetTextureCount(textureType);++i)
+	for (unsigned int i = 0; i < mat->GetTextureCount(textureType); ++i)
 	{
 		aiString path;
 		mat->GetTexture(textureType, i, &path);
 		std::string localPath = std::string(path.C_Str());
 		bool textureLoaded = isAssetLoaded(localPath);
 		auto tex2D = loadTexture2D(localPath);
+		if (tex2D == nullptr)
+		{
+			continue;
+		}
 		if (textureLoaded)
 		{
 			assert(tex2D->m_name == typeName);
@@ -195,7 +199,7 @@ Model* AssetUtils::loadModel(std::string filepath)
 	processNode(scene->mRootNode, scene, allMeshes);
 
 	// 3、处理Mesh
-	for (int i = 0;i < allMeshes.size();++i)
+	for (int i = 0; i < allMeshes.size(); ++i)
 	{
 		auto mesh = allMeshes[i];
 		Mesh* customMesh = processMesh(mesh, scene);
