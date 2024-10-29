@@ -23,7 +23,7 @@ public:
 	void uninit();
 	void render();
 
-	void drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix);
+	void drawMesh(SubMesh* mesh, Material* material, glm::mat4 modelMatrix);
 private:
 	void postUpdate();
 	void updatePerFrameConstantBuffer();

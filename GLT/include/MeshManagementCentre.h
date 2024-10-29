@@ -4,7 +4,7 @@
 /// <summary>
 /// 那些会进入渲染的Mesh的分配器
 /// </summary>
-class MeshManagementCentre :public ManagementCentreBase<Mesh*>
+class MeshManagementCentre :public ManagementCentreBase<SubMesh*>
 {
 public:
 	MeshManagementCentre() {}
@@ -12,5 +12,5 @@ public:
 
 	void onSubmit() override;
 private:
-	inline void deallocateMesh(Mesh* mesh) { mesh->_deallocate(); }
+	inline void deallocateMesh(SubMesh* mesh) { mesh->_deallocate(); }
 };

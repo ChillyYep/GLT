@@ -30,6 +30,7 @@ void createScene()
 	auto mat3 = shared_ptr<Material>(new Material(transparentShader));
 	// 需要引入一个从文件加载纹理的库
 
+	auto model = AssetUtils::getInstance()->loadModel("Resources/monkeyHead.obj");
 	auto tex = AssetUtils::getInstance()->loadTexture2D("Resources/wall.jpg");
 	tex->m_name = "wall";
 	tex->setInternalFormat(TextureInternalFormat::RGB8);
@@ -47,7 +48,12 @@ void createScene()
 	auto cubeMesh = PrimitiveUtils::createCube();
 	auto planeMesh = PrimitiveUtils::createQuad();
 
-	auto go1 = SceneUtility::createMeshGameObject(cubeMesh, mat1);
+	std::vector<std::shared_ptr<Material>> mats(model->getMeshCount());
+	for (int i = 0;i < model->getMeshCount();++i)
+	{
+		mats[i] = mat1;
+	}
+	auto go1 = SceneUtility::createMeshGameObject(model->getSubMeshes(), mats);
 	auto cube1Transform = go1->getComponent<Transform>();
 	cube1Transform->setPosition(glm::vec3(0.0f));
 	cube1Transform->setScale(glm::vec3(1.0f));

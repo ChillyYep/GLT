@@ -6,9 +6,9 @@ class PrimitiveUtils
 public:
 	PrimitiveUtils() {};
 	~PrimitiveUtils() {};
-	static Mesh* createCube();
+	static SubMesh* createCube();
 
-	static Mesh* createQuad();
+	static SubMesh* createQuad();
 private:
 
 };

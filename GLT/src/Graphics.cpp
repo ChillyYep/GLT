@@ -1,7 +1,7 @@
 #include "Graphics.h"
 RenderPipeline* Graphics::m_pipeline;
 
-void Graphics::drawMesh(Mesh* mesh, const std::shared_ptr<Material>& material, const glm::mat4x4& modelMatrix)
+void Graphics::drawMesh(SubMesh* mesh, const std::shared_ptr<Material>& material, const glm::mat4x4& modelMatrix)
 {
 	auto scenePtr = SceneManager::getInstance()->getMainScene();
 	if (scenePtr == nullptr)
@@ -14,7 +14,7 @@ void Graphics::drawMesh(Mesh* mesh, const std::shared_ptr<Material>& material, c
 	scenePtr->addObject(gameObject);
 }
 
-void Graphics::drawMeshNow(Mesh* mesh, const std::shared_ptr<Material>& material, const glm::mat4x4& modelMatrix)
+void Graphics::drawMeshNow(SubMesh* mesh, const std::shared_ptr<Material>& material, const glm::mat4x4& modelMatrix)
 {
 	ComponentStateMachine componentStateMachine;
 	auto scenePtr = SceneManager::getInstance()->getMainScene();
@@ -35,7 +35,7 @@ void Graphics::drawMeshNow(Mesh* mesh, const std::shared_ptr<Material>& material
 	}
 	drawRequestedMesh(mesh, material, modelMatrix);
 }
-void Graphics::drawRequestedMesh(Mesh* mesh, const std::shared_ptr<Material>& material, const glm::mat4x4& modelMatrix)
+void Graphics::drawRequestedMesh(SubMesh* mesh, const std::shared_ptr<Material>& material, const glm::mat4x4& modelMatrix)
 {
 	if (m_pipeline != nullptr)
 	{

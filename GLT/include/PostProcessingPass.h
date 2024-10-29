@@ -44,7 +44,7 @@ public:
 		m_uberPostRT->create();
 	}
 
-	Mesh* createFullscreenTraingleMesh()
+	SubMesh* createFullscreenTraingleMesh()
 	{
 		glm::vec4 vertices[] = {
 			glm::vec4(-1.f,-1.f,.0f,1.f),
@@ -53,7 +53,7 @@ public:
 		};
 		GLTUInt16 indices[] = { 0,1,2 };
 
-		Mesh* fullscreenTriangle = new Mesh(3, 3);
+		SubMesh* fullscreenTriangle = new SubMesh(3, 3);
 		fullscreenTriangle->setVertices(vertices);
 		fullscreenTriangle->setIndices(indices);
 
@@ -121,7 +121,7 @@ public:
 		}
 	}
 private:
-	Mesh* m_fullscreenTriangle;
+	SubMesh* m_fullscreenTriangle;
 	Material* m_fullscreenMat;
 	RenderTexture* m_uberPostRT;
 

@@ -75,7 +75,7 @@ void RenderResourceManagement::generateResourceIdentifier(ResourceType resourceT
 	{
 	case ResourceType::Mesh:
 	{
-		std::vector<Mesh*>&& meshPtrs = filterNewResources<Mesh>(objects, m_meshResources);
+		std::vector<SubMesh*>&& meshPtrs = filterNewResources<SubMesh>(objects, m_meshResources);
 
 		if (meshPtrs.size() > 0)
 		{

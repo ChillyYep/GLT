@@ -14,12 +14,18 @@ public:
 		gameObject->addComponent<Transform>();
 		return gameObject;
 	}
-	inline static std::shared_ptr<GameObject> createMeshGameObject(Mesh* mesh, const std::shared_ptr<Material>& material)
+	inline static std::shared_ptr<GameObject> createMeshGameObject(SubMesh* mesh, const std::shared_ptr<Material>& material)
 	{
 		auto gameObject = createEmptyGameObject();
 		auto renderer = gameObject->addComponent<Renderer>();
-		renderer->setMesh(mesh);
-		renderer->setMaterial(material);
+		renderer->addMesh(mesh, material);
+		return gameObject;
+	}
+	inline static std::shared_ptr<GameObject> createMeshGameObject(std::vector<SubMesh*> meshes, std::vector<std::shared_ptr<Material>>& materials)
+	{
+		auto gameObject = createEmptyGameObject();
+		auto renderer = gameObject->addComponent<Renderer>();
+		renderer->addMeshes(meshes, materials);
 		return gameObject;
 	}
 private:

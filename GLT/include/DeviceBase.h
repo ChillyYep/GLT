@@ -19,9 +19,9 @@ public:
 
 	virtual void setRenderStateBlock(RenderStateBlock& renderStateBlock) = 0;
 
-	virtual std::vector<MeshResourceIdentifier> requestMeshResources(std::vector<Mesh*>& meshPtrs) = 0;
+	virtual std::vector<MeshResourceIdentifier> requestMeshResources(std::vector<SubMesh*>& meshPtrs) = 0;
 
-	virtual void updateMeshResources(std::vector<Mesh*>& meshPtrs, std::vector<MeshResourceIdentifier>& meshResourceIdentifiers) = 0;
+	virtual void updateMeshResources(std::vector<SubMesh*>& meshPtrs, std::vector<MeshResourceIdentifier>& meshResourceIdentifiers) = 0;
 
 	virtual void destroyMeshResources(std::vector<MeshResourceIdentifier>& meshIdentifiers) = 0;
 

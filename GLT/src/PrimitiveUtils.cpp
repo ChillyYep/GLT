@@ -1,6 +1,6 @@
 #include "PrimitiveUtils.h"
 
-Mesh* PrimitiveUtils::createCube()
+SubMesh* PrimitiveUtils::createCube()
 {
 	static const glm::vec4 cube_vertices[] = {
 		// ǰ
@@ -141,7 +141,7 @@ Mesh* PrimitiveUtils::createCube()
 		{-1.0f,  0.0f, 0.0f,1.0f},
 	};
 
-	auto object = new Mesh(sizeof(cube_vertices) / sizeof(glm::vec4), sizeof(cube_indices) / sizeof(GLTUInt16));
+	auto object = new SubMesh(sizeof(cube_vertices) / sizeof(glm::vec4), sizeof(cube_indices) / sizeof(GLTUInt16));
 	object->setVertices(cube_vertices);
 	object->setIndices(cube_indices);
 	object->setColors(cube_colors);
@@ -150,7 +150,7 @@ Mesh* PrimitiveUtils::createCube()
 	return object;
 }
 
-Mesh* PrimitiveUtils::createQuad()
+SubMesh* PrimitiveUtils::createQuad()
 {
 	static const glm::vec4 plane_vertices[] = {
 		{-1.0f,  0.0f, -1.0f,1.0f},
@@ -184,7 +184,7 @@ Mesh* PrimitiveUtils::createQuad()
 		{0.0f,  1.0f,  0.0f,1.0f},
 		{0.0f,  1.0f,  0.0f,1.0f}
 	};
-	auto object = new Mesh(sizeof(plane_vertices) / sizeof(glm::vec4), sizeof(plane_indices) / sizeof(GLTUInt16));
+	auto object = new SubMesh(sizeof(plane_vertices) / sizeof(glm::vec4), sizeof(plane_indices) / sizeof(GLTUInt16));
 	object->setVertices(plane_vertices);
 	object->setIndices(plane_indices);
 	object->setColors(plane_colors);
