@@ -167,7 +167,7 @@ void RenderPipeline::updatePerCameraConstantBuffer(CameraData& cameraData)
 	m_renderContext.updateConstantBufferResources(ConstantBufferType::PerCamera);
 }
 
-void RenderPipeline::drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix)
+void RenderPipeline::drawMesh(SubMesh* mesh, Material* material, glm::mat4 modelMatrix)
 {
 	auto resourceIdentifier = static_cast<MeshResourceIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::Mesh, mesh->getInstanceId()));
 	if (resourceIdentifier == nullptr || !resourceIdentifier->isValid())

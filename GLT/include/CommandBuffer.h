@@ -23,7 +23,7 @@ public:
 	//void blitto(RenderTargetIdentifier* renderTargetIdentifier);
 	void clear();
 
-	void drawMesh(Mesh* mesh, Material* material, glm::mat4 modelMatrix);
+	void drawMesh(SubMesh* mesh, Material* material, glm::mat4 modelMatrix);
 
 	void drawRenderer(Renderer* renderer, Material* replacedMaterial = nullptr);
 

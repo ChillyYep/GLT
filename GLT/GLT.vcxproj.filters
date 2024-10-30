@@ -883,14 +883,14 @@
     <ClInclude Include="include\3rdParty\assimp\ZipArchiveIOSystem.h">
       <Filter>头文件\plugins\assimp</Filter>
     </ClInclude>
-    <ClInclude Include="include\Model.h">
-      <Filter>头文件\Game</Filter>
-    </ClInclude>
     <ClInclude Include="include\3rdParty\assimp\config.h">
       <Filter>头文件\plugins\assimp</Filter>
     </ClInclude>
     <ClInclude Include="include\3rdParty\assimp\revision.h">
       <Filter>头文件\plugins\assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Model.h">
+      <Filter>头文件\Game\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

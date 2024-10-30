@@ -1,5 +1,5 @@
 #include "Mesh.h"
-void Mesh::_allocate(const GLTSizei verticesCount, const GLTSizei indicesCount) {
+void SubMesh::_allocate(const GLTSizei verticesCount, const GLTSizei indicesCount) {
 	if (m_allocated)
 	{
 		_deallocate();
@@ -16,7 +16,7 @@ void Mesh::_allocate(const GLTSizei verticesCount, const GLTSizei indicesCount) 
 	m_readWrite = true;
 }
 
-void  Mesh::_deallocate()
+void  SubMesh::_deallocate()
 {
 	if (m_allocated)
 	{

@@ -2,13 +2,13 @@
 
 void Renderer::onEnable()
 {
-	if (m_mesh != nullptr)
+	for (int i = 0;i < m_meshes.size();++i)
 	{
-		LogicResourceManager::getInstance()->addResource(ResourceType::Mesh, m_mesh);
+		LogicResourceManager::getInstance()->addResource(ResourceType::Mesh, m_meshes[i]);
 	}
-	if (m_material != nullptr)
+	for (int i = 0;i < m_materials.size();++i)
 	{
-		auto textures = m_material->getAllTextures();
+		auto textures = m_materials[i]->getAllTextures();
 		for (const auto& texture : textures)
 		{
 			LogicResourceManager::getInstance()->addResource(ResourceType::Texture, texture);
@@ -18,13 +18,13 @@ void Renderer::onEnable()
 
 void Renderer::onDisable()
 {
-	if (m_mesh != nullptr)
+	for (int i = 0;i < m_meshes.size();++i)
 	{
-		LogicResourceManager::getInstance()->destroyResource(ResourceType::Mesh, m_mesh);
+		LogicResourceManager::getInstance()->destroyResource(ResourceType::Mesh, m_meshes[i]);
 	}
-	if (m_material != nullptr)
+	for (int i = 0;i < m_materials.size();++i)
 	{
-		auto textures = m_material->getAllTextures();
+		auto textures = m_materials[i]->getAllTextures();
 		for (const auto& texture : textures)
 		{
 			LogicResourceManager::getInstance()->destroyResource(ResourceType::Texture, texture);
@@ -34,28 +34,28 @@ void Renderer::onDisable()
 
 Bound Renderer::getLocalBound()
 {
-	if (m_mesh != nullptr)
+	Bound bound = m_meshes.size() > 0 ? m_meshes[0]->getBound() : Bound();
+	for (int i = 1;i < m_meshes.size();++i)
 	{
-		return m_mesh->getBound();
+		bound = bound.Extends(m_meshes[i]->getBound());
 	}
-	return Bound();
+	return bound;
 }
 
 Bound Renderer::getWorldBound()
 {
-	Bound bound = Bound();
-	if (m_mesh != nullptr)
+	Bound bound = m_meshes.size() > 0 ? m_meshes[0]->getBound() : Bound();
+	for (int i = 1;i < m_meshes.size();++i)
 	{
 		glm::mat4x4 modelMatrix = static_cast<GameObject*>(m_gameObjectPtr)->getTransform()->getModelMatrix();
-		auto verticesCount = m_mesh->getVerticesCount();
+		auto verticesCount = m_meshes[i]->getVerticesCount();
 		std::vector<glm::vec4> newVertices(verticesCount);
-		auto oldVertices = m_mesh->getVertices();
+		auto oldVertices = m_meshes[i]->getVertices();
 		for (size_t i = 0; i < verticesCount; i++)
 		{
 			newVertices[i] = modelMatrix * oldVertices[i];
 		}
-		bound = Mesh::computeBound(newVertices.data(), verticesCount);
-		return bound;
+		bound = bound.Extends(SubMesh::computeBound(newVertices.data(), verticesCount));
 	}
 	return bound;
 }

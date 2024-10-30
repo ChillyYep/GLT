@@ -5,7 +5,7 @@ Object* LogicResourceManager::addResource(ResourceType resourceType, Object* res
 	switch (resourceType)
 	{
 	case ResourceType::Mesh:
-		m_meshManagementCentre.add(static_cast<Mesh*>(resource));
+		m_meshManagementCentre.add(static_cast<SubMesh*>(resource));
 		break;
 	case ResourceType::Texture:
 		m_textureManagementCentre.add(static_cast<Texture*>(resource));
@@ -47,7 +47,7 @@ void LogicResourceManager::destroyResource(ResourceType resouceType, Object* res
 	{
 		if (m_meshManagementCentre.getRefObject(resource->getInstanceId()).m_target != nullptr)
 		{
-			m_meshManagementCentre.remove(static_cast<Mesh*>(resource));
+			m_meshManagementCentre.remove(static_cast<SubMesh*>(resource));
 		}
 		break;
 	}

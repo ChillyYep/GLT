@@ -123,26 +123,31 @@ void ScriptableRenderContext::executeCommand(RenderCommand& command)
 	{
 		auto drawRendererParam = static_cast<DrawRendererParam*>(commandParam);
 		auto renderer = drawRendererParam->m_rendererPtr;
-		auto material = drawRendererParam->m_replacedMaterial == nullptr ? renderer->getMaterial().get() : drawRendererParam->m_replacedMaterial;
-		auto mesh = renderer->getMesh();
+		auto meshCount = (int)renderer->getMeshCount();
+		auto materials = renderer->getMaterials();
+		auto meshes = renderer->getMeshes();
 		auto transform = static_cast<GameObject*>(renderer->getGameObject())->getTransform();
-
-		auto meshResourceIdentifier = static_cast<MeshResourceIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::Mesh, (mesh->getInstanceId())));
-		if (meshResourceIdentifier != nullptr)
+		for (int i = 0;i < meshCount;++i)
 		{
-			std::vector<TextureResourceIdentifier*> textureResources;
-			if (material != nullptr)
+			auto meshResourceIdentifier = static_cast<MeshResourceIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::Mesh, (meshes[i]->getInstanceId())));
+			if (meshResourceIdentifier != nullptr)
 			{
-				std::vector<Texture*> textures = material->getAllTextures();
-				for (const auto& texPtr : textures)
+				auto renderMat = drawRendererParam->m_replacedMaterial != nullptr ? drawRendererParam->m_replacedMaterial : materials[i].get();
+				std::vector<TextureResourceIdentifier*> textureResources;
+				if (renderMat != nullptr)
 				{
-					auto texIdentifierPtr = RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::Texture, texPtr->getInstanceId());
-					textureResources.push_back(static_cast<TextureResourceIdentifier*>(texIdentifierPtr));
+					std::vector<Texture*> textures = renderMat->getAllTextures();
+					for (const auto& texPtr : textures)
+					{
+						auto texIdentifierPtr = RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::Texture, texPtr->getInstanceId());
+						textureResources.push_back(static_cast<TextureResourceIdentifier*>(texIdentifierPtr));
+					}
+					setupPSO(meshResourceIdentifier, transform->getModelMatrix(), renderMat, textureResources);
+					m_device->draw(m_pso);
 				}
-				setupPSO(meshResourceIdentifier, transform->getModelMatrix(), material, textureResources);
-				m_device->draw(m_pso);
 			}
 		}
+
 		break;
 	}
 	case RenderCommandType::SetViewMatrix:

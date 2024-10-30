@@ -251,8 +251,8 @@ public:
 
 	void setRenderStateBlock(RenderStateBlock& renderStateBlock) override;
 
-	std::vector<MeshResourceIdentifier> requestMeshResources(std::vector<Mesh*>& meshPtrs) override;
-	void updateMeshResources(std::vector<Mesh*>& meshPtrs, std::vector<MeshResourceIdentifier>& meshResourceIdentifiers) override;
+	std::vector<MeshResourceIdentifier> requestMeshResources(std::vector<SubMesh*>& meshPtrs) override;
+	void updateMeshResources(std::vector<SubMesh*>& meshPtrs, std::vector<MeshResourceIdentifier>& meshResourceIdentifiers) override;
 	void destroyMeshResources(std::vector<MeshResourceIdentifier>& meshIdentifiers) override;
 
 	std::vector<TextureResourceIdentifier> requestTextureResources(std::vector<Texture*>& texturePtrs) override;

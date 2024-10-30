@@ -9,9 +9,15 @@
 #include <3rdParty/assimp/postprocess.h>
 #include <iostream>
 #include <stack>
+
 enum class AssetType {
 	Texture,
 	Model
+};
+struct ModelItem
+{
+	std::vector<SubMesh*> m_meshes;
+	std::vector<std::vector<Texture*>> m_textureResources;
 };
 
 class AssetUtils :public Singleton<AssetUtils>
@@ -49,7 +55,7 @@ private:
 	void removeAssetFromDatabase(Object* asset, AssetType assetType);
 
 	void processNode(aiNode* node, const aiScene* scene, std::vector<aiMesh*>& meshes);
-	Mesh* processMesh(aiMesh* mesh, const aiScene* scene);
+	SubMesh* processMesh(aiMesh* mesh, const aiScene* scene);
 	std::vector<Texture*> processTextures(aiMesh* mesh, const aiScene* scene);
 	std::vector<Texture*> processMaterialTextures(aiMaterial* mat, aiTextureType textureType, std::string typeName);
 

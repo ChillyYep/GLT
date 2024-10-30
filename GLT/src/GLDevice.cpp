@@ -1,6 +1,6 @@
 #include "GLDevice.h"
 
-std::vector<MeshResourceIdentifier> GLDevice::requestMeshResources(std::vector<Mesh*>& meshPtrs)
+std::vector<MeshResourceIdentifier> GLDevice::requestMeshResources(std::vector<SubMesh*>& meshPtrs)
 {
 	GLsizei length = (GLsizei)meshPtrs.size();
 	std::vector<MeshResourceIdentifier> meshResourceIdentifiers = std::vector<MeshResourceIdentifier>(length);
@@ -19,10 +19,10 @@ std::vector<MeshResourceIdentifier> GLDevice::requestMeshResources(std::vector<M
 		GLuint ebo = newMeshEbos[i];
 		auto mesh = meshPtrs[i];
 		GLuint instanceId = mesh->getInstanceId();
-		size_t verticesMemorySize = mesh->getVerticesCount() * Mesh::VertexSize;
-		size_t colorsMemorySize = mesh->getColors() == nullptr ? 0 : mesh->getVerticesCount() * Mesh::ColorSize;
-		size_t uvsMemorySize = mesh->getUvs() == nullptr ? 0 : mesh->getVerticesCount() * Mesh::UVSize;
-		size_t normalsMemorySize = mesh->getNormals() == nullptr ? 0 : mesh->getVerticesCount() * Mesh::NormalSize;
+		size_t verticesMemorySize = mesh->getVerticesCount() * SubMesh::VertexSize;
+		size_t colorsMemorySize = mesh->getColors() == nullptr ? 0 : mesh->getVerticesCount() * SubMesh::ColorSize;
+		size_t uvsMemorySize = mesh->getUvs() == nullptr ? 0 : mesh->getVerticesCount() * SubMesh::UVSize;
+		size_t normalsMemorySize = mesh->getNormals() == nullptr ? 0 : mesh->getVerticesCount() * SubMesh::NormalSize;
 
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -55,7 +55,7 @@ std::vector<MeshResourceIdentifier> GLDevice::requestMeshResources(std::vector<M
 		}
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-		glNamedBufferStorage(ebo, mesh->getIndicesCount() * Mesh::IndexSize, mesh->getIndices(), GL_DYNAMIC_STORAGE_BIT);
+		glNamedBufferStorage(ebo, mesh->getIndicesCount() * SubMesh::IndexSize, mesh->getIndices(), GL_DYNAMIC_STORAGE_BIT);
 
 		meshResourceIdentifiers[i] = MeshResourceIdentifier(vao, vbo, ebo, instanceId, mesh->getVerticesCount(), mesh->getIndicesCount());
 	}
@@ -63,7 +63,7 @@ std::vector<MeshResourceIdentifier> GLDevice::requestMeshResources(std::vector<M
 	return meshResourceIdentifiers;
 }
 
-void GLDevice::updateMeshResources(std::vector<Mesh*>& meshPtrs, std::vector<MeshResourceIdentifier>& meshResourceIdentifiers)
+void GLDevice::updateMeshResources(std::vector<SubMesh*>& meshPtrs, std::vector<MeshResourceIdentifier>& meshResourceIdentifiers)
 {
 	GLsizei length = (GLsizei)meshPtrs.size();
 
@@ -77,10 +77,10 @@ void GLDevice::updateMeshResources(std::vector<Mesh*>& meshPtrs, std::vector<Mes
 		GLuint ebo = meshResourceIdentifier.getEBO();
 
 		GLuint instanceId = mesh->getInstanceId();
-		size_t verticesMemorySize = mesh->getVerticesCount() * Mesh::VertexSize;
-		size_t colorsMemorySize = mesh->getColors() == nullptr ? 0 : mesh->getVerticesCount() * Mesh::ColorSize;
-		size_t uvsMemorySize = mesh->getUvs() == nullptr ? 0 : mesh->getVerticesCount() * Mesh::UVSize;
-		size_t normalsMemorySize = mesh->getNormals() == nullptr ? 0 : mesh->getVerticesCount() * Mesh::NormalSize;
+		size_t verticesMemorySize = mesh->getVerticesCount() * SubMesh::VertexSize;
+		size_t colorsMemorySize = mesh->getColors() == nullptr ? 0 : mesh->getVerticesCount() * SubMesh::ColorSize;
+		size_t uvsMemorySize = mesh->getUvs() == nullptr ? 0 : mesh->getVerticesCount() * SubMesh::UVSize;
+		size_t normalsMemorySize = mesh->getNormals() == nullptr ? 0 : mesh->getVerticesCount() * SubMesh::NormalSize;
 
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);

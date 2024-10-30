@@ -76,7 +76,7 @@ public:
 	DrawMeshParam() {}
 	~DrawMeshParam() {}
 
-	Mesh* m_meshPtr;
+	SubMesh* m_meshPtr;
 	Material* m_materialPtr;
 	glm::mat4 m_modelMatrix;
 };

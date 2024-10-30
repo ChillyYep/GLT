@@ -6,9 +6,26 @@
 struct Bound {
 	glm::vec3 m_center;
 	glm::vec3 m_extends;
+
+	Bound Extends(Bound other)
+	{
+		glm::vec3 ownMin, ownMax, otherMin, otherMax, finalMin, finalMax;
+		ownMin = m_center - m_extends;
+		ownMax = m_center + m_extends;
+
+		otherMin = other.m_center - other.m_extends;
+		otherMax = other.m_center + other.m_extends;
+		
+		finalMin = glm::vec3(MIN(ownMin.x, otherMin.x), MIN(ownMin.y, otherMin.y), MIN(ownMin.z, otherMin.z));
+		finalMax = glm::vec3(MAX(ownMax.x, otherMax.x), MAX(ownMax.y, otherMax.y), MAX(ownMax.z, otherMax.z));
+		Bound finalBound;
+		finalBound.m_center = (finalMax + finalMin) / 2;
+		finalBound.m_extends = (finalMax - finalMin) / 2;
+		return finalBound;
+	}
 };
 
-class Mesh :public Object
+class SubMesh :public Object
 {
 public:
 	friend class MeshManagementCentre;
@@ -17,11 +34,11 @@ public:
 	/// </summary>
 	/// <param name="verticesCount"></param>
 	/// <param name="indicesCount"></param>
-	Mesh(const GLTSizei verticesCount, const GLTSizei indicesCount) :Object()
+	SubMesh(const GLTSizei verticesCount, const GLTSizei indicesCount) :Object()
 	{
 		_allocate(verticesCount, indicesCount);
 	}
-	~Mesh() {
+	~SubMesh() {
 		_deallocate();
 	}
 	inline void setVertices(const glm::vec4 vertices[])
@@ -156,4 +173,27 @@ private:
 	const GLTUInt16* m_indices;
 
 
+};
+
+class Mesh :public Object
+{
+public:
+	Mesh() {}
+	~Mesh() {}
+	void addMesh(SubMesh* mesh)
+	{
+		m_meshes.push_back(mesh);
+	}
+	SubMesh* getMesh(int index)
+	{
+		if (index < m_meshes.size() && index >= 0)
+		{
+			return m_meshes[index];
+		}
+		return nullptr;
+	}
+	inline std::vector<SubMesh*> getMeshes() { return m_meshes; }
+	inline const size_t getMeshCount() { return m_meshes.size(); }
+private:
+	std::vector<SubMesh*> m_meshes;
 };
