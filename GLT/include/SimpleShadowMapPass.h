@@ -32,7 +32,7 @@ public:
 
 		// prepareResources
 
-		m_replacedShadowMaterialPtr = new Material(std::shared_ptr<Shader>(new Shader("shadowmap")));
+		m_replacedShadowMaterialPtr = new Material(std::shared_ptr<Shader>(new Shader("SimpleShadowMap")));
 
 		auto shadowData = m_renderData->m_shadowData;
 		m_shadowMapRT = new RenderTexture(shadowData.m_shadowSize.x, shadowData.m_shadowSize.y, TextureInternalFormat::None, TextureInternalFormat::Depth16,

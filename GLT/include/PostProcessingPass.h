@@ -31,7 +31,7 @@ public:
 
 		LogicResourceManager::getInstance()->addResource(ResourceType::Mesh, m_fullscreenTriangle);
 
-		m_fullscreenShader = std::shared_ptr<Shader>(new Shader("postProcessing"));
+		m_fullscreenShader = std::shared_ptr<Shader>(new Shader("PostProcessing"));
 
 		m_fullscreenMat = new Material(m_fullscreenShader);
 

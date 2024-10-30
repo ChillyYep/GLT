@@ -21,8 +21,8 @@ void createScene()
 	scene->setMainScene(true);
 	SceneManager::getInstance()->addScene(scene);
 	// 材质
-	auto opaqueShader = shared_ptr<Shader>(new Shader("cube_tex"));
-	auto transparentShader = shared_ptr<Shader>(new Shader("cube_tex_transparent"));
+	auto opaqueShader = shared_ptr<Shader>(new Shader("StandardPhongBlin"));
+	auto transparentShader = shared_ptr<Shader>(new Shader("StandardPhongBlin_Transparent"));
 	//auto shader = shared_ptr<Shader>(new Shader("depthview"));
 
 	auto mat1 = shared_ptr<Material>(new Material(opaqueShader));
@@ -31,18 +31,18 @@ void createScene()
 	// 需要引入一个从文件加载纹理的库
 
 	auto model = AssetUtils::getInstance()->loadModel("Resources/monkeyHead.obj");
-	auto tex = AssetUtils::getInstance()->loadTexture2D("Resources/wall.jpg");
-	tex->m_name = "wall";
-	tex->setInternalFormat(TextureInternalFormat::RGB8);
-	tex->setLevels(4);
-	tex->setPerChannelSize(TexturePerChannelSize::UNSIGNED_BYTE);
-	tex->setWrapModeS(TextureWrapMode::Repeat);
-	tex->setWrapModeT(TextureWrapMode::Repeat);
-	tex->setTextureFilter(TextureFilterMode::Linear_Mipmap_Linear);
+	auto wallTex = AssetUtils::getInstance()->loadTexture2D("Resources/wall.jpg");
+	wallTex->m_name = "wall";
+	wallTex->setInternalFormat(TextureInternalFormat::RGB8);
+	wallTex->setLevels(4);
+	wallTex->setPerChannelSize(TexturePerChannelSize::UNSIGNED_BYTE);
+	wallTex->setWrapModeS(TextureWrapMode::Repeat);
+	wallTex->setWrapModeT(TextureWrapMode::Repeat);
+	wallTex->setTextureFilter(TextureFilterMode::Linear_Mipmap_Linear);
 
-	mat1->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(tex)));
+	mat1->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(Texture2D::getWhiteTex2D())));
 	mat2->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(Texture2D::getGrayTex2D())));
-	mat3->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(tex)));
+	mat3->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(wallTex)));
 	mat3->setProperty(ShaderPropertyNames::CommonAlpha, std::shared_ptr<MaterialFloatProperty>(new MaterialFloatProperty(0.5f)));
 	// 网格
 	auto cubeMesh = PrimitiveUtils::createCube();

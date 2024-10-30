@@ -199,19 +199,15 @@
     <None Include="include\3rdParty\assimp\vector2.inl" />
     <None Include="include\3rdParty\assimp\vector3.inl" />
     <None Include="Shader\common.attr" />
-    <None Include="Shader\cube.frag" />
-    <None Include="Shader\cube.vert" />
-    <None Include="Shader\cube_tex.frag" />
-    <None Include="Shader\cube_tex.vert" />
-    <None Include="Shader\cube_tex_transparent.frag" />
-    <None Include="Shader\cube_tex_transparent.vert" />
-    <None Include="Shader\depthview.frag" />
-    <None Include="Shader\depthview.vert" />
+    <None Include="Shader\StandardPhongBlin.frag" />
+    <None Include="Shader\StandardPhongBlin.vert" />
+    <None Include="Shader\StandardPhongBlin_Transparent.frag" />
+    <None Include="Shader\StandardPhongBlin_Transparent.vert" />
     <None Include="Shader\lightdata.attr" />
     <None Include="Shader\postProcessing.frag" />
     <None Include="Shader\postProcessing.vert" />
-    <None Include="Shader\shadowmap.frag" />
-    <None Include="Shader\shadowmap.vert" />
+    <None Include="Shader\SimpleShadowMap.frag" />
+    <None Include="Shader\SimpleShadowMap.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\3rdParty\assimp\aabb.h" />
