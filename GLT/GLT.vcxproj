@@ -198,14 +198,15 @@
     <None Include="include\3rdParty\assimp\SmoothingGroups.inl" />
     <None Include="include\3rdParty\assimp\vector2.inl" />
     <None Include="include\3rdParty\assimp\vector3.inl" />
+    <None Include="Resources\S4609_YT_Rig.fbx" />
     <None Include="Shader\common.attr" />
     <None Include="Shader\StandardPhongBlin.frag" />
     <None Include="Shader\StandardPhongBlin.vert" />
     <None Include="Shader\StandardPhongBlin_Transparent.frag" />
     <None Include="Shader\StandardPhongBlin_Transparent.vert" />
     <None Include="Shader\lightdata.attr" />
-    <None Include="Shader\postProcessing.frag" />
-    <None Include="Shader\postProcessing.vert" />
+    <None Include="Shader\PostProcessing.frag" />
+    <None Include="Shader\PostProcessing.vert" />
     <None Include="Shader\SimpleShadowMap.frag" />
     <None Include="Shader\SimpleShadowMap.vert" />
   </ItemGroup>
@@ -383,6 +384,17 @@
     <ClInclude Include="include\WindowImplementBase.h" />
     <ClInclude Include="include\ScriptableRenderContext.h" />
     <ClInclude Include="Object.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="Resources\monkeyHead.obj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\TCom_Wall_Stone3_2x2_1K_albedo.tif" />
+    <Image Include="Resources\TCom_Wall_Stone3_2x2_1K_ao.tif" />
+    <Image Include="Resources\TCom_Wall_Stone3_2x2_1K_height.tif" />
+    <Image Include="Resources\TCom_Wall_Stone3_2x2_1K_normal.tif" />
+    <Image Include="Resources\TCom_Wall_Stone3_2x2_1K_roughness.tif" />
+    <Image Include="Resources\wall.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

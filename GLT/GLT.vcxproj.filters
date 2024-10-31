@@ -317,10 +317,10 @@
     <None Include="Shader\common.attr">
       <Filter>源文件\ShaderSourceCode</Filter>
     </None>
-    <None Include="Shader\postProcessing.frag">
+    <None Include="Shader\PostProcessing.frag">
       <Filter>源文件\ShaderSourceCode</Filter>
     </None>
-    <None Include="Shader\postProcessing.vert">
+    <None Include="Shader\PostProcessing.vert">
       <Filter>源文件\ShaderSourceCode</Filter>
     </None>
     <None Include="Shader\SimpleShadowMap.frag">
@@ -358,6 +358,9 @@
     </None>
     <None Include="include\3rdParty\assimp\vector3.inl">
       <Filter>头文件\plugins\assimp</Filter>
+    </None>
+    <None Include="Resources\S4609_YT_Rig.fbx">
+      <Filter>资源文件</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -880,5 +883,30 @@
     <ClInclude Include="include\Model.h">
       <Filter>头文件\Game\Scene</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="Resources\monkeyHead.obj">
+      <Filter>资源文件</Filter>
+    </Object>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\TCom_Wall_Stone3_2x2_1K_albedo.tif">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\TCom_Wall_Stone3_2x2_1K_ao.tif">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\TCom_Wall_Stone3_2x2_1K_height.tif">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\TCom_Wall_Stone3_2x2_1K_normal.tif">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\TCom_Wall_Stone3_2x2_1K_roughness.tif">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="Resources\wall.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>

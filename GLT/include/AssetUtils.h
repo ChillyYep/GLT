@@ -14,11 +14,6 @@ enum class AssetType {
 	Texture,
 	Model
 };
-struct ModelItem
-{
-	std::vector<SubMesh*> m_meshes;
-	std::vector<std::vector<Texture*>> m_textureResources;
-};
 
 class AssetUtils :public Singleton<AssetUtils>
 {
