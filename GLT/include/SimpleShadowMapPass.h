@@ -36,7 +36,7 @@ public:
 
 		auto shadowData = m_renderData->m_shadowData;
 		m_shadowMapRT = new RenderTexture(shadowData.m_shadowSize.x, shadowData.m_shadowSize.y, TextureInternalFormat::None, TextureInternalFormat::Depth16,
-			TextureInternalFormat::None);
+			TextureInternalFormat::None, TexturePerChannelSize::UNSIGNED_BYTE, TextureWrapMode::Border, TextureWrapMode::Border, TextureFilterMode::Point_Mipmap_Point, TextureFilterMode::Point_Mipmap_Point);
 		m_shadowMapRT->m_name = ResourceName::ShadowMapRTName;
 		m_shadowMapRT->setColorAttachmentSampleEnabled(true);
 		m_shadowMapRT->setDepthAttachmentSampleEnabled(true);

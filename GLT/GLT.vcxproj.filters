@@ -305,10 +305,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shader\StandardPhongBlin.frag">
+    <None Include="Shader\StandardBlinPhong.frag">
       <Filter>源文件\ShaderSourceCode</Filter>
     </None>
-    <None Include="Shader\StandardPhongBlin.vert">
+    <None Include="Shader\StandardBlinPhong.vert">
       <Filter>源文件\ShaderSourceCode</Filter>
     </None>
     <None Include="Shader\lightdata.attr">
@@ -329,10 +329,10 @@
     <None Include="Shader\SimpleShadowMap.vert">
       <Filter>源文件\ShaderSourceCode</Filter>
     </None>
-    <None Include="Shader\StandardPhongBlin_Transparent.frag">
+    <None Include="Shader\StandardBlinPhong_Transparent.frag">
       <Filter>源文件\ShaderSourceCode</Filter>
     </None>
-    <None Include="Shader\StandardPhongBlin_Transparent.vert">
+    <None Include="Shader\StandardBlinPhong_Transparent.vert">
       <Filter>源文件\ShaderSourceCode</Filter>
     </None>
     <None Include="include\3rdParty\assimp\color4.inl">
@@ -358,9 +358,6 @@
     </None>
     <None Include="include\3rdParty\assimp\vector3.inl">
       <Filter>头文件\plugins\assimp</Filter>
-    </None>
-    <None Include="Resources\S4609_YT_Rig.fbx">
-      <Filter>资源文件</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -883,11 +880,9 @@
     <ClInclude Include="include\Model.h">
       <Filter>头文件\Game\Scene</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="Resources\monkeyHead.obj">
-      <Filter>资源文件</Filter>
-    </Object>
+    <ClInclude Include="include\Cubemap.h">
+      <Filter>头文件\Render\RenderResourceManager\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\TCom_Wall_Stone3_2x2_1K_albedo.tif">

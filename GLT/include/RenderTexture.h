@@ -12,7 +12,7 @@ public:
 		TextureInternalFormat stencilInternalFormat = TextureInternalFormat::None,
 		TexturePerChannelSize perChannelSize = TexturePerChannelSize::UNSIGNED_BYTE,
 		TextureWrapMode wrapModeS = TextureWrapMode::ClampEdge, TextureWrapMode wrapModeT = TextureWrapMode::ClampEdge,
-		TextureFilterMode textureFilter = TextureFilterMode::Point_Mipmap_Point)
+		TextureFilterMode textureFilter = TextureFilterMode::Point_Mipmap_Point, TextureFilterMode depthTextureFilter = TextureFilterMode::Point_Mipmap_Point)
 		:Texture2D(), m_colorAttachmentSampleEnabled(false), m_depthAttachmentAllowSampled(false), m_stencilAttachmentAllowSampled(false), m_renderTarget(nullptr),
 		m_colorAttachment((RenderBuffer*)nullptr, FBOAttachmentType::Color), m_depthAttachment((RenderBuffer*)nullptr, FBOAttachmentType::Depth), m_stencilAttachment((RenderBuffer*)nullptr, FBOAttachmentType::Stencil)
 	{
@@ -31,6 +31,7 @@ public:
 		m_wrapModeS = wrapModeS;
 		m_wrapModeT = wrapModeT;
 		m_textureFilter = textureFilter;
+		m_depthTexFilterMode = depthTextureFilter;
 	}
 
 	~RenderTexture() {}
@@ -46,7 +47,7 @@ public:
 		{
 			return;
 		}
-		RenderTargetDescriptor rtDesc(m_width, m_height, m_colorInternalFormat, m_depthInternalFormat, m_stencilInternalFormat, m_perChannelSize, m_wrapModeS, m_wrapModeT, m_textureFilter);
+		RenderTargetDescriptor rtDesc(m_width, m_height, m_colorInternalFormat, m_depthInternalFormat, m_stencilInternalFormat, m_perChannelSize, m_wrapModeS, m_wrapModeT, m_textureFilter, m_depthTexFilterMode);
 		m_renderTarget = LogicResourceManager::getInstance()->addResource(rtDesc);
 		m_renderTarget->m_name = m_name;
 		if (m_colorInternalFormat != TextureInternalFormat::None)
@@ -96,9 +97,9 @@ public:
 				depthTexture->setLevels(1);
 				depthTexture->setIsProxy(false);
 				depthTexture->setPerChannelSize(TexturePerChannelSize::UNSIGNED_BYTE);
-				depthTexture->setTextureFilter(TextureFilterMode::Point_Mipmap_Point);
-				depthTexture->setWrapModeS(TextureWrapMode::ClampEdge);
-				depthTexture->setWrapModeT(TextureWrapMode::ClampEdge);
+				depthTexture->setTextureFilter(m_depthTexFilterMode);
+				depthTexture->setWrapModeS(TextureWrapMode::Border);
+				depthTexture->setWrapModeT(TextureWrapMode::Border);
 				depthTexture->setDepthTexture(true);
 				LogicResourceManager::getInstance()->addResource(ResourceType::Texture, depthTexture);
 				m_depthAttachment = AttachmentEntityWrapper(depthTexture,
@@ -222,6 +223,7 @@ private:
 	bool m_isCreated = false;
 	TextureInternalFormat m_depthInternalFormat;
 	TextureInternalFormat m_stencilInternalFormat;
+	TextureFilterMode m_depthTexFilterMode;
 	RenderTarget* m_renderTarget;
 
 	bool m_colorAttachmentSampleEnabled;

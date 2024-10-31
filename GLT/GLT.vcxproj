@@ -198,12 +198,11 @@
     <None Include="include\3rdParty\assimp\SmoothingGroups.inl" />
     <None Include="include\3rdParty\assimp\vector2.inl" />
     <None Include="include\3rdParty\assimp\vector3.inl" />
-    <None Include="Resources\S4609_YT_Rig.fbx" />
     <None Include="Shader\common.attr" />
-    <None Include="Shader\StandardPhongBlin.frag" />
-    <None Include="Shader\StandardPhongBlin.vert" />
-    <None Include="Shader\StandardPhongBlin_Transparent.frag" />
-    <None Include="Shader\StandardPhongBlin_Transparent.vert" />
+    <None Include="Shader\StandardBlinPhong.frag" />
+    <None Include="Shader\StandardBlinPhong.vert" />
+    <None Include="Shader\StandardBlinPhong_Transparent.frag" />
+    <None Include="Shader\StandardBlinPhong_Transparent.vert" />
     <None Include="Shader\lightdata.attr" />
     <None Include="Shader\PostProcessing.frag" />
     <None Include="Shader\PostProcessing.vert" />
@@ -309,6 +308,7 @@
     <ClInclude Include="include\ComponentType.h" />
     <ClInclude Include="include\ConstantBuffers.h" />
     <ClInclude Include="include\ConstantBufferType.h" />
+    <ClInclude Include="include\Cubemap.h" />
     <ClInclude Include="include\CullingResult.h" />
     <ClInclude Include="include\DebugPassBase.h" />
     <ClInclude Include="include\DeviceBase.h" />
@@ -384,9 +384,6 @@
     <ClInclude Include="include\WindowImplementBase.h" />
     <ClInclude Include="include\ScriptableRenderContext.h" />
     <ClInclude Include="Object.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="Resources\monkeyHead.obj" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\TCom_Wall_Stone3_2x2_1K_albedo.tif" />

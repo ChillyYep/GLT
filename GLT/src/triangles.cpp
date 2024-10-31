@@ -21,8 +21,8 @@ void createScene()
 	scene->setMainScene(true);
 	SceneManager::getInstance()->addScene(scene);
 	// ²ÄÖÊ
-	auto opaqueShader = shared_ptr<Shader>(new Shader("StandardPhongBlin"));
-	auto transparentShader = shared_ptr<Shader>(new Shader("StandardPhongBlin_Transparent"));
+	auto opaqueShader = shared_ptr<Shader>(new Shader("StandardBlinPhong"));
+	auto transparentShader = shared_ptr<Shader>(new Shader("StandardBlinPhong_Transparent"));
 	//auto shader = shared_ptr<Shader>(new Shader("depthview"));
 
 	auto mat1 = shared_ptr<Material>(new Material(opaqueShader));
@@ -70,7 +70,7 @@ void createScene()
 	auto go3 = SceneUtility::createMeshGameObject(planeMesh, mat2);
 	auto planeTransform = go3->getComponent<Transform>();
 	planeTransform->setPosition(glm::vec3(1.5f, -3.0f, 0.0f));
-	planeTransform->setScale(glm::vec3(10.0f));
+	planeTransform->setScale(glm::vec3(100.0f));
 	planeTransform->setEularAngle(glm::vec3(0.0f));
 
 	auto cameraGo = SceneUtility::createEmptyGameObject();
