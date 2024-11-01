@@ -314,6 +314,7 @@
     <ClInclude Include="include\DeviceBase.h" />
     <ClInclude Include="include\DrawOpaquePass.h" />
     <ClInclude Include="include\DrawSettings.h" />
+    <ClInclude Include="include\DrawSkyboxPass.h" />
     <ClInclude Include="include\DrawTransparentPass.h" />
     <ClInclude Include="include\EventObserver.h" />
     <ClInclude Include="include\FileUtils.h" />

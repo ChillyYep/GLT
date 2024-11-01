@@ -883,6 +883,9 @@
     <ClInclude Include="include\Cubemap.h">
       <Filter>头文件\Render\RenderResourceManager\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="include\DrawSkyboxPass.h">
+      <Filter>头文件\Render\PassManagement</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\TCom_Wall_Stone3_2x2_1K_albedo.tif">
