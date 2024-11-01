@@ -20,7 +20,7 @@ public:
 		delete[] m_faces;
 		m_faces = nullptr;
 	}
-	void setFaces(CubemapFace cubemapFace, Texture2D* face)
+	void setFace(CubemapFace cubemapFace, Texture2D* face)
 	{
 		m_faces[(int)cubemapFace] = face;
 	}
