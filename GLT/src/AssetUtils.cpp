@@ -47,6 +47,19 @@ void AssetUtils::unloadTexture2D(Texture2D* asset)
 	removeAssetFromDatabase(asset, AssetType::Texture);
 }
 
+Cubemap* AssetUtils::loadCubemap(std::string filepath)
+{
+	if (isAssetLoaded(filepath))
+	{
+		return static_cast<Cubemap*>(m_assetDatabase[AssetType::Texture][m_assetpath2instanceId[filepath]]);
+	}
+}
+
+void AssetUtils::unloadCubemap(Cubemap* asset)
+{
+
+}
+
 void AssetUtils::insertAssetToDatabase(std::string filepath, AssetType assetType, Object* asset)
 {
 	auto instanceId = asset->getInstanceId();

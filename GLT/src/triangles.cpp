@@ -49,7 +49,7 @@ void createScene()
 	auto planeMesh = PrimitiveUtils::createQuad();
 
 	std::vector<std::shared_ptr<Material>> mats(model->getMeshCount());
-	for (int i = 0;i < model->getMeshCount();++i)
+	for (int i = 0; i < model->getMeshCount(); ++i)
 	{
 		mats[i] = mat1;
 	}

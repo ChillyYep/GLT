@@ -4,6 +4,7 @@
 #include <map>
 #include <Mesh.h>
 #include <Texture.h>
+#include <Cubemap.h>
 #include <Sampler.h>
 #include <RenderTarget.h>
 #include <ConstantBuffers.h>

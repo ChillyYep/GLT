@@ -1,6 +1,7 @@
 #pragma once
 #include <Texture.h>
 #include <Model.h>
+#include <Cubemap.h>
 #include <3rdParty/stb_image/stb_image.h>
 #include <unordered_map>
 #include <Singleton.h>
@@ -42,6 +43,9 @@ public:
 
 	Texture2D* loadTexture2D(std::string filepath);
 	void unloadTexture2D(Texture2D* asset);
+
+	Cubemap* loadCubemap(std::string filepath);
+	void unloadCubemap(Cubemap* asset);
 
 	Model* loadModel(std::string filepath);
 	void unloadModel(Model* model);
