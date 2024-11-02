@@ -67,6 +67,7 @@ public:
 				colorTexture->setTextureFilter(m_textureFilter);
 				colorTexture->setWrapModeS(m_wrapModeS);
 				colorTexture->setWrapModeT(m_wrapModeT);
+				colorTexture->setBorderColor(m_borderColor);
 				LogicResourceManager::getInstance()->addResource(ResourceType::Texture, colorTexture);
 				m_colorAttachment = AttachmentEntityWrapper(colorTexture, FBOAttachmentType::Color);
 				m_renderTarget->addAttachment(m_colorAttachment);
@@ -100,6 +101,7 @@ public:
 				depthTexture->setTextureFilter(m_depthTexFilterMode);
 				depthTexture->setWrapModeS(TextureWrapMode::Border);
 				depthTexture->setWrapModeT(TextureWrapMode::Border);
+				depthTexture->setBorderColor(m_depthBorderColor);
 				depthTexture->setDepthTexture(true);
 				LogicResourceManager::getInstance()->addResource(ResourceType::Texture, depthTexture);
 				m_depthAttachment = AttachmentEntityWrapper(depthTexture,
@@ -195,6 +197,7 @@ public:
 		assert(!m_isCreated && "Please call function \"setColorAttachmentSampleEnabled\" before \"create\"!");
 		m_stencilAttachmentAllowSampled = enabled;
 	}
+	__GET_SET_PROPERTY__(DepthBorderColor, glm::vec4, m_depthBorderColor);
 private:
 	void release(AttachmentEntityWrapper& attachment)
 	{
@@ -218,13 +221,13 @@ private:
 			}
 		}
 	}
-
 private:
 	bool m_isCreated = false;
 	TextureInternalFormat m_depthInternalFormat;
 	TextureInternalFormat m_stencilInternalFormat;
 	TextureFilterMode m_depthTexFilterMode;
 	RenderTarget* m_renderTarget;
+	glm::vec4 m_depthBorderColor;
 
 	bool m_colorAttachmentSampleEnabled;
 	bool m_depthAttachmentAllowSampled;

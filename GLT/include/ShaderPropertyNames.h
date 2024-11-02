@@ -33,6 +33,7 @@ public:
 	static const char* MVP;
 	static const char* VP;
 
+	static const char* SkyBox;
 	static const char* MainTex;
 	static const char* ShadowMapTex;
 	static const char* Ambient;

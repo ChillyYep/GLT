@@ -29,26 +29,39 @@ public:
 			break;
 		}
 	}
-
-	inline void setTextureFilter(GLuint texture, GLenum pname, TextureFilterMode textureFilter)
+	inline GLenum getGLTextureWrapMode(TextureWrapMode wrapMode)
+	{
+		switch (wrapMode)
+		{
+		case TextureWrapMode::ClampEdge:
+			return GL_CLAMP_TO_EDGE;
+		case TextureWrapMode::Border:
+			return GL_CLAMP_TO_BORDER;
+		case TextureWrapMode::Repeat:
+			return GL_REPEAT;
+		case TextureWrapMode::MirroredRepeat:
+			return GL_MIRRORED_REPEAT;
+		default:
+			break;
+		}
+		return GL_CLAMP_TO_EDGE;
+	}
+	inline GLenum getGLTextureFilter(TextureFilterMode textureFilter)
 	{
 		switch (textureFilter)
 		{
 		case TextureFilterMode::Point_Mipmap_Point:
-			glTextureParameteri(texture, pname, GL_NEAREST_MIPMAP_NEAREST);
-			break;
-		case TextureFilterMode::Point_Mipmap_Linear:
-			glTextureParameteri(texture, pname, GL_NEAREST_MIPMAP_LINEAR);
-			break;
+			return GL_NEAREST_MIPMAP_NEAREST;
 		case TextureFilterMode::Linear_Mipmap_Point:
-			glTextureParameteri(texture, pname, GL_LINEAR_MIPMAP_NEAREST);
-			break;
+			return GL_NEAREST_MIPMAP_LINEAR;
+		case TextureFilterMode::Point_Mipmap_Linear:
+			return GL_LINEAR_MIPMAP_NEAREST;
 		case TextureFilterMode::Linear_Mipmap_Linear:
-			glTextureParameteri(texture, pname, GL_LINEAR_MIPMAP_LINEAR);
-			break;
+			return GL_LINEAR_MIPMAP_LINEAR;
 		default:
 			break;
 		}
+		return GL_NEAREST_MIPMAP_NEAREST;
 	}
 
 	inline GLenum getGLTextureExternalFormat(TextureExternalFormat externalFormat)

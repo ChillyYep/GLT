@@ -152,6 +152,7 @@
     <ClCompile Include="src\CommandBuffer.cpp" />
     <ClCompile Include="src\Component.cpp" />
     <ClCompile Include="src\ConstantBuffers.cpp" />
+    <ClCompile Include="src\Cubemap.cpp" />
     <ClCompile Include="src\EventSystem.cpp" />
     <ClCompile Include="src\FileUtils.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
@@ -199,6 +200,8 @@
     <None Include="include\3rdParty\assimp\vector2.inl" />
     <None Include="include\3rdParty\assimp\vector3.inl" />
     <None Include="Shader\common.attr" />
+    <None Include="Shader\Skybox.frag" />
+    <None Include="Shader\Skybox.vert" />
     <None Include="Shader\StandardBlinPhong.frag" />
     <None Include="Shader\StandardBlinPhong.vert" />
     <None Include="Shader\StandardBlinPhong_Transparent.frag" />

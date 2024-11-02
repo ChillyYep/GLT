@@ -40,17 +40,26 @@ std::vector<MeshResourceIdentifier> GLDevice::requestMeshResources(std::vector<S
 				glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)offset);
 				glEnableVertexAttribArray(1);
 			}
+			else {
+				glDisableVertexAttribArray(1);
+			}
 			if (uvsMemorySize > 0)
 			{
 				auto offset = colorsMemorySize + verticesMemorySize;
 				glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)offset);
 				glEnableVertexAttribArray(2);
 			}
+			else {
+				glDisableVertexAttribArray(2);
+			}
 			if (normalsMemorySize > 0)
 			{
 				auto offset = colorsMemorySize + verticesMemorySize + uvsMemorySize;
 				glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, (void*)offset);
 				glEnableVertexAttribArray(3);
+			}
+			else {
+				glDisableVertexAttribArray(3);
 			}
 		}
 
@@ -211,11 +220,11 @@ std::vector<TextureResourceIdentifier> GLDevice::requestTextureResources(std::ve
 			auto texture2DPtr = static_cast<Texture2D*>(texturePtr);
 			//glBindTextureUnit(0, resourceIdentifier.m_texture);
 
-			setTextureWrapMode(resourceIdentifier.m_texture, GL_TEXTURE_WRAP_S, texture2DPtr->getWrapModeS());
-			setTextureWrapMode(resourceIdentifier.m_texture, GL_TEXTURE_WRAP_T, texture2DPtr->getWrapModeT());
-
-			setTextureFilter(resourceIdentifier.m_texture, GL_TEXTURE_MIN_FILTER, texture2DPtr->getTextureFilter());
-			setTextureFilter(resourceIdentifier.m_texture, GL_TEXTURE_MAG_FILTER, texture2DPtr->getTextureFilter());
+			glTextureParameteri(resourceIdentifier.m_texture, GL_TEXTURE_WRAP_S, getGLTextureWrapMode(texture2DPtr->getWrapModeS()));
+			glTextureParameteri(resourceIdentifier.m_texture, GL_TEXTURE_WRAP_T, getGLTextureWrapMode(texture2DPtr->getWrapModeT()));
+			glTextureParameterfv(resourceIdentifier.m_texture, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(texture2DPtr->getBorderColor()));
+			glTextureParameteri(resourceIdentifier.m_texture, GL_TEXTURE_MIN_FILTER, getGLTextureFilter(texture2DPtr->getTextureFilter()));
+			glTextureParameteri(resourceIdentifier.m_texture, GL_TEXTURE_MAG_FILTER, getGLTextureFilter(texture2DPtr->getTextureFilter()));
 			/*	if (texture2DPtr->IsDepthTexture())
 				{
 					glTextureParameteri(resourceIdentifier.m_texture, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
@@ -229,6 +238,23 @@ std::vector<TextureResourceIdentifier> GLDevice::requestTextureResources(std::ve
 		{
 			glTextureStorage3D(resourceIdentifier.m_texture, resourceIdentifier.m_levels, internalFormat, resourceIdentifier.m_width, resourceIdentifier.m_height,
 				resourceIdentifier.m_depth);
+		}
+		else if (textureType == TextureType::CubeMap)
+		{
+			auto cubemap = static_cast<Cubemap*>(texturePtr);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, resourceIdentifier.m_texture);
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, getGLTextureFilter(cubemap->getTextureFilter()));
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, getGLTextureFilter(cubemap->getTextureFilter()));
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, getGLTextureWrapMode(cubemap->getWrapModeS()));
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, getGLTextureWrapMode(cubemap->getWrapModeT()));
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, getGLTextureWrapMode(cubemap->getWrapModeR()));
+			glTexParameterfv(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(cubemap->getBorderColor()));
+			for (int i = 0;i < Cubemap::CUBEMAP_FACENUM;++i)
+			{
+				auto tex2D = cubemap->getFace((CubemapFace)(i));
+				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, internalFormat, resourceIdentifier.m_width, resourceIdentifier.m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+			}
+			glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 		}
 		// Todo其他类型
 	}
@@ -256,7 +282,6 @@ void GLDevice::updateTextureResources(std::vector<Texture*>& texturePtrs, std::v
 		else if (textureType == TextureType::Texture2D)
 		{
 			auto texture2DPtr = static_cast<Texture2D*>(texturePtr);
-			//glBindTextureUnit(0, resourceIdentifier->m_texture);
 
 			auto data = texturePtr->getData();
 			if (data != nullptr)
@@ -269,6 +294,22 @@ void GLDevice::updateTextureResources(std::vector<Texture*>& texturePtrs, std::v
 		}
 		else if (textureType == TextureType::Texture3D)
 		{
+		}
+		else if (textureType == TextureType::CubeMap)
+		{
+			auto cubemapPtr = static_cast<Cubemap*>(texturePtr);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, resourceIdentifier.m_texture);
+			for (int i = 0;i < Cubemap::CUBEMAP_FACENUM;++i)
+			{
+				auto tex2D = cubemapPtr->getFace((CubemapFace)(i));
+				auto texData = tex2D->getData();
+				if (texData != nullptr)
+				{
+					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, getGLTextureInternalFormat(resourceIdentifier.m_internalFormat), resourceIdentifier.m_width, resourceIdentifier.m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, texData);
+				}
+			}
+			glGenerateTextureMipmap(resourceIdentifier.m_texture);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 		}
 		// Todo其他类型
 	}

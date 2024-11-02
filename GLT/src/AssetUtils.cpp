@@ -7,6 +7,7 @@ Texture2D* AssetUtils::loadTexture2D(std::string filepath)
 		return static_cast<Texture2D*>(m_assetDatabase[AssetType::Texture][m_assetpath2instanceId[filepath]]);
 	}
 	int width, height, channels;
+	stbi_set_flip_vertically_on_load(false);
 	GLTUByte* imageData = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
 	if (imageData != nullptr)
 	{
@@ -49,10 +50,7 @@ void AssetUtils::unloadTexture2D(Texture2D* asset)
 
 Cubemap* AssetUtils::loadCubemap(std::string filepath)
 {
-	if (isAssetLoaded(filepath))
-	{
-		return static_cast<Cubemap*>(m_assetDatabase[AssetType::Texture][m_assetpath2instanceId[filepath]]);
-	}
+	return static_cast<Cubemap*>(m_assetDatabase[AssetType::Texture][m_assetpath2instanceId[filepath]]);
 }
 
 void AssetUtils::unloadCubemap(Cubemap* asset)

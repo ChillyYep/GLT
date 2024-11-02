@@ -1,6 +1,6 @@
 #include "PrimitiveUtils.h"
 
-SubMesh* PrimitiveUtils::createCube()
+SubMesh* PrimitiveUtils::createCube(VertexProperty needProperty)
 {
 	static const glm::vec4 cube_vertices[] = {
 		// 前
@@ -34,71 +34,6 @@ SubMesh* PrimitiveUtils::createCube()
 		{-1.0f,  1.0f,  1.0f,1.0f},
 		{-1.0f, 1.0f,  -1.0f,1.0f},
 	};
-
-
-	static const glm::vec4 cube_colors[] = {
-		{1.0f,1.0f,1.0f,1.0f},
-		{1.0f,1.0f,1.0f,1.0f},
-		{1.0f,1.0f,1.0f,1.0f},
-		{1.0f,1.0f,1.0f,1.0f},
-
-		{1.0f,1.0f,1.0f,1.0f},
-		{1.0f,1.0f,1.0f,1.0f},
-		{1.0f,1.0f,1.0f,1.0f},
-		{1.0f,1.0f,1.0f,1.0f},
-
-		{1.0f,1.0f,1.0f,1.0f},
-		{1.0f,1.0f,1.0f,1.0f},
-		{1.0f,1.0f,1.0f,1.0f},
-		{1.0f,1.0f,1.0f,1.0f},
-
-		{1.0f,1.0f,1.0f,1.0f},
-		{1.0f,1.0f,1.0f,1.0f},
-		{1.0f,1.0f,1.0f,1.0f},
-		{1.0f,1.0f,1.0f,1.0f},
-
-		{1.0f,1.0f,1.0f,1.0f},
-		{1.0f,1.0f,1.0f,1.0f},
-		{1.0f,1.0f,1.0f,1.0f},
-		{1.0f,1.0f,1.0f,1.0f},
-
-		{1.0f,1.0f,1.0f,1.0f},
-		{1.0f,1.0f,1.0f,1.0f},
-		{1.0f,1.0f,1.0f,1.0f},
-		{1.0f,1.0f,1.0f,1.0f},
-	};
-
-	static const glm::vec2 cube_uvs[] = {
-		{0.0f,0.0f},
-		{1.0f,0.0f},
-		{1.0f,1.0f},
-		{0.0f,1.0f},
-
-		{0.0f,0.0f},
-		{1.0f,0.0f},
-		{1.0f,1.0f},
-		{0.0f,1.0f},
-
-		{0.0f,0.0f},
-		{1.0f,0.0f},
-		{1.0f,1.0f},
-		{0.0f,1.0f},
-
-		{0.0f,0.0f},
-		{1.0f,0.0f},
-		{1.0f,1.0f},
-		{0.0f,1.0f},
-
-		{0.0f,0.0f},
-		{1.0f,0.0f},
-		{1.0f,1.0f},
-		{0.0f,1.0f},
-
-		{0.0f,0.0f},
-		{1.0f,0.0f},
-		{1.0f,1.0f},
-		{0.0f,1.0f},
-	};
 	static const GLTUInt16 cube_indices[] = {
 		0,1,2,2,3,0,
 		4,5,6,6,7,4,
@@ -107,46 +42,121 @@ SubMesh* PrimitiveUtils::createCube()
 		16,17,18,18,19,16,
 		20,21,22,22,23,20,
 	};
-
-	static const glm::vec4 cube_normals[] = {
-		// 前
-		{0.0f,0.0f,1.0f,1.0f},
-		{0.0f,0.0f,1.0f,1.0f},
-		{0.0f,0.0f,1.0f,1.0f},
-		{0.0f,0.0f,1.0f,1.0f},
-		// 后
-		{0.0f,0.0f,-1.0f,1.0f},
-		{0.0f,0.0f,-1.0f,1.0f},
-		{0.0f,0.0f,-1.0f,1.0f},
-		{0.0f,0.0f,-1.0f,1.0f},
-		// 上
-		{0.0f,  1.0f,  0.0f,1.0f},
-		{0.0f,  1.0f,  0.0f,1.0f},
-		{0.0f,  1.0f,  0.0f,1.0f},
-		{0.0f,  1.0f,  0.0f,1.0f},
-		// 下
-		{0.0f,  -1.0f,  0.0f,1.0f},
-		{0.0f,  -1.0f,  0.0f,1.0f},
-		{0.0f,  -1.0f,  0.0f,1.0f},
-		{0.0f,  -1.0f,  0.0f,1.0f},
-		// 右
-		{1.0f,  0.0f, 0.0f,1.0f},
-		{1.0f,  0.0f, 0.0f,1.0f},
-		{1.0f,  0.0f, 0.0f,1.0f},
-		{1.0f,  0.0f, 0.0f,1.0f},
-		// 左
-		{-1.0f,  0.0f, 0.0f,1.0f},
-		{-1.0f,  0.0f, 0.0f,1.0f},
-		{-1.0f,  0.0f, 0.0f,1.0f},
-		{-1.0f,  0.0f, 0.0f,1.0f},
-	};
-
 	auto object = new SubMesh(sizeof(cube_vertices) / sizeof(glm::vec4), sizeof(cube_indices) / sizeof(GLTUInt16));
+
 	object->setVertices(cube_vertices);
 	object->setIndices(cube_indices);
-	object->setColors(cube_colors);
-	object->setNormals(cube_normals);
-	object->setUVs(cube_uvs);
+	if (((unsigned int)needProperty & (unsigned int)VertexProperty::Color) > 0)
+	{
+		static const glm::vec4 cube_colors[] = {
+			{1.0f,1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f,1.0f},
+
+			{1.0f,1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f,1.0f},
+
+			{1.0f,1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f,1.0f},
+
+			{1.0f,1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f,1.0f},
+
+			{1.0f,1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f,1.0f},
+
+			{1.0f,1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f,1.0f},
+			{1.0f,1.0f,1.0f,1.0f},
+		};
+		object->setColors(cube_colors);
+	}
+
+	if (((unsigned int)needProperty & (unsigned int)VertexProperty::Texcoord1) > 0)
+	{
+		static const glm::vec2 cube_uvs[] = {
+		{0.0f,0.0f},
+		{1.0f,0.0f},
+		{1.0f,1.0f},
+		{0.0f,1.0f},
+
+		{0.0f,0.0f},
+		{1.0f,0.0f},
+		{1.0f,1.0f},
+		{0.0f,1.0f},
+
+		{0.0f,0.0f},
+		{1.0f,0.0f},
+		{1.0f,1.0f},
+		{0.0f,1.0f},
+
+		{0.0f,0.0f},
+		{1.0f,0.0f},
+		{1.0f,1.0f},
+		{0.0f,1.0f},
+
+		{0.0f,0.0f},
+		{1.0f,0.0f},
+		{1.0f,1.0f},
+		{0.0f,1.0f},
+
+		{0.0f,0.0f},
+		{1.0f,0.0f},
+		{1.0f,1.0f},
+		{0.0f,1.0f},
+		};
+		object->setUVs(cube_uvs);
+	}
+
+
+	if (((unsigned int)needProperty & (unsigned int)VertexProperty::Normal) > 0)
+	{
+		static const glm::vec4 cube_normals[] = {
+			// 前
+			{0.0f,0.0f,1.0f,1.0f},
+			{0.0f,0.0f,1.0f,1.0f},
+			{0.0f,0.0f,1.0f,1.0f},
+			{0.0f,0.0f,1.0f,1.0f},
+			// 后
+			{0.0f,0.0f,-1.0f,1.0f},
+			{0.0f,0.0f,-1.0f,1.0f},
+			{0.0f,0.0f,-1.0f,1.0f},
+			{0.0f,0.0f,-1.0f,1.0f},
+			// 上
+			{0.0f,  1.0f,  0.0f,1.0f},
+			{0.0f,  1.0f,  0.0f,1.0f},
+			{0.0f,  1.0f,  0.0f,1.0f},
+			{0.0f,  1.0f,  0.0f,1.0f},
+			// 下
+			{0.0f,  -1.0f,  0.0f,1.0f},
+			{0.0f,  -1.0f,  0.0f,1.0f},
+			{0.0f,  -1.0f,  0.0f,1.0f},
+			{0.0f,  -1.0f,  0.0f,1.0f},
+			// 右
+			{1.0f,  0.0f, 0.0f,1.0f},
+			{1.0f,  0.0f, 0.0f,1.0f},
+			{1.0f,  0.0f, 0.0f,1.0f},
+			{1.0f,  0.0f, 0.0f,1.0f},
+			// 左
+			{-1.0f,  0.0f, 0.0f,1.0f},
+			{-1.0f,  0.0f, 0.0f,1.0f},
+			{-1.0f,  0.0f, 0.0f,1.0f},
+			{-1.0f,  0.0f, 0.0f,1.0f},
+		};
+		object->setNormals(cube_normals);
+	}
+
+	
 	return object;
 }
 

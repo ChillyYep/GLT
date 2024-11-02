@@ -15,7 +15,7 @@ struct Bound {
 
 		otherMin = other.m_center - other.m_extends;
 		otherMax = other.m_center + other.m_extends;
-		
+
 		finalMin = glm::vec3(MIN(ownMin.x, otherMin.x), MIN(ownMin.y, otherMin.y), MIN(ownMin.z, otherMin.z));
 		finalMax = glm::vec3(MAX(ownMax.x, otherMax.x), MAX(ownMax.y, otherMax.y), MAX(ownMax.z, otherMax.z));
 		Bound finalBound;
@@ -56,18 +56,30 @@ public:
 	inline void setColors(const glm::vec4 colors[])
 	{
 		assert(m_readWrite);
+		if (m_colors == nullptr)
+		{
+			m_colors = new glm::vec4[m_verticesCount];
+		}
 		memcpy((void*)m_colors, colors, m_verticesCount * sizeof(glm::vec4));
 	}
 
 	inline void setUVs(const glm::vec2 uvs[])
 	{
 		assert(m_readWrite);
+		if (m_uvs == nullptr)
+		{
+			m_uvs = new glm::vec2[m_verticesCount];
+		}
 		memcpy((void*)m_uvs, uvs, m_verticesCount * sizeof(glm::vec2));
 	}
 
 	inline void setNormals(const glm::vec4 normals[])
 	{
 		assert(m_readWrite);
+		if (m_normals == nullptr)
+		{
+			m_normals = new glm::vec4[m_verticesCount];
+		}
 		memcpy((void*)m_normals, normals, m_verticesCount * sizeof(glm::vec4));
 	}
 	inline GLTSizei getVerticesCount() const { return m_verticesCount; }

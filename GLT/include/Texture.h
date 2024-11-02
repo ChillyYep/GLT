@@ -91,7 +91,8 @@ public:
 		return TextureExternalFormat::RGB;
 	}
 
-	__GET_SET_PROPERTY__(Dirty, bool, m_dirty)
+	__GET_SET_PROPERTY__(BorderColor, glm::vec4, m_borderColor)
+		__GET_SET_PROPERTY__(Dirty, bool, m_dirty)
 		__GET_SET_PROPERTY__(Levels, GLTSizei, m_levels)
 		__GET_SET_PROPERTY__(Width, GLTSizei, m_width)
 		__GET_SET_PROPERTY__(IsProxy, GLTBool, m_isProxy)
@@ -120,6 +121,8 @@ protected:
 	TexturePerChannelSize m_perChannelSize;
 	TextureWrapMode m_wrapModeS;
 	TextureFilterMode m_textureFilter;
+
+	glm::vec4 m_borderColor;
 };
 class Texture1D :public Texture
 {

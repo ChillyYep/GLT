@@ -29,6 +29,7 @@ const char* ShaderPropertyNames::MVP = "MVP";
 const char* ShaderPropertyNames::VP = "VP";
 const char* ShaderPropertyNames::ShadowMatrixVP = "ShadowMatrix";
 
+const char* ShaderPropertyNames::SkyBox = "skybox";
 const char* ShaderPropertyNames::MainTex = "mainTex";
 
 const char* ShaderPropertyNames::ShadowMapTex = "shadowMapTex";

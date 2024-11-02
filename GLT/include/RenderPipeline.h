@@ -13,6 +13,7 @@
 #include <DebugPassBase.h>
 #include <PostProcessingPass.h>
 #include <CaptureFBOPass.h>
+#include <DrawSkyboxPass.h>
 
 class RenderPipeline
 {

@@ -7,10 +7,10 @@ void SubMesh::_allocate(const GLTSizei verticesCount, const GLTSizei indicesCoun
 	m_verticesCount = verticesCount;
 	m_indicesCount = indicesCount;
 	m_vertices = new glm::vec4[m_verticesCount];
-	m_colors = new glm::vec4[m_verticesCount];
 	m_indices = new GLTUInt16[m_indicesCount];
-	m_uvs = new glm::vec2[m_verticesCount];
-	m_normals = new glm::vec4[m_verticesCount];
+	m_colors = nullptr;
+	m_uvs = nullptr;
+	m_normals = nullptr;
 
 	m_dirty = false;
 	m_readWrite = true;

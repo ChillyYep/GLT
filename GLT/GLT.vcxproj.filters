@@ -166,6 +166,9 @@
     <Filter Include="头文件\plugins\assimp">
       <UniqueIdentifier>{013efc8d-a116-4b97-9201-c70e78214dec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\Render\RenderResourceManager\Resources">
+      <UniqueIdentifier>{66041839-a4df-449a-9b75-2df149d35dd8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl3w.c">
@@ -200,9 +203,6 @@
     </ClCompile>
     <ClCompile Include="src\TextureManagementCentre.cpp">
       <Filter>源文件\Render\RenderResourceManager\ManagementCentre</Filter>
-    </ClCompile>
-    <ClCompile Include="src\RenderTexture.cpp">
-      <Filter>源文件\Render\RenderResourceManager</Filter>
     </ClCompile>
     <ClCompile Include="src\MemoryManager.cpp">
       <Filter>源文件\Render\RenderResourceManager</Filter>
@@ -239,9 +239,6 @@
     </ClCompile>
     <ClCompile Include="src\Camera.cpp">
       <Filter>源文件\Game\Component\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Texture.cpp">
-      <Filter>源文件\Render\RenderResourceManager</Filter>
     </ClCompile>
     <ClCompile Include="src\GLSLPreProcessCompiler.cpp">
       <Filter>源文件\Render\RenderHardwareInterface\GLSL\Compiler</Filter>
@@ -303,6 +300,15 @@
     <ClCompile Include="src\AssetUtils.cpp">
       <Filter>源文件\Common\Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="src\Texture.cpp">
+      <Filter>源文件\Render\RenderResourceManager\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RenderTexture.cpp">
+      <Filter>源文件\Render\RenderResourceManager\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cubemap.cpp">
+      <Filter>源文件\Render\RenderResourceManager\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\StandardBlinPhong.frag">
@@ -358,6 +364,12 @@
     </None>
     <None Include="include\3rdParty\assimp\vector3.inl">
       <Filter>头文件\plugins\assimp</Filter>
+    </None>
+    <None Include="Shader\Skybox.frag">
+      <Filter>源文件\ShaderSourceCode</Filter>
+    </None>
+    <None Include="Shader\Skybox.vert">
+      <Filter>源文件\ShaderSourceCode</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
