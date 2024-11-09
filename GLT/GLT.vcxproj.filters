@@ -309,6 +309,12 @@
     <ClCompile Include="src\Cubemap.cpp">
       <Filter>源文件\Render\RenderResourceManager\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="src\RenderPassBase.cpp">
+      <Filter>源文件\Render\RenderHardwareInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ForwardRenderPass.cpp">
+      <Filter>源文件\Render\RenderHardwareInterface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\StandardBlinPhong.frag">
@@ -897,6 +903,12 @@
     </ClInclude>
     <ClInclude Include="include\DrawSkyboxPass.h">
       <Filter>头文件\Render\PassManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderPathBase.h">
+      <Filter>头文件\Render\RenderHardwareInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ForwardRenderPath.h">
+      <Filter>头文件\Render\RenderHardwareInterface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

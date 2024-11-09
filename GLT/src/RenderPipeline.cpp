@@ -1,34 +1,21 @@
 #include "RenderPipeline.h"
 void RenderPipeline::init() {
-	m_globalPassList.push_back(new SimpleShadowMapPass());
-	//m_globalPassList.push_back(new CaptureFBOPass());
-	m_perCameraPassList.push_back(new DrawOpaquePass());
-	m_perCameraPassList.push_back(new DrawSkyboxPass());
-	m_perCameraPassList.push_back(new DrawTransparentPass());
-	//m_perCameraPassList.push_back(new CaptureFBOPass());
-	//m_perCameraPassList.push_back(new PostProcessingPass());
-	m_renderContext.init();
 
 	m_renderData.m_shadowData.m_shadowMapRTName = ResourceName::ShadowMapRTName;
+
+	m_renderContext.init();
+
+	m_renderPath = new ForwardRenderPath();
+	m_renderPath->init(&m_renderContext, &m_renderData, &m_cmd);
 
 	ShaderUtils::loadAllShader(m_renderContext);
 }
 void RenderPipeline::uninit() {
 	ShaderUtils::unloadAllShader(m_renderContext);
+
 	m_renderContext.uninit();
 
-	for (const auto& pass : m_perCameraPassList)
-	{
-		pass->destroy();
-		delete pass;
-	}
-	for (const auto& pass : m_globalPassList)
-	{
-		pass->destroy();
-		delete pass;
-	}
-	m_perCameraPassList.clear();
-	m_globalPassList.clear();
+	m_renderPath->uninit();
 }
 void RenderPipeline::render() {
 
@@ -59,20 +46,8 @@ void RenderPipeline::render() {
 	updateLightProperties();
 	updatePerFrameConstantBuffer();
 
-	for (const auto& pass : m_globalPassList)
-	{
-		if (!pass->isExecutable())
-		{
-			continue;
-		}
-		if (!pass->isPrepared())
-		{
-			pass->setup(&m_renderContext, &m_renderData);
-			pass->prepare();
-		}
-		pass->execute();
-	}
-	if (m_perCameraPassList.size() > 0)
+	m_renderPath->renderGlobally();
+	if (m_renderPath->hasPerCameraPass())
 	{
 		for (int i = 0; i < m_renderData.m_cameraDatas.size(); ++i)
 		{
@@ -89,20 +64,7 @@ void RenderPipeline::render() {
 			m_renderContext.scheduleCommandBuffer(m_cmd);
 			m_cmd.clear();
 
-			// 逐相机调用Pass执行
-			for (const auto& pass : m_perCameraPassList)
-			{
-				if (!pass->isExecutable())
-				{
-					continue;
-				}
-				if (!pass->isPrepared())
-				{
-					pass->setup(&m_renderContext, &m_renderData);
-					pass->prepare();
-				}
-				pass->execute();
-			}
+			m_renderPath->renderPerCamera(&cameraData);
 		}
 	}
 	// 绘制完毕后,从绘制区FBO Blit到窗口区FBO

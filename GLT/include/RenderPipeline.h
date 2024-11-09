@@ -7,13 +7,7 @@
 #include <ScriptableRenderContext.h>
 #include <SceneManager.h>
 #include <PassBase.h>
-#include <DrawOpaquePass.h>
-#include <DrawTransparentPass.h>
-#include <SimpleShadowMapPass.h>
-#include <DebugPassBase.h>
-#include <PostProcessingPass.h>
-#include <CaptureFBOPass.h>
-#include <DrawSkyboxPass.h>
+#include <ForwardRenderPath.h>
 
 class RenderPipeline
 {
@@ -31,6 +25,8 @@ private:
 	void updatePerCameraConstantBuffer(CameraData& cameraData);
 	void updateLightProperties();
 
+	RenderPathBase* m_renderPath;
+
 	ScriptableRenderContext m_renderContext;
 
 	std::vector<LightProperties> m_lightProperties;
@@ -40,8 +36,4 @@ private:
 	CommandBuffer m_cmd;
 
 	RenderData m_renderData;
-
-	PassList m_globalPassList;
-
-	PassList m_perCameraPassList;
 };
