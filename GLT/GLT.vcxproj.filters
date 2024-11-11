@@ -169,6 +169,9 @@
     <Filter Include="源文件\Render\RenderResourceManager\Resources">
       <UniqueIdentifier>{66041839-a4df-449a-9b75-2df149d35dd8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\Render\PassManagement">
+      <UniqueIdentifier>{d20bf942-019d-40ee-bbd3-1fcd3d39c519}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\gl3w.c">
@@ -315,6 +318,9 @@
     <ClCompile Include="src\ForwardRenderPass.cpp">
       <Filter>源文件\Render\RenderHardwareInterface</Filter>
     </ClCompile>
+    <ClCompile Include="src\PostProcessingPass.cpp">
+      <Filter>源文件\Render\PassManagement</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\StandardBlinPhong.frag">
@@ -329,10 +335,10 @@
     <None Include="Shader\common.attr">
       <Filter>源文件\ShaderSourceCode</Filter>
     </None>
-    <None Include="Shader\PostProcessing.frag">
+    <None Include="Shader\GrayScaleImage.frag">
       <Filter>源文件\ShaderSourceCode</Filter>
     </None>
-    <None Include="Shader\PostProcessing.vert">
+    <None Include="Shader\GrayScaleImage.vert">
       <Filter>源文件\ShaderSourceCode</Filter>
     </None>
     <None Include="Shader\SimpleShadowMap.frag">
@@ -909,6 +915,12 @@
     </ClInclude>
     <ClInclude Include="include\ForwardRenderPath.h">
       <Filter>头文件\Render\RenderHardwareInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ScreenSpaceAmbientOcclusionPass.h">
+      <Filter>头文件\Render\PassManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GrayScaleImagePass.h">
+      <Filter>头文件\Render\PassManagement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

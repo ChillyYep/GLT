@@ -8,5 +8,5 @@ void ForwardRenderPath::init(ScriptableRenderContext* renderContext, RenderData*
 	m_perCameraPassList.push_back(new DrawSkyboxPass());
 	m_perCameraPassList.push_back(new DrawTransparentPass());
 	//m_perCameraPassList.push_back(new CaptureFBOPass());
-	//m_perCameraPassList.push_back(new PostProcessingPass());
+	m_perCameraPassList.push_back(new GrayScaleImagePass());
 }

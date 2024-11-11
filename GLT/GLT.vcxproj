@@ -169,6 +169,7 @@
     <ClCompile Include="src\MemoryManager.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\MeshManagementCentre.cpp" />
+    <ClCompile Include="src\PostProcessingPass.cpp" />
     <ClCompile Include="src\PrimitiveUtils.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\RenderEventSystem.cpp" />
@@ -209,8 +210,8 @@
     <None Include="Shader\StandardBlinPhong_Transparent.frag" />
     <None Include="Shader\StandardBlinPhong_Transparent.vert" />
     <None Include="Shader\lightdata.attr" />
-    <None Include="Shader\PostProcessing.frag" />
-    <None Include="Shader\PostProcessing.vert" />
+    <None Include="Shader\GrayScaleImage.frag" />
+    <None Include="Shader\GrayScaleImage.vert" />
     <None Include="Shader\SimpleShadowMap.frag" />
     <None Include="Shader\SimpleShadowMap.vert" />
   </ItemGroup>
@@ -336,6 +337,7 @@
     <ClInclude Include="include\MemoryManager.h" />
     <ClInclude Include="include\Model.h" />
     <ClInclude Include="include\PassBase.h" />
+    <ClInclude Include="include\GrayScaleImagePass.h" />
     <ClInclude Include="include\PipelineStateObject.h" />
     <ClInclude Include="include\PostProcessingPass.h" />
     <ClInclude Include="include\RenderBufferManagementCentre.h" />
@@ -375,6 +377,7 @@
     <ClInclude Include="include\SamplerManagementCentre.h" />
     <ClInclude Include="include\Scene.h" />
     <ClInclude Include="include\SceneManager.h" />
+    <ClInclude Include="include\ScreenSpaceAmbientOcclusionPass.h" />
     <ClInclude Include="include\ShaderCompilerBase.h" />
     <ClInclude Include="include\ShaderPreProcessCompilerBase.h" />
     <ClInclude Include="include\ShaderUtils.h" />

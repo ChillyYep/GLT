@@ -6,6 +6,9 @@
 #include <PostProcessingPass.h>
 #include <CaptureFBOPass.h>
 #include <DrawSkyboxPass.h>
+#include <ScreenSpaceAmbientOcclusionPass.h>
+#include <GrayScaleImagePass.h>
+
 class ForwardRenderPath :public RenderPathBase
 {
 public:

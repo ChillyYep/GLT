@@ -19,16 +19,15 @@ void RenderPathBase::renderPerCamera(CameraData* cameraData)
 {
 	for (const auto& pass : m_perCameraPassList)
 	{
-		if (!pass->isExecutable())
-		{
-			continue;
-		}
 		if (!pass->isPrepared())
 		{
 			pass->setup(m_renderContext, m_renderData);
 			pass->prepare();
 		}
-		pass->execute();
+		if (pass->isExecutable())
+		{
+			pass->execute();
+		}
 	}
 }
 

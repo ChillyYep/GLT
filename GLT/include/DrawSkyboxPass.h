@@ -75,8 +75,18 @@ public:
 
 	void execute() override
 	{
+		auto colorRT = static_cast<RenderTarget*>(LogicResourceManager::getInstance()->getResource(ResourceType::RenderTarget, ResourceName::OpaqueRTName));
+		if (colorRT == nullptr)
+		{
+			return;
+		}
+		auto rtIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, colorRT->getInstanceId()));
+		if (rtIdentifier == nullptr)
+		{
+			return;
+		}
 		m_context->setRenderStateBlock(m_renderStateBlock);
-
+		m_cmdBuffer.setRenderTarget(rtIdentifier);
 		m_cmdBuffer.drawMesh(m_cubeMesh, m_matPtr, glm::identity<glm::mat4>() * glm::scale(glm::vec3(100.0f)));
 		m_context->scheduleCommandBuffer(m_cmdBuffer);
 		m_cmdBuffer.clear();

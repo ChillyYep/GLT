@@ -10,8 +10,6 @@ public:
 	DrawOpaquePass() :PassBase() {}
 	~DrawOpaquePass() {}
 
-	bool isExecutable() override { return true; }
-
 	void prepare() override
 	{
 		PassBase::prepare();
@@ -44,6 +42,10 @@ public:
 			delete m_colorRT;
 			m_colorRT = nullptr;
 		}
+	}
+	bool isExecutable() override 
+	{ 
+		return true; 
 	}
 
 	void execute() override
