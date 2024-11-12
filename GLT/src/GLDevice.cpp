@@ -378,14 +378,14 @@ std::vector<RenderTargetIdentifier> GLDevice::requestRenderTargetResource(std::v
 	{
 		auto rtPtr = renderTargetPtrs[i];
 		renderTargetResources[i] = RenderTargetIdentifier(rtPtr->getInstanceId());
-		auto& rtIdentifier = renderTargetResources[i];
+		auto& m_shadowMapIdentifier = renderTargetResources[i];
 		auto fbo = rts[i];
-		rtIdentifier.m_fbo = fbo;
-		rtIdentifier.m_descriptor = rtPtr->getRenderTargetDescriptor();
+		m_shadowMapIdentifier.m_fbo = fbo;
+		m_shadowMapIdentifier.m_descriptor = rtPtr->getRenderTargetDescriptor();
 		auto attachmentIdentifiers = rtsAttachmentIdentifiers[i];
 		auto descriptor = rtPtr->getRenderTargetDescriptor();
 
-		rtIdentifier.m_attachmentIdentifiers = attachmentIdentifiers;
+		m_shadowMapIdentifier.m_attachmentIdentifiers = attachmentIdentifiers;
 
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 		for (const auto& attachment : attachmentIdentifiers)
@@ -542,17 +542,17 @@ void GLDevice::destroyConstantBufferResources(std::vector<ConstantBufferIdentifi
 	glDeleteBuffers(size, ubos.data());
 }
 
-void GLDevice::activate(RenderTargetIdentifier* rtIdentifier)
+void GLDevice::activate(RenderTargetIdentifier* m_shadowMapIdentifier)
 {
 	// 同一RT不必重复设置，减少指令提交
-	if (rtIdentifier == nullptr || (m_curRT != nullptr && m_curRT->getInstanceId() == rtIdentifier->getInstanceId()))
+	if (m_shadowMapIdentifier == nullptr || (m_curRT != nullptr && m_curRT->getInstanceId() == m_shadowMapIdentifier->getInstanceId()))
 	{
 		return;
 	}
-	if (rtIdentifier->m_fbo > 0)
+	if (m_shadowMapIdentifier->m_fbo > 0)
 	{
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, rtIdentifier->m_fbo);
-		m_curRT = rtIdentifier;
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_shadowMapIdentifier->m_fbo);
+		m_curRT = m_shadowMapIdentifier;
 	}
 }
 

@@ -287,7 +287,7 @@ public:
 
 	void destroyConstantBufferResources(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers) override;
 
-	void activate(RenderTargetIdentifier* rtIdentifier) override;
+	void activate(RenderTargetIdentifier* m_shadowMapIdentifier) override;
 
 	void clearColor(float r, float g, float b, float a) override;
 

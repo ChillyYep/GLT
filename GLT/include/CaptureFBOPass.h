@@ -7,18 +7,18 @@
 class CaptureFBOPass :public PassBase
 {
 public:
+
+protected:
 	bool isExecutable() override { return true; }
+	bool isPrepared() override { return true; }
 
-	void prepare() override {
-		PassBase::prepare();
-
-		define();
-
-	}
-
-	virtual void define()
+	void onDefine() override
 	{
 		defineShadowMapCaptureSetting();
+	}
+
+	void onPrepare() override {
+		PassBase::onPrepare();
 	}
 
 	void defineShadowMapCaptureSetting()
@@ -93,12 +93,8 @@ public:
 		return targetTexture;
 	}
 
-	void destroy() override
+	void onDestroy() override
 	{
-		if (!isPrepared())
-		{
-			return;
-		}
 		if (m_readPixels != nullptr)
 		{
 			delete[] m_readPixels;
@@ -107,7 +103,7 @@ public:
 		ensureReleaseDebugColorTexture();
 	}
 
-	void execute() override
+	void onExecute() override
 	{
 		// 使用glReadPixels读取某纹理像素，然后用glTextureSubImage2D写进某Texture中，并Blit至窗口来获取debugview
 		// 如果多相机绘制，则相机会在同一帧发生变化，所以需要及时更新
@@ -144,11 +140,6 @@ public:
 					m_readPixels = new GLTUByte[size];
 				}
 			}
-			//m_cmdBuffer.setRenderTarget(targetRtIdentifier);
-			//m_context->scheduleCommandBuffer(m_cmdBuffer);
-			//m_cmdBuffer.clear();
-			//m_context->submit();
-			//m_context->blitCurrentRTToWindow();
 			// 获取Pixels
 			m_context->capture(targetRtIdentifier, m_targetAttachmentType, m_readPixels, m_targetColorChannel);
 			// 填充Pixels
@@ -159,7 +150,6 @@ public:
 			m_context->submit();
 		}
 	}
-private:
 	Texture* m_debugColorTexture;
 
 	RenderTexture* m_debugViewRT;

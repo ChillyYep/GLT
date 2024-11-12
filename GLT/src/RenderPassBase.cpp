@@ -3,14 +3,9 @@ void RenderPathBase::renderGlobally()
 {
 	for (const auto& pass : m_globalPassList)
 	{
-		if (!pass->isExecutable())
-		{
-			continue;
-		}
-		if (!pass->isPrepared())
+		if (!pass->isInit())
 		{
 			pass->setup(m_renderContext, m_renderData);
-			pass->prepare();
 		}
 		pass->execute();
 	}
@@ -19,15 +14,11 @@ void RenderPathBase::renderPerCamera(CameraData* cameraData)
 {
 	for (const auto& pass : m_perCameraPassList)
 	{
-		if (!pass->isPrepared())
+		if (!pass->isInit())
 		{
 			pass->setup(m_renderContext, m_renderData);
-			pass->prepare();
 		}
-		if (pass->isExecutable())
-		{
-			pass->execute();
-		}
+		pass->execute();
 	}
 }
 

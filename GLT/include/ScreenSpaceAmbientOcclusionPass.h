@@ -9,19 +9,19 @@ public:
 
 	bool isExecutable() override { return true; }
 
-	void prepare() override
+	void onPrepare() override
 	{
-		PostProcessingPass::prepare();
+		PostProcessingPass::onPrepare();
 	}
 
-	void execute() override
+	void onExecute() override
 	{
-		PostProcessingPass::execute();
+		PostProcessingPass::onExecute();
 	}
 
-	void destroy() override
+	void onDestroy() override
 	{
-		PostProcessingPass::destroy();
+		PostProcessingPass::onDestroy();
 	}
 private:
 

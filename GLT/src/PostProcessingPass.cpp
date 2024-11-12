@@ -3,42 +3,13 @@ SubMesh* PostProcessingPass::s_fullscreenTriangle = nullptr;
 int PostProcessingPass::s_postProcessingPassCount = 0;
 RenderTexture* PostProcessingPass::s_uberPostRT = nullptr;
 
-void PostProcessingPass::prepare()
-{
-	PassBase::prepare();
-
-	m_renderStateBlock.m_colorState.m_cullMode = CullMode::Off;
-	m_renderStateBlock.m_colorState.m_rgbaWritable = glm::bvec4(true, true, true, true);
-
-	m_renderStateBlock.m_depthState.m_writable = false;
-	m_renderStateBlock.m_depthState.m_depthRange = glm::vec2(0, 1);
-	m_renderStateBlock.m_depthState.m_compareFunc = CompareFunction::Always;
-
-	s_postProcessingPassCount++;
-
-	if (s_fullscreenTriangle == nullptr)
-	{
-		s_fullscreenTriangle = createFullscreenTraingleMesh();
-		LogicResourceManager::getInstance()->addResource(ResourceType::Mesh, s_fullscreenTriangle);
-	}
-	auto window = Window::getInstance();
-	auto windowSize = window->getSize();
-
-	if (s_uberPostRT == nullptr)
-	{
-		s_uberPostRT = new RenderTexture(windowSize.x, windowSize.y, TextureInternalFormat::RGBA8, TextureInternalFormat::None);
-		s_uberPostRT->m_name = ResourceName::PostProcessingRTName;
-		s_uberPostRT->setColorAttachmentSampleEnabled(true);
-		s_uberPostRT->create();
-	}
-}
-void PostProcessingPass::preDefine(std::string shaderName)
+void PostProcessingPass::appointShader(std::string shaderName)
 {
 	m_fullscreenShader = std::shared_ptr<Shader>(new Shader(shaderName));
 
 	m_fullscreenMat = new Material(m_fullscreenShader);
 
-	preDefineProperties(m_fullscreenMat);
+	updateMaterialProperties(m_fullscreenMat);
 }
 
 SubMesh* PostProcessingPass::createFullscreenTraingleMesh()
@@ -57,46 +28,88 @@ SubMesh* PostProcessingPass::createFullscreenTraingleMesh()
 	return fullscreenTriangle;
 }
 
-void PostProcessingPass::execute()
+void PostProcessingPass::onDefine()
+{
+	m_renderStateBlock.m_colorState.m_cullMode = CullMode::Off;
+	m_renderStateBlock.m_colorState.m_rgbaWritable = glm::bvec4(true, true, true, true);
+
+	m_renderStateBlock.m_depthState.m_writable = false;
+	m_renderStateBlock.m_depthState.m_depthRange = glm::vec2(0, 1);
+	m_renderStateBlock.m_depthState.m_compareFunc = CompareFunction::Always;
+}
+
+void PostProcessingPass::onPrepare()
+{
+	PassBase::onPrepare();
+	s_postProcessingPassCount++;
+
+	if (s_fullscreenTriangle == nullptr)
+	{
+		s_fullscreenTriangle = createFullscreenTraingleMesh();
+		LogicResourceManager::getInstance()->addResource(ResourceType::Mesh, s_fullscreenTriangle);
+	}
+	auto window = Window::getInstance();
+	auto windowSize = window->getSize();
+
+	if (s_uberPostRT == nullptr)
+	{
+		s_uberPostRT = new RenderTexture(windowSize.x, windowSize.y, TextureInternalFormat::RGBA8, TextureInternalFormat::None);
+		s_uberPostRT->m_name = ResourceName::PostProcessingRTName;
+		s_uberPostRT->setColorAttachmentSampleEnabled(true);
+		s_uberPostRT->create();
+	}
+}
+
+bool PostProcessingPass::isPrepared()
 {
 	if (m_fullscreenShader == nullptr || m_fullscreenMat == nullptr)
 	{
-		return;
+		return false;
 	}
 	auto colorRT = static_cast<RenderTarget*>(LogicResourceManager::getInstance()->getResource(ResourceType::RenderTarget, ResourceName::OpaqueRTName));
 	if (colorRT == nullptr)
 	{
-		return;
+		return false;
 	}
+
 	auto attachments = colorRT->getAttachments();
-	Texture* texture = nullptr;
+	m_colorRTTexture = nullptr;
 	for (const auto& attachment : attachments)
 	{
 		if (attachment.getResourceType() == FBOAttachmentResourceType::Texture && attachment.getAttachmentType() == FBOAttachmentType::Color)
 		{
-			texture = attachment.getTexture();
+			m_colorRTTexture = attachment.getTexture();
 			break;
 		}
 	}
+	if (m_colorRTTexture == nullptr)
+	{
+		return false;
+	}
+	m_uberRTIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, s_uberPostRT->getRTInstanceId()));
+	m_colorRTIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, colorRT->getInstanceId()));
 
-	auto uberPostRTIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, s_uberPostRT->getRTInstanceId()));
-	auto colorRTIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, colorRT->getInstanceId()));
-	if (texture != nullptr && uberPostRTIdentifier != nullptr)
+	return m_uberRTIdentifier != nullptr && m_colorRTIdentifier != nullptr;
+}
+
+void PostProcessingPass::onExecute()
+{
+	if (m_colorRTTexture != nullptr && m_uberRTIdentifier != nullptr)
 	{
 		m_context->setRenderStateBlock(m_renderStateBlock);
 		// 将该临时RT作为渲染对象
-		m_cmdBuffer.setRenderTarget(uberPostRTIdentifier);
+		m_cmdBuffer.setRenderTarget(m_uberRTIdentifier);
 		// 后处理渲染
-		m_fullscreenMat->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(texture)));
+		m_fullscreenMat->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(m_colorRTTexture)));
 		m_cmdBuffer.drawMesh(s_fullscreenTriangle, m_fullscreenMat, glm::identity<glm::mat4>());
 		m_context->scheduleCommandBuffer(m_cmdBuffer);
 		m_cmdBuffer.clear();
 		m_context->submit();
-		m_context->blitRT(uberPostRTIdentifier, colorRTIdentifier);
+		m_context->blitRT(m_uberRTIdentifier, m_colorRTIdentifier);
 	}
 }
 
-void PostProcessingPass::destroy()
+void PostProcessingPass::onDestroy()
 {
 	s_postProcessingPassCount--;
 	if (s_postProcessingPassCount == 0)

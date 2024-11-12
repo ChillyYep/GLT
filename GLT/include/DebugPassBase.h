@@ -7,10 +7,11 @@
 class DebugPass :public PassBase
 {
 public:
+private:
 	bool isExecutable() override { return true; }
 
-	void prepare() override {
-		PassBase::prepare();
+	void onPrepare() override {
+		PassBase::onPrepare();
 
 		// prepareResources
 		auto window = Window::getInstance();
@@ -38,12 +39,8 @@ public:
 		}
 	}
 
-	void destroy() override
+	void onDestroy() override
 	{
-		if (!isPrepared())
-		{
-			return;
-		}
 		if (m_debugColorTexture != nullptr)
 		{
 			m_debugColorTexture->setData(nullptr);
@@ -62,7 +59,7 @@ public:
 
 	}
 
-	void execute() override
+	void onExecute() override
 	{
 		// 使用glReadPixels读取某纹理像素，然后用glTextureSubImage2D写进某Texture中，并Blit至窗口来获取debugview
 		// 如果多相机绘制，则相机会在同一帧发生变化，所以需要及时更新
@@ -103,7 +100,7 @@ public:
 			m_context->submit();
 		}
 	}
-private:
+
 	Texture* m_debugColorTexture;
 
 	RenderTexture* m_debugViewRT;

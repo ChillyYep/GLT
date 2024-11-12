@@ -1,11 +1,21 @@
 #pragma once
 #include <ScriptableRenderContext.h>
 #include <RenderData.h>
+enum class PassState
+{
+	None,
+	Inited,
+	Preparing,
+	Prepared,
+	Executing,
+	Destroyed
+};
 
 class PassBase
 {
 public:
-	PassBase() :m_context(nullptr), m_cmdBuffer() {}
+	PassBase() :m_context(nullptr), m_passState(PassState::None), m_cmdBuffer() {}
+
 	virtual ~PassBase() {}
 
 	/// <summary>
@@ -14,28 +24,96 @@ public:
 	void setup(ScriptableRenderContext* context, RenderData* renderData) { m_context = context; m_renderData = renderData; }
 
 	/// <summary>
-	/// Ô¤±¸
+	/// Ö´ÐÐÃüÁî
 	/// </summary>
-	virtual void prepare()
+	virtual void execute()
 	{
-		m_isPrepared = true;
+		switch (m_passState)
+		{
+		case PassState::None:
+		{
+			onDefine();
+			m_passState = PassState::Inited;
+			break;
+		}
+		case PassState::Inited:
+		{
+			onPrepare();
+			m_passState = PassState::Preparing;
+			break;
+		}
+		case PassState::Preparing:
+		{
+			if (isPrepared())
+			{
+				m_passState = PassState::Prepared;
+			}
+			break;
+		}
+		case PassState::Prepared:
+		{
+			if (isExecutable())
+			{
+				m_passState = PassState::Executing;
+			}
+			break;
+		}
+		case PassState::Executing:
+		{
+			onExecute();
+			break;
+		}
+		case PassState::Destroyed:
+		{
+			onDestroy();
+			break;
+		}
+		default:
+			break;
+		}
+	}
+
+	void destroy()
+	{
+		m_passState = PassState::Destroyed;
+	}
+	bool isInit() { return m_passState != PassState::None; }
+protected:
+	virtual bool isPrepared() { return true; }
+
+	virtual bool isExecutable() { return true; }
+	/// <summary>
+	/// ¶¨Òå½×¶Î
+	/// </summary>
+	virtual void onDefine()
+	{
 	}
 
 	/// <summary>
-	/// Ö´ÐÐÃüÁî
+	/// Ô¤±¸½×¶Î
 	/// </summary>
-	virtual void execute() {}
+	virtual void onPrepare()
+	{
+	}
+	/// <summary>
+	/// Ö´ÐÐ½×¶Î
+	/// </summary>
+	virtual void onExecute()
+	{
 
-	virtual void destroy() {}
+	}
+	/// <summary>
+	/// Ïú»Ù½×¶Î
+	/// </summary>
+	virtual void onDestroy()
+	{
 
-	bool isPrepared() { return m_isPrepared; }
+	}
 
-	virtual bool isExecutable() { return true; }
-protected:
-	bool m_isPrepared;
 	CommandBuffer m_cmdBuffer;
 	ScriptableRenderContext* m_context;
 	RenderData* m_renderData;
+	PassState m_passState;
 };
 
 using PassList = std::vector<PassBase*>;

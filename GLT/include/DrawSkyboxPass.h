@@ -7,10 +7,21 @@
 class DrawSkyboxPass :public PassBase
 {
 public:
+private:
 	bool isExecutable() override { return true; }
-	void prepare() override
+
+	void onDefine() override
 	{
-		PassBase::prepare();
+		m_renderStateBlock.m_colorState.m_cullMode = CullMode::Front;
+		m_renderStateBlock.m_colorState.m_rgbaWritable = glm::bvec4(true, true, true, true);
+		m_renderStateBlock.m_depthState.m_depthRange = glm::vec2(0, 1);
+		m_renderStateBlock.m_depthState.m_writable = false;
+		m_renderStateBlock.m_depthState.m_compareFunc = CompareFunction::Less;
+	}
+
+	void onPrepare() override
+	{
+		PassBase::onPrepare();
 		m_skybox = new Cubemap();
 		m_skybox->m_name = "skybox";
 		m_skybox->setInternalFormat(TextureInternalFormat::RGB8);
@@ -43,16 +54,24 @@ public:
 
 		LogicResourceManager::getInstance()->addResource(ResourceType::Texture, m_skybox);
 		LogicResourceManager::getInstance()->addResource(ResourceType::Mesh, m_cubeMesh);
-
-
-		m_renderStateBlock.m_colorState.m_cullMode = CullMode::Front;
-		m_renderStateBlock.m_colorState.m_rgbaWritable = glm::bvec4(true, true, true, true);
-		m_renderStateBlock.m_depthState.m_depthRange = glm::vec2(0, 1);
-		m_renderStateBlock.m_depthState.m_writable = false;
-		m_renderStateBlock.m_depthState.m_compareFunc = CompareFunction::Less;
 	}
 
-	void destroy() override
+	bool isPrepared() override
+	{
+		m_colorRT = static_cast<RenderTarget*>(LogicResourceManager::getInstance()->getResource(ResourceType::RenderTarget, ResourceName::OpaqueRTName));
+		if (m_colorRT == nullptr)
+		{
+			return false;
+		}
+		m_shadowMapIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, m_colorRT->getInstanceId()));
+		if (m_shadowMapIdentifier == nullptr)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	void onDestroy() override
 	{
 		LogicResourceManager::getInstance()->destroyResource(ResourceType::Texture, m_skybox);
 		LogicResourceManager::getInstance()->destroyResource(ResourceType::Mesh, m_cubeMesh);
@@ -73,26 +92,23 @@ public:
 		}
 	}
 
-	void execute() override
+	void onExecute() override
 	{
-		auto colorRT = static_cast<RenderTarget*>(LogicResourceManager::getInstance()->getResource(ResourceType::RenderTarget, ResourceName::OpaqueRTName));
-		if (colorRT == nullptr)
+		if (m_colorRT != nullptr && m_shadowMapIdentifier != nullptr)
 		{
-			return;
+			m_context->setRenderStateBlock(m_renderStateBlock);
+			m_cmdBuffer.setRenderTarget(m_shadowMapIdentifier);
+			m_cmdBuffer.drawMesh(m_cubeMesh, m_matPtr, glm::identity<glm::mat4>() * glm::scale(glm::vec3(100.0f)));
+			m_context->scheduleCommandBuffer(m_cmdBuffer);
+			m_cmdBuffer.clear();
+			m_context->submit();
 		}
-		auto rtIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, colorRT->getInstanceId()));
-		if (rtIdentifier == nullptr)
-		{
-			return;
-		}
-		m_context->setRenderStateBlock(m_renderStateBlock);
-		m_cmdBuffer.setRenderTarget(rtIdentifier);
-		m_cmdBuffer.drawMesh(m_cubeMesh, m_matPtr, glm::identity<glm::mat4>() * glm::scale(glm::vec3(100.0f)));
-		m_context->scheduleCommandBuffer(m_cmdBuffer);
-		m_cmdBuffer.clear();
-		m_context->submit();
 	}
-private:
+
+	RenderTarget* m_colorRT;
+
+	RenderTargetIdentifier* m_shadowMapIdentifier;
+
 	RenderStateBlock m_renderStateBlock;
 
 	Material* m_matPtr;

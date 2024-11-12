@@ -8,9 +8,10 @@ public:
 	DrawTransparentPass() {}
 	~DrawTransparentPass() {}
 
+private:
 	bool isExecutable() override { return true; }
 
-	void prepare() override
+	void onDefine() override
 	{
 		m_renderStateBlock.m_colorState.m_cullMode = CullMode::Off;
 		m_renderStateBlock.m_colorState.m_rgbaWritable = glm::bvec4(true, true, true, true);
@@ -24,34 +25,39 @@ public:
 
 		m_filterSettings.m_renderType = RenderType::Transparent;
 		m_drawSettings.m_sortType = SortType::Far2Near;
-
 	}
 
-	void destroy() override
+	void onPrepare() override {}
+
+	bool isPrepared() override
 	{
-
+		m_colorRT = static_cast<RenderTarget*>(LogicResourceManager::getInstance()->getResource(ResourceType::RenderTarget, ResourceName::OpaqueRTName));
+		if (m_colorRT == nullptr)
+		{
+			return false;
+		}
+		m_shadowMapIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, m_colorRT->getInstanceId()));
+		return m_shadowMapIdentifier != nullptr;
 	}
 
-	void execute() override
+	void onDestroy() override {}
+
+	void onExecute() override
 	{
 		m_context->setRenderStateBlock(m_renderStateBlock);
 		m_drawSettings.m_cameraPos = m_renderData->m_cameraDatas[m_renderData->m_curRenderingCameraIndex].m_worldPos;
-		auto colorRT = static_cast<RenderTarget*>(LogicResourceManager::getInstance()->getResource(ResourceType::RenderTarget, ResourceName::OpaqueRTName));
-		if (colorRT == nullptr)
+		if (m_colorRT != nullptr && m_shadowMapIdentifier != nullptr)
 		{
-			return;
-		}
-		auto colorRTIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, colorRT->getInstanceId()));
-		if (colorRTIdentifier != nullptr)
-		{
-			m_cmdBuffer.setRenderTarget(colorRTIdentifier);
+			m_cmdBuffer.setRenderTarget(m_shadowMapIdentifier);
 			m_context->scheduleCommandBuffer(m_cmdBuffer);
 			m_cmdBuffer.clear();
 			m_context->submit();
 			m_context->drawRenderers(m_filterSettings, m_drawSettings);
 		}
 	}
-private:
+
+	RenderTarget* m_colorRT;
+	RenderTargetIdentifier* m_shadowMapIdentifier;
 
 	FilterSettings m_filterSettings;
 	DrawSettings m_drawSettings;
