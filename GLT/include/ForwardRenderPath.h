@@ -1,13 +1,13 @@
 #pragma once
 #include <RenderPathBase.h>
-#include <DrawOpaquePass.h>
-#include <DrawTransparentPass.h>
-#include <SimpleShadowMapPass.h>
-#include <PostProcessingPass.h>
-#include <CaptureFBOPass.h>
-#include <DrawSkyboxPass.h>
-#include <ScreenSpaceAmbientOcclusionPass.h>
-#include <GrayScaleImagePass.h>
+#include <ForwardPassDrawOpaque.h>
+#include <ForwardPassDrawTransparent.h>
+#include <ForwardPassSimpleShadowMap.h>
+#include <ForwardPassPostProcessing.h>
+#include <PassCaptureFBO.h>
+#include <ForwardPassDrawSkybox.h>
+#include <ForwardPassScreenSpaceAmbientOcclusion.h>
+#include <ForwardPassGrayScaleImage.h>
 
 class ForwardRenderPath :public RenderPathBase
 {

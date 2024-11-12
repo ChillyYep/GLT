@@ -249,7 +249,7 @@ std::vector<TextureResourceIdentifier> GLDevice::requestTextureResources(std::ve
 			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, getGLTextureWrapMode(cubemap->getWrapModeT()));
 			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, getGLTextureWrapMode(cubemap->getWrapModeR()));
 			glTexParameterfv(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(cubemap->getBorderColor()));
-			for (int i = 0;i < Cubemap::CUBEMAP_FACENUM;++i)
+			for (int i = 0; i < Cubemap::CUBEMAP_FACENUM; ++i)
 			{
 				auto tex2D = cubemap->getFace((CubemapFace)(i));
 				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, internalFormat, resourceIdentifier.m_width, resourceIdentifier.m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
@@ -299,7 +299,7 @@ void GLDevice::updateTextureResources(std::vector<Texture*>& texturePtrs, std::v
 		{
 			auto cubemapPtr = static_cast<Cubemap*>(texturePtr);
 			glBindTexture(GL_TEXTURE_CUBE_MAP, resourceIdentifier.m_texture);
-			for (int i = 0;i < Cubemap::CUBEMAP_FACENUM;++i)
+			for (int i = 0; i < Cubemap::CUBEMAP_FACENUM; ++i)
 			{
 				auto tex2D = cubemapPtr->getFace((CubemapFace)(i));
 				auto texData = tex2D->getData();
@@ -881,6 +881,20 @@ void GLDevice::fillShaderProperties(PipelineStateObject& pso)
 				{
 					auto vec4 = vec4Param->getValue();
 					glUniform4f(uniforms[i].m_location, vec4.x, vec4.y, vec4.z, vec4.w);
+				}
+				break;
+			}
+			case MaterialPropertyType::Vector4Array:
+			{
+				auto vec4ArrayParam = static_cast<MaterialVector4ArrayProperty*>(matProperty.get());
+				if (vec4ArrayParam != nullptr)
+				{
+					auto vec4Array = vec4ArrayParam->getValue();
+					auto size = vec4Array.size();
+					if (size > 0)
+					{
+						glUniform4fv(uniforms[i].m_location, (GLsizei)size, &vec4Array[0].x);
+					}
 				}
 				break;
 			}

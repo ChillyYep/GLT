@@ -11,6 +11,7 @@ enum class MaterialPropertyType {
 	Int,
 	Float,
 	Vector4,
+	Vector4Array,
 	Matrix4
 };
 class MaterialProperty
@@ -45,6 +46,18 @@ public:
 
 private:
 	glm::vec4 m_vec4;
+};
+
+class MaterialVector4ArrayProperty :public MaterialProperty
+{
+public:
+	MaterialVector4ArrayProperty(std::vector<glm::vec4> vec4Array) :m_vec4Array(vec4Array) {}
+	~MaterialVector4ArrayProperty() {}
+	MaterialPropertyType getMaterialPropertyType() override { return MaterialPropertyType::Vector4Array; }
+	__GET_SET_PROPERTY__(Value, std::vector<glm::vec4>, m_vec4Array)
+
+private:
+	std::vector<glm::vec4> m_vec4Array;
 };
 
 class MaterialFloatProperty :public MaterialProperty

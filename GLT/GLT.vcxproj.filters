@@ -154,9 +154,6 @@
     <Filter Include="源文件\Render\Window\GLFW">
       <UniqueIdentifier>{b471d2d5-bbdd-4836-87cc-a1fce37073df}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\Render\PassManagement">
-      <UniqueIdentifier>{4e8404ba-d0a7-4a0a-a1f7-482d4196a9ea}</UniqueIdentifier>
-    </Filter>
     <Filter Include="头文件\Common\ObserverPattern">
       <UniqueIdentifier>{7c7ae7e9-ec12-4c3e-a355-e2b80b1ee129}</UniqueIdentifier>
     </Filter>
@@ -169,8 +166,23 @@
     <Filter Include="源文件\Render\RenderResourceManager\Resources">
       <UniqueIdentifier>{66041839-a4df-449a-9b75-2df149d35dd8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\Render\PassManagement">
+    <Filter Include="头文件\Render\RenderPipeline\ForwardRenderPath">
+      <UniqueIdentifier>{133d1fdf-3765-469d-9f3e-b310b5ac71e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Render\RenderPipeline\DeferedRenderPath">
+      <UniqueIdentifier>{eb353672-da13-4389-9980-f2b3cd95802d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Render\RenderPipeline\ForwardRenderPath\ForwardPass">
+      <UniqueIdentifier>{4e8404ba-d0a7-4a0a-a1f7-482d4196a9ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Render\RenderPipeline\ForwardRenderPath">
+      <UniqueIdentifier>{04cd5061-b82c-4ce9-9cf0-52d64e74d2d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Render\RenderPipeline\ForwardRenderPath\ForwardPass">
       <UniqueIdentifier>{d20bf942-019d-40ee-bbd3-1fcd3d39c519}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Render\RenderPipeline\ForwardRenderPath\DeferedPass">
+      <UniqueIdentifier>{fe096098-3e36-4b99-bb45-6de89b484b09}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -318,8 +330,8 @@
     <ClCompile Include="src\ForwardRenderPass.cpp">
       <Filter>源文件\Render\RenderHardwareInterface</Filter>
     </ClCompile>
-    <ClCompile Include="src\PostProcessingPass.cpp">
-      <Filter>源文件\Render\PassManagement</Filter>
+    <ClCompile Include="src\ForwardPassPostProcessing.cpp">
+      <Filter>源文件\Render\RenderPipeline\ForwardRenderPath\ForwardPass</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -381,6 +393,12 @@
       <Filter>源文件\ShaderSourceCode</Filter>
     </None>
     <None Include="Shader\Skybox.vert">
+      <Filter>源文件\ShaderSourceCode</Filter>
+    </None>
+    <None Include="Shader\SSAOForward.frag">
+      <Filter>源文件\ShaderSourceCode</Filter>
+    </None>
+    <None Include="Shader\SSAOForward.vert">
       <Filter>源文件\ShaderSourceCode</Filter>
     </None>
   </ItemGroup>
@@ -541,9 +559,6 @@
     <ClInclude Include="Object.cpp">
       <Filter>源文件\Common\Object</Filter>
     </ClInclude>
-    <ClInclude Include="include\ScriptableRenderContext.h">
-      <Filter>头文件\Render\RenderHardwareInterface</Filter>
-    </ClInclude>
     <ClInclude Include="include\GLDevice.h">
       <Filter>头文件\Render\RenderHardwareInterface\GLSL</Filter>
     </ClInclude>
@@ -574,11 +589,8 @@
     <ClInclude Include="include\EventSystem.h">
       <Filter>头文件\Render\Window\GLFW</Filter>
     </ClInclude>
-    <ClInclude Include="include\PassBase.h">
-      <Filter>头文件\Render\PassManagement</Filter>
-    </ClInclude>
-    <ClInclude Include="include\DrawOpaquePass.h">
-      <Filter>头文件\Render\PassManagement</Filter>
+    <ClInclude Include="include\ForwardPassDrawOpaque.h">
+      <Filter>头文件\Render\RenderPipeline\ForwardRenderPath\ForwardPass</Filter>
     </ClInclude>
     <ClInclude Include="include\RenderStateBlock.h">
       <Filter>头文件\Render\RenderPipeline</Filter>
@@ -619,29 +631,29 @@
     <ClInclude Include="include\RenderBufferManagementCentre.h">
       <Filter>头文件\Render\RenderResourceManager\ManagementCentre</Filter>
     </ClInclude>
-    <ClInclude Include="include\SimpleShadowMapPass.h">
-      <Filter>头文件\Render\PassManagement</Filter>
+    <ClInclude Include="include\ForwardPassSimpleShadowMap.h">
+      <Filter>头文件\Render\RenderPipeline\ForwardRenderPath\ForwardPass</Filter>
     </ClInclude>
     <ClInclude Include="include\RenderTargetDescriptor.h">
       <Filter>头文件\Render\RenderResourceManager\ResourceDescriptor</Filter>
     </ClInclude>
-    <ClInclude Include="include\DebugPassBase.h">
-      <Filter>头文件\Render\PassManagement</Filter>
+    <ClInclude Include="include\PassDebug.h">
+      <Filter>头文件\Render\RenderPipeline\ForwardRenderPath\ForwardPass</Filter>
     </ClInclude>
-    <ClInclude Include="include\PostProcessingPass.h">
-      <Filter>头文件\Render\PassManagement</Filter>
+    <ClInclude Include="include\ForwardPassPostProcessing.h">
+      <Filter>头文件\Render\RenderPipeline\ForwardRenderPath\ForwardPass</Filter>
     </ClInclude>
     <ClInclude Include="include\ResourceNames.h">
       <Filter>头文件\Render\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="include\CaptureFBOPass.h">
-      <Filter>头文件\Render\PassManagement</Filter>
+    <ClInclude Include="include\PassCaptureFBO.h">
+      <Filter>头文件\Render\RenderPipeline\ForwardRenderPath\ForwardPass</Filter>
     </ClInclude>
     <ClInclude Include="include\PipelineStateObject.h">
       <Filter>头文件\Render\RenderHardwareInterface</Filter>
     </ClInclude>
-    <ClInclude Include="include\DrawTransparentPass.h">
-      <Filter>头文件\Render\PassManagement</Filter>
+    <ClInclude Include="include\ForwardPassDrawTransparent.h">
+      <Filter>头文件\Render\RenderPipeline\ForwardRenderPath\ForwardPass</Filter>
     </ClInclude>
     <ClInclude Include="include\AssetUtils.h">
       <Filter>头文件\Common\Utilities</Filter>
@@ -907,20 +919,29 @@
     <ClInclude Include="include\Cubemap.h">
       <Filter>头文件\Render\RenderResourceManager\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="include\DrawSkyboxPass.h">
-      <Filter>头文件\Render\PassManagement</Filter>
+    <ClInclude Include="include\ForwardPassDrawSkybox.h">
+      <Filter>头文件\Render\RenderPipeline\ForwardRenderPath\ForwardPass</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ForwardPassScreenSpaceAmbientOcclusion.h">
+      <Filter>头文件\Render\RenderPipeline\ForwardRenderPath\ForwardPass</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ForwardPassGrayScaleImage.h">
+      <Filter>头文件\Render\RenderPipeline\ForwardRenderPath\ForwardPass</Filter>
     </ClInclude>
     <ClInclude Include="include\RenderPathBase.h">
-      <Filter>头文件\Render\RenderHardwareInterface</Filter>
+      <Filter>头文件\Render\RenderPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ScriptableRenderContext.h">
+      <Filter>头文件\Render\RenderPipeline</Filter>
     </ClInclude>
     <ClInclude Include="include\ForwardRenderPath.h">
-      <Filter>头文件\Render\RenderHardwareInterface</Filter>
+      <Filter>头文件\Render\RenderPipeline\ForwardRenderPath</Filter>
     </ClInclude>
-    <ClInclude Include="include\ScreenSpaceAmbientOcclusionPass.h">
-      <Filter>头文件\Render\PassManagement</Filter>
+    <ClInclude Include="include\PassBase.h">
+      <Filter>头文件\Render\RenderPipeline</Filter>
     </ClInclude>
-    <ClInclude Include="include\GrayScaleImagePass.h">
-      <Filter>头文件\Render\PassManagement</Filter>
+    <ClInclude Include="include\DeferedPassScreenSpaceAmbientOcclusion.h">
+      <Filter>头文件\Render\RenderPipeline\ForwardRenderPath\DeferedPass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
