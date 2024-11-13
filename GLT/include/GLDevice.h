@@ -376,11 +376,21 @@ public:
 	void setViewMatrix(glm::mat4& viewMatrix) override
 	{
 		Shader::setGlobalMatrix(ShaderPropertyNames::ViewMatrix, viewMatrix);
+		Shader::setGlobalMatrix(ShaderPropertyNames::InverseViewMatrix, glm::inverse(viewMatrix));
 	}
 
 	void setProjectionMatrix(glm::mat4& projectionMatrix) override
 	{
 		Shader::setGlobalMatrix(ShaderPropertyNames::ProjectMatrix, projectionMatrix);
+		Shader::setGlobalMatrix(ShaderPropertyNames::InverseProjectMatrix, glm::inverse(projectionMatrix));
+	}
+	void setProjectionParams(glm::vec4& projectionParams) override
+	{
+		Shader::setGlobalVector(ShaderPropertyNames::ProjectParams, projectionParams);
+	}
+	void setScreenParams(glm::vec4& screenParams) override
+	{
+		Shader::setGlobalVector(ShaderPropertyNames::ScreenParams, screenParams);
 	}
 private:
 	void bindTextureUnit(PipelineStateObject& pso, TextureResourceIdentifier* textureIdentifier);

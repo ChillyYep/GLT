@@ -118,6 +118,8 @@ public:
 	~SetProjectionMatrixParam() {}
 
 	glm::mat4 m_projectionMatrix;
+	glm::vec4 m_projectionParams;
+	glm::vec4 m_screenParams;
 };
 RENDERCOMMANDPARAM_CLASS(SetGlobalTextureResource, RenderCommandType::SetGlobalTextureResource)
 {

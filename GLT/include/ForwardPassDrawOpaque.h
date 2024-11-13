@@ -32,7 +32,7 @@ private:
 			TextureInternalFormat::None);
 		m_colorRT->m_name = ResourceName::OpaqueRTName;
 		m_colorRT->setColorAttachmentSampleEnabled(true);
-		m_colorRT->setDepthAttachmentSampleEnabled(false);
+		m_colorRT->setDepthAttachmentSampleEnabled(true);
 		m_colorRT->create();
 	}
 

@@ -38,6 +38,9 @@ void RenderPipeline::render() {
 		cameraData.m_worldPos = static_cast<GameObject*>(mainCamera->getGameObject())->getTransform()->getPosition();
 		cameraData.m_viewMatrix = mainCamera->getViewMatrix();
 		cameraData.m_projectionMatrix = mainCamera->getProjectMatrix();
+		cameraData.m_projectionParams = mainCamera->getProjectParams();
+		auto windowSize = Window::getInstance()->getSize();
+		cameraData.m_screenParams = glm::vec4(windowSize.x, windowSize.y, 0.0f, 0.0f);;
 		cameraData.m_viewport = mainCamera->getViewPort();;
 		m_renderData.m_cameraDatas.push_back(cameraData);
 		// π‚’’ ˝æ›
@@ -93,9 +96,11 @@ void RenderPipeline::updateLightProperties()
 		m_renderData.m_shadowData.m_shadowMapRTName = ResourceName::ShadowMapRTName;
 		m_renderData.m_shadowData.m_shadowSize = glm::ivec2(2048, 2048);
 		m_renderData.m_shadowData.m_shadowBound = 30.f;
+		m_renderData.m_shadowData.m_shadowProjectionParams = glm::vec4(1.0f, 1.f, 100.f, 0.01f);
+		m_renderData.m_shadowData.m_shadowScreenParams = glm::vec4(windowSize.x, windowSize.y, 0.0f, 0.0f);
 		auto viewMatrix = Camera::computeViewMatrix(mainLightData.rotation, mainLightData.position);
 		auto projectionMatrix = Camera::computeOrthoProjectionMatrix((float)m_renderData.m_shadowData.m_shadowSize.x / m_renderData.m_shadowData.m_shadowSize.y,
-			m_renderData.m_shadowData.m_shadowBound, 1.f, 100.f);
+			m_renderData.m_shadowData.m_shadowBound, m_renderData.m_shadowData.m_shadowProjectionParams.y, m_renderData.m_shadowData.m_shadowProjectionParams.z);
 		m_renderData.m_shadowData.m_shadowViewMatrix = viewMatrix;
 		m_renderData.m_shadowData.m_shadowProjectionMatrix = projectionMatrix;
 		m_renderData.m_shadowData.m_shadowVPMatrix = projectionMatrix * viewMatrix;
@@ -121,7 +126,7 @@ void RenderPipeline::updatePerFrameConstantBuffer()
 void RenderPipeline::updatePerCameraConstantBuffer(CameraData& cameraData)
 {
 	m_cmd.setViewMatrix(cameraData.m_viewMatrix);
-	m_cmd.setProjectionMatrix(cameraData.m_projectionMatrix);
+	m_cmd.setProjectionMatrix(cameraData.m_projectionMatrix, cameraData.m_projectionParams, cameraData.m_screenParams);
 	m_renderContext.scheduleCommandBuffer(m_cmd);
 	m_cmd.clear();
 	m_renderContext.submit();

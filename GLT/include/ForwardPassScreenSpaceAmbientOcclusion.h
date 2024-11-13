@@ -1,6 +1,7 @@
 #pragma once
 #include <ForwardPassPostProcessing.h>
 #include <random>
+#include <RenderResourceManagment.h>
 
 class ForwardPassScreenSpaceAmbientOcclusion :public ForwardPassPostProcessing
 {
@@ -24,7 +25,7 @@ public:
 			// 随机采样点，分布在z正方向半球内
 			glm::vec4 sample(randomFloats(generator) * 2.0f - 1.0f,
 				randomFloats(generator) * 2.0f - 1.0f,
-				randomFloats(generator), 0.0f);
+				randomFloats(generator) * 2.0f - 1.0f, 0.0f);
 			sample = glm::normalize(sample);
 			float scale = float(i) / 64.0f;
 			// 使采样点分布更靠近片段表面
@@ -45,11 +46,28 @@ public:
 
 	bool isPrepared() override
 	{
-		return true;
+		if (!ForwardPassPostProcessing::isPrepared())
+		{
+			return false;
+		}
+		auto colorRT = static_cast<RenderTarget*>(LogicResourceManager::getInstance()->getResource(ResourceType::RenderTarget, ResourceName::OpaqueRTName));
+		if (colorRT == nullptr)
+		{
+			return false;
+		}
+		for (const auto& attachment : colorRT->getAttachments())
+		{
+			if (attachment.getResourceType() == FBOAttachmentResourceType::Texture && attachment.getAttachmentType() == FBOAttachmentType::Depth)
+			{
+				m_depthTex = attachment.getTexture();
+			}
+		}
+		return m_depthTex != nullptr;
 	}
 
 	void onExecute() override
 	{
+		m_fullscreenMat->setProperty(ShaderPropertyNames::DepthBuffer, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(m_depthTex)));
 		ForwardPassPostProcessing::onExecute();
 	}
 
@@ -58,5 +76,6 @@ public:
 		ForwardPassPostProcessing::onDestroy();
 	}
 private:
+	Texture* m_depthTex;
 	std::vector<glm::vec4> m_ssaoKernel;
 };

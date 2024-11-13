@@ -32,6 +32,8 @@ public:
 
 	inline glm::mat4x4 getProjectMatrix() { recomputeProjectMatrix(); return m_projectMatrix; }
 
+	inline glm::vec4 getProjectParams() { return glm::vec4(1.0f, m_nearFar.x, m_nearFar.y, 1 / m_nearFar.y); }
+
 	inline void setCameraController(std::shared_ptr<CameraController> cameraController)
 	{
 		m_cameraController = cameraController;

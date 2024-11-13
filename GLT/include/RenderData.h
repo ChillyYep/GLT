@@ -16,6 +16,8 @@ struct CameraData {
 	glm::vec3 m_worldPos;
 	glm::mat4 m_viewMatrix;
 	glm::mat4 m_projectionMatrix;
+	glm::vec4 m_projectionParams;
+	glm::vec4 m_screenParams;
 	glm::vec4 m_viewport;
 };
 struct LightProperties {
@@ -37,6 +39,8 @@ struct ShadowMapData {
 	std::string m_shadowMapRTName;
 	glm::mat4 m_shadowViewMatrix;
 	glm::mat4 m_shadowProjectionMatrix;
+	glm::vec4 m_shadowProjectionParams;
+	glm::vec4 m_shadowScreenParams;
 	glm::mat4 m_shadowVPMatrix;
 	glm::ivec2 m_shadowSize;
 	float m_shadowBound;

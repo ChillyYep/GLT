@@ -55,7 +55,7 @@ void createScene()
 	}
 	auto go1 = SceneUtility::createMeshGameObject(model->getSubMeshes(), mats);
 	auto cube1Transform = go1->getComponent<Transform>();
-	cube1Transform->setPosition(glm::vec3(0.0f));
+	cube1Transform->setPosition(glm::vec3(0.0f, -1.0f, 0.0f));
 	cube1Transform->setScale(glm::vec3(1.0f));
 	cube1Transform->setEularAngle(glm::vec3(0.0f));
 

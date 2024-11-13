@@ -160,6 +160,8 @@ void ScriptableRenderContext::executeCommand(RenderCommand& command)
 	{
 		auto setProjectionMatrixParam = static_cast<SetProjectionMatrixParam*>(commandParam);
 		m_device->setProjectionMatrix(setProjectionMatrixParam->m_projectionMatrix);
+		m_device->setProjectionParams(setProjectionMatrixParam->m_projectionParams);
+		m_device->setScreenParams(setProjectionMatrixParam->m_screenParams);
 		break;
 	}
 	case RenderCommandType::SetGlobalTextureResource:

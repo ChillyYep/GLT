@@ -80,6 +80,8 @@ public:
 		RenderCommandParamFactory::getInstance()->releaseParam(command.param);
 		command.param = nullptr;
 	}
+	virtual void setProjectionParams(glm::vec4& projectionParams) = 0;
+	virtual void setScreenParams(glm::vec4& screenParams) = 0;
 protected:
 	RenderTargetIdentifier* m_curRT;
 };

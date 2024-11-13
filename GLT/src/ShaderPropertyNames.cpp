@@ -5,6 +5,10 @@ std::stringstream ShaderPropertyNames::s_sstream;
 const char* ShaderPropertyNames::ModelMatrix = "Model";
 const char* ShaderPropertyNames::ViewMatrix = "View";
 const char* ShaderPropertyNames::ProjectMatrix = "Project";
+const char* ShaderPropertyNames::InverseViewMatrix = "InverseView";
+const char* ShaderPropertyNames::ProjectParams = "ProjectParams";
+const char* ShaderPropertyNames::ScreenParams = "ScreenParams";
+const char* ShaderPropertyNames::InverseProjectMatrix = "InverseProject";
 const char* ShaderPropertyNames::EyePosition = "EyePosition";
 
 const char* ShaderPropertyNames::ZBufferParams = "ZBufferParams";
@@ -31,6 +35,7 @@ const char* ShaderPropertyNames::ShadowMatrixVP = "ShadowMatrix";
 
 const char* ShaderPropertyNames::SkyBox = "skybox";
 const char* ShaderPropertyNames::MainTex = "mainTex";
+const char* ShaderPropertyNames::DepthBuffer = "depthBuffer";
 
 const char* ShaderPropertyNames::ShadowMapTex = "shadowMapTex";
 

@@ -8,6 +8,10 @@ public:
 	static const char* ModelMatrix;
 	static const char* ViewMatrix;
 	static const char* ProjectMatrix;
+	static const char* InverseViewMatrix;
+	static const char* InverseProjectMatrix;
+	static const char* ProjectParams;
+	static const char* ScreenParams;
 	static const char* EyePosition;
 
 	static const char* ZBufferParams;
@@ -35,6 +39,7 @@ public:
 
 	static const char* SkyBox;
 	static const char* MainTex;
+	static const char* DepthBuffer;
 	static const char* ShadowMapTex;
 	static const char* Ambient;
 	static const char* Lights;

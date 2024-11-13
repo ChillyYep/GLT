@@ -80,7 +80,7 @@ private:
 		{
 			m_cmdBuffer.setViewport(0, 0, shadowData.m_shadowSize.x, shadowData.m_shadowSize.y);
 			m_cmdBuffer.setViewMatrix(shadowData.m_shadowViewMatrix);
-			m_cmdBuffer.setProjectionMatrix(shadowData.m_shadowProjectionMatrix);
+			m_cmdBuffer.setProjectionMatrix(shadowData.m_shadowProjectionMatrix, shadowData.m_shadowProjectionParams, shadowData.m_shadowScreenParams);
 			m_context->scheduleCommandBuffer(m_cmdBuffer);
 			m_cmdBuffer.clear();
 			m_context->submit();

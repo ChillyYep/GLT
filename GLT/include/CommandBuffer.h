@@ -29,7 +29,7 @@ public:
 
 	void setViewport(int x, int y, int width, int height);
 
-	void setProjectionMatrix(glm::mat4 projection);
+	void setProjectionMatrix(glm::mat4 projection, glm::vec4 projectionParams, glm::vec4 screenParams);
 
 	void setViewMatrix(glm::mat4 viewMatrix);
 
