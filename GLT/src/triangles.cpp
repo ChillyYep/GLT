@@ -73,6 +73,13 @@ void createScene()
 	planeTransform->setScale(glm::vec3(100.0f));
 	planeTransform->setEularAngle(glm::vec3(0.0f));
 
+
+	auto go4 = SceneUtility::createMeshGameObject(planeMesh, mat2);
+	auto plane2Transform = go4->getComponent<Transform>();
+	plane2Transform->setPosition(glm::vec3(1.5f, -3.0f, 0.0f));
+	plane2Transform->setScale(glm::vec3(1.0f));
+	plane2Transform->setEularAngle(glm::vec3(90.0f,0.0f,0.0f));
+
 	auto cameraGo = SceneUtility::createEmptyGameObject();
 	auto cameraTransform = cameraGo->getTransform();
 	cameraTransform->setPosition(glm::vec3(10.0f, 2.0f, 10.0f));
@@ -112,6 +119,7 @@ void createScene()
 	scene->addObject(go1);
 	scene->addObject(go2);
 	scene->addObject(go3);
+	scene->addObject(go4);
 	scene->addObject(cameraGo);
 	scene->addObject(lightGo);
 	//scene->addObject(lightGo2);

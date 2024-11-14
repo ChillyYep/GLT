@@ -9,10 +9,23 @@ enum class MaterialPropertyType {
 	Texture,
 	Bool,
 	Int,
+	Int2,
+	Int3,
+	Int4,
 	Float,
+	Vector2,
+	Vector3,
 	Vector4,
+	Matrix2,
+	Matrix2x3,
+	Matrix2x4,
+	Matrix3x2,
+	Matrix3,
+	Matrix3x4,
+	Matrix4x2,
+	Matrix4x3,
+	Matrix4,
 	Vector4Array,
-	Matrix4
 };
 class MaterialProperty
 {
@@ -24,86 +37,39 @@ public:
 private:
 };
 
-class MaterialTextureProperty :public MaterialProperty
-{
-public:
-	MaterialTextureProperty(Texture* texPtr) :m_texPtr(texPtr) {}
-	~MaterialTextureProperty() {}
-	MaterialPropertyType getMaterialPropertyType() override { return MaterialPropertyType::Texture; }
-	__GET_SET_PROPERTY__(Texture, Texture*, m_texPtr)
+#define MaterialCommonProperty(CLASSNAME,VALUETYPE,VALUEENUM) \
+class CLASSNAME :public MaterialProperty	\
+{	\
+public:	\
+	CLASSNAME(VALUETYPE value) :m_value(value) {}	\
+	~CLASSNAME() {}	\
+	MaterialPropertyType getMaterialPropertyType() override { return VALUEENUM; }	\
+	__GET_SET_PROPERTY__(Value, VALUETYPE, m_value)	\
+\
+private:	\
+	VALUETYPE m_value;	\
+};	\
 
-private:
-	Texture* m_texPtr;
-};
-
-class MaterialVector4Property :public MaterialProperty
-{
-public:
-	MaterialVector4Property(glm::vec4 vec4) :m_vec4(vec4) {}
-	~MaterialVector4Property() {}
-	MaterialPropertyType getMaterialPropertyType() override { return MaterialPropertyType::Vector4; }
-	__GET_SET_PROPERTY__(Value, glm::vec4, m_vec4)
-
-private:
-	glm::vec4 m_vec4;
-};
-
-class MaterialVector4ArrayProperty :public MaterialProperty
-{
-public:
-	MaterialVector4ArrayProperty(std::vector<glm::vec4> vec4Array) :m_vec4Array(vec4Array) {}
-	~MaterialVector4ArrayProperty() {}
-	MaterialPropertyType getMaterialPropertyType() override { return MaterialPropertyType::Vector4Array; }
-	__GET_SET_PROPERTY__(Value, std::vector<glm::vec4>, m_vec4Array)
-
-private:
-	std::vector<glm::vec4> m_vec4Array;
-};
-
-class MaterialFloatProperty :public MaterialProperty
-{
-public:
-	MaterialFloatProperty(float value) :m_value(value) {}
-	~MaterialFloatProperty() {}
-	MaterialPropertyType getMaterialPropertyType() override { return MaterialPropertyType::Float; }
-	__GET_SET_PROPERTY__(Value, float, m_value)
-private:
-	float m_value;
-};
-
-class MaterialIntProperty :public MaterialProperty
-{
-public:
-	MaterialIntProperty(int value) :m_value(value) {}
-	~MaterialIntProperty() {}
-	MaterialPropertyType getMaterialPropertyType() override { return MaterialPropertyType::Int; }
-	__GET_SET_PROPERTY__(Value, int, m_value)
-
-private:
-	int m_value;
-};
-
-class MaterialBoolProperty :public MaterialProperty
-{
-public:
-	MaterialBoolProperty(bool value) :m_value(value) {}
-	~MaterialBoolProperty() {}
-	MaterialPropertyType getMaterialPropertyType() override { return MaterialPropertyType::Bool; }
-	__GET_SET_PROPERTY__(Value, bool, m_value)
-private:
-	bool m_value;
-};
-
-class MaterialMatrix4Property :public MaterialProperty
-{
-public:
-	MaterialMatrix4Property(glm::mat4 value) :m_value(value) {}
-	~MaterialMatrix4Property() {}
-	MaterialPropertyType getMaterialPropertyType() override { return MaterialPropertyType::Matrix4; }
-	__GET_SET_PROPERTY__(Value, glm::mat4, m_value)
-private:
-	glm::mat4 m_value;
-};
+MaterialCommonProperty(MaterialTextureProperty, Texture*, MaterialPropertyType::Texture)
+MaterialCommonProperty(MaterialFloatProperty, float, MaterialPropertyType::Float)
+MaterialCommonProperty(MaterialVector2Property, glm::vec2, MaterialPropertyType::Vector2)
+MaterialCommonProperty(MaterialVector3Property, glm::vec3, MaterialPropertyType::Vector3)
+MaterialCommonProperty(MaterialVector4Property, glm::vec4, MaterialPropertyType::Vector4)
+MaterialCommonProperty(MaterialVector4ArrayProperty, std::vector<glm::vec4>, MaterialPropertyType::Vector4Array)
+MaterialCommonProperty(MaterialBoolProperty, bool, MaterialPropertyType::Bool)
+MaterialCommonProperty(MaterialIntProperty, int, MaterialPropertyType::Int)
+MaterialCommonProperty(MaterialInt2Property, glm::ivec2, MaterialPropertyType::Int2)
+MaterialCommonProperty(MaterialInt3Property, glm::ivec3, MaterialPropertyType::Int3)
+MaterialCommonProperty(MaterialInt4Property, glm::ivec4, MaterialPropertyType::Int4)
+MaterialCommonProperty(MaterialMatrix2Property, glm::mat2, MaterialPropertyType::Matrix2)
+MaterialCommonProperty(MaterialMatrix2x3Property, glm::mat2x3, MaterialPropertyType::Matrix2x3)
+MaterialCommonProperty(MaterialMatrix2x4Property, glm::mat2x4, MaterialPropertyType::Matrix2x4)
+MaterialCommonProperty(MaterialMatrix3x2Property, glm::mat3x2, MaterialPropertyType::Matrix3x2)
+MaterialCommonProperty(MaterialMatrix3Property, glm::mat3, MaterialPropertyType::Matrix3)
+MaterialCommonProperty(MaterialMatrix3x4Property, glm::mat3x4, MaterialPropertyType::Matrix3x4)
+MaterialCommonProperty(MaterialMatrix4x2Property, glm::mat4x2, MaterialPropertyType::Matrix4x2)
+MaterialCommonProperty(MaterialMatrix4x3Property, glm::mat4x3, MaterialPropertyType::Matrix4x3)
+MaterialCommonProperty(MaterialMatrix4Property, glm::mat4, MaterialPropertyType::Matrix4)
 
 
 class Material :public Object
@@ -111,9 +77,9 @@ class Material :public Object
 public:
 	Material(std::shared_ptr<Shader> shader) :m_shader(shader) {}
 	~Material() {}
-	inline void setProperty(std::string name, std::shared_ptr<MaterialProperty> property) 
-	{ 
-		m_properties[name] = property; 
+	inline void setProperty(std::string name, std::shared_ptr<MaterialProperty> property)
+	{
+		m_properties[name] = property;
 	}
 	inline std::shared_ptr<MaterialProperty> getProperty(std::string name) const
 	{

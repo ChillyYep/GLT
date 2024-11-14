@@ -7,7 +7,7 @@ std::vector<Texture*> Material::getAllTextures()
 	{
 		if (propertyPair.second->getMaterialPropertyType() == MaterialPropertyType::Texture)
 		{
-			textures.push_back(((MaterialTextureProperty*)propertyPair.second.get())->getTexture());
+			textures.push_back(((MaterialTextureProperty*)propertyPair.second.get())->getValue());
 		}
 	}
 	return textures;

@@ -36,11 +36,14 @@ void main()
 		vec3 samplePos=camPos+samples[i].xyz*0.001;
 		vec4 projectPos=Project*vec4(samplePos,1.0);
 		projectPos/=projectPos.w;
+		projectPos.xyz=(vec3(1.0)+projectPos.xyz)*0.5;
+		projectPos.xy=vec2(projectPos.x,1-projectPos.y);
 		float sampleDepth = texture(depthBuffer,projectPos.xy).r;
-		occlussion+=(projectPos.z+1)*0.5 > sampleDepth?1.0:0.0;
+		occlussion+=step(projectPos.z,sampleDepth);
+		//occlussion+=sampleDepth;
 	}
 	occlussion = max(occlussion - 32,0) / 32;
 
-	//fColor = texture(mainTex, fs_in.fs_Texcoord);
-	fColor = (1-occlussion).xxxx;
+	fColor = texture(mainTex, fs_in.fs_Texcoord)*(1-occlussion);
+	//fColor = (1-occlussion).xxxx;
 }

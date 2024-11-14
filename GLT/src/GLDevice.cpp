@@ -865,12 +865,62 @@ void GLDevice::fillShaderProperties(PipelineStateObject& pso)
 				}
 				break;
 			}
+			case MaterialPropertyType::Int2:
+			{
+				auto intParam = static_cast<MaterialInt2Property*>(matProperty.get());
+				if (intParam != nullptr)
+				{
+					auto value = intParam->getValue();
+					glUniform2i(uniforms[i].m_location, value.x, value.y);
+				}
+				break;
+			}
+			case MaterialPropertyType::Int3:
+			{
+				auto intParam = static_cast<MaterialInt3Property*>(matProperty.get());
+				if (intParam != nullptr)
+				{
+					auto value = intParam->getValue();
+					glUniform3i(uniforms[i].m_location, value.x, value.y, value.z);
+				}
+				break;
+			}
+			case MaterialPropertyType::Int4:
+			{
+				auto intParam = static_cast<MaterialInt4Property*>(matProperty.get());
+				if (intParam != nullptr)
+				{
+					auto value = intParam->getValue();
+					glUniform4i(uniforms[i].m_location, value.x, value.y, value.z, value.w);
+				}
+				break;
+			}
 			case MaterialPropertyType::Float:
 			{
 				auto floatParam = static_cast<MaterialFloatProperty*>(matProperty.get());
 				if (floatParam != nullptr)
 				{
 					glUniform1f(uniforms[i].m_location, floatParam->getValue());
+				}
+				break;
+			}
+			case MaterialPropertyType::Vector2:
+			{
+				auto vec2Param = static_cast<MaterialVector2Property*>(matProperty.get());
+				if (vec2Param != nullptr)
+				{
+					auto vec2 = vec2Param->getValue();
+					glUniform2f(uniforms[i].m_location, vec2.x, vec2.y);
+				}
+				break;
+			}
+			case MaterialPropertyType::Vector3:
+			{
+				auto vec3Param = static_cast<MaterialVector3Property*>(matProperty.get());
+				if (vec3Param != nullptr)
+				{
+					auto vec3 = vec3Param->getValue();
+					glUniform3f(uniforms[i].m_location, vec3.x, vec3.y, vec3.z);
 				}
 				break;
 			}
@@ -898,6 +948,86 @@ void GLDevice::fillShaderProperties(PipelineStateObject& pso)
 				}
 				break;
 			}
+			case MaterialPropertyType::Matrix2:
+			{
+				auto mat2Param = static_cast<MaterialMatrix2Property*>(matProperty.get());
+				if (mat2Param != nullptr)
+				{
+					auto mat2 = mat2Param->getValue();
+					glUniformMatrix2fv(uniforms[i].m_location, 1, false, glm::value_ptr(mat2));
+				}
+				break;
+			}
+			case MaterialPropertyType::Matrix2x3:
+			{
+				auto mat2x3Param = static_cast<MaterialMatrix2x3Property*>(matProperty.get());
+				if (mat2x3Param != nullptr)
+				{
+					auto mat2x3 = mat2x3Param->getValue();
+					glUniformMatrix2x3fv(uniforms[i].m_location, 1, false, glm::value_ptr(mat2x3));
+				}
+				break;
+			}
+			case MaterialPropertyType::Matrix2x4:
+			{
+				auto mat2x4Param = static_cast<MaterialMatrix2x4Property*>(matProperty.get());
+				if (mat2x4Param != nullptr)
+				{
+					auto mat2x4 = mat2x4Param->getValue();
+					glUniformMatrix2x4fv(uniforms[i].m_location, 1, false, glm::value_ptr(mat2x4));
+				}
+				break;
+			}
+			case MaterialPropertyType::Matrix3x2:
+			{
+				auto mat3x2Param = static_cast<MaterialMatrix3x2Property*>(matProperty.get());
+				if (mat3x2Param != nullptr)
+				{
+					auto mat3x2 = mat3x2Param->getValue();
+					glUniformMatrix3x2fv(uniforms[i].m_location, 1, false, glm::value_ptr(mat3x2));
+				}
+				break;
+			}
+			case MaterialPropertyType::Matrix3:
+			{
+				auto mat3Param = static_cast<MaterialMatrix3Property*>(matProperty.get());
+				if (mat3Param != nullptr)
+				{
+					auto mat3 = mat3Param->getValue();
+					glUniformMatrix3fv(uniforms[i].m_location, 1, false, glm::value_ptr(mat3));
+				}
+				break;
+			}
+			case MaterialPropertyType::Matrix3x4:
+			{
+				auto mat3x4Param = static_cast<MaterialMatrix3x4Property*>(matProperty.get());
+				if (mat3x4Param != nullptr)
+				{
+					auto mat3x4 = mat3x4Param->getValue();
+					glUniformMatrix3x4fv(uniforms[i].m_location, 1, false, glm::value_ptr(mat3x4));
+				}
+				break;
+			}
+			case MaterialPropertyType::Matrix4x2:
+			{
+				auto mat4x2Param = static_cast<MaterialMatrix4x2Property*>(matProperty.get());
+				if (mat4x2Param != nullptr)
+				{
+					auto mat4x2 = mat4x2Param->getValue();
+					glUniformMatrix4x2fv(uniforms[i].m_location, 1, false, glm::value_ptr(mat4x2));
+				}
+				break;
+			}
+			case MaterialPropertyType::Matrix4x3:
+			{
+				auto mat4x3Param = static_cast<MaterialMatrix4x3Property*>(matProperty.get());
+				if (mat4x3Param != nullptr)
+				{
+					auto mat4x3 = mat4x3Param->getValue();
+					glUniformMatrix4x3fv(uniforms[i].m_location, 1, false, glm::value_ptr(mat4x3));
+				}
+				break;
+			}
 			case MaterialPropertyType::Matrix4:
 			{
 				auto mat4Param = static_cast<MaterialMatrix4Property*>(matProperty.get());
@@ -913,7 +1043,7 @@ void GLDevice::fillShaderProperties(PipelineStateObject& pso)
 				auto textureParam = static_cast<MaterialTextureProperty*>(matProperty.get());
 				if (textureParam != nullptr)
 				{
-					auto texture = textureParam->getTexture();
+					auto texture = textureParam->getValue();
 					for (const auto& texIdentifierPtr : pso.m_textureResources)
 					{
 						if (texIdentifierPtr->getInstanceId() == texture->getInstanceId())
