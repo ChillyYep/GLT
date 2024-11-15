@@ -128,9 +128,9 @@ private:
 		m_pso.m_uniformBlockRefs = shader->getReferencedBlocks();
 	}
 
-	void addGlobalTextureResource(std::string textureName, TextureResourceIdentifier* textureResource)
+	void addGlobalTextureResource(std::string textureName, TextureResourceIdentifier* textureResource, unsigned int registerIndex)
 	{
-		m_pso.m_globalTextureResources[textureName] = textureResource;
+		m_pso.m_globalTextureResources[textureName] = std::pair<unsigned int, TextureResourceIdentifier*>(registerIndex, textureResource);
 	}
 
 	PipelineStateObject m_pso;

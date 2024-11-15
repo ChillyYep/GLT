@@ -47,7 +47,7 @@ public:
 
 	virtual void destroyConstantBufferResources(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers) = 0;
 
-	virtual void activate(RenderTargetIdentifier* m_shadowMapIdentifier) = 0;
+	virtual void activate(RenderTargetIdentifier* m_colorRTIdentifier) = 0;
 
 	virtual void clearColor(float r, float g, float b, float a) = 0;
 

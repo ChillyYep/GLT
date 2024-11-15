@@ -50,7 +50,7 @@ private:
 
 		m_matPtr = new Material(std::shared_ptr<Shader>(new Shader("Skybox")));
 
-		m_matPtr->setProperty(ShaderPropertyNames::SkyBox, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(m_skybox)));
+		m_matPtr->setProperty(ShaderPropertyNames::SkyBox, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(m_skybox, 0)));
 
 		LogicResourceManager::getInstance()->addResource(ResourceType::Texture, m_skybox);
 		LogicResourceManager::getInstance()->addResource(ResourceType::Mesh, m_cubeMesh);
@@ -63,8 +63,8 @@ private:
 		{
 			return false;
 		}
-		m_shadowMapIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, m_colorRT->getInstanceId()));
-		if (m_shadowMapIdentifier == nullptr)
+		m_colorRTIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, m_colorRT->getInstanceId()));
+		if (m_colorRTIdentifier == nullptr)
 		{
 			return false;
 		}
@@ -94,10 +94,10 @@ private:
 
 	void onExecute() override
 	{
-		if (m_colorRT != nullptr && m_shadowMapIdentifier != nullptr)
+		if (m_colorRT != nullptr && m_colorRTIdentifier != nullptr)
 		{
 			m_context->setRenderStateBlock(m_renderStateBlock);
-			m_cmdBuffer.setRenderTarget(m_shadowMapIdentifier);
+			m_cmdBuffer.setRenderTarget(m_colorRTIdentifier);
 			m_cmdBuffer.drawMesh(m_cubeMesh, m_matPtr, glm::identity<glm::mat4>() * glm::scale(glm::vec3(100.0f)));
 			m_context->scheduleCommandBuffer(m_cmdBuffer);
 			m_cmdBuffer.clear();
@@ -107,7 +107,7 @@ private:
 
 	RenderTarget* m_colorRT;
 
-	RenderTargetIdentifier* m_shadowMapIdentifier;
+	RenderTargetIdentifier* m_colorRTIdentifier;
 
 	RenderStateBlock m_renderStateBlock;
 

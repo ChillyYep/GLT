@@ -67,7 +67,7 @@ public:
 
 	void onExecute() override
 	{
-		m_fullscreenMat->setProperty(ShaderPropertyNames::DepthBuffer, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(m_depthTex)));
+		m_fullscreenMat->setProperty(ShaderPropertyNames::DepthBuffer, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(m_depthTex, 1)));
 		ForwardPassPostProcessing::onExecute();
 	}
 

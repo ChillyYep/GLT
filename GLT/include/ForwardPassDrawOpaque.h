@@ -38,9 +38,28 @@ private:
 
 	bool isPrepared() override
 	{
-		m_shadowMapIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, m_colorRT->getRTInstanceId()));
-		m_shadowMap = static_cast<RenderTarget*>(LogicResourceManager::getInstance()->getResource(ResourceType::RenderTarget, m_renderData->m_shadowData.m_shadowMapRTName));
-		return m_shadowMapIdentifier != nullptr && m_shadowMap != nullptr;
+		m_colorRTIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, m_colorRT->getRTInstanceId()));
+		auto shadowMapRT = static_cast<RenderTarget*>(LogicResourceManager::getInstance()->getResource(ResourceType::RenderTarget, m_renderData->m_shadowData.m_shadowMapRTName));
+		if (shadowMapRT == nullptr)
+		{
+			return false;
+		}
+		Texture2D* shadowMapTexture = nullptr;
+		auto attachments = shadowMapRT->getAttachments();
+		for (const auto& attachment : attachments)
+		{
+			if (attachment.getAttachmentType() == FBOAttachmentType::Depth && attachment.getResourceType() == FBOAttachmentResourceType::Texture)
+			{
+				shadowMapTexture = static_cast<Texture2D*>(attachment.getTexture());
+				break;
+			}
+		}
+		if (shadowMapTexture == nullptr)
+		{
+			return false;
+		}
+		m_shadowMapTextureIdentifier = static_cast<TextureResourceIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::Texture, shadowMapTexture->getInstanceId()));
+		return m_colorRTIdentifier != nullptr && m_shadowMapTextureIdentifier != nullptr;
 	}
 
 	void onDestroy() override
@@ -56,20 +75,11 @@ private:
 		m_context->setRenderStateBlock(m_renderStateBlock);
 		// 如果多相机绘制，则相机会在同一帧发生变化，所以需要及时更新
 		m_drawSettings.m_cameraPos = m_renderData->m_cameraDatas[m_renderData->m_curRenderingCameraIndex].m_worldPos;
-		if (m_shadowMapIdentifier != nullptr && m_shadowMap != nullptr)
+		if (m_colorRTIdentifier != nullptr && m_shadowMapTextureIdentifier != nullptr)
 		{
-			auto shadowMapIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, m_shadowMap->getInstanceId()));
-			auto attachments = m_shadowMap->getAttachments();
-			Texture2D* shadowTexture = nullptr;
-			for (const auto& attachment : attachments)
-			{
-				if (attachment.getAttachmentType() == FBOAttachmentType::Depth && attachment.getResourceType() == FBOAttachmentResourceType::Texture)
-				{
-					shadowTexture = static_cast<Texture2D*>(attachment.getTexture());
-					break;
-				}
-			}
-			m_cmdBuffer.setRenderTarget(m_shadowMapIdentifier);
+			m_cmdBuffer.setGlobalTextureResource(ShaderPropertyNames::ShadowMapTex, m_shadowMapTextureIdentifier, ResourceCommonRegisterIndices::ShadowMapRegisterIndex);
+
+			m_cmdBuffer.setRenderTarget(m_colorRTIdentifier);
 			m_cmdBuffer.clearColor(0.0f, 0.0f, 0.0f, 0.0f);
 			m_context->scheduleCommandBuffer(m_cmdBuffer);
 			m_cmdBuffer.clear();
@@ -78,8 +88,8 @@ private:
 		}
 	}
 
-	RenderTargetIdentifier* m_shadowMapIdentifier;
-	RenderTarget* m_shadowMap;
+	RenderTargetIdentifier* m_colorRTIdentifier;
+	TextureResourceIdentifier* m_shadowMapTextureIdentifier;
 
 	FilterSettings m_filterSettings;
 	DrawSettings m_drawSettings;

@@ -49,8 +49,8 @@ private:
 
 	bool isPrepared() override
 	{
-		m_shadowMapIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, m_shadowMapRT->getRTInstanceId()));
-		return m_shadowMapIdentifier != nullptr;
+		m_colorRTIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, m_shadowMapRT->getRTInstanceId()));
+		return m_colorRTIdentifier != nullptr;
 	}
 
 	void onDestroy() override
@@ -76,7 +76,7 @@ private:
 		m_context->setRenderStateBlock(m_renderStateBlock);
 
 		m_drawSettings.m_cameraPos = mainLightData.position;
-		if (m_shadowMapIdentifier != nullptr)
+		if (m_colorRTIdentifier != nullptr)
 		{
 			m_cmdBuffer.setViewport(0, 0, shadowData.m_shadowSize.x, shadowData.m_shadowSize.y);
 			m_cmdBuffer.setViewMatrix(shadowData.m_shadowViewMatrix);
@@ -87,18 +87,12 @@ private:
 
 			m_context->updateConstantBufferResources(ConstantBufferType::PerCamera);
 
-			m_cmdBuffer.setRenderTarget(m_shadowMapIdentifier);
+			m_cmdBuffer.setRenderTarget(m_colorRTIdentifier);
 			m_cmdBuffer.clearColor(0.0f, 0.0f, 0.0f, 0.0f);
 			m_context->scheduleCommandBuffer(m_cmdBuffer);
 			m_cmdBuffer.clear();
 			m_context->submit();
 			m_context->drawRenderers(m_filterSettings, m_drawSettings, m_replacedShadowMaterialPtr);
-
-			auto depthTextureAttachmentIdentifier = static_cast<TextureResourceIdentifier*>(m_shadowMapIdentifier->getAttachmentIdentifier(FBOAttachmentType::Depth, FBOAttachmentResourceType::Texture));
-			if (depthTextureAttachmentIdentifier != nullptr)
-			{
-				m_cmdBuffer.setGlobalTextureResource(ShaderPropertyNames::ShadowMapTex, depthTextureAttachmentIdentifier);
-			}
 
 			m_context->scheduleCommandBuffer(m_cmdBuffer);
 			m_cmdBuffer.clear();
@@ -106,7 +100,7 @@ private:
 		}
 	}
 
-	RenderTargetIdentifier* m_shadowMapIdentifier;
+	RenderTargetIdentifier* m_colorRTIdentifier;
 
 	FilterSettings m_filterSettings;
 	DrawSettings m_drawSettings;

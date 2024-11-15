@@ -36,8 +36,8 @@ private:
 		{
 			return false;
 		}
-		m_shadowMapIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, m_colorRT->getInstanceId()));
-		return m_shadowMapIdentifier != nullptr;
+		m_colorRTIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, m_colorRT->getInstanceId()));
+		return m_colorRTIdentifier != nullptr;
 	}
 
 	void onDestroy() override {}
@@ -46,9 +46,9 @@ private:
 	{
 		m_context->setRenderStateBlock(m_renderStateBlock);
 		m_drawSettings.m_cameraPos = m_renderData->m_cameraDatas[m_renderData->m_curRenderingCameraIndex].m_worldPos;
-		if (m_colorRT != nullptr && m_shadowMapIdentifier != nullptr)
+		if (m_colorRT != nullptr && m_colorRTIdentifier != nullptr)
 		{
-			m_cmdBuffer.setRenderTarget(m_shadowMapIdentifier);
+			m_cmdBuffer.setRenderTarget(m_colorRTIdentifier);
 			m_context->scheduleCommandBuffer(m_cmdBuffer);
 			m_cmdBuffer.clear();
 			m_context->submit();
@@ -57,7 +57,7 @@ private:
 	}
 
 	RenderTarget* m_colorRT;
-	RenderTargetIdentifier* m_shadowMapIdentifier;
+	RenderTargetIdentifier* m_colorRTIdentifier;
 
 	FilterSettings m_filterSettings;
 	DrawSettings m_drawSettings;

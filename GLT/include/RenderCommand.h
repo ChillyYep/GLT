@@ -128,6 +128,7 @@ public:
 	~SetGlobalTextureResource() {}
 	std::string m_shaderPropertyName;
 	TextureResourceIdentifier* m_globalTextureResource;
+	unsigned int m_registerIndex;
 };
 
 class RenderCommandParamFactory :public Singleton<RenderCommandParamFactory>

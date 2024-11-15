@@ -287,7 +287,7 @@ public:
 
 	void destroyConstantBufferResources(std::vector<ConstantBufferIdentifier>& constantBufferIdentifiers) override;
 
-	void activate(RenderTargetIdentifier* m_shadowMapIdentifier) override;
+	void activate(RenderTargetIdentifier* m_colorRTIdentifier) override;
 
 	void clearColor(float r, float g, float b, float a) override;
 
@@ -393,7 +393,7 @@ public:
 		Shader::setGlobalVector(ShaderPropertyNames::ScreenParams, screenParams);
 	}
 private:
-	void bindTextureUnit(PipelineStateObject& pso, TextureResourceIdentifier* textureIdentifier);
+	void bindTextureUnit(PipelineStateObject& pso, unsigned int registerIndex, TextureResourceIdentifier* textureIdentifier);
 
 	void fillShaderProperties(PipelineStateObject& pso);
 

@@ -127,7 +127,7 @@ void ScriptableRenderContext::executeCommand(RenderCommand& command)
 		auto materials = renderer->getMaterials();
 		auto meshes = renderer->getMeshes();
 		auto transform = static_cast<GameObject*>(renderer->getGameObject())->getTransform();
-		for (int i = 0;i < meshCount;++i)
+		for (int i = 0; i < meshCount; ++i)
 		{
 			auto meshResourceIdentifier = static_cast<MeshResourceIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::Mesh, (meshes[i]->getInstanceId())));
 			if (meshResourceIdentifier != nullptr)
@@ -170,7 +170,7 @@ void ScriptableRenderContext::executeCommand(RenderCommand& command)
 
 		if (setGlobalTextureResource->m_globalTextureResource != nullptr)
 		{
-			addGlobalTextureResource(setGlobalTextureResource->m_shaderPropertyName, setGlobalTextureResource->m_globalTextureResource);
+			addGlobalTextureResource(setGlobalTextureResource->m_shaderPropertyName, setGlobalTextureResource->m_globalTextureResource, setGlobalTextureResource->m_registerIndex);
 		}
 		break;
 	}

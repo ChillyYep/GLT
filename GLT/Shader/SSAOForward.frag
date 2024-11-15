@@ -1,8 +1,8 @@
 #version 450 core
 #include "common.attr"
 // in
-layout (binding = 0) uniform sampler2D depthBuffer;
-layout (binding = 1) uniform sampler2D mainTex;
+layout (location = 0,binding = 0) uniform sampler2D mainTex;
+layout (location = 1,binding = 1) uniform sampler2D depthBuffer;
 
 uniform vec4 samples[64];
 

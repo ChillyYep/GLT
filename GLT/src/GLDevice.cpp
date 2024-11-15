@@ -378,14 +378,14 @@ std::vector<RenderTargetIdentifier> GLDevice::requestRenderTargetResource(std::v
 	{
 		auto rtPtr = renderTargetPtrs[i];
 		renderTargetResources[i] = RenderTargetIdentifier(rtPtr->getInstanceId());
-		auto& m_shadowMapIdentifier = renderTargetResources[i];
+		auto& m_colorRTIdentifier = renderTargetResources[i];
 		auto fbo = rts[i];
-		m_shadowMapIdentifier.m_fbo = fbo;
-		m_shadowMapIdentifier.m_descriptor = rtPtr->getRenderTargetDescriptor();
+		m_colorRTIdentifier.m_fbo = fbo;
+		m_colorRTIdentifier.m_descriptor = rtPtr->getRenderTargetDescriptor();
 		auto attachmentIdentifiers = rtsAttachmentIdentifiers[i];
 		auto descriptor = rtPtr->getRenderTargetDescriptor();
 
-		m_shadowMapIdentifier.m_attachmentIdentifiers = attachmentIdentifiers;
+		m_colorRTIdentifier.m_attachmentIdentifiers = attachmentIdentifiers;
 
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 		for (const auto& attachment : attachmentIdentifiers)
@@ -542,17 +542,17 @@ void GLDevice::destroyConstantBufferResources(std::vector<ConstantBufferIdentifi
 	glDeleteBuffers(size, ubos.data());
 }
 
-void GLDevice::activate(RenderTargetIdentifier* m_shadowMapIdentifier)
+void GLDevice::activate(RenderTargetIdentifier* m_colorRTIdentifier)
 {
 	// 同一RT不必重复设置，减少指令提交
-	if (m_shadowMapIdentifier == nullptr || (m_curRT != nullptr && m_curRT->getInstanceId() == m_shadowMapIdentifier->getInstanceId()))
+	if (m_colorRTIdentifier == nullptr || (m_curRT != nullptr && m_curRT->getInstanceId() == m_colorRTIdentifier->getInstanceId()))
 	{
 		return;
 	}
-	if (m_shadowMapIdentifier->m_fbo > 0)
+	if (m_colorRTIdentifier->m_fbo > 0)
 	{
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_shadowMapIdentifier->m_fbo);
-		m_curRT = m_shadowMapIdentifier;
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_colorRTIdentifier->m_fbo);
+		m_curRT = m_colorRTIdentifier;
 	}
 }
 
@@ -803,10 +803,10 @@ void GLDevice::fillNoMaterialProperties(PipelineStateObject& pso, std::string pr
 {
 	if (pso.m_globalTextureResources.find(propertyName) != pso.m_globalTextureResources.end())
 	{
-		auto texRes = pso.m_globalTextureResources[propertyName];
-		if (texRes != nullptr)
+		auto texResPair = pso.m_globalTextureResources[propertyName];
+		if (texResPair.second != nullptr)
 		{
-			bindTextureUnit(pso, texRes);
+			bindTextureUnit(pso, texResPair.first, texResPair.second);
 		}
 	}
 }
@@ -828,11 +828,12 @@ void GLDevice::useProgram(PipelineStateObject& pso)
 	glUseProgram(pso.m_program);
 }
 
-void GLDevice::bindTextureUnit(PipelineStateObject& pso, TextureResourceIdentifier* textureIdentifier)
+void GLDevice::bindTextureUnit(PipelineStateObject& pso, unsigned int registerIndex, TextureResourceIdentifier* textureIdentifier)
 {
 	if (textureIdentifier != nullptr)
 	{
-		glBindTextureUnit(pso.m_texUnit++, textureIdentifier->m_texture);
+		pso.m_texUnit++;
+		glBindTextureUnit(registerIndex, textureIdentifier->m_texture);
 	}
 }
 
@@ -1048,7 +1049,7 @@ void GLDevice::fillShaderProperties(PipelineStateObject& pso)
 					{
 						if (texIdentifierPtr->getInstanceId() == texture->getInstanceId())
 						{
-							bindTextureUnit(pso, texIdentifierPtr);
+							bindTextureUnit(pso, textureParam->getRegisterIndex(), texIdentifierPtr);
 							break;
 						}
 					}
