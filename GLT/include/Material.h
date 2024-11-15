@@ -50,19 +50,7 @@ private:	\
 	VALUETYPE m_value;	\
 };	\
 
-class MaterialTextureProperty :public MaterialProperty
-{
-public:
-	MaterialTextureProperty(Texture* value, int registerIndex = 0) :m_value(value), m_registerIndex(registerIndex) {}
-	~MaterialTextureProperty() {}
-	MaterialPropertyType getMaterialPropertyType() override { return MaterialPropertyType::Texture; }
-	__GET_SET_PROPERTY__(Value, Texture*, m_value)
-		__GET_SET_PROPERTY__(RegisterIndex, int, m_registerIndex)
-private:
-	Texture* m_value;
-	int m_registerIndex;
-};
-
+MaterialCommonProperty(MaterialTextureProperty, Texture*, MaterialPropertyType::Texture)
 MaterialCommonProperty(MaterialFloatProperty, float, MaterialPropertyType::Float)
 MaterialCommonProperty(MaterialVector2Property, glm::vec2, MaterialPropertyType::Vector2)
 MaterialCommonProperty(MaterialVector3Property, glm::vec3, MaterialPropertyType::Vector3)

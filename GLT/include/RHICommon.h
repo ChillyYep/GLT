@@ -11,6 +11,13 @@ struct ShaderUniformProperty {
 	GLTInt32 m_offset;
 	size_t m_size;
 
+	GLTInt32 m_registerIndex;
+
+	inline bool isSampler()
+	{
+		return m_registerIndex >= 0;
+	}
+
 	bool operator==(const ShaderUniformProperty& other) const;
 
 	bool operator!=(const ShaderUniformProperty& other) const;

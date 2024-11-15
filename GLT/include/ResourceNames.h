@@ -9,10 +9,3 @@ public:
 	static const char* DebugRTName;
 	static const char* CaptureFBODebugRTName;
 };
-
-class ResourceCommonRegisterIndices {
-public:
-	static const unsigned int MainTexRegisterIndex;
-	static const unsigned int ShadowMapRegisterIndex;
-
-};

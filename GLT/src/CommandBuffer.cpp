@@ -11,14 +11,13 @@ void CommandBuffer::setRenderTarget(RenderTargetIdentifier* renderTargetIdentifi
 	command.param = setRenderTargetParam;
 	m_cmdList.push_back(command);
 }
-void CommandBuffer::setGlobalTextureResource(std::string propertyName, TextureResourceIdentifier* textureResource, unsigned int registerIndex)
+void CommandBuffer::setGlobalTextureResource(std::string propertyName, TextureResourceIdentifier* textureResource)
 {
 	assert(textureResource != nullptr);
 	RenderCommand command = RenderCommand();
 	SetGlobalTextureResource* setGlobalTextureResourceParam = RenderCommandParamFactory::getInstance()->createParam<SetGlobalTextureResource>();
 	setGlobalTextureResourceParam->m_globalTextureResource = textureResource;
 	setGlobalTextureResourceParam->m_shaderPropertyName = propertyName;
-	setGlobalTextureResourceParam->m_registerIndex = registerIndex;
 
 	command.commandType = RenderCommandType::SetGlobalTextureResource;
 	command.param = setGlobalTextureResourceParam;

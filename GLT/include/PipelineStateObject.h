@@ -15,7 +15,7 @@ struct PipelineStateObject
 	Material* m_material = nullptr;
 	ConstantBufferSet* m_constantBufferSet = nullptr;
 
-	std::map<std::string, std::pair<unsigned int, TextureResourceIdentifier*>> m_globalTextureResources;
+	std::map<std::string, TextureResourceIdentifier*> m_globalTextureResources;
 
 	std::vector<ShaderUniformProperty> m_uniforms;
 	std::vector<TextureResourceIdentifier*> m_textureResources;

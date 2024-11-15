@@ -364,7 +364,7 @@ public:
 
 	void draw(PipelineStateObject& pso);
 
-	void fillNoMaterialProperties(PipelineStateObject& pso, std::string propertyName);
+	void fillNoMaterialProperties(PipelineStateObject& pso, ShaderUniformProperty& uniformProperty);
 
 	void setViewport(int x, int y, int width, int height) override
 	{

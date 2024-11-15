@@ -170,7 +170,7 @@ void ScriptableRenderContext::executeCommand(RenderCommand& command)
 
 		if (setGlobalTextureResource->m_globalTextureResource != nullptr)
 		{
-			addGlobalTextureResource(setGlobalTextureResource->m_shaderPropertyName, setGlobalTextureResource->m_globalTextureResource, setGlobalTextureResource->m_registerIndex);
+			addGlobalTextureResource(setGlobalTextureResource->m_shaderPropertyName, setGlobalTextureResource->m_globalTextureResource);
 		}
 		break;
 	}

@@ -50,7 +50,7 @@ private:
 
 		m_matPtr = new Material(std::shared_ptr<Shader>(new Shader("Skybox")));
 
-		m_matPtr->setProperty(ShaderPropertyNames::SkyBox, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(m_skybox, 0)));
+		m_matPtr->setProperty(ShaderPropertyNames::SkyBox, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(m_skybox)));
 
 		LogicResourceManager::getInstance()->addResource(ResourceType::Texture, m_skybox);
 		LogicResourceManager::getInstance()->addResource(ResourceType::Mesh, m_cubeMesh);

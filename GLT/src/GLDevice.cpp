@@ -799,14 +799,14 @@ void GLDevice::setRenderStateBlock(RenderStateBlock& renderStateBlock)
 	}
 }
 
-void GLDevice::fillNoMaterialProperties(PipelineStateObject& pso, std::string propertyName)
+void GLDevice::fillNoMaterialProperties(PipelineStateObject& pso, ShaderUniformProperty& uniformProperty)
 {
-	if (pso.m_globalTextureResources.find(propertyName) != pso.m_globalTextureResources.end())
+	if (pso.m_globalTextureResources.find(uniformProperty.m_name) != pso.m_globalTextureResources.end())
 	{
-		auto texResPair = pso.m_globalTextureResources[propertyName];
-		if (texResPair.second != nullptr)
+		auto texRes = pso.m_globalTextureResources[uniformProperty.m_name];
+		if (texRes != nullptr)
 		{
-			bindTextureUnit(pso, texResPair.first, texResPair.second);
+			bindTextureUnit(pso, uniformProperty.m_registerIndex, texRes);
 		}
 	}
 }
@@ -1042,14 +1042,14 @@ void GLDevice::fillShaderProperties(PipelineStateObject& pso)
 			case MaterialPropertyType::Texture:
 			{
 				auto textureParam = static_cast<MaterialTextureProperty*>(matProperty.get());
-				if (textureParam != nullptr)
+				if (textureParam != nullptr && uniforms[i].isSampler())
 				{
 					auto texture = textureParam->getValue();
 					for (const auto& texIdentifierPtr : pso.m_textureResources)
 					{
 						if (texIdentifierPtr->getInstanceId() == texture->getInstanceId())
 						{
-							bindTextureUnit(pso, textureParam->getRegisterIndex(), texIdentifierPtr);
+							bindTextureUnit(pso, uniforms[i].m_registerIndex, texIdentifierPtr);
 							break;
 						}
 					}
@@ -1061,7 +1061,7 @@ void GLDevice::fillShaderProperties(PipelineStateObject& pso)
 			}
 		}
 		else {
-			fillNoMaterialProperties(pso, uniforms[i].m_name);
+			fillNoMaterialProperties(pso, uniforms[i]);
 		}
 	}
 }

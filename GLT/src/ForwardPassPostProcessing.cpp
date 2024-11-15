@@ -100,7 +100,7 @@ void ForwardPassPostProcessing::onExecute()
 		// 将该临时RT作为渲染对象
 		m_cmdBuffer.setRenderTarget(m_uberRTIdentifier);
 		// 后处理渲染
-		m_fullscreenMat->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(m_colorRTTexture, ResourceCommonRegisterIndices::MainTexRegisterIndex)));
+		m_fullscreenMat->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(m_colorRTTexture)));
 		m_cmdBuffer.drawMesh(s_fullscreenTriangle, m_fullscreenMat, glm::identity<glm::mat4>());
 		m_context->scheduleCommandBuffer(m_cmdBuffer);
 		m_cmdBuffer.clear();

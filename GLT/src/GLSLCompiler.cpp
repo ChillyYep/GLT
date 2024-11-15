@@ -89,11 +89,11 @@ void GLSLCompiler::afterEveryProgramCompiled(GLuint program, ShaderProgramInfo& 
 void GLSLCompiler::afterAllProgramCompiled(const std::unordered_map<std::string, ShaderProgramInfo>& outputShaderPrograms, std::vector<ConstantBufferIdentifier>& constantBuffers)
 {
 	int count = 0;
-	for (int i = 0;i < constantBuffers.size();++i)
+	for (int i = 0; i < constantBuffers.size(); ++i)
 	{
 		constantBuffers[i].recalculateBufferSizeAndBlockOffset();
 		auto& blocks = constantBuffers[i].getBlocks();
-		for (int j = 0;j < blocks.size();++j)
+		for (int j = 0; j < blocks.size(); ++j)
 		{
 			blocks[j].m_blockBindingNum = count++;
 		}
@@ -123,7 +123,7 @@ void GLSLCompiler::extractBlocks(GLuint program, GLint numBlocks, GLint maxBlock
 {
 	std::vector<GLchar> propertyNameBuff = std::vector<GLchar>(maxBlockNameLength);
 	GLsizei blockNameLength;
-	for (GLint i = 0;i < numBlocks;++i)
+	for (GLint i = 0; i < numBlocks; ++i)
 	{
 		ShaderUniformBlockProperty blockProperty;
 		memset(propertyNameBuff.data(), '\0', propertyNameBuff.size());
@@ -144,7 +144,7 @@ void GLSLCompiler::extractBlocks(GLuint program, GLint numBlocks, GLint maxBlock
 
 			glGetActiveUniformBlockiv(program, blockIndex, GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES, blockUniformsIndices.data());
 
-			for (GLint j = 0;j < numBlockActivedUniforms;++j)
+			for (GLint j = 0; j < numBlockActivedUniforms; ++j)
 			{
 				auto index = getUniformIndex(blockUniformsIndices[j], uniformNames, uniformIndcies);
 				BlockUniform blockUniform;
@@ -186,7 +186,7 @@ void GLSLCompiler::extractBlocks(GLuint program, GLint numBlocks, GLint maxBlock
 void GLSLCompiler::extractNoBlockUniforms(GLuint program, GLint numProperties, GLint maxPropertyNameLength, const std::vector<std::string>& uniformNames, const std::vector<GLint>& uniformSizes,
 	const std::vector<GLint>& uniformOffsets, const std::vector<GLint>& uniformTypes, std::vector<ShaderUniformProperty>& uniformProperties)
 {
-	for (GLint i = 0;i < numProperties;++i)
+	for (GLint i = 0; i < numProperties; ++i)
 	{
 		GLint location = glGetUniformLocation(program, uniformNames[i].data());
 		// 程序内部uniform变量
@@ -196,6 +196,14 @@ void GLSLCompiler::extractNoBlockUniforms(GLuint program, GLint numProperties, G
 			property.m_name = std::string(uniformNames[i]);
 			property.m_location = location;
 			property.m_type = uniformTypes[i];
+
+			if (isSampler(property.m_type))
+			{
+				glGetUniformiv(program, location, &property.m_registerIndex);
+			}
+			else {
+				property.m_registerIndex = -1;
+			}
 			property.m_offset = uniformOffsets[i];
 			property.m_size = uniformSizes[i] * typeSize(uniformTypes[i]);
 			uniformProperties.push_back(property);
@@ -208,7 +216,7 @@ void GLSLCompiler::extractUniformIndices(GLuint program, std::vector<std::string
 {
 	GLsizei numProperties = (GLsizei)uniformNames.size();
 	std::vector<const GLchar*> uniformNamePtrs = std::vector<const GLchar*>(numProperties);
-	for (int i = 0;i < numProperties;++i)
+	for (int i = 0; i < numProperties; ++i)
 	{
 		uniformNamePtrs[i] = uniformNames[i].c_str();
 	}
@@ -223,7 +231,7 @@ std::vector<std::string> GLSLCompiler::extractUniformNames(GLuint program, GLint
 	std::vector<GLchar> propertyNameBuff = std::vector<GLchar>(maxPropertyNameLength);
 	GLsizei propertyNameLength;
 	std::vector<std::string> uniformNames = std::vector<std::string>(numProperties);
-	for (GLint i = 0;i < numProperties;++i)
+	for (GLint i = 0; i < numProperties; ++i)
 	{
 		memset(propertyNameBuff.data(), '\0', propertyNameBuff.size());
 		glGetActiveUniformName(program, i, maxPropertyNameLength, &propertyNameLength, propertyNameBuff.data());
@@ -241,7 +249,22 @@ void GLSLCompiler::getProgramInfo(GLuint program, GLint* maxPropertyNameLength, 
 	glGetProgramInterfaceiv(program, GL_UNIFORM_BLOCK, GL_MAX_NAME_LENGTH, maxBlockNameLength);
 	glGetProgramInterfaceiv(program, GL_UNIFORM_BLOCK, GL_ACTIVE_RESOURCES, numBlocks);
 }
-
+bool GLSLCompiler::isSampler(GLenum type)
+{
+	switch (type)
+	{
+	case GL_SAMPLER_1D:
+	case GL_SAMPLER_2D:
+	case GL_SAMPLER_3D:
+	case GL_SAMPLER_CUBE:
+	case GL_SAMPLER_1D_SHADOW:
+	case GL_SAMPLER_2D_SHADOW:
+		return true;
+	default:
+		break;
+	}
+	return false;
+}
 size_t GLSLCompiler::typeSize(GLenum type)
 {
 	size_t size = 0;
@@ -297,7 +320,7 @@ GLuint GLSLCompiler::getPreDefineSize(std::vector<BlockUniform>& blockUniforms)
 #define ALIGN(size,alignment) ((size - 1) / alignment + 1) * alignment
 	GLint maxOffset = -1;
 	GLint maxOffsetSize = 0;
-	for (int i = 0;i < blockUniforms.size();++i)
+	for (int i = 0; i < blockUniforms.size(); ++i)
 	{
 		if (blockUniforms[i].m_offset > maxOffset)
 		{
@@ -312,7 +335,7 @@ GLuint GLSLCompiler::getPreDefineSize(std::vector<BlockUniform>& blockUniforms)
 ShaderUniformBlockProperty* GLSLCompiler::findBlock(std::vector<ConstantBufferIdentifier>& constantBuffers, std::string blockName, int* constantBufferIndex)
 {
 	ShaderUniformBlockProperty* blockPtr;
-	for (int i = 0;i < constantBuffers.size();++i)
+	for (int i = 0; i < constantBuffers.size(); ++i)
 	{
 		if (constantBuffers[i].findBlock(blockName, blockPtr))
 		{
@@ -328,7 +351,7 @@ ShaderUniformBlockProperty* GLSLCompiler::findBlock(std::vector<ConstantBufferId
 
 int GLSLCompiler::getUniformIndex(GLuint index, const std::vector<std::string>& uniformNames, const std::vector<GLuint>& uniformIndcies)
 {
-	for (int i = 0;i < uniformIndcies.size();++i)
+	for (int i = 0; i < uniformIndcies.size(); ++i)
 	{
 		if (index == uniformIndcies[i])
 		{
@@ -357,7 +380,7 @@ ConstantBufferType GLSLCompiler::getConstantType(std::string blockName)
 
 ConstantBufferIdentifier* GLSLCompiler::getConstantBuffer(std::vector<ConstantBufferIdentifier>& constantBuffers, ConstantBufferType constantBufferType)
 {
-	for (int i = 0;i < constantBuffers.size();++i)
+	for (int i = 0; i < constantBuffers.size(); ++i)
 	{
 		if (constantBuffers[i].getConstantBufferType() == constantBufferType)
 		{

@@ -17,7 +17,7 @@ public:
 
 	void setRenderTarget(RenderTargetIdentifier* renderTargetIdentifier);
 
-	void setGlobalTextureResource(std::string propertyName, TextureResourceIdentifier* textureResource, unsigned int registerIndex);
+	void setGlobalTextureResource(std::string propertyName, TextureResourceIdentifier* textureResource);
 
 	void clearColor(float r, float g, float b, float a);
 	//void blitto(RenderTargetIdentifier* renderTargetIdentifier);

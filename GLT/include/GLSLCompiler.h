@@ -39,6 +39,8 @@ private:
 
 	void getProgramInfo(GLuint program, GLint* maxPropertyNameLength, GLint* numProperties, GLint* maxBlockNameLength, GLint* numBlocks);
 
+	static bool isSampler(GLenum type);
+
 	static size_t typeSize(GLenum type);
 
 	static bool isTypeSupportBlock(GLenum type);

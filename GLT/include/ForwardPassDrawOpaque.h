@@ -77,7 +77,7 @@ private:
 		m_drawSettings.m_cameraPos = m_renderData->m_cameraDatas[m_renderData->m_curRenderingCameraIndex].m_worldPos;
 		if (m_colorRTIdentifier != nullptr && m_shadowMapTextureIdentifier != nullptr)
 		{
-			m_cmdBuffer.setGlobalTextureResource(ShaderPropertyNames::ShadowMapTex, m_shadowMapTextureIdentifier, ResourceCommonRegisterIndices::ShadowMapRegisterIndex);
+			m_cmdBuffer.setGlobalTextureResource(ShaderPropertyNames::ShadowMapTex, m_shadowMapTextureIdentifier);
 
 			m_cmdBuffer.setRenderTarget(m_colorRTIdentifier);
 			m_cmdBuffer.clearColor(0.0f, 0.0f, 0.0f, 0.0f);

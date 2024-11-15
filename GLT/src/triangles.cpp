@@ -40,9 +40,9 @@ void createScene()
 	wallTex->setWrapModeT(TextureWrapMode::Repeat);
 	wallTex->setTextureFilter(TextureFilterMode::Linear_Mipmap_Linear);
 
-	mat1->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(Texture2D::getWhiteTex2D(), ResourceCommonRegisterIndices::MainTexRegisterIndex)));
-	mat2->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(Texture2D::getGrayTex2D(), ResourceCommonRegisterIndices::MainTexRegisterIndex)));
-	mat3->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(wallTex, ResourceCommonRegisterIndices::MainTexRegisterIndex)));
+	mat1->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(Texture2D::getWhiteTex2D())));
+	mat2->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(Texture2D::getGrayTex2D())));
+	mat3->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(wallTex)));
 	mat3->setProperty(ShaderPropertyNames::CommonAlpha, std::shared_ptr<MaterialFloatProperty>(new MaterialFloatProperty(0.5f)));
 	// Íø¸ñ
 	auto cubeMesh = PrimitiveUtils::createCube();
