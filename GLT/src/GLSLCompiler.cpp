@@ -237,6 +237,16 @@ std::vector<std::string> GLSLCompiler::extractUniformNames(GLuint program, GLint
 		glGetActiveUniformName(program, i, maxPropertyNameLength, &propertyNameLength, propertyNameBuff.data());
 		std::string temp = std::string(propertyNameLength, '\0');
 		memcpy(temp.data(), propertyNameBuff.data(), propertyNameLength);
+		// 如果是简单数组(如vec4[64])需要截断处理，像结构体的数组(LightData[64])就需要截断
+		size_t arrNumEnd = temp.find(']');
+		if (arrNumEnd == (propertyNameLength - 1))
+		{
+			size_t arrNumBegin = temp.find('[');
+			if (arrNumBegin > 0)
+			{
+				temp = temp.substr(0, arrNumBegin);
+			}
+		}
 		uniformNames[i] = temp;
 	}
 	return uniformNames;

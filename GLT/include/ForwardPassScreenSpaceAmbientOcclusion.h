@@ -19,7 +19,7 @@ public:
 		std::uniform_real_distribution<float> randomFloats(0.0f, 1.0f);
 		std::default_random_engine generator;
 		const int randomSampleCount = 64;
-		m_ssaoKernel.resize(randomSampleCount);
+		m_ssaoKernel.reserve(randomSampleCount);
 		for (unsigned int i = 0; i < randomSampleCount; ++i)
 		{
 			// 随机采样点，分布在z正方向半球内
