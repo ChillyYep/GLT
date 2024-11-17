@@ -115,18 +115,15 @@ struct ColorState
 
 struct DepthState
 {
-	RenderStateParam<glm::vec2> m_depthRange;
 	RenderStateParam<bool> m_writable;
 	RenderStateParam<CompareFunction> m_compareFunc;
 	bool isSame(const DepthState& other)
 	{
-		return m_depthRange == other.m_depthRange &&
-			m_writable == other.m_writable &&
+		return m_writable == other.m_writable &&
 			m_compareFunc == other.m_compareFunc;
 	}
 	void copyTo(DepthState& depthState)
 	{
-		depthState.m_depthRange = m_depthRange.getValue();
 		depthState.m_writable = m_writable.getValue();
 		depthState.m_compareFunc = m_compareFunc.getValue();
 	}

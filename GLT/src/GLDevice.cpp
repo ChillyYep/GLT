@@ -693,12 +693,6 @@ GLenum GLDevice::textureType2TextureTarget(TextureType textureType) const
 void GLDevice::setRenderStateBlock(RenderStateBlock& renderStateBlock)
 {
 	// 开启深度写入与否
-	if (renderStateBlock.m_depthState.m_depthRange.isDirty())
-	{
-		renderStateBlock.m_depthState.m_depthRange.clearDirty();
-		auto depthRange = renderStateBlock.m_depthState.m_depthRange.getValue();
-		glDepthRange(depthRange.x, depthRange.y);
-	}
 	if (renderStateBlock.m_depthState.m_writable.isDirty())
 	{
 		renderStateBlock.m_depthState.m_writable.clearDirty();

@@ -47,6 +47,10 @@ public:
 		{
 			return;
 		}
+		if (!m_renderStateInited)
+		{
+			glDepthRange(0, 1);
+		}
 		m_renderStateInited = true;
 		renderStateBlock.copyTo(m_curRenderStateBlock);
 		m_device->setRenderStateBlock(m_curRenderStateBlock);

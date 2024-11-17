@@ -19,7 +19,6 @@ private:
 		m_renderStateBlock.m_colorState.m_srcBlendMode = BlendMode::SrcAlpha;
 		m_renderStateBlock.m_colorState.m_dstBlendMode = BlendMode::OneMinuesSrcAlpha;
 
-		m_renderStateBlock.m_depthState.m_depthRange = glm::vec2(0, 1);
 		m_renderStateBlock.m_depthState.m_writable = false;
 		m_renderStateBlock.m_depthState.m_compareFunc = CompareFunction::Less;
 

@@ -34,7 +34,6 @@ void ForwardPassPostProcessing::onDefine()
 	m_renderStateBlock.m_colorState.m_rgbaWritable = glm::bvec4(true, true, true, true);
 
 	m_renderStateBlock.m_depthState.m_writable = false;
-	m_renderStateBlock.m_depthState.m_depthRange = glm::vec2(0, 1);
 	m_renderStateBlock.m_depthState.m_compareFunc = CompareFunction::Always;
 }
 
