@@ -96,6 +96,7 @@ void RenderPipeline::updateLightProperties()
 		m_renderData.m_shadowData.m_shadowMapRTName = ResourceName::ShadowMapRTName;
 		m_renderData.m_shadowData.m_shadowSize = glm::ivec2(2048, 2048);
 		m_renderData.m_shadowData.m_shadowBound = 30.f;
+		m_renderData.m_shadowData.m_shadowBias = 0.008f;
 		m_renderData.m_shadowData.m_shadowProjectionParams = glm::vec4(1.0f, 1.f, 100.f, 0.01f);
 		m_renderData.m_shadowData.m_shadowScreenParams = glm::vec4(windowSize.x, windowSize.y, 0.0f, 0.0f);
 		auto viewMatrix = Camera::computeViewMatrix(mainLightData.rotation, mainLightData.position);
@@ -105,6 +106,7 @@ void RenderPipeline::updateLightProperties()
 		m_renderData.m_shadowData.m_shadowProjectionMatrix = projectionMatrix;
 		m_renderData.m_shadowData.m_shadowVPMatrix = projectionMatrix * viewMatrix;
 		Shader::setGlobalMatrix(ShaderPropertyNames::ShadowMatrixVP, m_renderData.m_shadowData.m_shadowVPMatrix);
+		Shader::setGlobalFloat(ShaderPropertyNames::ShadowBias, m_renderData.m_shadowData.m_shadowBias);
 	}
 	for (int i = 0; i < lightDatas.size() - 1; ++i)
 	{

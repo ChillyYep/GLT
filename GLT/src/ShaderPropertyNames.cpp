@@ -32,6 +32,7 @@ const char* ShaderPropertyNames::AddtionalLightData_Attenuations = "attenuations
 const char* ShaderPropertyNames::MVP = "MVP";
 const char* ShaderPropertyNames::VP = "VP";
 const char* ShaderPropertyNames::ShadowMatrixVP = "ShadowMatrix";
+const char* ShaderPropertyNames::ShadowBias = "ShadowBias";
 
 const char* ShaderPropertyNames::SkyBox = "skybox";
 const char* ShaderPropertyNames::MainTex = "mainTex";

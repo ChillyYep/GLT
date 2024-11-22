@@ -34,6 +34,7 @@ public:
 
 
 	static const char* ShadowMatrixVP;
+	static const char* ShadowBias;
 	static const char* MVP;
 	static const char* VP;
 

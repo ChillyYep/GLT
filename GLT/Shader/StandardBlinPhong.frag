@@ -19,6 +19,6 @@ layout (binding = 1) uniform sampler2D shadowMapTex;
 void main()
 {
 	fColor = texture(mainTex, fs_in.fs_Texcoord);
-	float shadowStrength = PCFShadowCalculation(fs_in.fs_shadowCoord,shadowMapTex,0.008);
+	float shadowStrength = PCFShadowCalculation(fs_in.fs_shadowCoord,shadowMapTex,ShadowBias);
 	fColor = PhongShading_All(EyePosition.xyz,fs_in.fs_worldPosition.xyz,fs_in.fs_worldNormal,fColor,10)*(1-shadowStrength);
 }

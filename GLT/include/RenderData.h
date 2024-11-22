@@ -44,6 +44,7 @@ struct ShadowMapData {
 	glm::mat4 m_shadowVPMatrix;
 	glm::ivec2 m_shadowSize;
 	float m_shadowBound;
+	float m_shadowBias;
 };
 struct RenderData
 {
