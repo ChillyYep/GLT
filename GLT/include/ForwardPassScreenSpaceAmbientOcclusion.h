@@ -9,7 +9,7 @@ public:
 	ForwardPassScreenSpaceAmbientOcclusion() {}
 	~ForwardPassScreenSpaceAmbientOcclusion() {}
 
-	bool isExecutable() override { return true; }
+	bool isExecutable() override { return false; }
 
 	void onDefine() override
 	{
