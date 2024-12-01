@@ -170,12 +170,14 @@
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\MeshManagementCentre.cpp" />
     <ClCompile Include="src\ForwardPassPostProcessing.cpp" />
+    <ClCompile Include="src\MultipleRenderTexture.cpp" />
     <ClCompile Include="src\PrimitiveUtils.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\RenderEventSystem.cpp" />
     <ClCompile Include="src\RenderPassBase.cpp" />
     <ClCompile Include="src\RenderPipeline.cpp" />
     <ClCompile Include="src\RenderResourceManagment.cpp" />
+    <ClCompile Include="src\RenderTargetTextureBase.cpp" />
     <ClCompile Include="src\RenderTexture.cpp" />
     <ClCompile Include="src\ResourceNames.cpp" />
     <ClCompile Include="src\RHICommon.cpp" />
@@ -308,6 +310,7 @@
     <ClInclude Include="include\BytesBuffer.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\CameraOperation.h" />
+    <ClInclude Include="include\MultipleRenderTexture.h" />
     <ClInclude Include="include\PassCaptureFBO.h" />
     <ClInclude Include="include\CommandBuffer.h" />
     <ClInclude Include="include\Common.h" />
@@ -353,6 +356,7 @@
     <ClInclude Include="include\RenderTargetDescriptor.h" />
     <ClInclude Include="include\RenderTargetManagementCentre.h" />
     <ClInclude Include="include\RenderEventSystem.h" />
+    <ClInclude Include="include\RenderTargetTextureBase.h" />
     <ClInclude Include="include\ResourceIdentifier.h" />
     <ClInclude Include="include\ConstantBufferIdentifier.h" />
     <ClInclude Include="include\EventSystem.h" />

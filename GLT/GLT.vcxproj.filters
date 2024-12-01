@@ -333,6 +333,12 @@
     <ClCompile Include="src\ForwardPassPostProcessing.cpp">
       <Filter>源文件\Render\RenderPipeline\ForwardRenderPath\ForwardPass</Filter>
     </ClCompile>
+    <ClCompile Include="src\MultipleRenderTexture.cpp">
+      <Filter>源文件\Render\RenderResourceManager\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RenderTargetTextureBase.cpp">
+      <Filter>源文件\Render\RenderResourceManager\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\StandardBlinPhong.frag">
@@ -942,6 +948,12 @@
     </ClInclude>
     <ClInclude Include="include\DeferedPassScreenSpaceAmbientOcclusion.h">
       <Filter>头文件\Render\RenderPipeline\ForwardRenderPath\DeferedPass</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MultipleRenderTexture.h">
+      <Filter>头文件\Render\RenderResourceManager\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderTargetTextureBase.h">
+      <Filter>头文件\Render\RenderResourceManager\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

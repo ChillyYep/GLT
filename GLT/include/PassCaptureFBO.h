@@ -43,7 +43,7 @@ protected:
 
 	void ensureCreateDebugColorTexture(int width, int height)
 	{
-		if (m_debugViewRT == nullptr || m_debugViewRT->getWidth() != width || m_debugViewRT->getHeight() != height)
+		if (m_debugViewRT == nullptr || m_debugViewRT->getDescriptor().m_width != width || m_debugViewRT->getDescriptor().m_height != height)
 		{
 			ensureReleaseDebugColorTexture();
 			m_debugViewRT = new RenderTexture(width, height, m_debugInternalFormat, TextureInternalFormat::None,

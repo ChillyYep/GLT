@@ -30,7 +30,9 @@ void createScene()
 	auto mat3 = shared_ptr<Material>(new Material(transparentShader));
 	// 需要引入一个从文件加载纹理的库
 
-	auto model = AssetUtils::getInstance()->loadModel("Resources/monkeyHead.obj");
+	auto monkeyHeadModel = AssetUtils::getInstance()->loadModel("Resources/monkeyHead.obj");
+	auto cylinderMesh = AssetUtils::getInstance()->loadModel("Resources/cylinder.obj");
+	auto capsuleMesh = AssetUtils::getInstance()->loadModel("Resources/capsule.obj");
 	auto wallTex = AssetUtils::getInstance()->loadTexture2D("Resources/wall.jpg");
 	wallTex->m_name = "wall";
 	wallTex->setInternalFormat(TextureInternalFormat::RGB8);
@@ -48,12 +50,22 @@ void createScene()
 	auto cubeMesh = PrimitiveUtils::createCube();
 	auto planeMesh = PrimitiveUtils::createQuad();
 
-	std::vector<std::shared_ptr<Material>> mats(model->getMeshCount());
-	for (int i = 0; i < model->getMeshCount(); ++i)
+	std::vector<std::shared_ptr<Material>> mats1(monkeyHeadModel->getMeshCount());
+	std::vector<std::shared_ptr<Material>> mats2(cylinderMesh->getMeshCount());
+	std::vector<std::shared_ptr<Material>> mats3(capsuleMesh->getMeshCount());
+	for (int i = 0; i < monkeyHeadModel->getMeshCount(); ++i)
 	{
-		mats[i] = mat1;
+		mats1[i] = mat1;
 	}
-	auto go1 = SceneUtility::createMeshGameObject(model->getSubMeshes(), mats);
+	for (int i = 0; i < cylinderMesh->getMeshCount(); ++i)
+	{
+		mats2[i] = mat1;
+	}
+	for (int i = 0; i < capsuleMesh->getMeshCount(); ++i)
+	{
+		mats3[i] = mat1;
+	}
+	auto go1 = SceneUtility::createMeshGameObject(monkeyHeadModel->getSubMeshes(), mats1);
 	auto cube1Transform = go1->getComponent<Transform>();
 	cube1Transform->setPosition(glm::vec3(0.0f, -1.0f, 0.0f));
 	cube1Transform->setScale(glm::vec3(1.0f));
@@ -73,12 +85,23 @@ void createScene()
 	planeTransform->setScale(glm::vec3(100.0f));
 	planeTransform->setEularAngle(glm::vec3(0.0f));
 
-
 	auto go4 = SceneUtility::createMeshGameObject(planeMesh, mat2);
 	auto plane2Transform = go4->getComponent<Transform>();
 	plane2Transform->setPosition(glm::vec3(1.5f, -3.0f, 0.0f));
 	plane2Transform->setScale(glm::vec3(1.0f));
 	plane2Transform->setEularAngle(glm::vec3(90.0f,0.0f,0.0f));
+
+	auto go5 = SceneUtility::createMeshGameObject(cylinderMesh->getSubMeshes(), mats2);
+	auto cylinderTransform = go5->getComponent<Transform>();
+	cylinderTransform->setPosition(glm::vec3(3.f, -3.0f, 4.0f));
+	cylinderTransform->setScale(glm::vec3(1.0f));
+	cylinderTransform->setEularAngle(glm::vec3(0.0f, 0.0f, 0.0f));
+
+	auto go6 = SceneUtility::createMeshGameObject(capsuleMesh->getSubMeshes(), mats3);
+	auto capsuleTransform = go6->getComponent<Transform>();
+	capsuleTransform->setPosition(glm::vec3(2.5f, -3.0f, 2.0f));
+	capsuleTransform->setScale(glm::vec3(1.0f));
+	capsuleTransform->setEularAngle(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	auto cameraGo = SceneUtility::createEmptyGameObject();
 	auto cameraTransform = cameraGo->getTransform();
@@ -110,9 +133,6 @@ void createScene()
 	lightGo->getTransform()->setPosition(glm::vec3(0.0f, 15.0f, 0.0f));
 	lightGo->getTransform()->setEularAngle(glm::vec3(90.0f, 45.0f, 0.f));
 
-	auto forward = lightGo->getTransform()->getForward();
-	std::cout << forward.x << "," << forward.y << "," << forward.z << std::endl;
-
 	lightGo2->getTransform()->setPosition(glm::vec3(-10.0f, -10.0f, -10.0f));
 	lightGo2->getTransform()->setEularAngle(glm::vec3(30.0f, 30.0f, 0.f));
 
@@ -120,6 +140,8 @@ void createScene()
 	scene->addObject(go2);
 	scene->addObject(go3);
 	scene->addObject(go4);
+	scene->addObject(go5);
+	scene->addObject(go6);
 	scene->addObject(cameraGo);
 	scene->addObject(lightGo);
 	//scene->addObject(lightGo2);
