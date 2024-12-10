@@ -38,7 +38,7 @@ inline void set##PROPERTYNAME(bool params) \
 { \
 	VARIABLE = params; \
 } \
-inline bool Is##PROPERTYNAME() const \
+inline bool is##PROPERTYNAME() const \
 { \
 	return VARIABLE; \
 } 

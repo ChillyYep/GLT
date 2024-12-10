@@ -1,5 +1,6 @@
 #pragma once
 enum class RenderType {
+	None,
 	Opaque = 1,
 	Transparent = 1 << 1
 };

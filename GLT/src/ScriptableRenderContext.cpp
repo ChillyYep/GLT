@@ -43,8 +43,19 @@ void ScriptableRenderContext::drawRenderers(FilterSettings& filterSetting, DrawS
 	}
 	for (int i = 0; i < m_renderers.size(); ++i)
 	{
-		m_renderers[i] = simpleStructure[i].m_target;
-		m_cmdList.drawRenderer(m_renderers[i], replacedMaterial);
+		auto renderer = simpleStructure[i].m_target;
+		m_renderers[i] = renderer;
+		for (int j = 0; j < renderer->getMeshCount(); ++j)
+		{
+			auto targetMat = renderer->getMaterial(j).get();
+			if (targetMat == nullptr || targetMat->getRenderType() != filterSetting.m_renderType)
+			{
+				continue;
+			}
+			auto transform = static_cast<GameObject*>(renderer->getGameObject())->getTransform();
+			m_cmdList.drawMesh(renderer->getMesh(j),
+				replacedMaterial == nullptr ? targetMat : replacedMaterial, transform->getModelMatrix());
+		}
 	}
 	scheduleCommandBuffer(m_cmdList);
 	m_cmdList.clear();

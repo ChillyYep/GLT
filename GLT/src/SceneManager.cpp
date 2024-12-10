@@ -3,7 +3,7 @@
 const std::shared_ptr<Scene> SceneManager::getMainScene() const {
 	for (int i = 0; i < m_allScenes.size(); ++i)
 	{
-		if (m_allScenes[i]->IsMainScene() && m_allScenes[i]->getActived())
+		if (m_allScenes[i]->isMainScene() && m_allScenes[i]->getActived())
 		{
 			return m_allScenes[i];
 		}
@@ -68,7 +68,7 @@ std::vector<LightProperties> SceneManager::getAffectedLights(std::shared_ptr<Cam
 		auto lights = scene->getComponents<Light>(false);
 		for (const auto& light : lights)
 		{
-			if (light != nullptr && light->IsRealtime() && light->getEnable())
+			if (light != nullptr && light->isRealtime() && light->getEnable())
 			{
 				auto lightProperties = light->getLightProperties();
 				allLightProperties.push_back(lightProperties);

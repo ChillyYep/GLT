@@ -12,7 +12,7 @@ COMPONENT_CLASS(Renderer, ComponentType::Renderer)
 public:
 	ComponentType getComponentType() override { return ComponentType::Renderer; }
 	Renderer() {}
-	Renderer(std::vector<SubMesh*> meshes, std::vector<std::shared_ptr<Material>> materials) { m_meshes = meshes;m_materials = materials; }
+	Renderer(std::vector<SubMesh*> meshes, std::vector<std::shared_ptr<Material>> materials) { m_meshes = meshes; m_materials = materials; }
 	~Renderer() {}
 
 	void onEnable() override;
@@ -32,7 +32,7 @@ public:
 	void addMeshes(std::vector<SubMesh*>&meshes, std::vector<std::shared_ptr<Material>>&materials)
 	{
 		assert(meshes.size() == materials.size());
-		for (int i = 0;i < meshes.size();++i)
+		for (int i = 0; i < meshes.size(); ++i)
 		{
 			m_meshes.push_back(meshes[i]);
 			m_materials.push_back(materials[i]);
@@ -62,10 +62,21 @@ public:
 	inline std::vector<std::shared_ptr<Material>> getMaterials() { return m_materials; }
 	inline size_t getMeshCount() { return m_meshes.size(); }
 
-	__GET_SET_PROPERTY__(RenderType, RenderType, m_renderType)
+	inline RenderType getRenderType() const
+	{
+		int renderType = 0;
+		for (int i = 0; i < m_materials.size(); ++i)
+		{
+			if (m_materials[i] == nullptr)
+			{
+				continue;
+			}
+			renderType |= (int)m_materials[i]->getRenderType();
+		}
+		return (RenderType)renderType;
+	}
 
 private:
-	RenderType m_renderType = RenderType::Opaque;
 	std::vector<SubMesh*> m_meshes;
 	std::vector<std::shared_ptr<Material>> m_materials;
 };

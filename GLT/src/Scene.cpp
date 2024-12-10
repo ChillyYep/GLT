@@ -1,7 +1,7 @@
 #include "Scene.h"
 void Scene::addObject(std::shared_ptr<GameObject> go, std::shared_ptr<Transform> parent)
 {
-	assert(m_allGos.find(go->getInstanceId()) == m_allGos.end() && !go->IsDestroyed());
+	assert(m_allGos.find(go->getInstanceId()) == m_allGos.end() && !go->isDestroyed());
 	m_allGos[go->getInstanceId()] = go;
 	if (parent == nullptr)
 	{
@@ -13,7 +13,7 @@ void Scene::addObject(std::shared_ptr<GameObject> go, std::shared_ptr<Transform>
 }
 void Scene::removeObject(GameObject* go)
 {
-	if (!go->IsDestroyed())
+	if (!go->isDestroyed())
 	{
 		go->destroy();
 	}
@@ -76,9 +76,14 @@ std::vector<Renderer*> Scene::filterRenderers(RenderType renderType, bool includ
 	auto rendererPtrs = getComponents<Renderer>(includeInactived);
 	for (const auto& rendererPtr : rendererPtrs)
 	{
-		if (((int)rendererPtr->getRenderType() & (int)renderType) > 0)
+		auto mats = rendererPtr->getMaterials();
+		for (int i = 0; i < mats.size(); ++i)
 		{
-			renderers.push_back(rendererPtr.get());
+			if (((int)renderType & (int)mats[i]->getRenderType()) > 0)
+			{
+				renderers.push_back(rendererPtr.get());
+				break;
+			}
 		}
 	}
 	return renderers;

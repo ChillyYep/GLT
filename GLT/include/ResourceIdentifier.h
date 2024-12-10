@@ -162,10 +162,13 @@ public:
 	FBOAttachmentResourceType getResourceType() const { return m_resourceType; }
 
 	FBOAttachmentType getAttachmentType() const { return m_fboAttachmentType; }
+
+	__GET_SET_BOOLEANPROPERTY__(Blocked, m_blocked)
 private:
 	FBOAttachmentResourceType m_resourceType;
 	FBOAttachmentType m_fboAttachmentType;
 	ResourceIdentifier* m_identifier;
+	bool m_blocked;
 };
 
 RESOUCEIDENTIFIER_CLASS(RenderTargetIdentifier, ResourceIdentifierType::RenderTarget)
@@ -176,6 +179,51 @@ public:
 	std::vector<AttachmentEntityIdentifierWrapper> m_attachmentIdentifiers;
 	GLTUInt32 m_fbo = 0;
 	RenderTargetDescriptor m_descriptor;
+
+	void setColorAttachmentBlocked(int index, bool blocked)
+	{
+		int count = 0;
+		for (auto& identifierWrapper : m_attachmentIdentifiers)
+		{
+			if (identifierWrapper.getAttachmentType() == FBOAttachmentType::Color)
+			{
+				if (count == index)
+				{
+					identifierWrapper.setBlocked(blocked);
+					break;
+				}
+				count++;
+			}
+		}
+	}
+
+	void setAllColorAttachmentBlocked(bool blocked)
+	{
+		for (auto& identifierWrapper : m_attachmentIdentifiers)
+		{
+			if (identifierWrapper.getAttachmentType() == FBOAttachmentType::Color)
+			{
+				identifierWrapper.setBlocked(blocked);
+			}
+		}
+	}
+
+	bool getColorAttachmentBlockedState(int index)
+	{
+		int count = 0;
+		for (auto& identifierWrapper : m_attachmentIdentifiers)
+		{
+			if (identifierWrapper.getAttachmentType() == FBOAttachmentType::Color)
+			{
+				if (count == index)
+				{
+					return identifierWrapper.isBlocked();
+				}
+				count++;
+			}
+		}
+		return true;
+	}
 
 	ResourceIdentifier* getAttachmentIdentifier(FBOAttachmentType attachmentType, FBOAttachmentResourceType resourceType) {
 		for (const auto& identifierWrapper : m_attachmentIdentifiers)

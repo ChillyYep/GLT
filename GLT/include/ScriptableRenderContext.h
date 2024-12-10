@@ -122,7 +122,7 @@ private:
 	{
 		auto shader = material->getShader().get();
 		m_pso.m_meshIdentifier = meshResourceIdentifier;
-		m_pso.m_texUnit = 0;
+		m_pso.m_renderType = material->getRenderType();
 		m_pso.m_material = material;
 		m_pso.m_modelMatrix = modelMatrix;
 		m_pso.m_textureResources = textureResources;

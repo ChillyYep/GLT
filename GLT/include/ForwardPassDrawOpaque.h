@@ -1,6 +1,7 @@
 #pragma once
 #include <PassBase.h>
 #include <RenderTexture.h>
+#include <MultipleRenderTexture.h>
 #include <RenderResourceManagment.h>
 #include <ResourceNames.h>
 
@@ -27,17 +28,32 @@ private:
 		// prepareResources
 		auto window = Window::getInstance();
 		auto windowSize = window->getSize();
-		m_colorRT = new RenderTexture(windowSize.x, windowSize.y, TextureInternalFormat::RGBA8, TextureInternalFormat::Depth16,
+		auto attachmentSettings = std::vector<AttachmentSetting>();
+		AttachmentSetting colorAttachment = AttachmentSetting(TextureInternalFormat::RGBA8, TexturePerChannelSize::UNSIGNED_BYTE, TextureWrapMode::ClampEdge, TextureWrapMode::ClampEdge,
+			TextureFilterMode::Point_Mipmap_Point, true, 1, glm::vec4(0.0f));
+		AttachmentSetting normalAttachment = AttachmentSetting(TextureInternalFormat::RGBA8, TexturePerChannelSize::UNSIGNED_BYTE, TextureWrapMode::ClampEdge, TextureWrapMode::ClampEdge,
+			TextureFilterMode::Point_Mipmap_Point, true, 1, glm::vec4(0.0f));
+		attachmentSettings.push_back(colorAttachment);
+		attachmentSettings.push_back(normalAttachment);
+		AttachmentSetting depthAttachment = AttachmentSetting(TextureInternalFormat::Depth16, TexturePerChannelSize::UNSIGNED_BYTE, TextureWrapMode::ClampEdge, TextureWrapMode::ClampEdge,
+			TextureFilterMode::Point_Mipmap_Point, true, 1, glm::vec4(0.0f));
+
+		AttachmentSetting stencilAttachment = AttachmentSetting(TextureInternalFormat::None, TexturePerChannelSize::UNSIGNED_BYTE, TextureWrapMode::ClampEdge, TextureWrapMode::ClampEdge,
+			TextureFilterMode::Point_Mipmap_Point, true, 1, glm::vec4(0.0f));
+		m_multipleRT = new MultipleRenderTexture(windowSize.x, windowSize.y, attachmentSettings, depthAttachment, stencilAttachment);
+		m_multipleRT->m_name = ResourceName::OpaqueRTName;
+		m_multipleRT->create();
+	/*	m_colorRT = new RenderTexture(windowSize.x, windowSize.y, TextureInternalFormat::RGBA8, TextureInternalFormat::Depth16,
 			TextureInternalFormat::None);
 		m_colorRT->m_name = ResourceName::OpaqueRTName;
 		m_colorRT->setColorAttachmentSampleEnabled(true);
 		m_colorRT->setDepthAttachmentSampleEnabled(true);
-		m_colorRT->create();
+		m_colorRT->create();*/
 	}
 
 	bool isPrepared() override
 	{
-		m_colorRTIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, m_colorRT->getRTInstanceId()));
+		m_colorRTIdentifier = static_cast<RenderTargetIdentifier*>(RenderResourceManagement::getInstance()->getResourceIdentifier(ResourceType::RenderTarget, m_multipleRT->getRTInstanceId()));
 		auto shadowMapRT = static_cast<RenderTarget*>(LogicResourceManager::getInstance()->getResource(ResourceType::RenderTarget, m_renderData->m_shadowData.m_shadowMapRTName));
 		if (shadowMapRT == nullptr)
 		{
@@ -63,9 +79,9 @@ private:
 
 	void onDestroy() override
 	{
-		m_colorRT->release();
-		delete m_colorRT;
-		m_colorRT = nullptr;
+		m_multipleRT->release();
+		delete m_multipleRT;
+		m_multipleRT = nullptr;
 	}
 	bool isExecutable() override { return true; }
 
@@ -76,6 +92,7 @@ private:
 		m_drawSettings.m_cameraPos = m_renderData->m_cameraDatas[m_renderData->m_curRenderingCameraIndex].m_worldPos;
 		if (m_colorRTIdentifier != nullptr && m_shadowMapTextureIdentifier != nullptr)
 		{
+			m_colorRTIdentifier->setAllColorAttachmentBlocked(false);
 			m_cmdBuffer.setGlobalTextureResource(ShaderPropertyNames::ShadowMapTex, m_shadowMapTextureIdentifier);
 
 			m_cmdBuffer.setRenderTarget(m_colorRTIdentifier);
@@ -93,6 +110,6 @@ private:
 	FilterSettings m_filterSettings;
 	DrawSettings m_drawSettings;
 	RenderStateBlock m_renderStateBlock;
-	RenderTexture* m_colorRT;
+	RenderTargetTextureBase* m_multipleRT;
 
 };

@@ -95,6 +95,7 @@ private:
 	{
 		if (m_colorRT != nullptr && m_colorRTIdentifier != nullptr)
 		{
+			m_colorRTIdentifier->setColorAttachmentBlocked(1, true);
 			m_context->setRenderStateBlock(m_renderStateBlock);
 			m_cmdBuffer.setRenderTarget(m_colorRTIdentifier);
 			m_cmdBuffer.drawMesh(m_cubeMesh, m_matPtr, glm::identity<glm::mat4>() * glm::scale(glm::vec3(100.0f)));

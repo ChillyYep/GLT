@@ -4,6 +4,7 @@
 #include <Texture.h>
 #include <Shader.h>
 #include <ShaderPropertyNames.h>
+#include <FilterSetting.h>
 
 enum class MaterialPropertyType {
 	Texture,
@@ -97,7 +98,9 @@ public:
 	std::vector<Texture*> getAllTextures();
 
 	__GET_SET_PROPERTY__(Shader, std::shared_ptr<Shader>, m_shader)
+		__GET_SET_PROPERTY__(RenderType, RenderType, m_renderType)
 private:
 	std::map<std::string, std::shared_ptr<MaterialProperty>> m_properties;
 	std::shared_ptr<Shader> m_shader;
+	RenderType m_renderType;
 };

@@ -47,6 +47,7 @@ private:
 		m_drawSettings.m_cameraPos = m_renderData->m_cameraDatas[m_renderData->m_curRenderingCameraIndex].m_worldPos;
 		if (m_colorRT != nullptr && m_colorRTIdentifier != nullptr)
 		{
+			m_colorRTIdentifier->setColorAttachmentBlocked(1, true);
 			m_cmdBuffer.setRenderTarget(m_colorRTIdentifier);
 			m_context->scheduleCommandBuffer(m_cmdBuffer);
 			m_cmdBuffer.clear();

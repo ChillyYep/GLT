@@ -13,7 +13,7 @@ public:
 			auto objects = scene->getObjectListIncludeDestroying();
 			for (const auto& obj : objects)
 			{
-				if (obj->IsDestroyed())
+				if (obj->isDestroyed())
 				{
 					scene->removeObject(obj);
 				}

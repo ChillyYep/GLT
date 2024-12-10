@@ -42,8 +42,11 @@ void createScene()
 	wallTex->setWrapModeT(TextureWrapMode::Repeat);
 	wallTex->setTextureFilter(TextureFilterMode::Linear_Mipmap_Linear);
 
+	mat1->setRenderType(RenderType::Opaque);
 	mat1->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(Texture2D::getWhiteTex2D())));
+	mat2->setRenderType(RenderType::Opaque);
 	mat2->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(Texture2D::getGrayTex2D())));
+	mat3->setRenderType(RenderType::Transparent);
 	mat3->setProperty(ShaderPropertyNames::MainTex, std::shared_ptr<MaterialProperty>(new MaterialTextureProperty(wallTex)));
 	mat3->setProperty(ShaderPropertyNames::CommonAlpha, std::shared_ptr<MaterialFloatProperty>(new MaterialFloatProperty(0.5f)));
 	// Íø¸ñ
@@ -72,7 +75,6 @@ void createScene()
 	cube1Transform->setEularAngle(glm::vec3(0.0f));
 
 	auto go2 = SceneUtility::createMeshGameObject(cubeMesh, mat3);
-	go2->getComponent<Renderer>()->setRenderType(RenderType::Transparent);
 	auto cube2Transform = go2->getComponent<Transform>();
 	cube2Transform->setPosition(glm::vec3(3.0f, 0.0f, 0.0f));
 	cube2Transform->setScale(glm::vec3(1.0f));

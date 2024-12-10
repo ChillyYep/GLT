@@ -406,4 +406,6 @@ private:
 	void bindMesh(PipelineStateObject& pso);
 
 	void drawElements(PipelineStateObject& pso);
+
+	std::vector<GLenum> m_drawingColorAttachments;
 };

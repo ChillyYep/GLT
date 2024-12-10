@@ -386,8 +386,9 @@ std::vector<RenderTargetIdentifier> GLDevice::requestRenderTargetResource(std::v
 		auto descriptor = rtPtr->getRenderTargetDescriptor();
 
 		m_colorRTIdentifier.m_attachmentIdentifiers = attachmentIdentifiers;
-
+		// 开始一个FBO的初始化工作
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+		int colorAttachmentCount = 0;
 		for (const auto& attachment : attachmentIdentifiers)
 		{
 			auto resourceType = attachment.getResourceType();
@@ -400,7 +401,7 @@ std::vector<RenderTargetIdentifier> GLDevice::requestRenderTargetResource(std::v
 				{
 					if (attachmentType == FBOAttachmentType::Color)
 					{
-						glNamedFramebufferRenderbuffer(fbo, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderBuffer);
+						glNamedFramebufferRenderbuffer(fbo, GL_COLOR_ATTACHMENT0 + colorAttachmentCount++, GL_RENDERBUFFER, renderBuffer);
 					}
 				}
 				else
@@ -426,7 +427,7 @@ std::vector<RenderTargetIdentifier> GLDevice::requestRenderTargetResource(std::v
 				if (attachmentType == FBOAttachmentType::Color)
 				{
 					glBindTexture(GL_TEXTURE_2D, texture);
-					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + colorAttachmentCount++, GL_TEXTURE_2D, texture, 0);
 					glBindTexture(GL_TEXTURE_2D, 0);
 				}
 				else if (attachmentType == FBOAttachmentType::DepthStencil)
@@ -558,10 +559,22 @@ void GLDevice::activate(RenderTargetIdentifier* m_colorRTIdentifier)
 
 void GLDevice::clearColor(float r, float g, float b, float a)
 {
+	for (size_t i = 0; i < m_curRT->m_attachmentIdentifiers.size(); ++i)
+	{
+		if (m_curRT->m_attachmentIdentifiers[i].getAttachmentType() == FBOAttachmentType::Color)
+		{
+			m_drawingColorAttachments.push_back((GLenum)(GL_COLOR_ATTACHMENT0 + m_drawingColorAttachments.size()));
+		}
+	}
 	//auto size = Window::getInstance()->getSize();
 	//glViewport(0, 0, size.x, size.y);
+	// 
+	// 设置需要清除的颜色附件
+	glDrawBuffers((GLsizei)m_drawingColorAttachments.size(), m_drawingColorAttachments.data());
+
 	glClearColor(r, g, b, a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	m_drawingColorAttachments.clear();
 }
 
 void GLDevice::blitCurrentRTToWindow()
@@ -826,7 +839,6 @@ void GLDevice::bindTextureUnit(PipelineStateObject& pso, unsigned int registerIn
 {
 	if (textureIdentifier != nullptr)
 	{
-		pso.m_texUnit++;
 		glBindTextureUnit(registerIndex, textureIdentifier->m_texture);
 	}
 }
@@ -1139,8 +1151,28 @@ void GLDevice::fillMaterialPropertyBlocks(PipelineStateObject& pso)
 
 void GLDevice::drawElements(PipelineStateObject& pso)
 {
-	// 绘制指令
+	// FBO中颜色附件的数量
+	int colorAttachmentCount = 0;
+	int curAttachmentNum = 0;
+	for (size_t i = 0; i < m_curRT->m_attachmentIdentifiers.size(); ++i)
+	{
+		if (m_curRT->m_attachmentIdentifiers[i].getAttachmentType() == FBOAttachmentType::Color)
+		{
+			curAttachmentNum = colorAttachmentCount;
+			colorAttachmentCount++;
+			if (m_curRT->getColorAttachmentBlockedState(curAttachmentNum))
+			{
+				continue;
+			}
+			// 绘制指令，此次绘制种启用的颜色附件数量
+			m_drawingColorAttachments.push_back((GLenum)(GL_COLOR_ATTACHMENT0 + curAttachmentNum));
+		}
+	}
+	// 用于决定启用多少个颜色缓冲区
+	glDrawBuffers((GLsizei)m_drawingColorAttachments.size(), m_drawingColorAttachments.data());
 	glDrawElements(GL_TRIANGLES, pso.m_meshIdentifier->getIndicesCount(), GL_UNSIGNED_SHORT, NULL);
+
+	m_drawingColorAttachments.clear();
 }
 
 void GLDevice::draw(PipelineStateObject& pso)
